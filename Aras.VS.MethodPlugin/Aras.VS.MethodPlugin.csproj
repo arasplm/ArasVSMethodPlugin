@@ -266,6 +266,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\LICENSE">
+      <Link>Resources\LICENSE</Link>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <None Include="Aras.VS.MethodPlugin.licenseheader" />
     <None Include="Key.snk" />
     <Content Include="MethodLauncher\MethodLauncher.exe.config">
@@ -309,9 +313,6 @@
     </Content>
     <Content Include="ProjectTemplates\CSharp\Aras Innovator\Methods\Aras11SP12MethodProject.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="Resources\LICENSE">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <None Include="source.extension.vsixmanifest">

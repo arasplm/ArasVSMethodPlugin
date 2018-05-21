@@ -34,4 +34,4 @@ extension for Visual Studio which enables some features
 used by this project.
 
 ## License
-[Apache 2.0](LICENSE)
+Projects are published to Github under the MIT license. See the LICENSE file for license rights and limitations.  (LICENSE)
