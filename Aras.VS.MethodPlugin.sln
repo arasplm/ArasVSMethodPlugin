@@ -1,0 +1,80 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2020
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B89DC826-187A-4CE5-A6FA-D5DFCBC8E021}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aras.VS.MethodPlugin", "Aras.VS.MethodPlugin\Aras.VS.MethodPlugin.csproj", "{95381532-F7F9-4556-9178-EEC0AEFD2122}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aras.VS.MethodPlugin.11sp9CSharp", "Aras.VS.MethodPlugin.11sp9CSharp\Aras.VS.MethodPlugin.11sp9CSharp.csproj", "{5181AFED-3DDB-48BC-9B78-F188B928B359}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Aras.VS.MethodPlugin.11sp9VB", "Aras.VS.MethodPlugin.11sp9VB\Aras.VS.MethodPlugin.11sp9VB.vbproj", "{EA2EC6D2-39CA-4CE4-A32E-78229083F134}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aras.VS.MethodPlugin.11sp10CSharp", "Aras.VS.MethodPlugin.11sp10CSharp\Aras.VS.MethodPlugin.11sp10CSharp.csproj", "{B7E26645-8BFC-460E-B010-784F52F61A04}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aras.VS.MethodPlugin.11sp11CSharp", "Aras.VS.MethodPlugin.11sp11CSharp\Aras.VS.MethodPlugin.11sp11CSharp.csproj", "{51428086-5975-49CA-9B11-528F396213FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aras.VS.MethodPlugin.11sp8CSharp", "Aras.VS.MethodPlugin.11sp8CSharp\Aras.VS.MethodPlugin.11sp8CSharp.csproj", "{16B29445-D7AF-4B29-B660-54B3235C1A6C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aras.VS.MethodPlugin.11sp12CSharp", "Aras.VS.MethodPlugin.11sp12CSharp\Aras.VS.MethodPlugin.11sp12CSharp.csproj", "{8AA47666-149F-4789-A489-A7FF5685B6FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MethodLauncher", "MethodLauncher\MethodLauncher.csproj", "{E8CD6B11-2B91-417A-8C87-210DB84C94F0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FDFAB02B-45BB-4220-926A-C5A08BBFA662}"
+	ProjectSection(SolutionItems) = preProject
+		CHANGELOG.md = CHANGELOG.md
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{95381532-F7F9-4556-9178-EEC0AEFD2122}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95381532-F7F9-4556-9178-EEC0AEFD2122}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95381532-F7F9-4556-9178-EEC0AEFD2122}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95381532-F7F9-4556-9178-EEC0AEFD2122}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5181AFED-3DDB-48BC-9B78-F188B928B359}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5181AFED-3DDB-48BC-9B78-F188B928B359}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5181AFED-3DDB-48BC-9B78-F188B928B359}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5181AFED-3DDB-48BC-9B78-F188B928B359}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA2EC6D2-39CA-4CE4-A32E-78229083F134}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA2EC6D2-39CA-4CE4-A32E-78229083F134}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA2EC6D2-39CA-4CE4-A32E-78229083F134}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA2EC6D2-39CA-4CE4-A32E-78229083F134}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7E26645-8BFC-460E-B010-784F52F61A04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7E26645-8BFC-460E-B010-784F52F61A04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7E26645-8BFC-460E-B010-784F52F61A04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7E26645-8BFC-460E-B010-784F52F61A04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51428086-5975-49CA-9B11-528F396213FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51428086-5975-49CA-9B11-528F396213FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51428086-5975-49CA-9B11-528F396213FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51428086-5975-49CA-9B11-528F396213FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16B29445-D7AF-4B29-B660-54B3235C1A6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16B29445-D7AF-4B29-B660-54B3235C1A6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16B29445-D7AF-4B29-B660-54B3235C1A6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16B29445-D7AF-4B29-B660-54B3235C1A6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AA47666-149F-4789-A489-A7FF5685B6FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AA47666-149F-4789-A489-A7FF5685B6FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AA47666-149F-4789-A489-A7FF5685B6FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AA47666-149F-4789-A489-A7FF5685B6FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8CD6B11-2B91-417A-8C87-210DB84C94F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8CD6B11-2B91-417A-8C87-210DB84C94F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8CD6B11-2B91-417A-8C87-210DB84C94F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8CD6B11-2B91-417A-8C87-210DB84C94F0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1ACEE032-E6A5-4432-A161-A89529B05931}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,711 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<MethodConfig>
+		<ReferencedAssemblies>
+				<name>System.dll</name>
+				<name>System.XML.dll</name>
+				<name>System.Web.dll</name>
+				<name>System.Data.dll</name>
+				<name>System.Core.dll</name>
+				<name>System.Configuration.dll</name>
+				<name>System.Web.Extensions.dll</name>
+				<name>$(binpath)/IOM.dll</name>
+				<name>$(binpath)/InnovatorCore.dll</name>
+				<name>$(binpath)/SPConnector.dll</name>
+				<name>$(binpath)/ConversionManager.dll</name>
+				<name>$(binpath)/FileExchangeService.dll</name>
+				<name>$(binpath)/Conversion.Base.dll</name>
+				<name>$(binpath)/Aras.TDF.Base.dll</name>
+				<name>$(binpath)/Aras.ES.dll</name>
+		</ReferencedAssemblies>
+
+		<Support dialect="VB" template="VBScript" compiler="Microsoft.VisualBasic.VBCodeProvider"/>
+		<Support dialect="VBScript" template="VBScript" compiler="Microsoft.VisualBasic.VBCodeProvider"/>
+		<Support dialect="C#" template="CSharp" compiler="Microsoft.CSharp.CSharpCodeProvider"/>
+		<Support dialect="CSharp" template="CSharp" compiler="Microsoft.CSharp.CSharpCodeProvider"/>
+		<!-- If AssemblyNameType="full" fails, then try AssemblyNameType="partial"
+     and limit the AssemblyName to only the name portion, leave out the Version, etc.
+     You can find out exactly what has been loaded into the Innovator server
+     by using the Server/ServerInfo.aspx url. -->
+		<!-- This next one is an example, it has not been tested -->
+		<Template name="VBScript" line_number_offset="41">
+				<![CDATA[
+Imports Microsoft.VisualBasic
+Imports System
+Imports System.IO
+Imports System.Text
+Imports System.Xml
+Imports System.Collections
+Imports System.Collections.Generic
+Imports System.Data
+Imports System.Linq
+Imports System.Net
+Imports System.Web
+Imports System.Web.SessionState
+Imports System.Globalization
+Imports Aras.IOM
+
+Namespace $(pkgname)
+
+  Class ItemMethod
+    Inherits Item
+    
+    Public Sub New(InnovatorObject_arg As IServerConnection)
+      MyBase.New(InnovatorObject_arg)
+    End Sub
+
+#If EventDataIsAvailable Then
+		Public Function methodCode( _
+			) As Item
+			Return methodCode( Nothing )
+		End Function
+
+		Public Function methodCode( _
+			ByVal eventData As $(EventDataClass) _
+			) As Item
+#Else
+		Public Function methodCode( _
+			) As Item
+#End If
+		Dim CCO As Aras.Server.Core.CallContext = CType(serverConnection,Aras.Server.Core.IOMConnection).CCO
+		Dim RequestState As Aras.Server.Core.IContextState = CCO.RequestState
+		$(MethodCode)
+    End Function
+  End Class
+
+  Class $(clsname)
+    Implements $(interfacename)
+#If EventDataIsAvailable Then
+		Public Sub $(fncname)( _
+			ByVal InnovatorObject_arg As IServerConnection, _
+			ByVal inDom As XmlDocument, _
+			ByVal eventData As $(EventDataClass), _
+			ByVal outDom As XmlDocument _
+			) Implements $(interfacename).$(fncname)
+#Else
+		Public Sub $(fncname)( _
+			InnovatorObject_arg As IServerConnection, _
+			inDom As XmlDocument, _
+			outDom As XmlDocument _
+			) Implements $(interfacename).$(fncname)
+#End If
+      Dim inItem As ItemMethod
+      Dim outItem As Item
+
+      inItem = new ItemMethod(InnovatorObject_arg)
+      inItem.dom = inDom
+
+      Dim nodes As XmlNodeList = inDom.SelectNodes("//Item[not(ancestor::node()[local-name()='Item'])]")
+      If (nodes.Count = 1) Then
+        inItem.node = CType(nodes(0), XmlElement)
+      Else
+        inItem.node = Nothing
+        inItem.nodeList = nodes
+      End If
+        
+#If EventDataIsAvailable Then
+			outItem = inItem.methodCode( _
+				eventData _
+				)
+#Else
+			outItem = inItem.methodCode( _
+				)
+#End If
+      If (Not outItem Is Nothing) Then
+        outDom.LoadXml(outItem.dom.OuterXml)
+      End If
+    End Sub
+  End Class
+End Namespace
+]]>
+		</Template>
+
+
+		<!-- To use this template, put this in your method code.
+
+' MethodTemplateName=VBMain;
+
+The you must define a function Main() returning Item.
+
+function Main() as Item
+ return Nothing
+End Function
+
+For example:
+
+'MethodTemplateName=VBMain;
+Dim x As String
+Function Main() As Item
+	cco.startup.debuglog("me",Me.dom)
+	Return Nothing
+End Function
+
+-->
+
+		<Template name="VBMain" line_number_offset="25">
+				<![CDATA[
+Imports Microsoft.VisualBasic
+Imports System
+Imports System.IO
+Imports System.Text
+Imports System.Xml
+Imports System.Collections
+Imports System.Collections.Generic
+Imports System.Data
+Imports System.Linq
+Imports System.Net
+Imports System.Web
+Imports System.Web.SessionState
+Imports System.Globalization
+Imports Aras.IOM
+
+Namespace $(pkgname)
+
+  Class ItemMethod
+    Inherits Item
+
+	Dim CCO As Aras.Server.Core.CallContext
+	Dim RequestState As Aras.Server.Core.IContextState
+
+    $(MethodCode)
+
+    Public Sub New(InnovatorObject_arg As IServerConnection)
+      MyBase.New(InnovatorObject_arg)
+    End Sub
+
+#If EventDataIsAvailable Then
+		Private eventData As $(EventDataClass)
+
+		Public Function methodCode( _
+			) As Item
+			Return methodCode( Nothing )
+		End Function
+
+		Public Function methodCode( _
+			ByVal eventData As $(EventDataClass) _
+			) As Item
+			Me.eventData = eventData
+#Else
+		Public Function methodCode( _
+			) As Item
+#End If
+		CCO = CType(serverConnection,Aras.Server.Core.IOMConnection).CCO
+		RequestState = CCO.RequestState
+		Return Main()
+    End Function
+  End Class
+
+  Class $(clsname)
+    Implements $(interfacename)
+#If EventDataIsAvailable Then
+    Public Sub $(fncname)( _
+			ByVal InnovatorObject_arg As IServerConnection, _
+			ByVal inDom As XmlDocument, _
+			ByVal eventData As $(EventDataClass), _
+			ByVal outDom As XmlDocument _
+			) Implements $(interfacename).$(fncname)
+#Else
+    Public Sub $(fncname)( _
+			ByVal InnovatorObject_arg As IServerConnection, _
+			ByVal inDom As XmlDocument, _
+			ByVal outDom As XmlDocument _
+			) Implements $(interfacename).$(fncname)
+#End If
+      Dim inItem As ItemMethod
+      Dim outItem As Item
+
+      inItem = new ItemMethod(InnovatorObject_arg)
+      inItem.dom = inDom
+      Dim nodes As XmlNodeList = inDom.SelectNodes("//Item[not(ancestor::node()[local-name()='Item'])]")
+      If (nodes.Count = 1) Then
+        inItem.node = CType(nodes(0), XmlElement)
+      Else
+        inItem.node = Nothing
+        inItem.nodeList = nodes
+      End If
+
+#If EventDataIsAvailable Then
+      outItem = inItem.methodCode( _
+				eventData _
+				)
+#Else
+      outItem = inItem.methodCode( _
+				)
+#End If
+      If (Not outItem Is Nothing) Then
+        outDom.LoadXml(outItem.dom.OuterXml)
+      End If
+    End Sub
+  End Class
+End Namespace
+]]>
+		</Template>
+
+		<Template name="VBScriptInOut" line_number_offset="43">
+				<![CDATA[
+Imports Microsoft.VisualBasic
+Imports System
+Imports System.IO
+Imports System.Text
+Imports System.Xml
+Imports System.Collections
+Imports System.Data
+Imports System.Linq
+Imports System.Net
+Imports System.Web
+Imports System.Web.SessionState
+Imports System.Globalization
+Imports Aras.IOM
+
+Namespace $(pkgname)
+
+  Class $(clsname)
+    Implements $(interfacename)
+
+		Private ReadOnly Property InnovatorContext() As System.Web.HttpContext
+			Get
+				Return System.Web.HttpContext.Current
+			End Get
+		End Property
+
+#If EventDataIsAvailable Then
+		Public Sub $(fncname)( _
+			ByVal InnovatorObject_arg As IServerConnection, _
+			ByVal inDom As XmlDocument, _
+			ByVal eventData As $(EventDataClass), _
+			ByVal outDom As XmlDocument _
+			) Implements $(interfacename).$(fncname)
+#Else
+		Public Sub $(fncname)( _
+			ByVal InnovatorObject_arg As IServerConnection, _
+			ByVal inDom As XmlDocument, _
+			ByVal outDom As XmlDocument _
+			) Implements $(interfacename).$(fncname)
+#End If
+		Dim you as object = InnovatorObject_arg
+		Dim RequestState As Aras.Server.Core.IContextState = CType(InnovatorObject_arg,Aras.Server.Core.IOMConnection).CCO.RequestState
+		$(MethodCode)
+    End Sub
+  End Class
+End Namespace
+]]>
+		</Template>
+
+		<!-- This is a special template for porting existing DBUpdate scripts.
+     MethodTemplateName=VBScriptDBUpdateTool;
+-->
+		<Template name="VBScriptDBUpdateTool" line_number_offset="20">
+				<![CDATA[
+Imports Microsoft.VisualBasic
+Imports System
+Imports System.IO
+Imports System.Text
+Imports System.Xml
+Imports System.Collections
+Imports System.Data
+Imports System.Linq
+Imports System.Net
+Imports System.Web
+Imports System.Web.SessionState
+Imports System.Globalization
+Imports Aras.IOM
+
+Namespace $(pkgname) 
+ Class $(clsname)
+   Implements $(interfacename)
+
+$(MethodCode)
+
+#If EventDataIsAvailable Then
+		Private eventData As $(EventDataClass)
+
+		Public Sub $(fncname)( _
+			ByVal InnovatorObject As IServerConnection, _
+			ByVal inDom As XmlDocument, _
+			ByVal eventData As $(EventDataClass), _
+			ByVal outDom As XmlDocument _
+			) Implements $(interfacename).$(fncname)
+			Me.eventData = eventData
+#Else
+		Public Sub $(fncname)( _
+			ByVal InnovatorObject As IServerConnection, _
+			ByVal inDom As XmlDocument, _
+			ByVal outDom As XmlDocument _
+			) Implements $(interfacename).$(fncname)
+#End If
+   Main(InnovatorObject,inDom.SelectSingleNode("//Data"),outDom)
+   Dim RequestState As Aras.Server.Core.IContextState = CType(InnovatorObject,Aras.Server.Core.IOMConnection).CCO.RequestState
+  End Sub
+ End Class
+End Namespace
+]]>
+		</Template>
+
+		<Template name="CSharp" line_number_offset="35">
+				<![CDATA[using Aras.IOM;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Web;
+using System.Web.SessionState;
+using System.Xml;
+
+namespace $(pkgname)
+{
+    public class ItemMethod : Item
+    {
+      public ItemMethod(IServerConnection arg) : base(arg)
+        {
+        }
+#if EventDataIsAvailable
+		public Item methodCode()
+		{
+			return methodCode( null );
+		}
+
+		public Item methodCode($(EventDataClass) eventData)
+#else
+		public Item methodCode()
+#endif
+        {
+		Aras.Server.Core.CallContext CCO = ((Aras.Server.Core.IOMConnection) serverConnection).CCO;
+		Aras.Server.Core.IContextState RequestState = CCO.RequestState;
+		   $(MethodCode)
+        }
+    }
+  
+    public class $(clsname): $(interfacename)
+    {
+#if EventDataIsAvailable
+        public void $(fncname)(IServerConnection InnovatorServerASP, XmlDocument inDom, $(EventDataClass) eventData, XmlDocument outDom)
+#else
+        public void $(fncname)(IServerConnection InnovatorServerASP, XmlDocument inDom, XmlDocument outDom)
+#endif
+        {
+          ItemMethod inItem = null;
+          Item outItem = null;
+          inItem = new ItemMethod(InnovatorServerASP);
+          inItem.dom = inDom;
+          XmlNodeList nodes = inDom.SelectNodes("//Item[not(ancestor::node()[local-name()='Item'])]");
+          if (nodes.Count == 1)
+          {
+              inItem.node = (XmlElement)nodes[0];
+          }
+          else
+          {
+              inItem.node = null;
+              inItem.nodeList = nodes;
+          }
+
+#if EventDataIsAvailable
+      outItem = inItem.methodCode(eventData);
+#else
+      outItem = inItem.methodCode();
+#endif
+      if (outItem != null)
+      {
+          outDom.ReplaceChild(outDom.ImportNode(outItem.dom.DocumentElement, true), outDom.FirstChild);
+      }
+    }
+  }
+}
+]]>
+		</Template>
+
+		<Template name="CSharpInOut" line_number_offset="38">
+				<![CDATA[
+using System;
+using System.IO;
+using System.Text;
+using System.Xml;
+using System.Net;
+using System.Web.Caching;
+using System.Web;
+using System.Linq;
+using System.Web.SessionState;
+using System.Collections;
+using System.Globalization;
+
+using Aras.IOM;
+
+namespace $(pkgname)
+{
+  public class $(clsname): $(interfacename)
+  {
+	  private System.Web.HttpContext InnovatorContext
+	  {
+		  get
+		  {
+			  return System.Web.HttpContext.Current;
+		  }
+	  }
+
+		public void $(fncname)(
+			IServerConnection InnovatorServerASP,
+			XmlDocument inDom,
+#if EventDataIsAvailable
+			$(EventDataClass) eventData,
+#endif
+			XmlDocument outDom
+			)
+    {
+		Aras.Server.Core.IContextState RequestState = ((Aras.Server.Core.IOMConnection) InnovatorServerASP).CCO.RequestState;
+		$(MethodCode)
+    }
+  }
+}
+]]>
+		</Template>
+
+		<!-- This template allows the MethodCode to contain multiple subroutines as long     as one of the subroutines is called Main. It also allows the code to contain
+     multiple Dim variables at toplevel. These will be instance variables of the class,
+     where one instance is created during the lifetime of the execution of the method.
+     MethodTemplateName=VBScriptMain;
+
+-->
+		<Template name="VBScriptMain" line_number_offset="21">
+				<![CDATA[
+Imports Microsoft.VisualBasic
+Imports System
+Imports System.IO
+Imports System.Xml
+Imports System.Text
+Imports System.Collections
+Imports System.Data
+Imports System.Linq
+Imports System.Net
+Imports System.Web
+Imports System.Web.SessionState
+Imports System.Globalization
+Imports Aras.IOM
+
+Namespace $(pkgname) 
+ Class $(clsname)
+   Implements $(interfacename)
+ Dim CCO as Aras.Server.Core.CallContext
+
+$(MethodCode)
+
+#If EventDataIsAvailable Then
+		Private eventData As $(EventDataClass)
+
+		Public Sub $(fncname)( _
+			ByVal InnovatorObject As IServerConnection, _
+			ByVal inDom As XmlDocument, _
+			ByVal eventData As $(EventDataClass), _
+			ByVal outDom As XmlDocument _
+			) Implements $(interfacename).$(fncname)
+			Me.eventData = eventData
+#Else
+		Public Sub $(fncname)( _
+			ByVal InnovatorObject As IServerConnection, _
+			ByVal inDom As XmlDocument, _
+			ByVal outDom As XmlDocument _
+			) Implements $(interfacename).$(fncname)
+#End If
+	CCO = CType(InnovatorObject,Aras.Server.Core.IOMConnection).CCO
+	Dim InnovatorContext As HttpContext = HttpContext.Current
+	Dim InnovatorServer As HttpServerUtility = InnovatorContext.Server
+	Dim InnovatorSession As HttpSessionState = InnovatorContext.Session
+	Dim RequestState As Aras.Server.Core.IContextState = CCO.RequestState
+	Main(inDom,outDom,InnovatorObject,InnovatorServer,InnovatorSession)
+  End Sub
+ End Class
+End Namespace
+]]>
+		</Template>
+
+		<!-- This one is only for VBScript methods upgraded
+     from Release 6.0 customer deployments with the aid
+     of the script upgrade tools.
+
+     The IOM is imported because sometime these methods used the
+     old "object" api, which is similar enough to the new one
+     to be worth using.
+
+ -->
+		<Template name="VBScriptMainUpgrade" line_number_offset="31">
+				<![CDATA[
+Imports Microsoft.VisualBasic
+Imports System
+Imports System.IO
+Imports System.Text
+Imports System.Xml
+Imports System.Collections
+Imports System.Data
+Imports System.Linq
+Imports System.Net
+Imports System.Web
+Imports System.Web.SessionState
+Imports System.Net.Mail
+Imports System.Globalization
+
+Imports Aras.IOM
+
+Namespace $(pkgname) 
+ Class $(clsname)
+  Implements $(interfacename)
+
+ Dim inDom as XmlDocument
+ Dim outDom as XmlDocument
+ Dim errorDom as XmlDocument
+ Dim InnovatorObject As IServerConnection
+ Dim InnovatorContext As HttpContext = HttpContext.Current
+ Dim Server as HttpServerUtility = InnovatorContext.Server
+ Dim Session as HttpSessionState = InnovatorContext.Session
+ Dim CCO as Aras.Server.Core.CallContext
+
+$(MethodCode)
+
+#If EventDataIsAvailable Then
+		Private eventData As $(EventDataClass)
+
+		Public Sub $(fncname)( _
+			ByVal InnovatorObject_arg As IServerConnection, _
+			ByVal inDom_arg As XmlDocument, _
+			ByVal eventData As $(EventDataClass), _
+			ByVal outDom_arg As XmlDocument _
+			) Implements $(interfacename).$(fncname)
+			Me.eventData = eventData
+#Else
+		Public Sub $(fncname)( _
+			ByVal InnovatorObject_arg As IServerConnection, _
+			ByVal inDom_arg As XmlDocument, _
+			ByVal outDom_arg As XmlDocument _
+			) Implements $(interfacename).$(fncname)
+#End If
+   inDom = inDom_arg
+   outDom = outDom_arg
+   errorDom = outDom_arg
+   InnovatorObject = InnovatorObject_arg
+   CCO = CType(InnovatorObject, Aras.Server.Core.IOMConnection).CCO
+   Dim RequestState As Aras.Server.Core.IContextState = CCO.RequestState
+   MethodMainSubroutine
+  End Sub
+ End Class
+End Namespace
+]]>
+		</Template>
+
+		<Template name="ConflictDetectionLocalRuleCSharp.version:1" line_number_offset="19">
+				<![CDATA[
+using System;
+using System.IO;
+using System.Xml;
+using System.Text;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Net;
+using System.Web;
+using System.Web.SessionState;
+using System.Globalization;
+using Aras.IOM;
+using Aras.IOME.ConflictDetection;
+
+namespace $(pkgname)
+{
+	$(MethodCode)
+}
+]]>
+		</Template>
+		<Template name="ConflictDetectionLocalRuleSimplifiedCSharp.version:1" line_number_offset="31">
+				<![CDATA[
+using System;
+using System.IO;
+using System.Xml;
+using System.Text;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Net;
+using System.Web;
+using System.Web.SessionState;
+using System.Globalization;
+using Aras.IOM;
+using Aras.IOME.ConflictDetection;
+
+namespace $(pkgname)
+{
+public class $(clsname) : LocalConflictDetectionRule
+{
+	Aras.Server.Core.CallContext CCO;
+
+	public $(clsname)(IServerConnection serverConnection, String name)
+		: base(serverConnection, name)
+	{
+		this.CCO = ((Aras.Server.Core.IOMConnection)serverConnection).CCO;
+	}
+
+	public override IList<ConflictDetectionResult> Execute(Item configuration)
+	{
+		$(MethodCode)
+	}
+}
+}
+]]>
+		</Template>
+		<Template name="CSharp:Aras.TDF.ContentGenerator(Strict)" line_number_offset="27">
+				<![CDATA[
+using System;
+using System.IO;
+using System.Xml;
+using System.Text;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Net;
+using System.Web;
+using System.Web.SessionState;
+using System.Globalization;
+using Aras.IOM;
+using Aras.TDF.Base;
+
+namespace $(pkgname)
+{
+	public class $(clsname) : BaseContentGenerator
+	{
+		public $(clsname)(SchemaElementFactory factory) : base(factory)
+		{
+		}
+
+		public override void GenerateContent(DocumentSchemaElement targetElement)
+		{
+			$(MethodCode)
+		}
+	}
+}
+]]>
+		</Template>
+		<Template name="CSharp:Aras.TDF.ContentGenerator(Extended)" line_number_offset="19">
+				<![CDATA[
+using System;
+using System.IO;
+using System.Xml;
+using System.Text;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Net;
+using System.Web;
+using System.Web.SessionState;
+using System.Globalization;
+using Aras.IOM;
+using Aras.TDF.Base;
+
+namespace $(pkgname)
+{
+	$(MethodCode)
+}
+]]>
+		</Template>
+</MethodConfig>

@@ -1,0 +1,484 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <!--  This is the file that defines the actual layout and type of the commands.
+        It is divided in different sections (e.g. command definition, command
+        placement, ...), with each defining a specific set of properties.
+        See the comment before each section for more details about how to
+        use it. -->
+
+  <!--  The VSCT compiler (the tool that translates this file into the binary
+        format that VisualStudio will consume) has the ability to run a preprocessor
+        on the vsct file; this preprocessor is (usually) the C++ preprocessor, so
+        it is possible to define includes and macros with the same syntax used
+        in C++ files. Using this ability of the compiler here, we include some files
+        defining some of the constants that we will use inside the file. -->
+
+  <!--This is the file that defines the IDs for all the commands exposed by VisualStudio. -->
+  <Extern href="stdidcmd.h" />
+
+  <!--This header contains the command ids for the menus provided by the shell. -->
+  <Extern href="vsshlids.h" />
+
+  <!--The Commands section is where commands, menus, and menu groups are defined.
+      This section uses a Guid to identify the package that provides the command defined inside it. -->
+  <Commands package="ArasMainMenuCmdPackage">
+    <!-- Inside this section we have different sub-sections: one for the menus, another
+    for the menu groups, one for the buttons (the actual commands), one for the combos
+    and the last one for the bitmaps used. Each element is identified by a command id that
+    is a unique pair of guid and numeric identifier; the guid part of the identifier is usually
+    called "command set" and is used to group different command inside a logically related
+    group; your package should define its own command set in order to avoid collisions
+    with command ids defined by other packages. -->
+
+    <!-- In this section you can define new menu groups. A menu group is a container for
+         other menus or buttons (commands); from a visual point of view you can see the
+         group as the part of a menu contained between two lines. The parent of a group
+         must be a menu. -->
+
+    <Menus>
+      <Menu guid="ArasToolbarGroupCmdSet" id="ArasToolbar" type="Toolbar">
+        <Strings>
+          <ButtonText>Aras Innovator</ButtonText>
+          <CommandName>Aras Innovator</CommandName>
+        </Strings>
+      </Menu>
+
+      <Menu guid="ArasProjGroupCmdSet" id="ArasProjMenu" priority="0x700" type="Context">
+        <Parent guid="ArasProjGroupCmdSet" id="ProjGroup" />
+        <Strings>
+          <ButtonText>Aras Innovator</ButtonText>
+          <CommandName>Aras Innovator</CommandName>
+        </Strings>
+      </Menu>
+
+      <Menu guid="ArasFolderGroupCmdSet" id="ArasFolderMenu" priority="0x700" type="Context">
+        <Parent guid="ArasFolderGroupCmdSet" id="FolderGroup" />
+        <Strings>
+          <ButtonText>Aras Innovator</ButtonText>
+          <CommandName>Aras Innovator</CommandName>
+        </Strings>
+      </Menu>
+
+      <Menu guid="ArasItemGroupCmdSet" id="ArasItemMenu" priority="0x700" type="Context">
+        <Parent guid="ArasItemGroupCmdSet" id="ItemGroup" />
+        <Strings>
+          <ButtonText>Aras Innovator</ButtonText>
+          <CommandName>Aras Innovator</CommandName>
+        </Strings>
+      </Menu>
+
+    </Menus>
+    <Groups>
+      <!--<Group guid="ArasMainMenuCmdPackageCmdSet" id="ArasMainMenuGroup" priority="0x0200">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_PROJNODE" />
+      </Group>
+      <Group guid="ArasMainMenuCmdPackageCmdSetFromAras" id="ArasMainMenuGroupFromAras" priority="0x0601">
+        <Parent guid="ArasMainMenuCmdPackageCmdSet" id="ArasMenu" />
+      </Group>
+      <Group guid="ArasMainMenuCmdPackageCmdSetFromPackage" id="ArasMainMenuGroupFromPackage" priority="0x0602">
+        <Parent guid="ArasMainMenuCmdPackageCmdSet" id="ArasMenu" />
+      </Group>-->
+
+      <Group guid="ArasToolbarGroupCmdSet" id="ToolbarGroup" priority="0x0000">
+        <Parent guid="ArasToolbarGroupCmdSet" id="ArasToolbar" />
+      </Group>
+
+      <!--Project menu grouops-->
+      <Group guid="ArasProjGroupCmdSet" id="ProjGroup" priority="0x0200">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_PROJNODE" />
+      </Group>
+
+      <!--Create groups-->
+      <Group guid="ArasProjCreateGroupCmdSet" id="CreateMethodGroup" priority="0x0200">
+        <Parent guid="ArasProjGroupCmdSet" id="ArasProjMenu" />
+      </Group>
+
+      <!--Open groups-->
+      <Group guid="ArasProjOpenGroupCmdSet" id="OpenMethodGroup" priority="0x0201">
+        <Parent guid="ArasProjGroupCmdSet" id="ArasProjMenu" />
+      </Group>
+
+      <!--Update project groups-->
+      <Group guid="ArasProjUpdateProjectGroupCmdSet" id="UpdateProjectMethodGroup" priority="0x0202">
+        <Parent guid="ArasProjGroupCmdSet" id="ArasProjMenu" />
+      </Group>
+
+      <!--Project setting groups-->
+      <Group guid="ArasProjSettingGroupCmdSet" id="ProjSettingGroup" priority="0x0203">
+        <Parent guid="ArasProjGroupCmdSet" id="ArasProjMenu" />
+      </Group>
+
+      <!--Folder menu groups-->
+      <Group guid="ArasFolderGroupCmdSet" id="FolderGroup" priority="0x0200">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_FOLDERNODE" />
+      </Group>
+
+      <!--Create partial elemetn folder groups-->
+      <Group guid="ArasFolderCreatePartialElementCmdSet" id="CreatePartialElementGroup" priority="0x0200">
+        <Parent guid="ArasFolderGroupCmdSet" id="ArasFolderMenu" />
+      </Group>
+
+
+      <!--Item menu groups-->
+      <Group guid="ArasItemGroupCmdSet" id="ItemGroup" priority="0x0200">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE" />
+      </Group>
+
+      <!--Save method groups-->
+      <Group guid="ArasItemSaveGroupCmdSet" id="SaveMethodGroup" priority="0x0200">
+        <Parent guid="ArasItemGroupCmdSet" id="ArasItemMenu" />
+      </Group>
+
+      <!--Update method groups-->
+      <Group guid="ArasItemUpdateMethodCmdSet" id="UpdateMethodGroup" priority="0x0203">
+        <Parent guid="ArasItemGroupCmdSet" id="ArasItemMenu" />
+      </Group>
+
+      <!--Item settings groups-->
+      <Group guid="ArasItemSettingGroupCmdSet" id="ItemSettingGroup" priority="0x0201">
+        <Parent guid="ArasItemGroupCmdSet" id="ArasItemMenu" />
+      </Group>
+
+      <!--Item debug groups-->
+      <Group guid="ArasItemDebugGroupCmdSet" id="ItemDebugGroup" priority="0x0204">
+        <Parent guid="ArasItemGroupCmdSet" id="ArasItemMenu" />
+      </Group>
+
+    </Groups>
+
+    <!--Buttons section. -->
+    <!--This section defines the elements the user can interact with, like a menu command or a button
+        or combo box in a toolbar. -->
+    <Buttons>
+      <!--To define a menu group you have to specify its ID, the parent menu and its display priority.
+          The command is visible and enabled by default. If you need to change the visibility, status, etc, you can use
+          the CommandFlag node.
+          You can add more than one CommandFlag node e.g.:
+              <CommandFlag>DefaultInvisible</CommandFlag>
+              <CommandFlag>DynamicVisibility</CommandFlag>
+          If you do not want an image next to your command, remove the Icon node />-->
+
+      <Button guid="ArasToolbarGroupCmdSet" id="ArasToolbarGroupCreateMethodCommandId" priority="0x0101" type="Button">
+        <Parent guid="ArasToolbarGroupCmdSet" id="ToolbarGroup" />
+        <Icon guid="guidCreateImages" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Create method</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="ArasToolbarGroupCmdSet" id="ArasToolbarGroupCreatePartialElementCommandId" priority="0x0102" type="Button">
+        <Parent guid="ArasToolbarGroupCmdSet" id="ToolbarGroup" />
+        <Icon guid="guidCreateImages" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Create Partial Element</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="ArasToolbarGroupCmdSet" id="ArasToolbarGroupOpenFromArasCommandId" priority="0x0103" type="Button">
+        <Parent guid="ArasToolbarGroupCmdSet" id="ToolbarGroup" />
+        <Icon guid="guidOpenFromArasImages" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Open method from Aras Innovator</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="ArasToolbarGroupCmdSet" id="ArasToolbarGroupOpenFromPackageCommandId" priority="0x0104" type="Button">
+        <Parent guid="ArasToolbarGroupCmdSet" id="ToolbarGroup" />
+        <Icon guid="guidOpenFromPackageImages" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Open method from AML package</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="ArasToolbarGroupCmdSet" id="ArasToolbarGroupItemSaveToArasCommandId" priority="0x0105" type="Button">
+        <Parent guid="ArasToolbarGroupCmdSet" id="ToolbarGroup" />
+        <Icon guid="guidSaveToArasImages" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Save method to Aras Innovator</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="ArasToolbarGroupCmdSet" id="ArasToolbarGroupItemSaveToPackageCommandId" priority="0x0106" type="Button">
+        <Parent guid="ArasToolbarGroupCmdSet" id="ToolbarGroup" />
+        <Icon guid="guidSaveToPackageImages" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Save method to AML package</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="ArasToolbarGroupCmdSet" id="ArasToolbarGroupItemUpdateMethodFormArasCommandId" priority="0x0107" type="Button">
+        <Parent guid="ArasToolbarGroupCmdSet" id="ToolbarGroup" />
+        <Icon guid="guidRefreshMethodFromArasImages" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Update method from Aras Innovator</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="ArasToolbarGroupCmdSet" id="ArasToolbarGroupItemUpdateProjectConfigurationCommandId" priority="0x0108" type="Button">
+        <Parent guid="ArasToolbarGroupCmdSet" id="ToolbarGroup" />
+        <Icon guid="guidRefreshMethodFromArasImages" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Update project configuration</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="ArasToolbarGroupCmdSet" id="ArasToolbarGroupSedttingCommandId" priority="0x0109" type="Button">
+        <Parent guid="ArasToolbarGroupCmdSet" id="ToolbarGroup" />
+        <Icon guid="guidArasImages" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Connection Info</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="ArasToolbarGroupCmdSet" id="ArasToolbarGroupDebugMethodCommandId" priority="0x0111" type="Button">
+        <Parent guid="ArasToolbarGroupCmdSet" id="ToolbarGroup" />
+        <Icon guid="guidDebugMethodImages" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Debug method</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="ArasProjOpenGroupCmdSet" id="ArasProjMenuOpenFromArasCommandId" priority="0x0101" type="Button">
+        <Parent guid="ArasProjOpenGroupCmdSet" id="OpenMethodGroup" />
+        <Icon guid="guidOpenFromArasImages" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Open method from Aras Innovator</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="ArasProjOpenGroupCmdSet" id="ArasProjMenuOpenFromPackageCommandId" priority="0x0102" type="Button">
+        <Parent guid="ArasProjOpenGroupCmdSet" id="OpenMethodGroup" />
+        <Icon guid="guidOpenFromPackageImages" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Open method from AML package</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="ArasProjCreateGroupCmdSet" id="ArasProjMenuCreateMethodCommandId" priority="0x0103" type="Button">
+        <Parent guid="ArasProjCreateGroupCmdSet" id="CreateMethodGroup" />
+        <Icon guid="guidCreateImages" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Create method</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="ArasProjUpdateProjectGroupCmdSet" id="ArasProjMenuUpdateConfigCommandId" priority="0x0104" type="Button">
+        <Parent guid="ArasProjUpdateProjectGroupCmdSet" id="UpdateProjectMethodGroup" />
+        <Icon guid="guidRefreshMethodFromArasImages" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Update project configuration</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="ArasProjSettingGroupCmdSet" id="ArasProjMenuSedttingCommandId" priority="0x0105" type="Button">
+        <Parent guid="ArasProjSettingGroupCmdSet" id="ProjSettingGroup" />
+        <Icon guid="guidArasImages" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Connection Info</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="ArasFolderCreatePartialElementCmdSet" id="ArasFolderCreatePartialElementCommandId" priority="0x0101" type="Button">
+        <Parent guid="ArasFolderCreatePartialElementCmdSet" id="CreatePartialElementGroup" />
+        <Icon guid="guidCreateImages" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Create Partial Element</ButtonText>
+        </Strings>
+      </Button>
+
+
+
+      <Button guid="ArasItemSaveGroupCmdSet" id="ArasItemSaveToArasCommandId" priority="0x0101" type="Button">
+        <Parent guid="ArasItemSaveGroupCmdSet" id="SaveMethodGroup" />
+        <Icon guid="guidSaveToArasImages" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Save method to Aras Innovator</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="ArasItemSaveGroupCmdSet" id="ArasItemSaveToPackageCommandId" priority="0x0102" type="Button">
+        <Parent guid="ArasItemSaveGroupCmdSet" id="SaveMethodGroup" />
+        <Icon guid="guidSaveToPackageImages" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Save method to AML package</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="ArasItemUpdateMethodCmdSet" id="ArasItemUpdateMethodFormArasCommandId" priority="0x0103" type="Button">
+        <Parent guid="ArasItemUpdateMethodCmdSet" id="UpdateMethodGroup" />
+        <Icon guid="guidRefreshMethodFromArasImages" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Update method from Aras Innovator</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="ArasItemDebugMethodCmdSet" id="ArasItemDebugMethodCommandId" priority="0x0104" type="Button">
+        <Parent guid="ArasItemDebugGroupCmdSet" id="ItemDebugGroup" />
+        <Icon guid="guidDebugMethodImages" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Debug method</ButtonText>
+        </Strings>
+      </Button>
+
+    </Buttons>
+
+    <!--The bitmaps section is used to define the bitmaps that are used for the commands.-->
+    <Bitmaps>
+      <!--  The bitmap id is defined in a way that is a little bit different from the others:
+            the declaration starts with a guid for the bitmap strip, then there is the resource id of the
+            bitmap strip containing the bitmaps and then there are the numeric ids of the elements used
+            inside a button definition. An important aspect of this declaration is that the element id
+            must be the actual index (1-based) of the bitmap inside the bitmap strip. -->
+      <Bitmap guid="guidArasImages" href="Resources\aras_16x16.png" usedList="bmpPic1" />
+
+      <Bitmap guid="guidOpenFromArasImages" href="Resources\OpenFromAras.png" usedList="bmpPic1" />
+      <Bitmap guid="guidOpenFromPackageImages" href="Resources\OpenFromPackage.png" usedList="bmpPic1" />
+      <Bitmap guid="guidCreateImages" href="Resources\Create.png" usedList="bmpPic1" />
+      <Bitmap guid="guidSettingsImages" href="Resources\Settings.png" usedList="bmpPic1" />
+
+      <Bitmap guid="guidSaveToArasImages" href="Resources\Save.png" usedList="bmpPic1" />
+      <Bitmap guid="guidSaveToPackageImages" href="Resources\SaveAsPackage.png" usedList="bmpPic1" />
+      <Bitmap guid="guidEditPackageImages" href="Resources\Package_16x16.png" usedList="bmpPic1" />
+
+      <Bitmap guid="guidRefreshMethodFromArasImages" href="Resources\refresh-16x16.png" usedList="bmpPic1" />
+      <Bitmap guid="guidDebugMethodImages" href="Resources\16x16-Run.png" usedList="bmpPic1" />
+    </Bitmaps>
+  </Commands>
+
+  <Symbols>
+    <GuidSymbol name="ArasToolbarGroupCmdSet" value="{21D122E1-35BF-4156-B458-7E292CDD9C2D}">
+      <IDSymbol name="ArasToolbar" value="0x100" />
+      <IDSymbol name="ToolbarGroup" value="0x101" />
+      <IDSymbol name="ArasToolbarGroupOpenFromArasCommandId" value="0x102" />
+      <IDSymbol name="ArasToolbarGroupOpenFromPackageCommandId" value="0x103" />
+      <IDSymbol name="ArasToolbarGroupCreateMethodCommandId" value="0x104" />
+      <IDSymbol name="ArasToolbarGroupSedttingCommandId" value="0x105" />
+      <IDSymbol name="ArasToolbarGroupItemSaveToArasCommandId" value="0x106" />
+      <IDSymbol name="ArasToolbarGroupItemSaveToPackageCommandId" value="0x107" />
+      <IDSymbol name="ArasToolbarGroupItemUpdateMethodFormArasCommandId" value="0x108" />
+      <IDSymbol name="ArasToolbarGroupItemUpdateProjectConfigurationCommandId" value="0x109" />
+      <IDSymbol name="ArasToolbarGroupCreatePartialElementCommandId" value="0x110" />
+      <IDSymbol name="ArasToolbarGroupDebugMethodCommandId" value="0x111" />
+    </GuidSymbol>
+
+    <!-- This is the package guid. -->
+    <GuidSymbol name="ArasMainMenuCmdPackage" value="{7afa5f12-ad2b-4fda-85d3-818f2d1e6c8c}" />
+
+    <!-- This is the guid used to group the menu commands together -->
+    <!--Project-->
+    <GuidSymbol name="ArasProjGroupCmdSet" value="{96D122E1-35BF-4156-B458-7E292CDD9C2D}">
+      <IDSymbol name="ArasProjMenu" value="0x1021" />
+      <IDSymbol name="ProjGroup" value="0x1020" />
+    </GuidSymbol>
+
+    <GuidSymbol name="ArasProjCreateGroupCmdSet" value="{B69B1AC9-3D7E-4553-9786-A852B873DF01}">
+      <IDSymbol name="CreateMethodGroup" value="0x0200" />
+      <IDSymbol name="ProjGroup" value="0x1020" />
+      <IDSymbol name="ArasProjMenuCreateMethodCommandId" value="0x0103" />
+    </GuidSymbol>
+
+    <GuidSymbol name="ArasProjOpenGroupCmdSet" value="{AEA8535B-C666-4112-9BDD-5ECFA4934B47}">
+      <IDSymbol name="OpenMethodGroup" value="0x0201" />
+      <IDSymbol name="ProjGroup" value="0x1020" />
+      <IDSymbol name="ArasProjMenuOpenFromArasCommandId" value="0x0101" />
+      <IDSymbol name="ArasProjMenuOpenFromPackageCommandId" value="0x0102" />
+    </GuidSymbol>
+
+    <GuidSymbol name="ArasProjUpdateProjectGroupCmdSet" value="{DB77AE9E-9CB5-4C13-9EB3-ED388DC94B66}">
+      <IDSymbol name="UpdateProjectMethodGroup" value="0x0201" />
+      <IDSymbol name="ProjGroup" value="0x1020" />
+      <IDSymbol name="ArasProjMenuUpdateConfigCommandId" value="0x0101" />
+    </GuidSymbol>
+
+    <GuidSymbol name="ArasProjSettingGroupCmdSet" value="{E15DDF0A-1B6E-46A8-8B78-AEC2A7BB4922}">
+      <IDSymbol name="ProjSettingGroup" value="0x0202" />
+      <IDSymbol name="ProjGroup" value="0x1020" />
+      <IDSymbol name="ArasProjMenuSedttingCommandId" value="0x0104" />
+    </GuidSymbol>
+
+    <!--Folder -->
+    <GuidSymbol name="ArasFolderGroupCmdSet" value="{4043fa7c-a89a-4597-a4b9-086c504c5871}">
+      <IDSymbol name="ArasFolderMenu" value="0x1021" />
+      <IDSymbol name="FolderGroup" value="0x1020" />
+    </GuidSymbol>
+
+    <GuidSymbol name="ArasFolderCreatePartialElementCmdSet" value="{714c822b-ebc4-4413-89b5-c93eaed863fc}">
+      <IDSymbol name="CreatePartialElementGroup" value="0x0201" />
+      <IDSymbol name="FolderGroup" value="0x1020" />
+      <IDSymbol name="ArasFolderCreatePartialElementCommandId" value="0x0101" />
+    </GuidSymbol>
+
+    <!--Item -->
+    <GuidSymbol name="ArasItemGroupCmdSet" value="{83570863-CC37-4952-861B-A4DA4FFD6C29}">
+      <IDSymbol name="ArasItemMenu" value="0x1021" />
+      <IDSymbol name="ItemGroup" value="0x1020" />
+    </GuidSymbol>
+
+    <GuidSymbol name="ArasItemSaveGroupCmdSet" value="{694F6136-7CF1-46E1-B9E2-24296488AE96}">
+      <IDSymbol name="SaveMethodGroup" value="0x0201" />
+      <IDSymbol name="ItemGroup" value="0x1020" />
+      <IDSymbol name="ArasItemSaveToArasCommandId" value="0x0101" />
+      <IDSymbol name="ArasItemSaveToPackageCommandId" value="0x0102" />
+      <IDSymbol name="UpdateMethodGroup" value="0x0103" />
+    </GuidSymbol>
+
+    <GuidSymbol name="ArasItemUpdateMethodCmdSet" value="{CF767190-3696-4365-9857-3600622B097D}">
+      <IDSymbol name="UpdateMethodGroup" value="0x0201" />
+      <IDSymbol name="ArasItemMenu" value="0x700" />
+      <IDSymbol name="ArasItemUpdateMethodFormArasCommandId" value="0x0104" />
+    </GuidSymbol>
+
+    <GuidSymbol name="ArasItemSettingGroupCmdSet" value="{59C158CC-5E31-4200-AAEB-98060281FEEF}">
+      <IDSymbol name="ItemSettingGroup" value="0x0201" />
+      <IDSymbol name="ArasItemMenu" value="0x700" />
+    </GuidSymbol>
+
+    <GuidSymbol name="ArasItemDebugMethodCmdSet" value="{020DC4DF-2FC3-493E-97D3-4012DE93BCAB}">
+      <IDSymbol name="ItemDebugGroup" value="0x0204" />
+      <IDSymbol name="ArasItemMenu" value="0x700" />
+      <IDSymbol name="ArasItemDebugMethodCommandId" value="0x0104" />
+    </GuidSymbol>
+
+    <GuidSymbol name="ArasItemDebugGroupCmdSet" value="{169E9027-DAB1-4E05-B1CA-32E14D5DA564}">
+      <IDSymbol name="ItemDebugGroup" value="0x0204" />
+      <IDSymbol name="ArasItemMenu" value="0x700" />
+      <IDSymbol name="ArasItemDebugMethodCmdSet" value="0x0104" />
+      
+    </GuidSymbol>
+
+    <!--Bitmap-->
+    <GuidSymbol name="guidArasImages" value="{de731ac7-5736-42d4-818d-21c0b7e438f0}">
+      <IDSymbol name="bmpPic1" value="1" />
+    </GuidSymbol>
+    <GuidSymbol name="guidOpenFromArasImages" value="{EE761896-F6FF-470C-9E40-36FED5179946}">
+      <IDSymbol name="bmpPic1" value="1" />
+    </GuidSymbol>
+    <GuidSymbol name="guidOpenFromPackageImages" value="{A7309540-8008-4FA5-86FF-51EA27E1E138}">
+      <IDSymbol name="bmpPic1" value="1" />
+    </GuidSymbol>
+    <GuidSymbol name="guidCreateImages" value="{07AFC46E-2F4F-4E1E-A699-8DA50A3A2AFA}">
+      <IDSymbol name="bmpPic1" value="1" />
+    </GuidSymbol>
+    <GuidSymbol name="guidSettingsImages" value="{1C6424F3-8DB3-4C3A-88ED-EAEBD00B5D14}">
+      <IDSymbol name="bmpPic1" value="1" />
+    </GuidSymbol>
+    <GuidSymbol name="guidSaveToArasImages" value="{1C4654D6-C4B4-4EF2-B426-43B851DA55C0}">
+      <IDSymbol name="bmpPic1" value="1" />
+    </GuidSymbol>
+    <GuidSymbol name="guidSaveToPackageImages" value="{533E7318-0E9A-4913-B2DD-3EFA363AB83E}">
+      <IDSymbol name="bmpPic1" value="1" />
+    </GuidSymbol>
+    <GuidSymbol name="guidEditPackageImages" value="{BA08AA98-7516-402A-971E-B597206DACCF}">
+      <IDSymbol name="bmpPic1" value="1" />
+    </GuidSymbol>
+    <GuidSymbol name="guidRefreshMethodFromArasImages" value="{b52fea1d-852f-4d2f-9b00-3b18624e9810}">
+      <IDSymbol name="bmpPic1" value="1" />
+    </GuidSymbol>
+
+    <GuidSymbol name="guidDebugMethodImages" value="{26969D84-B33C-4E29-ADD0-8E37A107C2F7}">
+      <IDSymbol name="bmpPic1" value="1" />
+    </GuidSymbol>
+
+  </Symbols>
+</CommandTable>

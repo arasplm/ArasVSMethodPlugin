@@ -1,0 +1,193 @@
+﻿<!--
+ <copyright file="UpdateFromArasView.xaml" company="Aras Corporation">
+     © 2017-2018 Aras Corporation. All rights reserved.
+ </copyright>
+-->
+
+<Window x:Class="Aras.VS.MethodPlugin.Dialogs.Views.UpdateFromArasView"
+             x:Name="UpdateFromArasViewWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Aras.VS.MethodPlugin.Dialogs.Views"
+             xmlns:converters="clr-namespace:Aras.VS.MethodPlugin.Dialogs.Converters"
+             Width="1000" SizeToContent="Height" ResizeMode="NoResize"
+             Title="Update method from Aras Innovator"
+             Icon="/Aras.VS.MethodPlugin;component/Resources/aras.ico"
+             mc:Ignorable="d"
+             WindowStartupLocation="CenterScreen"
+             WindowStyle="None"
+             xmlns:shell="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.14.0"
+             Style="{DynamicResource WindowVsTheme}" >
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles/ButtonControl.xaml" />
+                <ResourceDictionary Source="Styles/ComboBoxControl.xaml" />
+                <ResourceDictionary Source="Styles/ExpanderControl.xaml" />
+                <ResourceDictionary Source="Styles/LabelControl.xaml" />
+                <ResourceDictionary Source="Styles/ListBoxControl.xaml" />
+                <ResourceDictionary Source="Styles/TextBoxControl.xaml" />
+                <ResourceDictionary Source="Styles/GroupBoxControl.xaml" />
+                <ResourceDictionary Source="Styles/TreeViewControl.xaml" />
+                <ResourceDictionary Source="Styles/Grid.xaml" />
+                <ResourceDictionary Source="Styles/Window.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Border Padding="5">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <GroupBox Header="Connection Info">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition/>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Margin="5" Grid.Column="0" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" Content="Server URL:" VerticalAlignment="Center" />
+                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=ConnectionInformation.ServerUrl}" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" IsReadOnly="True"/>
+                    </Grid>
+
+                    <Grid Margin="5" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" Content="Database:" VerticalAlignment="Center" />
+                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=ConnectionInformation.Database}" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" IsReadOnly="True"/>
+                    </Grid>
+
+                    <Grid Margin="5" Grid.Column="2" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" Content="User:" VerticalAlignment="Center" />
+                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=ConnectionInformation.Login}" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" IsReadOnly="True"/>
+                    </Grid>
+
+                    <Button Grid.Column="3"  Grid.Row="1" Content="Edit Connection Info" HorizontalAlignment="Right" Margin="10,5,10,5"
+                             Command="{Binding Path=EditConnectionInfoCommand}" CommandParameter="{Binding ElementName=UpdateFromArasViewWindow}" />
+                </Grid>
+
+            </GroupBox>
+
+            <GroupBox Header="Method Info" Grid.Row="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.ColumnSpan="2" Margin="5" Grid.Column="0" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Method Name:" Margin="0,0,5,0"/>
+                        <TextBox Text="{Binding Path=MethodName}" IsReadOnly="True" Grid.Column="1" VerticalContentAlignment="Center" HorizontalAlignment="Stretch"/>
+                    </Grid>
+
+                    <Grid Grid.Row="1" Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" Content="Method Type:" VerticalAlignment="Center" />
+                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=MethodType}" IsReadOnly="True" HorizontalAlignment="Stretch" VerticalContentAlignment="Center"/>
+                    </Grid>
+
+                    <Grid Grid.Row="1" Grid.Column="1" Margin="5" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" Content="Language:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,5,0"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=MethodLanguage}" IsReadOnly="True" VerticalContentAlignment="Center" />
+                    </Grid>
+
+                    <Grid Grid.Row="2" Grid.Column="0" Margin="5" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" Content="Template Name:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,5,0"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=TemplateName}" IsReadOnly="True"  VerticalContentAlignment="Center" HorizontalAlignment="Stretch"/>
+                    </Grid>
+
+                    <Grid Grid.Row="2" Grid.Column="1" Margin="5" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Label>Event Data:</Label>
+                        <TextBox Grid.Column="1" Text="{Binding Path=EventSpecificData}" IsReadOnly="True" VerticalContentAlignment="Center"/>
+                    </Grid>
+
+                    <Expander Grid.Row="3" Grid.ColumnSpan="4" Header="Method Preview" 
+                      VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5">
+                        <TextBox x:Name="tempaltePreviewTextBox" HorizontalAlignment="Stretch" AcceptsReturn="True" IsReadOnly="True" MaxHeight="300"
+                                 VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
+                                 Text="{Binding Path=MethodCode}">
+                        </TextBox>
+                    </Expander>
+
+                    <Grid Grid.Row="4" Grid.ColumnSpan="2" Grid.Column="0" Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Execution allowed to:" VerticalAlignment="Center" />
+                        <TextBox Grid.Column="1" IsReadOnly="True" Text="{Binding Path=ExecutionIdentityKeyedName}" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" />
+                    </Grid>
+
+                    <Grid Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4" VerticalAlignment="Center"  Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Package:" Grid.Column="0" Margin="0,0,5,0"/>
+                        <TextBox IsReadOnly="True" Text="{Binding Path=PackageName}"
+                             Grid.Column="1" HorizontalAlignment="Stretch" VerticalContentAlignment="Center"
+                             Margin="5,0,0,0"/>
+                    </Grid>
+                </Grid>
+            </GroupBox>
+
+            <WrapPanel Grid.Row="3" Grid.ColumnSpan="5" HorizontalAlignment="Right">
+                <Button Content="OK" Width="70" Margin="5"
+                        Command="{Binding Path=OkCommand}" CommandParameter="{Binding ElementName=UpdateFromArasViewWindow}"
+                        IsEnabled="{Binding IsOkButtonEnabled}" />
+                <Button Grid.Row="4" Grid.Column="2" Content="Cancel" Width="70" Margin="5" Click="CancelClick"/>
+            </WrapPanel>
+        </Grid>
+    </Border>
+</Window>

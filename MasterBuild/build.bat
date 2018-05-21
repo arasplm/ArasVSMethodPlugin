@@ -1,0 +1,2 @@
+nant -buildfile:vsmethodplugin.build.xml -D:Build.Number.Dir=ber.Dir=1 -D:Build.Path.Root=..\..\ -D:Sandbox.Path=..\..\VSMethodPlugin_Development -D:VSMethodPlugin.Major.Release=1 -D:VSMethodPlugin.Minor.Release=0 -D:VSMethodPlugin.ServicePack.Release=0 -D:buildnumber.revision=1 -D:Branch.Name=VSMethodPlugin_Development
+PAUSE

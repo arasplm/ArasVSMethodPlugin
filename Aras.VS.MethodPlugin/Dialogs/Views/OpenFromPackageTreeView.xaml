@@ -1,0 +1,104 @@
+﻿<!--
+ <copyright file="OpenFromPackageTreeView.xaml" company="Aras Corporation">
+     © 2017-2018 Aras Corporation. All rights reserved.
+ </copyright>
+-->
+
+<Window x:Class="Aras.VS.MethodPlugin.Dialogs.Views.OpenFromPackageTreeView"
+             x:Name="OpenFromPackageTreeWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Aras.VS.MethodPlugin.Dialogs.Views"
+             xmlns:converters="clr-namespace:Aras.VS.MethodPlugin.Dialogs.Converters"
+             Width="1000" Height="500"
+             MinWidth="200" MinHeight="200"
+             Title="Open method from AML package"
+             Icon="/Aras.VS.MethodPlugin;component/Resources/aras.ico"
+             mc:Ignorable="d"
+             d:DesignHeight="300"
+             WindowStartupLocation="CenterScreen"
+             WindowStyle="None"
+             xmlns:shell="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.14.0"
+             Style="{DynamicResource WindowVsTheme}">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles/ButtonControl.xaml" />
+                <ResourceDictionary Source="Styles/ComboBoxControl.xaml" />
+                <ResourceDictionary Source="Styles/ExpanderControl.xaml" />
+                <ResourceDictionary Source="Styles/LabelControl.xaml" />
+                <ResourceDictionary Source="Styles/ListBoxControl.xaml" />
+                <ResourceDictionary Source="Styles/TextBoxControl.xaml" />
+                <ResourceDictionary Source="Styles/GroupBoxControl.xaml" />
+                <ResourceDictionary Source="Styles/TreeViewControl.xaml" />
+                <ResourceDictionary Source="Styles/Grid.xaml" />
+                <ResourceDictionary Source="Styles/Window.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Border Padding="5">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition />
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TreeView x:Name="FolderView" ItemsSource="{Binding SelectPathViewModel.DirectoryItems}">
+                <TreeView.ItemContainerStyle>
+                    <Style TargetType="{x:Type TreeViewItem}">
+                        <Setter Property="Foreground" Value="{DynamicResource {x:Static shell:EnvironmentColors.ComboBoxTextBrushKey}}"/>
+                        <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                    </Style>
+                </TreeView.ItemContainerStyle>
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="20" Margin="3"
+                               Source="{Binding Type, Converter={x:Static converters:HeaderToImageConverter.Instance}}" />
+                            <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+
+            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+
+            <ListBox Grid.Column="2" x:Name="PackagesView" ItemsSource="{Binding Packages}"
+                     SelectedValuePath="Value"
+                     SelectedValue="{Binding Path=SelectedPackageValue}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Key}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <GridSplitter Grid.Column="3" Width="5" HorizontalAlignment="Stretch" />
+
+            <ListBox Grid.Column="4" x:Name="MethodsView" ItemsSource="{Binding Methods}"
+                     SelectedValuePath="Value"
+                     SelectedValue="{Binding Path=SelectedMethodValue}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Key}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <WrapPanel Grid.Row="2" Grid.ColumnSpan="5" HorizontalAlignment="Right">
+                <Button Content="OK" Width="70" Margin="5" Command="{Binding Path=OkCommand}" CommandParameter="{Binding ElementName=OpenFromPackageTreeWindow}"/>
+                <Button Grid.Row="4" Grid.Column="2" Content="Cancel" Width="70" Margin="5" Click="CancelClick"/>
+            </WrapPanel>
+        </Grid>
+    </Border>
+</Window>

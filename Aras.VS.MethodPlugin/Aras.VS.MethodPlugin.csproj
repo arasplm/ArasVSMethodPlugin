@@ -1,0 +1,657 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.VSSDK.BuildTools.15.5.100\build\Microsoft.VSSDK.BuildTools.props" Condition="Exists('..\packages\Microsoft.VSSDK.BuildTools.15.5.100\build\Microsoft.VSSDK.BuildTools.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <UseCodebase>true</UseCodebase>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>14.0</OldToolsVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectTypeGuids>{82b43b9b-a64c-4715-b499-d71e9ca2bd60};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{95381532-F7F9-4556-9178-EEC0AEFD2122}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Aras.VS.MethodPlugin</RootNamespace>
+    <AssemblyName>Aras.VS.MethodPlugin</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <GeneratePkgDefFile>true</GeneratePkgDefFile>
+    <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
+    <IncludeDebugSymbolsInVSIXContainer>true</IncludeDebugSymbolsInVSIXContainer>
+    <IncludeDebugSymbolsInLocalVSIXDeployment>true</IncludeDebugSymbolsInLocalVSIXDeployment>
+    <CopyBuildOutputToOutputDirectory>true</CopyBuildOutputToOutputDirectory>
+    <CopyOutputSymbolsToOutputDirectory>false</CopyOutputSymbolsToOutputDirectory>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <DeployExtension>False</DeployExtension>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="ArasMainMenuCmdPackage.cs" />
+    <Compile Include="Authentication\AuthenticationManager.cs" />
+    <Compile Include="Authentication\InnovatorUser.cs" />
+    <Compile Include="Code\CodeProviderFactory.cs" />
+    <Compile Include="Code\CodeInfo.cs" />
+    <Compile Include="Code\ICodeProviderFactory.cs" />
+    <Compile Include="Commands\AuthenticationCommandBase.cs" />
+    <Compile Include="Commands\CmdBase.cs" />
+    <Compile Include="Commands\DebugMethodCmd.cs" />
+    <Compile Include="Commands\RefreshConfigCmd.cs" />
+    <Compile Include="Commands\CreatePartialElementCmd.cs" />
+    <Compile Include="Commands\UpdateMethodCmd.cs" />
+    <Compile Include="Commands\CreateMethodCmd.cs" />
+    <Compile Include="Commands\ConnectionInfoCmd.cs" />
+    <Compile Include="Commands\OpenFromArasCmd.cs" />
+    <Compile Include="Commands\OpenFromPackageCmd.cs" />
+    <Compile Include="Commands\SaveToArasCmd.cs" />
+    <Compile Include="Commands\SaveToPackageCmd.cs" />
+    <Compile Include="Code\CommonData.cs" />
+    <Compile Include="Code\EventSpecificData.cs" />
+    <Compile Include="Code\EventSpecificDataType.cs" />
+    <Compile Include="Code\FilteredListInfo.cs" />
+    <Compile Include="Code\ListInfo.cs" />
+    <Compile Include="Code\CSharpCodeProvider.cs" />
+    <Compile Include="Code\DefaultCodeProvider.cs" />
+    <Compile Include="Code\DefaultCodeTemplate.cs" />
+    <Compile Include="Dialogs\Converters\HeaderToImageConverter.cs" />
+    <Compile Include="Dialogs\Converters\LoginViewMultiValueConverter.cs" />
+    <Compile Include="Dialogs\Directory\Data\DirectoryItem.cs" />
+    <Compile Include="Dialogs\Directory\Data\DirectoryItemType.cs" />
+    <Compile Include="Dialogs\Directory\DirectoryStructure.cs" />
+    <Compile Include="Dialogs\ViewModels\CreatePartialElementViewModel.cs" />
+    <Compile Include="Dialogs\ViewResult.cs" />
+    <Compile Include="Dialogs\Views\ConnectionInfoViewAdapter.cs" />
+    <Compile Include="Dialogs\Views\CreatePartialElementView.xaml.cs">
+      <DependentUpon>CreatePartialElementView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Views\CreatePartialElementViewResult.cs" />
+    <Compile Include="Dialogs\Views\CreatePartialElementViewAdapter.cs" />
+    <Compile Include="Dialogs\Views\CreateMethodViewAdapter.cs" />
+    <Compile Include="Dialogs\Views\CreateMethodViewResult.cs" />
+    <Compile Include="Dialogs\Views\OpenFromArasViewAdapter.cs" />
+    <Compile Include="Dialogs\Views\OpenFromArasViewResult.cs" />
+    <Compile Include="Dialogs\Views\OpenFromPackageViewAdapter.cs" />
+    <Compile Include="Dialogs\Views\OpenFromPackageViewResult.cs" />
+    <Compile Include="Dialogs\Views\SaveMethodViewAdapter.cs" />
+    <Compile Include="Dialogs\Views\SaveMethodViewResult.cs" />
+    <Compile Include="Dialogs\Views\SaveToPackageViewAdapter.cs" />
+    <Compile Include="Dialogs\Views\SaveToPackageViewResult.cs" />
+    <Compile Include="Dialogs\Views\UpdateFromArasViewAdapter.cs" />
+    <Compile Include="Dialogs\Views\UpdateFromArasViewResult.cs" />
+    <Compile Include="Dialogs\Views\ViewAdaper.cs" />
+    <Compile Include="Dialogs\MessageIcon.cs" />
+    <Compile Include="Dialogs\ToolStripSystemRendererHook.cs" />
+    <Compile Include="Dialogs\ViewModels\ConnectionInfoViewModel.cs" />
+    <Compile Include="Dialogs\ViewModels\FolderNameViewModel.cs" />
+    <Compile Include="Dialogs\ViewModels\DirectoryItemViewModel.cs" />
+    <Compile Include="Dialogs\ViewModels\LoginViewModel.cs" />
+    <Compile Include="Dialogs\ViewModels\MessageBoxViewModel.cs" />
+    <Compile Include="Dialogs\ViewModels\MethodInformationViewModel.cs" />
+    <Compile Include="Dialogs\ViewModels\OpenFromArasViewModel.cs" />
+    <Compile Include="Dialogs\ViewModels\OpenFromPackageTreeViewModel.cs" />
+    <Compile Include="Dialogs\ViewModels\OpenFromPackageViewModel.cs" />
+    <Compile Include="Dialogs\ViewModels\UpdateFromArasViewModel.cs" />
+    <Compile Include="Dialogs\ViewModels\SaveMethodViewModel.cs" />
+    <Compile Include="Dialogs\ViewModels\SaveToLocalPackageViewModel.cs" />
+    <Compile Include="Dialogs\ViewModels\SearchResultViewModel.cs" />
+    <Compile Include="Dialogs\ViewModels\SelectPathViewModel.cs" />
+    <Compile Include="Dialogs\Views\BasePresener.cs" />
+    <Compile Include="Dialogs\Views\LoginViewAdapter.cs" />
+    <Compile Include="Dialogs\Views\MessageBoxWindow.xaml.cs">
+      <DependentUpon>MessageBoxWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Views\ConnectionInfoView.xaml.cs">
+      <DependentUpon>ConnectionInfoView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Views\IItemSearchView.cs" />
+    <Compile Include="Dialogs\Views\IPresenter.cs" />
+    <Compile Include="Dialogs\Views\ItemSearchDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\Views\ItemSearchDialog.designer.cs">
+      <DependentUpon>ItemSearchDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Views\ItemSearchDialogStyle.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\Views\ItemSearchPresenter.cs" />
+    <Compile Include="Dialogs\Views\ItemSearchPresenterArgs.cs" />
+    <Compile Include="Dialogs\Views\ItemSearchPresenterResult.cs" />
+    <Compile Include="Dialogs\MessageButtons.cs" />
+    <Compile Include="Dialogs\MessageDialogResult.cs" />
+    <Compile Include="Dialogs\Views\UpdateFromArasView.xaml.cs">
+      <DependentUpon>UpdateFromArasView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Views\OpenFromArasView.xaml.cs">
+      <DependentUpon>OpenFromArasView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Views\OpenFromPackageView.xaml.cs">
+      <DependentUpon>OpenFromPackageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Views\OpenFromPackageTreeView.xaml.cs">
+      <DependentUpon>OpenFromPackageTreeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Views\SaveToPackageView.xaml.cs">
+      <DependentUpon>SaveToPackageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Views\FolderNameDialog.xaml.cs">
+      <DependentUpon>FolderNameDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Views\SelectPathDialog.xaml.cs">
+      <DependentUpon>SelectPathDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Extensions\ProjectItemsExtensions.cs" />
+    <Compile Include="Code\GeneratedCodeInfo.cs" />
+    <Compile Include="Code\ICodeProvider.cs" />
+    <Compile Include="IOMWrapper.cs" />
+    <Compile Include="ItemSearch\DataGridViewCalendarCell.cs" />
+    <Compile Include="ItemSearch\DataGridViewCalendarEditingControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ItemSearch\DataGridViewComboBoxCellLable.cs" />
+    <Compile Include="ItemSearch\IdentitySearcher.cs" />
+    <Compile Include="ItemSearch\ItemSearchCellProvider.cs" />
+    <Compile Include="ItemSearch\ItemSearchColumnProvider.cs" />
+    <Compile Include="ItemSearch\IUpdatedCell.cs" />
+    <Compile Include="Dialogs\Views\IView.cs" />
+    <Compile Include="MessageMenager.cs" />
+    <Compile Include="PackageManagement\PackageManager.cs" />
+    <Compile Include="Code\PartialCodeInfo.cs" />
+    <Compile Include="ProjectConfigurations\ProjectConfigurationManager.cs" />
+    <Compile Include="ProjectConfigurations\ConnectionInfo.cs" />
+    <Compile Include="ProjectConfigurations\MethodInfo.cs" />
+    <Compile Include="ProjectConfigurations\ProjectConfiguraiton.cs" />
+    <Compile Include="Properties\Resources.Designer.cs" />
+    <Compile Include="Properties\Resources1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SolutionManagement\IProjectManager.cs" />
+    <Compile Include="SolutionManagement\ProjectManager.cs" />
+    <Compile Include="Templates\TemplateInfo.cs" />
+    <Compile Include="Dialogs\DialogFactory.cs" />
+    <Compile Include="Dialogs\IDialogFactory.cs" />
+    <Compile Include="Dialogs\ViewModels\BaseViewModel.cs" />
+    <Compile Include="Dialogs\ViewModels\CreateMethodViewModel.cs" />
+    <Compile Include="Dialogs\ViewModels\RelayCommand.cs" />
+    <Compile Include="Dialogs\Views\CreateMethodView.xaml.cs">
+      <DependentUpon>CreateMethodView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Views\LoginView.xaml.cs">
+      <DependentUpon>LoginView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Views\MethodInfoView.xaml.cs">
+      <DependentUpon>MethodInfoView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Views\SaveMethodView.xaml.cs">
+      <DependentUpon>SaveMethodView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Authentication\IAuthenticationManager.cs" />
+    <Compile Include="ItemSearch\BaseSearcher.cs" />
+    <Compile Include="ItemSearch\ColorListPropertyInfo.cs" />
+    <Compile Include="ItemSearch\ISavedSearchProvider.cs" />
+    <Compile Include="ItemSearch\ISearcher.cs" />
+    <Compile Include="ItemSearch\ItemSearchResult.cs" />
+    <Compile Include="ItemSearch\ItemTypeItem.cs" />
+    <Compile Include="ItemSearch\ListPropertyInfo.cs" />
+    <Compile Include="ItemSearch\LockedByPropertyInfo.cs" />
+    <Compile Include="ItemSearch\PropertyDataType.cs" />
+    <Compile Include="ItemSearch\PropertyDataTypeParser.cs" />
+    <Compile Include="ItemSearch\PropertyInfo.cs" />
+    <Compile Include="ItemSearch\SavedSearch.cs" />
+    <Compile Include="ItemSearch\SavedSearchItem.cs" />
+    <Compile Include="ItemSearch\SavedSearchProvider.cs" />
+    <Compile Include="ItemSearch\Preferences\IPreferenceProvider.cs" />
+    <Compile Include="ItemSearch\Preferences\ItemGridLayout.cs" />
+    <Compile Include="ItemSearch\Preferences\PreferenceProvider.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Templates\TemplateLoader.cs" />
+    <Compile Include="Utilities\ItemExtensions.cs" />
+    <Compile Include="Utilities\Utils.cs" />
+    <Compile Include="Utilities\XmlNodeExt.cs" />
+    <Compile Include="Code\VBCodeProvider.cs" />
+    <Compile Include="VSPackage.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>VSPackage.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Aras.VS.MethodPlugin.licenseheader" />
+    <None Include="Key.snk" />
+    <Content Include="MethodLauncher\MethodLauncher.exe.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="aras.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="MethodLauncher\MethodLauncher.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="MethodLauncher\MethodLauncher.pdb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="MethodLauncher\NSubstitute.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="ProjectTemplates\CSharp\Aras Innovator\Methods\Aras11SP10MethodProject.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="ProjectTemplates\CSharp\Aras Innovator\Methods\Aras11SP11MethodProject.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="ProjectTemplates\CSharp\Aras Innovator\Methods\Aras11SP9MethodProject.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="ProjectTemplates\CSharp\Aras Innovator\Methods\Aras11SP8MethodProject.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="ProjectTemplates\CSharp\Aras Innovator\Methods\Aras11SP12MethodProject.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Resources\LICENSE">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <None Include="source.extension.vsixmanifest">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="EnvDTE100, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="EnvDTE80, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="EnvDTE90, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="Microsoft.CodeAnalysis, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.Common.1.0.0-rc2\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.1.0.0-rc2\lib\net45\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp.Desktop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.1.0.0-rc2\lib\net45\Microsoft.CodeAnalysis.CSharp.Desktop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.Desktop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.Common.1.0.0-rc2\lib\net45\Microsoft.CodeAnalysis.Desktop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.VisualStudio.CommandBars, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Imaging, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.VisualStudio.Imaging.14.3.25407\lib\net45\Microsoft.VisualStudio.Imaging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.OLE.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\Microsoft.VisualStudio.OLE.Interop.7.10.6070\lib\Microsoft.VisualStudio.OLE.Interop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.14.0, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.VisualStudio.Shell.14.0.14.3.25407\lib\Microsoft.VisualStudio.Shell.14.0.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.VisualStudio.Shell.Immutable.10.0.10.0.30319\lib\net40\Microsoft.VisualStudio.Shell.Immutable.10.0.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.VisualStudio.Shell.Immutable.11.0.11.0.50727\lib\net45\Microsoft.VisualStudio.Shell.Immutable.11.0.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.12.0, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.VisualStudio.Shell.Immutable.12.0.12.0.21003\lib\net45\Microsoft.VisualStudio.Shell.Immutable.12.0.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.14.0, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.VisualStudio.Shell.Immutable.14.0.14.3.25407\lib\net45\Microsoft.VisualStudio.Shell.Immutable.14.0.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\Microsoft.VisualStudio.Shell.Interop.7.10.6071\lib\Microsoft.VisualStudio.Shell.Interop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.10.0, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\packages\Microsoft.VisualStudio.Shell.Interop.11.0.11.0.61030\lib\Microsoft.VisualStudio.Shell.Interop.11.0.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.12.0, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\packages\Microsoft.VisualStudio.Shell.Interop.12.0.12.0.30110\lib\Microsoft.VisualStudio.Shell.Interop.12.0.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.8.0, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\Microsoft.VisualStudio.Shell.Interop.8.0.8.0.50727\lib\Microsoft.VisualStudio.Shell.Interop.8.0.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.9.0, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\Microsoft.VisualStudio.Shell.Interop.9.0.9.0.30729\lib\Microsoft.VisualStudio.Shell.Interop.9.0.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.TextManager.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\Microsoft.VisualStudio.TextManager.Interop.7.10.6070\lib\Microsoft.VisualStudio.TextManager.Interop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.TextManager.Interop.8.0, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\Microsoft.VisualStudio.TextManager.Interop.8.0.8.0.50727\lib\Microsoft.VisualStudio.TextManager.Interop.8.0.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Threading, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.VisualStudio.Threading.14.1.111\lib\net45\Microsoft.VisualStudio.Threading.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Utilities, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.VisualStudio.Utilities.14.3.25407\lib\net45\Microsoft.VisualStudio.Utilities.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Validation, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.VisualStudio.Validation.14.1.111\lib\net45\Microsoft.VisualStudio.Validation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.1.33.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.1.33-beta\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Reflection.Metadata, Version=1.0.18.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reflection.Metadata.1.0.18-beta\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <VSCTCompile Include="ArasMainMenuCmdPackage.vsct">
+      <ResourceName>Menus.ctmenu</ResourceName>
+      <SubType>Designer</SubType>
+    </VSCTCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Dialogs\Views\ItemSearchDialog.resx">
+      <DependentUpon>ItemSearchDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VSPackage.resx">
+      <MergeWithCTO>true</MergeWithCTO>
+      <ManifestResourceName>VSPackage</ManifestResourceName>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>VSPackage.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\aras.ico" />
+    <Content Include="Resources\16x16-Run.png" />
+    <Content Include="Resources\32x32-DiscussionPanelOn.png" />
+    <Content Include="Resources\32x32-help.png" />
+    <Content Include="Resources\32x32-new-aras-doc.png" />
+    <Content Include="Resources\32x32-open-from-aras.png" />
+    <Content Include="Resources\32x32-open-from-link.png" />
+    <Content Include="Resources\32x32-promote.png" />
+    <Content Include="Resources\32x32-refresh.png" />
+    <Content Include="Resources\32x32-save-to-aras.png" />
+    <Content Include="Resources\32x32-show_arasform.png" />
+    <Content Include="Resources\ArasMainMenuCommandPackage.png" />
+    <Content Include="Resources\ArasMainMenuCommandPackagePackage.ico" />
+    <Content Include="Resources\aras_16x16.png" />
+    <Content Include="Resources\Aras_A_300.png" />
+    <Content Include="Resources\Create.png" />
+    <Content Include="Resources\Elipse.bmp" />
+    <Content Include="Resources\Ellipsis.png" />
+    <None Include="Resources\getNextPage.Image.png" />
+    <None Include="Resources\getPreviousPage.Image.png" />
+    <Content Include="Resources\keysearch.gif" />
+    <Content Include="Resources\locked.gif" />
+    <Content Include="Resources\locked_else.gif" />
+    <Content Include="Resources\newsearch.gif" />
+    <None Include="Resources\newSearchBtn.Image.png" />
+    <Content Include="Resources\next_page.gif" />
+    <Content Include="Resources\off2013_innovator.bmp" />
+    <Content Include="Resources\off2013_innovator.ico" />
+    <Content Include="Resources\OpenFromAras.png" />
+    <Content Include="Resources\OpenFromPackage.png" />
+    <Content Include="Resources\Package_16x16.png" />
+    <Content Include="Resources\Preference30x30.ico" />
+    <Content Include="Resources\Preferences32x32.png" />
+    <Content Include="Resources\prev_page.gif" />
+    <None Include="Resources\runSearchBtn.Image.png" />
+    <Content Include="Resources\refresh-16x16.png" />
+    <Content Include="Resources\Save.png" />
+    <Content Include="Resources\SaveAsPackage.png" />
+    <Content Include="Resources\SaveUnlockClose-32.png" />
+    <Content Include="Resources\Settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.0.0-rc2\tools\analyzers\C#\Microsoft.CodeAnalysis.Analyzers.dll" />
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.0.0-rc2\tools\analyzers\C#\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Dialogs\Views\CreatePartialElementView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\Views\MessageBoxWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\Views\UpdateFromArasView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\Views\OpenFromArasView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\Views\OpenFromPackageView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\Views\OpenFromPackageTreeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\Views\SaveToPackageView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\Views\FolderNameDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\Views\SelectPathDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\Views\Styles\ButtonControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\Views\Styles\ExpanderControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\Views\Styles\GroupBoxControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\Views\Styles\Grid.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\Views\Styles\TextBlockControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\Views\Styles\TreeViewControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\Views\Styles\ListBoxControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\Views\Styles\LabelControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\Views\Styles\PasswordBoxControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\Views\Styles\TextBoxControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\Views\Styles\ComboBoxControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\Views\Styles\Window.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\Views\ConnectionInfoView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\Views\CreateMethodView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\Views\LoginView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\Views\MethodInfoView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\Views\SaveMethodView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ProjectTemplates\VisualBasic\Aras Innovator\Methods\" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.VSSDK.BuildTools.15.5.100\build\Microsoft.VSSDK.BuildTools.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.VSSDK.BuildTools.15.5.100\build\Microsoft.VSSDK.BuildTools.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.VSSDK.BuildTools.15.5.100\build\Microsoft.VSSDK.BuildTools.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.VSSDK.BuildTools.15.5.100\build\Microsoft.VSSDK.BuildTools.targets'))" />
+  </Target>
+  <Import Project="..\packages\Microsoft.VSSDK.BuildTools.15.5.100\build\Microsoft.VSSDK.BuildTools.targets" Condition="Exists('..\packages\Microsoft.VSSDK.BuildTools.15.5.100\build\Microsoft.VSSDK.BuildTools.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

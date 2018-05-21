@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2017 Aras Corp. All Rights Reserved. -->
+
+<project name="Aras.VS.MethodPlugin">
+	<if test="${property::exists('Machine.Specific.Include')}">
+		<include buildfile="${Machine.Specific.Include}" verbose="true" />
+	</if>
+
+	<if test="${property::exists('MachineSpecific.Includes.Folder.Path')}">
+		<include buildfile="${MachineSpecific.Includes.Folder.Path}/Includes/FTP.include" verbose="true" />
+	</if>
+
+	<!-- Build directory absolute path -->
+	<property name="Build.Path" readonly="true" value="${Build.Path.Root}\VSMethodPlugin" />
+	
+	<property name="project.basedir" value="${Build.Number.Dir}" />
+	<echo>Proj Base Dir: ${project.basedir}</echo>
+
+	<include buildfile="MSBuild.VS2015.include" verbose="true" />
+	<!--	<include buildfile="${path::combine(Sandbox.Path, '..\Build.git\Includes\MSBuild.VS2015.include')}" verbose="true" /> -->
+
+	<target name="Full" depends="Initialize,Export,Build,Package,Zip,FTP,Cleanup" description="Creates deployment structure for VS Method Plugin solution" />
+
+	<target name="Initialize">
+		
+		<version path="${project.basedir}/VSMethodPlugin.build.number" buildtype="NoIncrement" revisiontype="Increment" unless="${property::exists('buildnumber.revision')}"/>
+		<property name="VSMethodPlugin.Version.Build" value="${buildnumber.revision}" />
+		
+		<echo>Release: ${VSMethodPlugin.Major.Release}.${VSMethodPlugin.Minor.Release}${VSMethodPlugin.ServicePack.Release} - Build: ${VSMethodPlugin.Version.Build}</echo>
+
+		<property name="Build.Dir" value="${Build.Path}\${VSMethodPlugin.Version.Build}-VSMethodPlugin-${Branch.Name}-${VSMethodPlugin.Major.Release}.${VSMethodPlugin.Minor.Release}${VSMethodPlugin.ServicePack.Release}" />
+    <echo>Build Dir: ${Build.Dir}</echo>
+
+		<property name="git.repository" value="VSMethodPlugin_Development" />
+		<property name="Source.Dir" value="${Build.Dir}\${git.repository}" />
+		<property name="Dest.Dir" value="${Build.Dir}\ForZip" />
+		<property name="Build.Logs" value="${Build.Dir}\Logs" />
+	</target>
+
+	<target name="Export" depends="Initialize" description="Gets the source code from GIT and registers COM assemblies">
+
+		<delete dir="${Build.Dir}" failonerror="false" />
+		<mkdir dir="${Build.Dir}" unless="${directory::exists(Build.Dir)}" />
+		<mkdir dir="${Build.Logs}" failonerror="false"/>
+		<mkdir dir="${Source.Dir}" failonerror="false"/>
+
+		<copy todir="${Source.Dir}">
+			<fileset basedir="${Sandbox.Path}">
+				<include name="**/*" />
+				<exclude name=".git/**/*" />
+			</fileset>
+		</copy>
+
+		<echo>... done</echo>
+	</target>
+
+	<!-- Build compilable modules -->
+	<target name="Build" depends="Initialize" description="Builds compilable modules" >
+		<echo>Building Aras.VS.MethodPlugin solution ... </echo>
+
+		<call target="BuildVSMethodPlugin" />
+
+		
+		<!--<call target="SignDLLs" /> -->
+	</target>
+	
+	<target name="BuildVSMethodPlugin">
+		<!--
+		<property name="Assembly.Version.File.Path" value="${Source.Dir}\OfficeIntegration\Properties\AssemblyVersion.cs" />
+		<property name="Assembly.Version.Major.Release" value="${VSMethodPlugin.Major.Release}" />
+		<property name="Assembly.Version.Minor.Release" value="${VSMethodPlugin.Minor.Release}" />
+		<property name="Assembly.Version.Build" value="${VSMethodPlugin.Version.Build}" />
+		<call target="SetVersion" />
+		-->
+
+		<property name="VS.Solution" value="Aras.VS.MethodPlugin.sln" />
+		<property name="VS.Solution.Dir" value="${Source.Dir}" />
+		<property name="VS.Logs.Dir" value="${Build.Logs}" />
+		<call target="BuildVsSolutionUsingMSBUILD" />
+	</target>
+
+	<target name="Package" description="Copy required files to the proper deployment dir structure">
+		<!-- Move built Setup files -->
+		<mkdir dir="${Dest.Dir}" />
+		
+		<move tofile="${Dest.Dir}\Aras.VS.MethodPlugin.vsix"
+				file="${Source.Dir}\Aras.VS.MethodPlugin\bin\${CodeBuild.Target}\Aras.VS.MethodPlugin.vsix" />
+
+    <!-- Sign the DLL -->
+		<exec program="signFileWithPasswd.bat"
+			  basedir="${project.basedir}\sign"
+			  workingdir="${project.basedir}\sign" >
+			  <arg value="${Dest.Dir}\Aras.VS.MethodPlugin.vsix" />
+		</exec>
+
+	</target>
+
+	<target name="Zip" depends="Initialize" description="Makes the build zip files">
+		<!-- Create archive -->
+		<zip zipfile="${Build.Dir}\VSMethodPlugin-${Branch.Name}-${VSMethodPlugin.Major.Release}.${VSMethodPlugin.Minor.Release}${VSMethodPlugin.ServicePack.Release}-${VSMethodPlugin.Version.Build}.zip">
+			<fileset basedir="${Dest.Dir}">
+				<include name="**\*" />
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="FTP" depends="Initialize" description="Posts the build to the FTP site" >
+		<property name="FTP.LocalFiles" value="${Build.Dir}\*.zip" />
+		<property name="FTP.ToFTPDir" value="${Build.FTP.RemoteDir}" />
+		<call target="UploadToFTP"/>
+	</target>
+
+	<target name="Cleanup" description="Remove source tree" depends="Initialize">
+		<!-- <delete dir="${Build.Dir}\VSMethodPlugin_Development"/> -->
+	</target>
+
+</project>

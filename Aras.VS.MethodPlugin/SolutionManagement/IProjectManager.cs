@@ -1,0 +1,62 @@
+﻿//------------------------------------------------------------------------------
+// <copyright file="IProjectManager.cs" company="Aras Corporation">
+//     © 2017-2018 Aras Corporation. All rights reserved.
+// </copyright>
+//------------------------------------------------------------------------------
+
+using System.Collections.Generic;
+using Aras.VS.MethodPlugin.Code;
+using Aras.VS.MethodPlugin.ProjectConfigurations;
+using EnvDTE;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
+
+namespace Aras.VS.MethodPlugin.SolutionManagement
+{
+	public interface IProjectManager
+	{
+		string ProjectConfigPath { get; }
+
+		string MethodConfigPath { get; }
+
+		string DefaultCodeTemplatesPath { get; }
+
+		string ServerMethodFolderPath { get; }
+
+		string MethodPath { get; }
+
+		string MethodName { get; }
+
+		string SelectedFilePath { get; }
+
+		string SelectedFileName { get; }
+
+		string SelectedFolderPath { get; }
+
+		Project SelectedProject { get; }
+
+		IVsUIShell UIShell { get; }
+
+		ProjectItems ServerMethodFolderItems { get; }
+
+		OleMenuCommandService CommandService { get; }
+
+		bool IsArasProject { get; }
+
+		IEnumerable<string> GetSelectedFiles();
+
+		string AddItemTemplateToProjectNew(CodeInfo codeInfo, bool openAfterCreation, int cursorIndex = -1);
+
+		bool IsMethodExist(string methodName);
+
+		bool IsFileExist(string path);
+
+		void RemoveMethod(MethodInfo methodInfo);
+
+		void CreateMethodTree(GeneratedCodeInfo generatedCodeInfo);
+
+		bool SaveDirtyFiles(List<MethodInfo> methodInfos);
+
+		void ExecuteCommand(string commandName);
+	}
+}

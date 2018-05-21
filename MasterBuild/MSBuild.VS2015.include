@@ -1,0 +1,56 @@
+﻿<project name="MSBuild">
+	<property name="MSBuild.exe" value="${path::combine(environment::get-folder-path('ProgramFilesX86'), 'MSBuild\14.0\Bin\MSBuild.exe')}" readonly="true" />
+	<property name="Remote.MSBuild.exe" overwrite="true" value="${path::combine(environment::get-folder-path('ProgramFilesX86'), 'MSBuild\14.0\Bin\MSBuild.exe')}" />
+	<property name="Nuget.exe" overwrite="true" value="${project.basedir}/.nuget/nuget.exe" />
+
+	<!--
+		Target takes several parameters:
+		1) Build.Logs - directory where log file will be written.
+		2) VS.Solution.Dir - directory with sln or proj file.
+		3) VS.Solution - name of solution to compile (i.e. CompileAll.sln).
+		4) CodeBuild.Target.
+	-->
+	<target name="BuildVsSolutionUsingMSBUILD" description="Builds Visual Studio solution using MSBUILD utility">
+
+		<property name="FullPathToVsFile" value="${path::combine(VS.Solution.Dir, VS.Solution)}" />
+		<property name="FileName" value="${path::get-file-name(FullPathToVsFile)}" />
+		<property name="MsBuild.maxcpucount" value="" />
+
+		<if test="${string::ends-with(FileName, '.sln')}">
+<!--
+			<exec program="${Nuget.exe}"
+				  commandline='restore "${FullPathToVsFile}"'
+				  output="${Build.Logs}\Nuget.${FileName}.log"
+				  append="true" />
+-->
+			<property name="MsBuild.maxcpucount" value="/m" />
+		</if>
+
+		<property name="CodeBuild.Target" value="Release" unless="${property::exists('CodeBuild.Target')}" />
+<!--
+		<property name="Platform" value='/p:Platform="Any CPU"' unless="${property::exists('Platform')}" />
+		<exec program="${MSBuild.exe}"
+			  commandline='"${FullPathToVsFile}" ${MsBuild.maxcpucount} /v:n /nologo /clp:ErrorsOnly /nodeReuse:False /flp:logfile="${Build.Logs}\msbuild.${FileName}.log" /t:Build /p:Configuration="${CodeBuild.Target}" ${Platform}'
+			  verbose="true" />
+-->
+
+		<exec program="${MSBuild.exe}"
+			  commandline='"${FullPathToVsFile}" ${MsBuild.maxcpucount} /v:n /nologo /clp:ErrorsOnly /nodeReuse:False /flp:logfile="${Build.Logs}\msbuild.${FileName}.log" /t:Build /p:Configuration="${CodeBuild.Target}"'
+			  verbose="true" />
+	</target>
+
+	<target name="SetVersion" description="Creates AssemblyVersion with proper values">
+		<!-- Set build number for RM Http handler -->
+		<delete file="${Assembly.Version.File.Path}" failonerror="false" />
+		<echo file="${Assembly.Version.File.Path}">
+			<![CDATA[
+  using System.Reflection;
+  using System.Runtime.CompilerServices;
+  using System.Runtime.InteropServices;
+  
+  [assembly: AssemblyVersion("${Assembly.Version.Major.Release}.${Assembly.Version.Minor.Release}.${Assembly.Version.Build}.0")]
+  [assembly: AssemblyFileVersion("${Assembly.Version.Major.Release}.${Assembly.Version.Minor.Release}.${Assembly.Version.Build}.0")]
+  ]]>
+		</echo>
+	</target>
+</project>

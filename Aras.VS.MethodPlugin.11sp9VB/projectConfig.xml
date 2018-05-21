@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<projectinfo>
+  <connections>
+    <connectionInfo>
+      <serverUrl>http://myinnovator.com</serverUrl>
+      <databaseName>MyInnovator</databaseName>
+      <login>admin</login>
+      <lastConnection>True</lastConnection>
+    </connectionInfo>
+  </connections>
+  <methods>
+    <methodInfo>
+      <methodId>EF55CA4A-D404-4C8B-B74E-B41E1C77E374</methodId>
+      <innovatorMethodId></innovatorMethodId>
+      <methodName>TestMethod</methodName>
+      <methodType>Server</methodType>
+      <language>C#</language>
+      <templateName>CSharp</templateName>
+      <packageName>com.aras.innovator.conversation</packageName>
+    </methodInfo>
+  </methods>
+</projectinfo>

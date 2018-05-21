@@ -1,0 +1,17 @@
+﻿<!--
+ <copyright file="ListBoxControl.xaml" company="Aras Corporation">
+     © 2017-2018 Aras Corporation. All rights reserved. </copyright>
+-->
+
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:shell="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.14.0">
+
+    <!-- ListBoxVSTheme -->
+    <Style TargetType="{x:Type ListBox}">
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static shell:EnvironmentColors.ComboBoxTextBrushKey}}"/>
+        <Setter Property="Background" Value="{DynamicResource {x:Static shell:EnvironmentColors.ComboBoxBackgroundBrushKey}}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static shell:EnvironmentColors.ComboBoxBorderBrushKey}}"/>
+    </Style>
+
+</ResourceDictionary>
