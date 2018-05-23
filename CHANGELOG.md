@@ -1,7 +1,12 @@
 # Road map
 
-- [x] A feature that has been completed
-- [ ] A feature that has NOT yet been completed
+- [x] Create new method
+- [x] Open method from Aras Innovator
+- [x] Open method from AML package
+- [x] Save method to Aras Innovator
+- [x] Save method to AML package
+- [x] Partial class generation
+- [ ] Possibility to debug server method
 
 Features that have a checkmark are complete and available for
 download in the
@@ -14,12 +19,14 @@ on the official Visual Studio extension gallery.
 
 ## 1.1
 
-- [x] Feature 3
-- [x] Feature 4
+- [x] Partial class generation
+
 
 ## 1.0
 
 - [x] Initial release
-- [x] Feature 1
-- [x] Feature 2
-  - [x] Sub feature
+- [x] Create new method
+- [x] Open method from Aras Innovator
+- [x] Open method from AML package
+- [x] Save method to Aras Innovator
+- [x] Save method to AML package

@@ -1,10 +1,10 @@
 # Aras Innovator Method Plugin
 
 <!-- Replace this badge with your own-->
-[![Build status](https://ci.appveyor.com/api/projects/status/hv6uyc059rqbc6fj?svg=true)](https://ci.appveyor.com/project/madskristensen/extensibilitytools)
+[![Build status](https://ci.appveyor.com/api/projects/status/bvssaf9aiylltmkc?svg=true)](https://ci.appveyor.com/project/mkubrak/arasvsmethodplugin)
 
 <!-- Update the VS Gallery link after you upload the VSIX-->
-Download this extension from the [VS Gallery](https://visualstudiogallery.msdn.microsoft.com/[GuidFromGallery])
+Download this extension from the [VS Gallery](https://marketplace.visualstudio.com/items?itemName=ArasCorporation.ArasInnovatorVisualStudioMethodPlugin)
 or get the [CI build](http://vsixgallery.com/extension/8424E2CB-F5F4-40EA-85B8-260998634ED5/).
 
 ---------------------------------------
@@ -34,4 +34,4 @@ extension for Visual Studio which enables some features
 used by this project.
 
 ## License
-Projects are published to Github under the MIT license. See the LICENSE file for license rights and limitations.  (LICENSE)
+Projects are published to Github under the MIT license. See the LICENSE file for license rights and limitations.
