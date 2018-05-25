@@ -491,7 +491,7 @@ namespace Aras.VS.MethodPlugin.Code
 			EventSpecificDataType eventData = CommonData.EventSpecificDataTypeList.First(x => x.EventSpecificData == methodInformation.EventData);
 			GeneratedCodeInfo codeInfo = this.CreateWrapper(template, eventData, methodName);
 
-			string methodCode = File.ReadAllText(projectManager.MethodPath);
+			string methodCode = File.ReadAllText(projectManager.MethodPath,new UTF8Encoding(true));
 			var tree = CSharpSyntaxTree.ParseText(methodCode);
 			var root = tree.GetRoot();
 
@@ -564,7 +564,7 @@ namespace Aras.VS.MethodPlugin.Code
 
 				string normalizedUpdatedPath = updatedPath.TrimStart(Path.DirectorySeparatorChar).TrimStart(Path.AltDirectorySeparatorChar);
 				var filePath = Path.Combine(serverMethodPath, normalizedUpdatedPath);
-				var source = File.ReadAllText(filePath);
+				var source = File.ReadAllText(filePath, new UTF8Encoding(true));
 				var tree = CSharpSyntaxTree.ParseText(source);
 				var root = tree.GetRoot();
 

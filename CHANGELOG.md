@@ -20,6 +20,7 @@ on the official Visual Studio extension gallery.
 ## 1.1
 
 - [x] Partial class generation
+- [x] Encoding changed from UTF8 to UTF8-BOM for all files
 
 
 ## 1.0

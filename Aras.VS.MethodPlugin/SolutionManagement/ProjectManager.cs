@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Interop;
 using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.Dialogs;
@@ -260,7 +261,8 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 			var methodNameWithExtension = !Path.HasExtension(methodName) ? methodName + ".cs" : methodName;
 			var pathToFolder = folder.Properties.Item("FullPath").Value.ToString();
 			var filePath = Path.Combine(pathToFolder, methodNameWithExtension);
-			File.WriteAllText(filePath, codeInfo.Code);
+			Encoding witoutBom =  new UTF8Encoding(true);
+			File.WriteAllText(filePath, codeInfo.Code, witoutBom);
 			folder.ProjectItems.AddFromFile(filePath);
 			string filePathNew = folder.ProjectItems.Item(methodNameWithExtension).FileNames[0].ToString();
 			if (openAfterCreation)

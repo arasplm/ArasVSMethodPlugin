@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using Aras.VS.MethodPlugin.Authentication;
@@ -81,7 +82,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.closeCommand = new RelayCommand<object>(OnCloseCliked);
 			this.selectedIdentityCommand = new RelayCommand(SelectedIdentityCommandClick);
 
-			string sourceCode = File.ReadAllText(pathToFileForSave);
+			string sourceCode = File.ReadAllText(pathToFileForSave, new UTF8Encoding(true));
 
 			PackagePath = projectConfiguration.LastSelectedDir;
 			MethodName = MethodInformation.MethodName;

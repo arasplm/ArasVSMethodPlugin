@@ -8,6 +8,7 @@ using System;
 using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
+using System.Text;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.Dialogs;
@@ -99,7 +100,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			ProjectConfiguraiton projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
 
 			string selectedMethodPath = projectManager.MethodPath;
-			string sourceCode = File.ReadAllText(selectedMethodPath);
+			string sourceCode = File.ReadAllText(selectedMethodPath, new UTF8Encoding(true));
 			string selectedMethodName = Path.GetFileNameWithoutExtension(selectedMethodPath);
 
 			MethodInfo methodInformation = projectConfiguration.MethodInfos.FirstOrDefault(m => m.MethodName == selectedMethodName);

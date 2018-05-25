@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using Aras.VS.MethodPlugin.Extensions;
 using Aras.VS.MethodPlugin.ItemSearch;
 using Aras.VS.MethodPlugin.SolutionManagement;
@@ -98,10 +99,10 @@ namespace Aras.VS.MethodPlugin.ProjectConfigurations
 
 					string oldPartialAttribute = oldPartialPath.Substring(oldPartialPath.IndexOf("\\") + 1).Replace("\\", "/");
 					string newPartialAttribute = newPartialPath.Substring(newPartialPath.IndexOf("\\") + 1).Replace("\\", "/");
-
-					string code = File.ReadAllText(newFilePath);
+					Encoding witoutBom = new UTF8Encoding(true);
+					string code = File.ReadAllText(newFilePath, witoutBom);
 					code = code.Replace($"[PartialPath(\"{oldPartialAttribute}\")]", $"[PartialPath(\"{newPartialAttribute}\")]");
-					File.WriteAllText(newFilePath, code);
+					File.WriteAllText(newFilePath, code, witoutBom);
 
 					break;
 				}

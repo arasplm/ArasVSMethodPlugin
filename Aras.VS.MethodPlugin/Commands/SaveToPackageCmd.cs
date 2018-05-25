@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Code;
@@ -138,7 +139,12 @@ namespace Aras.VS.MethodPlugin.Commands
 					packageXmlElement.SetAttribute("path", $"{saveViewResult.SelectedPackage}\\Import");
 					importsXmlNode.AppendChild(packageXmlElement);
 
-					xmlDocument.Save(importFilePath);
+					XmlWriterSettings settings = new XmlWriterSettings();
+					settings.Encoding = new UTF8Encoding(true);
+					using (XmlWriter xmlWriter = XmlWriter.Create(importFilePath, settings))
+					{
+						xmlDocument.Save(xmlWriter);
+					}
 				}
 			}
 			else
@@ -151,7 +157,12 @@ namespace Aras.VS.MethodPlugin.Commands
 				importsXmlNode.AppendChild(packageXmlElement);
 				xmlDocument.AppendChild(importsXmlNode);
 
-				xmlDocument.Save(importFilePath);
+				XmlWriterSettings settings = new XmlWriterSettings();
+				settings.Encoding = new UTF8Encoding(true);
+				using (XmlWriter xmlWriter = XmlWriter.Create(importFilePath, settings))
+				{
+					xmlDocument.Save(xmlWriter);
+				}
 			}
 
 			string methodTemplate = $@"<AML>
@@ -164,7 +175,8 @@ namespace Aras.VS.MethodPlugin.Commands
 </AML>";
 
 			string methodFilePath = Path.Combine(rootPath, $"{saveViewResult.SelectedPackage}\\Import\\Method\\{saveViewResult.MethodName}.xml");
-			File.WriteAllText(methodFilePath, methodTemplate);
+			Encoding witoutBom = new UTF8Encoding(true);
+			File.WriteAllText(methodFilePath, methodTemplate, witoutBom);
 
 			if (methodInformation.MethodName == saveViewResult.MethodName)
 			{

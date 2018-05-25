@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Xml;
 using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.ItemSearch;
@@ -24,7 +25,13 @@ namespace Aras.VS.MethodPlugin.ProjectConfigurations
 		public void Save(string configFilePath, ProjectConfiguraiton configuration)
 		{
 			XmlDocument xmlDoc = MapProjectConfigToXmlDoc(configuration);
-			xmlDoc.Save(configFilePath);
+			XmlWriterSettings settings = new XmlWriterSettings();
+			settings.Encoding = new UTF8Encoding(true);
+			using (XmlWriter xmlWriter = XmlWriter.Create(configFilePath, settings))
+			{
+				xmlDoc.Save(xmlWriter);
+			}
+			//xmlDoc.Save(configFilePath);
 		}
 
 		private XmlDocument MapProjectConfigToXmlDoc(ProjectConfiguraiton configuration)

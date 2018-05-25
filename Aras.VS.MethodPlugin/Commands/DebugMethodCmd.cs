@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.ProjectConfigurations;
 using Aras.VS.MethodPlugin.SolutionManagement;
@@ -92,7 +93,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			var pkgName = methodInformation.PackageName;
 			
 			string selectedMethodPath = projectManager.MethodPath;
-			string sourceCode = File.ReadAllText(selectedMethodPath);
+			string sourceCode = File.ReadAllText(selectedMethodPath, new UTF8Encoding(true));
 
 			var tree = CSharpSyntaxTree.ParseText(sourceCode);
 			SyntaxNode root = tree.GetRoot();
