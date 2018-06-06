@@ -176,7 +176,12 @@ namespace Aras.VS.MethodPlugin.Commands
 
 			string methodFilePath = Path.Combine(rootPath, $"{saveViewResult.SelectedPackage}\\Import\\Method\\{saveViewResult.MethodName}.xml");
 			Encoding witoutBom = new UTF8Encoding(true);
-			File.WriteAllText(methodFilePath, methodTemplate, witoutBom);
+			string[] contents = methodTemplate.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+			if (contents.Last() == Environment.NewLine)
+			{
+				contents = contents.Take(contents.Count() - 1).ToArray();
+			}
+			File.WriteAllLines(methodFilePath, contents, witoutBom);
 
 			if (methodInformation.MethodName == saveViewResult.MethodName)
 			{
