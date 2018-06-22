@@ -265,7 +265,7 @@ namespace Aras.VS.MethodPlugin.Code
 			if (!string.IsNullOrEmpty(partialCode))
 			{
 				partialCode = partialCode.Remove(partialCode.LastIndexOf('}'));
-				userCode += "}" + partialCode;
+				userCode += Environment.NewLine + "}" + partialCode;
 			}
 
 			return userCode;
