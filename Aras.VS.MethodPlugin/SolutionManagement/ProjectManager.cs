@@ -164,11 +164,24 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 			}
 		}
 
+		public ProjectItem ServerMethodsFolderItem
+		{
+			get
+			{
+				if (!SelectedProject.ProjectItems.Exists(serverMethodsFolderName))
+				{
+					SelectedProject.ProjectItems.AddFolder(serverMethodsFolderName);
+				}
+
+				return SelectedProject.ProjectItems.Item(serverMethodsFolderName);
+			}
+		}
+
 		public ProjectItems ServerMethodFolderItems
 		{
 			get
 			{
-				return SelectedProject.ProjectItems.Item(serverMethodsFolderName).ProjectItems;
+				return this.ServerMethodsFolderItem.ProjectItems;
 			}
 		}
 
@@ -177,7 +190,7 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 			get
 			{
 				var project = GetFirstSelectedProject();
-				ProjectItem defaultmethodConfigFile = project.ProjectItems.Item(serverMethodsFolderName);
+				ProjectItem defaultmethodConfigFile = this.ServerMethodsFolderItem;
 				return defaultmethodConfigFile.FileNames[0];
 			}
 		}
@@ -439,7 +452,7 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 		{
 			string[] pathParts = path.Split(new string[] { @"\" }, StringSplitOptions.RemoveEmptyEntries);
 			string fileName = pathParts.Last();
-			ProjectItem folder = SelectedProject.ProjectItems.Item(serverMethodsFolderName);
+			ProjectItem folder = this.ServerMethodsFolderItem;
 			for (int i = 0; i < pathParts.Length - 1; i++)
 			{
 				if (string.IsNullOrEmpty(pathParts[i]))
@@ -462,7 +475,7 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 		private ProjectItem LoadProjectFolder(string path)
 		{
 			string[] pathParts = path.Split(new string[] { @"\" }, StringSplitOptions.RemoveEmptyEntries);
-			ProjectItem folder = SelectedProject.ProjectItems.Item(serverMethodsFolderName);
+			ProjectItem folder = this.ServerMethodsFolderItem;
 			for (int i = 0; i < pathParts.Length - 1; i++)
 			{
 				if (folder.ProjectItems.Exists(pathParts[i]))

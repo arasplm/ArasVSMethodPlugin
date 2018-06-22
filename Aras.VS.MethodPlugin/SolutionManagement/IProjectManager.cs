@@ -37,6 +37,8 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 
 		IVsUIShell UIShell { get; }
 
+		ProjectItem ServerMethodsFolderItem { get; }
+
 		ProjectItems ServerMethodFolderItems { get; }
 
 		OleMenuCommandService CommandService { get; }

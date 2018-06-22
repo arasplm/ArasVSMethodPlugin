@@ -29,14 +29,8 @@ namespace Aras.VS.MethodPlugin.ProjectConfigurations
 
 		public void Update(IProjectManager projectManager)
 		{
-			Project project = projectManager.SelectedProject;
-
-			ProjectItems serverMethods;
-			if (project.ProjectItems.Exists(serverMethodsFolderName))
-			{
-				serverMethods = project.ProjectItems.Item(serverMethodsFolderName).ProjectItems;
-			}
-			else
+			ProjectItems serverMethods = projectManager.ServerMethodFolderItems;
+			if (serverMethods.Count == 0)
 			{
 				this.MethodInfos.Clear();
 				return;
