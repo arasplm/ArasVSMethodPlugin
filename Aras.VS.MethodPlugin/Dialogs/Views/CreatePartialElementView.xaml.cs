@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
 using System.Windows;
 
 namespace Aras.VS.MethodPlugin.Dialogs.Views
@@ -16,6 +17,12 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 		public CreatePartialElementView()
 		{
 			InitializeComponent();
+		}
+
+		private void CreatePartialElementView_SourceInitialized(object sender, EventArgs e)
+		{
+			this.FileNameTextBlock.Focus();
+			this.FileNameTextBlock.SelectAll();
 		}
 	}
 }

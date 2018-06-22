@@ -11,7 +11,8 @@
              Icon="/Aras.VS.MethodPlugin;component/Resources/aras.ico"
              WindowStyle="None"
              WindowStartupLocation="CenterScreen"
-             Style="{DynamicResource WindowVsTheme}">
+             Style="{DynamicResource WindowVsTheme}"
+             SourceInitialized="CreatePartialElementView_SourceInitialized">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
