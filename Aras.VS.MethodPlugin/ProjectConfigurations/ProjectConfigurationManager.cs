@@ -27,6 +27,10 @@ namespace Aras.VS.MethodPlugin.ProjectConfigurations
 			XmlDocument xmlDoc = MapProjectConfigToXmlDoc(configuration);
 			XmlWriterSettings settings = new XmlWriterSettings();
 			settings.Encoding = new UTF8Encoding(true);
+			settings.Indent = true;
+			settings.IndentChars = "\t";
+			settings.NewLineOnAttributes = false;
+			settings.OmitXmlDeclaration = true;
 			using (XmlWriter xmlWriter = XmlWriter.Create(configFilePath, settings))
 			{
 				xmlDoc.Save(xmlWriter);
