@@ -96,7 +96,7 @@ namespace Aras.VS.MethodPlugin
 			Commands.ConnectionInfoCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager);
 			Commands.CreatePartialElementCmd.Initialize(projectManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
 			Commands.RefreshConfigCmd.Initialize(projectManager, dialogFactory, projectConfigurationManager);
-			//Commands.DebugMethodCmd.Initialize(projectManager, dialogFactory, projectConfigurationManager);
+			Commands.DebugMethodCmd.Initialize(projectManager, dialogFactory, projectConfigurationManager);
 
 			var dte = (DTE)this.GetService(typeof(DTE));
 			this.projectItemsEvents = dte.Events.GetObject("CSharpProjectItemsEvents") as ProjectItemsEvents;

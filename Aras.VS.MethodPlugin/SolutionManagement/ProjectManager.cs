@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -274,7 +275,7 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 			var methodNameWithExtension = !Path.HasExtension(methodName) ? methodName + ".cs" : methodName;
 			var pathToFolder = folder.Properties.Item("FullPath").Value.ToString();
 			var filePath = Path.Combine(pathToFolder, methodNameWithExtension);
-			Encoding witoutBom =  new UTF8Encoding(true);
+			Encoding witoutBom = new UTF8Encoding(true);
 			File.WriteAllText(filePath, codeInfo.Code, witoutBom);
 			folder.ProjectItems.AddFromFile(filePath);
 			string filePathNew = folder.ProjectItems.Item(methodNameWithExtension).FileNames[0].ToString();
@@ -507,6 +508,18 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 			}
 
 			return fileProjectItem;
+		}
+
+		public void AttachToProcess(System.Diagnostics.Process process)
+		{
+			DTE dte = (DTE)Package.GetGlobalService(typeof(DTE));
+			foreach (EnvDTE.Process processToAttach in dte.Debugger.LocalProcesses)
+			{
+				if (processToAttach.ProcessID == process.Id)
+				{
+					processToAttach.Attach();
+				}
+			}
 		}
 	}
 }

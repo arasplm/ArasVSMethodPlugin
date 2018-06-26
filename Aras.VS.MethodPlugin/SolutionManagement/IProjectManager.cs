@@ -60,5 +60,7 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 		bool SaveDirtyFiles(List<MethodInfo> methodInfos);
 
 		void ExecuteCommand(string commandName);
+
+		void AttachToProcess(System.Diagnostics.Process process);
 	}
 }

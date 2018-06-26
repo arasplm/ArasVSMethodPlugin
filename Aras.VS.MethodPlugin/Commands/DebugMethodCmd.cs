@@ -84,7 +84,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			
 			var outputPath = props.Item("OutputPath");
 			var dllFullPath = Path.Combine(project.Properties.Item("FullPath").Value.ToString(), outputPath.Value.ToString(), project.Properties.Item("OutputFileName").Value.ToString());
-			var selectedMethodName = projectManager.MethodPath;
+			var selectedMethodName = projectManager.MethodName;
 
 			var projectConfigPath = projectManager.ProjectConfigPath;
 			ProjectConfiguraiton projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
@@ -112,10 +112,14 @@ namespace Aras.VS.MethodPlugin.Commands
 			var directoryPath = Path.GetDirectoryName(currentDllPath);
 			var launcherPath = Path.Combine(directoryPath, "MethodLauncher", "MethodLauncher.exe");
 			ProcessStartInfo startInfo = new ProcessStartInfo(launcherPath);
-			startInfo.WindowStyle = ProcessWindowStyle.Minimized;
+			startInfo.WindowStyle = ProcessWindowStyle.Hidden;
 			startInfo.Arguments = dllFullPath + " " + className + " " + methodName;
 
-			Process.Start(startInfo);
+			Process process = Process.Start(startInfo);
+
+			projectManager.AttachToProcess(process);
+
+
 
 		}
 
