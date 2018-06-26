@@ -21,6 +21,7 @@ See the [change log](CHANGELOG.md) for changes and road map.
 - Save method to Aras Innovator
 - Save method to AML package
 - Partial class generation
+- Debug server method
 
 
 ## Contribute
