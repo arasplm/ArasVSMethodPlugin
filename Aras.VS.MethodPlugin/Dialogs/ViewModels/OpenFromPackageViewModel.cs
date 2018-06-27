@@ -236,8 +236,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				{
 					this.MethodType = "client";
 				}
-
-				this.MethodCode = methodCodeXmlNode.InnerText;
+				int cdataLength = "<![CDATA[".Length;
+				this.MethodCode = methodCodeXmlNode.InnerXml.Substring(cdataLength, methodCodeXmlNode.InnerXml.LastIndexOf("]]>") - cdataLength);
 				this.IdentityKeyedName = executionAllowedToXmlNode.Attributes["keyed_name"].InnerText;
 				this.IdentityId = executionAllowedToXmlNode.InnerText;
 				this.MethodName = nameTypeXmlNode.InnerText;
