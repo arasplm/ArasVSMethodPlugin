@@ -138,9 +138,6 @@ namespace Aras.VS.MethodPlugin.Code
 				//RemoveMethod(storedMethodInfo, folder);
 			}
 
-			var defaultTemplate = defaultCodeProvider.GetDefaultCodeTemplates(projectManager.DefaultCodeTemplatesPath)
-				.FirstOrDefault(dct => dct.TempalteName == template.TemplateName && dct.EventDataType == eventData.EventSpecificData);
-
 			var codeInfo = CreateWrapper(template, eventData, methodName);
 			codeInfo = CreateMainNew(codeInfo, template, eventData, methodName, false, methodCode);
 			codeInfo = CreatePartialClasses(codeInfo);
@@ -283,9 +280,7 @@ namespace Aras.VS.MethodPlugin.Code
 
 		public GeneratedCodeInfo CreateWrapper(TemplateInfo template, EventSpecificDataType eventData, string methodName)
 		{
-			var defaultTemplate = defaultCodeProvider.GetDefaultCodeTemplates(projectManager.DefaultCodeTemplatesPath)
-				.FirstOrDefault(dct => dct.TempalteName == template.TemplateName && dct.EventDataType == eventData.EventSpecificData);
-
+			DefaultCodeTemplate defaultTemplate = LoadDefaultCodeTemplate(template, eventData);
 			string wrapperCode = defaultTemplate.WrapperSourceCode;
 
 			const string fncname = "FNCMethod";
@@ -351,9 +346,7 @@ namespace Aras.VS.MethodPlugin.Code
 			bool useAdvancedCode,
 			string codeToInsert)
 		{
-			var defaultTemplate = defaultCodeProvider.GetDefaultCodeTemplates(projectManager.DefaultCodeTemplatesPath)
-				.FirstOrDefault(dct => dct.TempalteName == template.TemplateName && dct.EventDataType == eventData.EventSpecificData);
-
+			DefaultCodeTemplate defaultTemplate = LoadDefaultCodeTemplate(template, eventData);
 			string code = useAdvancedCode ? defaultTemplate.AdvancedSourceCode : defaultTemplate.SimpleSourceCode;
 			code = code.Replace("$(pkgname)", generatedCodeInfo.Namespace);
 
@@ -516,9 +509,8 @@ namespace Aras.VS.MethodPlugin.Code
 		public GeneratedCodeInfo CreateTestsNew(GeneratedCodeInfo generatedCodeInfo, TemplateInfo template, EventSpecificDataType eventData, string methodName, bool useAdvancedCode)
 		{
 			var resultCodeInfo = new GeneratedCodeInfo(generatedCodeInfo);
+			DefaultCodeTemplate defaultTemplate = LoadDefaultCodeTemplate(template, eventData);
 
-			var defaultTemplate = defaultCodeProvider.GetDefaultCodeTemplates(projectManager.DefaultCodeTemplatesPath)
-				.FirstOrDefault(dct => dct.TempalteName == template.TemplateName && dct.EventDataType == eventData.EventSpecificData);
 			string code = useAdvancedCode ? defaultTemplate.AdvancedUnitTestsCode : defaultTemplate.SimpleUnitTestsCode;
 			code = code.Replace("$(pkgname)", resultCodeInfo.Namespace);
 			code = code.Replace("$(clsname)", resultCodeInfo.ClassName);
@@ -527,6 +519,18 @@ namespace Aras.VS.MethodPlugin.Code
 			resultCodeInfo.TestsCodeInfo.Path = Path.Combine(methodName, methodName + "Tests.cs");
 
 			return resultCodeInfo;
+		}
+
+		private DefaultCodeTemplate LoadDefaultCodeTemplate(TemplateInfo template, EventSpecificDataType eventData)
+		{
+			var defaultTemplate = defaultCodeProvider.GetDefaultCodeTemplates(projectManager.DefaultCodeTemplatesPath)
+				.FirstOrDefault(dct => dct.TempalteName == template.TemplateName && dct.EventDataType == eventData.EventSpecificData);
+			if (defaultTemplate == null)
+			{
+				throw new FileNotFoundException($"Default code template file with templateName=\"{template.TemplateName}\" eventData=\"{eventData.EventSpecificData}\" not found.");
+			}
+
+			return defaultTemplate;
 		}
 
 		private string GetParentClassName(SyntaxNode node)
