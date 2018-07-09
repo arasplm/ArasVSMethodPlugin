@@ -175,13 +175,16 @@ namespace Aras.VS.MethodPlugin.Commands
 </AML>";
 
 			string methodFilePath = Path.Combine(rootPath, $"{saveViewResult.SelectedPackage}\\Import\\Method\\{saveViewResult.MethodName}.xml");
-			Encoding witoutBom = new UTF8Encoding(true);
-			string[] contents = methodTemplate.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
-			if (contents.Last() == Environment.NewLine)
-			{
-				contents = contents.Take(contents.Count() - 1).ToArray();
-			}
-			File.WriteAllLines(methodFilePath, contents, witoutBom);
+			//Encoding witoutBom = new UTF8Encoding(true);
+			//string[] contents = methodTemplate.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+			//if (contents.Last() == Environment.NewLine)
+			//{
+			//	contents = contents.Take(contents.Count() - 1).ToArray();
+			//}
+			XmlDocument resultXmlDoc = new XmlDocument();
+			resultXmlDoc.LoadXml(methodTemplate);
+			SaveToFile(methodFilePath, resultXmlDoc);
+			//File.WriteAllLines(methodFilePath, contents, witoutBom);
 
 			if (methodInformation.MethodName == saveViewResult.MethodName)
 			{
@@ -202,6 +205,24 @@ namespace Aras.VS.MethodPlugin.Commands
 				string.Empty,
 				MessageButtons.OK,
 				MessageIcon.Information);
+		}
+
+		private void SaveToFile(string filePath, XmlDocument xmlDoc)
+		{
+
+			using (StreamWriter streamWriter = new StreamWriter(filePath, false, new UTF8Encoding(true)))
+			{
+				XmlWriterSettings xwSettings = new XmlWriterSettings
+				{
+					Indent = true,
+					OmitXmlDeclaration = true,
+					IndentChars = " "
+				};
+				using (XmlWriter xmlWriter = XmlWriter.Create(streamWriter, xwSettings))
+				{
+					xmlDoc.Save(xmlWriter);
+				}
+			}
 		}
 	}
 }
