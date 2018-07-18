@@ -10,6 +10,7 @@ using System.Text;
 using System.Xml;
 using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.ItemSearch;
+using System.Linq;
 
 namespace Aras.VS.MethodPlugin.ProjectConfigurations
 {
@@ -118,7 +119,7 @@ namespace Aras.VS.MethodPlugin.ProjectConfigurations
 				metohdInfoNode.AppendChild(executionAllowedTo);
 
 				XmlElement partialClasses = xmlDoc.CreateElement("partialClasses");
-				foreach (string path in methodInfo.PartialClasses)
+				foreach (string path in methodInfo.PartialClasses.OrderBy(i => i).ToList())
 				{
 					XmlElement pathXmlElement = xmlDoc.CreateElement("path");
 					pathXmlElement.InnerText = path;
