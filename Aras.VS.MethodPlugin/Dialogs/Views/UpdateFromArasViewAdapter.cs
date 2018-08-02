@@ -33,6 +33,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 				MethodLanguage = viewModel.MethodLanguage,
 				MethodName = viewModel.MethodName,
 				MethodType = viewModel.MethodType,
+				MethodComment = viewModel.MethodComment,
 				PackageName = viewModel.PackageName
 			};
 		}

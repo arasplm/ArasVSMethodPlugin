@@ -27,6 +27,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 				MethodItem = viewModel.MethodItem,
 				MethodLanguage = viewModel.MethodLanguage,
 				MethodName = viewModel.MethodName,
+				MethodComment = viewModel.MethodComment,
 				SelectedIdentityId = viewModel.SelectedIdentityId,
 				SelectedIdentityKeyedName = viewModel.SelectedIdentityKeyedName,
 				SelectedPackage = viewModel.SelectedPackage,

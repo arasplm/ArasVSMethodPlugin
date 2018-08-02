@@ -98,6 +98,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -151,7 +152,17 @@
                         <ComboBox Grid.Column="1" ItemsSource="{Binding Path=EventSpecificData}" SelectedItem="{Binding Path=SelectedEventSpecificData}" VerticalAlignment="Center"></ComboBox>
                     </Grid>
 
-                    <Expander Grid.Row="3" Grid.ColumnSpan="4" Header="Method Preview" 
+                    <Grid Grid.Row="3" Grid.ColumnSpan="2" Grid.Column="0" Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Comment:" VerticalAlignment="Center" />
+                        <TextBox Grid.Column="1" IsReadOnly="True"  Text="{Binding Path=MethodComment}" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" />
+                    </Grid>
+
+                    <Expander Grid.Row="4" Grid.ColumnSpan="4" Header="Method Preview" 
                       VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5">
                         <TextBox x:Name="tempaltePreviewTextBox" HorizontalAlignment="Stretch" AcceptsReturn="True" IsReadOnly="True" MaxHeight="300"
                          VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
@@ -159,7 +170,7 @@
                         </TextBox>
                     </Expander>
 
-                    <Grid Grid.Row="4" Grid.ColumnSpan="2" Grid.Column="0" Margin="5">
+                    <Grid Grid.Row="5" Grid.ColumnSpan="2" Grid.Column="0" Margin="5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition/>
@@ -169,7 +180,7 @@
                         <TextBox Grid.Column="1" IsReadOnly="True"  Text="{Binding Path=IdentityKeyedName}" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" />
                     </Grid>
 
-                    <Grid Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4" VerticalAlignment="Center"  Margin="5">
+                    <Grid Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="4" VerticalAlignment="Center"  Margin="5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>

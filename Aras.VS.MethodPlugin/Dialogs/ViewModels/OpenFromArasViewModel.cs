@@ -37,6 +37,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private ProjectConfiguraiton projectConfiguration;
 		private ConnectionInfo connectionInfo;
 
+		private string methodComment;
 		private string methodType;
 		private string methodLanguage;
 		private TemplateInfo selectedTemplate;
@@ -104,6 +105,16 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			{
 				connectionInfo = value;
 				RaisePropertyChanged(nameof(ConnectionInformation));
+			}
+		}
+
+		public string MethodComment
+		{
+			get { return methodComment; }
+			set
+			{
+				methodComment = value;
+				RaisePropertyChanged(nameof(MethodComment));
 			}
 		}
 
@@ -260,6 +271,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				this.IdentityKeyedName = string.Empty;
 				this.IdentityId = string.Empty;
 				this.Package = string.Empty;
+				this.MethodComment = string.Empty;
 			}
 		}
 
@@ -307,6 +319,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				this.MethodCode = item.getProperty("method_code", string.Empty);
 				this.IdentityKeyedName = item.getPropertyAttribute("execution_allowed_to", "keyed_name", string.Empty);
 				this.IdentityId = item.getProperty("execution_allowed_to", string.Empty);
+				this.MethodComment = item.getProperty("comments", string.Empty);
 
 				if (methodLanguage == "C#" || methodLanguage == "VB")
 				{

@@ -133,6 +133,8 @@ namespace Aras.VS.MethodPlugin.Commands
 				{
 					methodCode = methodCode.Insert(0, string.Format("//MethodTemplateName={0}\r\n", template.TemplateName));
 				}
+
+				currentMethodItem.setProperty("comments", saveViewResult.MethodComment);
 				currentMethodItem.setProperty("method_code", methodCode);
 				currentMethodItem.setProperty("name", saveViewResult.MethodName);
 				currentMethodItem.setProperty("method_type", saveViewResult.MethodLanguage);
@@ -151,6 +153,7 @@ namespace Aras.VS.MethodPlugin.Commands
 				}
 
 				currentMethodItem = authManager.InnovatorInstance.newItem("Method", "add");
+				currentMethodItem.setProperty("comments", saveViewResult.MethodComment);
 				currentMethodItem.setProperty("method_code", methodCode);
 				currentMethodItem.setProperty("name", saveViewResult.MethodName);
 				currentMethodItem.setProperty("method_type", saveViewResult.MethodLanguage);
@@ -199,6 +202,7 @@ namespace Aras.VS.MethodPlugin.Commands
 				methodInformation.PackageName = saveViewResult.SelectedPackage;
 				methodInformation.ExecutionAllowedToKeyedName = saveViewResult.SelectedIdentityKeyedName;
 				methodInformation.ExecutionAllowedToId = saveViewResult.SelectedIdentityId;
+				methodInformation.MethodComment = saveViewResult.MethodComment;
 
 				projectConfigurationManager.Save(projectConfigPath, projectConfiguration);
 			}

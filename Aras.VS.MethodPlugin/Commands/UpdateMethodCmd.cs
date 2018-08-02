@@ -125,6 +125,7 @@ namespace Aras.VS.MethodPlugin.Commands
 				EventData = updateViewResult.EventSpecificData,
 				ExecutionAllowedToId = updateViewResult.ExecutionIdentityId,
 				ExecutionAllowedToKeyedName = updateViewResult.ExecutionIdentityKeyedName,
+				MethodComment = updateViewResult.MethodComment,
 				PartialClasses = codeInfo.PartialCodeInfoList.Select(pci => pci.Path).ToList()
 			};
 

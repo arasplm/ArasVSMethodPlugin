@@ -18,6 +18,7 @@ namespace Aras.VS.MethodPlugin.ProjectConfigurations
 			this.MethodName = methodInfo.MethodName;
 			this.MethodType = methodInfo.MethodType;
 			this.MethodLanguage = methodInfo.MethodLanguage;
+			this.MethodComment = methodInfo.MethodComment;
 			this.TemplateName = methodInfo.TemplateName;
 			this.PackageName = methodInfo.PackageName;
 			this.EventData = methodInfo.EventData;
@@ -40,6 +41,8 @@ namespace Aras.VS.MethodPlugin.ProjectConfigurations
 		public string MethodType { get; set; }
 
 		public string MethodLanguage { get; set; }
+
+		public string MethodComment { get; set; }
 
 		public string TemplateName { get; set; }
 

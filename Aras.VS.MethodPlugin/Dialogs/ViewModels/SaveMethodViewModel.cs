@@ -34,6 +34,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private ConnectionInfo connectionInfo;
 		private string innovatorMethodId;
 
+		private string methodComment;
 		private string methodType;
 		private string methodLanguage;
 		private string templateName;
@@ -85,6 +86,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.editConnectionInfoCommand = new RelayCommand<object>(EditConnectionInfoCommandClick);
 			this.selectedIdentityCommand = new RelayCommand(SelectedIdentityCommandClick);
 
+			this.methodComment = methodInformation.MethodComment;
 			this.innovatorMethodId = methodInformation.InnovatorMethodId;
 
 			this.methodCode = methodCode;
@@ -183,6 +185,16 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				methodName = value;
 				RaisePropertyChanged(nameof(MethodName));
 				ValidateOkButton();
+			}
+		}
+
+		public string MethodComment
+		{
+			get { return methodComment; }
+			set
+			{
+				methodComment = value;
+				RaisePropertyChanged(nameof(MethodComment));
 			}
 		}
 

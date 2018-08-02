@@ -35,6 +35,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		private MethodInfo methodInfo;
 
+		private string methodComments;
 		private string packagePath;
 		private string methodName;
 		private string methodCode;
@@ -84,6 +85,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 			string sourceCode = File.ReadAllText(pathToFileForSave, new UTF8Encoding(true));
 
+			MethodComment = MethodInformation.MethodComment;
 			PackagePath = projectConfiguration.LastSelectedDir;
 			MethodName = MethodInformation.MethodName;
 			MethodCode = codeProvider.LoadMethodCode(sourceCode, MethodInformation, projectManager.ServerMethodFolderPath);
@@ -114,6 +116,16 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			{
 				methodInfo = value;
 				RaisePropertyChanged(nameof(MethodInfo));
+			}
+		}
+
+		public string MethodComment
+		{
+			get { return methodComments; }
+			set
+			{
+				methodComments = value;
+				RaisePropertyChanged(nameof(MethodComment));
 			}
 		}
 

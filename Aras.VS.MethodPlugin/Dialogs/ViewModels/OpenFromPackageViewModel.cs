@@ -27,6 +27,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private EventSpecificDataType selectedEventSpecificData;
 		private bool isOkButtonEnabled;
 
+		private string methodComment;
 		private string methodPath;
 		private string methodType;
 		private string methodLanguage;
@@ -79,6 +80,16 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			{
 				isOkButtonEnabled = value;
 				RaisePropertyChanged(nameof(IsOkButtonEnabled));
+			}
+		}
+		
+		public string MethodComment
+		{
+			get { return methodComment; }
+			set
+			{
+				methodComment = value;
+				RaisePropertyChanged(nameof(MethodComment));
 			}
 		}
 
@@ -221,6 +232,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				var xmlDocument = new XmlDocument();
 				xmlDocument.Load(this.methodPath);
 				XmlNode itemXmlNode = xmlDocument.SelectSingleNode("AML/Item");
+				XmlNode commentsXmlNode = itemXmlNode.SelectSingleNode("comments");
 				XmlNode methodCodeXmlNode = itemXmlNode.SelectSingleNode("method_code");
 				XmlNode executionAllowedToXmlNode = itemXmlNode.SelectSingleNode("execution_allowed_to");
 				XmlNode methodTypeXmlNode = itemXmlNode.SelectSingleNode("method_type");
@@ -237,6 +249,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 					this.MethodType = "client";
 				}
 
+				this.MethodComment = commentsXmlNode?.InnerText;
 				this.MethodCode = methodCodeXmlNode.InnerText;
 				this.IdentityKeyedName = executionAllowedToXmlNode.Attributes["keyed_name"].InnerText;
 				this.IdentityId = executionAllowedToXmlNode.InnerText;

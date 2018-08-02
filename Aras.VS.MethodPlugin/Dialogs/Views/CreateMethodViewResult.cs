@@ -17,6 +17,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 
 		public string MethodName { get; set; }
 
+		public string MethodComment { get; set; }
+
 		public bool UseRecommendedDefaultCode { get; set; }
 
 		public ListInfo SelectedActionLocation { get; set; }

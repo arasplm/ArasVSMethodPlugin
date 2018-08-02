@@ -135,6 +135,7 @@ namespace Aras.VS.MethodPlugin.Commands
 				MethodLanguage = openViewResult.MethodLanguage,
 				MethodName = openViewResult.MethodName,
 				MethodType = openViewResult.MethodType,
+				MethodComment = openViewResult.MethodComment,
 				PackageName = openViewResult.Package,
 				TemplateName = openViewResult.SelectedTemplate.TemplateName,
 				EventData = openViewResult.SelectedEventSpecificData.EventSpecificData,

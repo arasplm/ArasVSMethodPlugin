@@ -102,6 +102,7 @@ namespace Aras.VS.MethodPlugin.Commands
 				MethodLanguage = createViewResult.SelectedLanguage.Value,
 				MethodName = createViewResult.MethodName,
 				MethodType = createViewResult.SelectedActionLocation.Value,
+				MethodComment = createViewResult.MethodComment,
 				PackageName = createViewResult.SelectedPackage,
 				TemplateName = createViewResult.SelectedTemplate.TemplateName,
 				EventData = createViewResult.SelectedEventSpecificData.EventSpecificData,

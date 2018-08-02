@@ -17,6 +17,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 		public string MethodName { get; set; }
 		public string MethodConfigId { get; set; }
 		public string MethodId { get; set; }
+		public string MethodComment { get; set; }
 		public TemplateInfo SelectedTemplate { get; set; }
 		public EventSpecificDataType SelectedEventSpecificData { get; set; }
 		public string Package { get; set; }

@@ -42,6 +42,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private TemplateInfo selectedTemplate;
 		private ObservableCollection<TemplateInfo> templates;
 		private string methodName = "Method1";
+		private string methodComment;
 		private bool isOkButtonEnabled;
 
 		private string selectedIdentityKeyedName;
@@ -242,6 +243,16 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				methodName = value;
 				RaisePropertyChanged(nameof(MethodName));
 				ValidateOkButton();
+			}
+		}
+
+		public string MethodComment
+		{
+			get { return methodComment; }
+			set
+			{
+				methodComment = value;
+				RaisePropertyChanged(nameof(MethodComment));
 			}
 		}
 

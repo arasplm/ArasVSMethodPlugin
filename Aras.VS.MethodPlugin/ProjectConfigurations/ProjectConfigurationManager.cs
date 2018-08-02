@@ -94,6 +94,10 @@ namespace Aras.VS.MethodPlugin.ProjectConfigurations
 				methodType.InnerText = methodInfo.MethodType;
 				metohdInfoNode.AppendChild(methodType);
 
+				XmlElement comments = xmlDoc.CreateElement("comments");
+				comments.InnerText = methodInfo.MethodComment;
+				metohdInfoNode.AppendChild(comments);
+
 				XmlElement language = xmlDoc.CreateElement("language");
 				language.InnerText = methodInfo.MethodLanguage;
 				metohdInfoNode.AppendChild(language);
@@ -199,9 +203,11 @@ namespace Aras.VS.MethodPlugin.ProjectConfigurations
 				methodInfo.InnovatorMethodId = methodInfoNode.SelectSingleNode("id").InnerText;
 				methodInfo.MethodName = methodInfoNode.SelectSingleNode("methodName").InnerText;
 				methodInfo.MethodType = methodInfoNode.SelectSingleNode("methodType").InnerText;
+				methodInfo.MethodComment = methodInfoNode.SelectSingleNode("comments")?.InnerText;
 				methodInfo.MethodLanguage = methodInfoNode.SelectSingleNode("language").InnerText;
 				methodInfo.TemplateName = methodInfoNode.SelectSingleNode("templateName").InnerText;
 				methodInfo.PackageName = methodInfoNode.SelectSingleNode("packageName").InnerText;
+
 				EventSpecificData eventData;
 				if (Enum.TryParse(methodInfoNode.SelectSingleNode("eventData")?.InnerText, out eventData))
 				{

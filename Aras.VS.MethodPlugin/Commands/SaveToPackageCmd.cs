@@ -168,6 +168,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			string updateMethodCodeForSavingToAmlPackage = saveViewResult.MethodCode.Replace("]]", "]]]]><![CDATA[");
 			string methodTemplate = $@"<AML>
  <Item type=""Method"" id=""{saveViewResult.MethodInformation.InnovatorMethodConfigId}"" action=""add"">
+  <comments>{saveViewResult.MethodComment}</comments>
   <execution_allowed_to keyed_name=""{saveViewResult.SelectedIdentityKeyedName}"" type=""Identity"">{saveViewResult.SelectedIdentityId}</execution_allowed_to>
   <method_code><![CDATA[{updateMethodCodeForSavingToAmlPackage}]]></method_code>
   <method_type>{saveViewResult.MethodInformation.MethodLanguage}</method_type>
@@ -184,6 +185,7 @@ namespace Aras.VS.MethodPlugin.Commands
 				methodInformation.PackageName = saveViewResult.SelectedPackage;
 				methodInformation.ExecutionAllowedToKeyedName = saveViewResult.SelectedIdentityKeyedName;
 				methodInformation.ExecutionAllowedToId = saveViewResult.SelectedIdentityId;
+				methodInformation.MethodComment = saveViewResult.MethodComment;
 			}
 
 			projectConfiguration.LastSelectedDir = rootPath;

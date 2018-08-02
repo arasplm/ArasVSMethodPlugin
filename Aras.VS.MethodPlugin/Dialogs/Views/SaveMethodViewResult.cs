@@ -16,5 +16,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 		public string SelectedIdentityKeyedName { get; set; }
 		public string SelectedPackage { get; set; }
 		public dynamic MethodItem { get; set; }
+		public string MethodComment { get; set; }
 	}
 }

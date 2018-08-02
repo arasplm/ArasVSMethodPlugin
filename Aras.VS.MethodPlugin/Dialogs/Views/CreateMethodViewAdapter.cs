@@ -23,6 +23,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 			{
 				DialogOperationResult = result,
 				MethodName = viewModel.MethodName,
+				MethodComment = viewModel.MethodComment,
 				SelectedActionLocation = viewModel.SelectedActionLocation,
 				SelectedEventSpecificData = viewModel.SelectedEventSpecificData,
 				SelectedIdentityId = viewModel.SelectedIdentityId,

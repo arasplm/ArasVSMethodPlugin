@@ -41,6 +41,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -81,14 +82,23 @@
                 <ComboBox Grid.Column="1" ItemsSource="{Binding Path=EventSpecificData}" SelectedItem="{Binding Path=SelectedEventSpecificData}" VerticalAlignment="Center"></ComboBox>
             </Grid>
 
-            <Expander Grid.Row="2" Grid.ColumnSpan="3" Header="Template Preview" 
+            <Grid Grid.Row="2" Grid.ColumnSpan="3" Margin="5,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Label Content="Comment:"/>
+                <TextBox x:Name="MethodComment" Text="{Binding Path=MethodComment, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" VerticalContentAlignment="Center" HorizontalAlignment="Stretch"/>
+            </Grid>
+
+            <Expander Grid.Row="3" Grid.ColumnSpan="3" Header="Template Preview" 
                       VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5">
                 <TextBox x:Name="tempaltePreviewTextBox" HorizontalAlignment="Stretch" AcceptsReturn="True" IsReadOnly="True" MaxHeight="300"
                          VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Text="{Binding Path=TemplatePreviewWithEventData}">
                 </TextBox>
             </Expander>
 
-            <Grid Grid.Row="3" Grid.ColumnSpan="2" Grid.Column="0" Margin="5">
+            <Grid Grid.Row="4" Grid.ColumnSpan="2" Grid.Column="0" Margin="5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
@@ -99,7 +109,7 @@
                 <Button Content="  ...  " Grid.Column="2" Command="{Binding Path=SelectedIdentityCommand}" VerticalAlignment="Center" Margin="5, 0"/>
             </Grid>
 
-            <Grid Grid.Row="4" Grid.ColumnSpan="3" VerticalAlignment="Center"  Margin="5">
+            <Grid Grid.Row="5" Grid.ColumnSpan="3" VerticalAlignment="Center"  Margin="5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -111,7 +121,7 @@
                          Margin="5,0,0,0"/>
             </Grid>
 
-            <Grid Grid.Row="5" Grid.ColumnSpan="3" Margin="5,5">
+            <Grid Grid.Row="6" Grid.ColumnSpan="3" Margin="5,5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
@@ -120,12 +130,12 @@
                 <TextBox x:Name="MethodName" Text="{Binding Path=MethodName, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="MethodName_PreviewTextInput" Grid.Column="1" VerticalContentAlignment="Center" HorizontalAlignment="Stretch"/>
             </Grid>
 
-            <WrapPanel Visibility="Collapsed" Grid.Row="6" Margin="5">
+            <WrapPanel Visibility="Collapsed" Grid.Row="7" Margin="5">
                 <Label Content="Use Recommended Default Code"/>
                 <CheckBox VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding Path=UseRecommendedDefaultCode}"/>
             </WrapPanel>
 
-            <WrapPanel Grid.Row="6" Grid.Column="2" HorizontalAlignment="Right">
+            <WrapPanel Grid.Row="7" Grid.Column="2" HorizontalAlignment="Right">
                 <Button Content="OK" Width="70" Margin="5" 
                         Command="{Binding Path=OkCommand}" CommandParameter="{Binding ElementName=CreateMethodWindow}"
                         IsEnabled="{Binding IsOkButtonEnabled}"/>
