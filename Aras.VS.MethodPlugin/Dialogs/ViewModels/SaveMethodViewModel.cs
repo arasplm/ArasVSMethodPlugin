@@ -43,6 +43,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private string selectedIdentityKeyedName;
 		private string selectedIdentityId;
 		private string selectedPackage;
+		private string currentMethodPackage;
 		private string methodName;
 
 		private bool isOkButtonEnabled;
@@ -177,6 +178,11 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			}
 		}
 
+		public string CurrentMethodPackage
+		{
+			get { return currentMethodPackage; }
+		}
+
 		public string MethodName
 		{
 			get { return methodName; }
@@ -238,6 +244,23 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 			try
 			{
+				this.currentMethodPackage = packageManager.GetPackageDefinitionByElementName(this.methodName);
+				if (!string.IsNullOrEmpty(currentMethodPackage) && !string.Equals(this.currentMethodPackage, this.selectedPackage))
+				{
+					var messageWindow = new MessageBoxWindow();
+					var dialogReuslt = messageWindow.ShowDialog(null,
+						$"The {this.methodName} method already attached to differernt package. Click OK to reasign package for this method.",
+						"Save method to Aras Innovator",
+						MessageButtons.OKCancel,
+						MessageIcon.None);
+
+					if (dialogReuslt == MessageDialogResult.Cancel)
+					{
+						this.SelectedPackage = this.currentMethodPackage;
+						return;
+					}
+				}
+
 				methodItem = authManager.InnovatorInstance.newItem("Method", "get");
 				methodItem.setProperty("name", methodName);
 				methodItem = methodItem.apply();

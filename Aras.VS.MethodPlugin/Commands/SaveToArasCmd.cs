@@ -176,32 +176,16 @@ namespace Aras.VS.MethodPlugin.Commands
 			}
 
 			var newId = currentMethodItem.getID();
-			var currentMethodPackage = packageManager.GetPackageDefinitionByElementName(saveViewResult.MethodName);
-
-			if (string.IsNullOrEmpty(currentMethodPackage))
+			if (string.IsNullOrEmpty(saveViewResult.CurrentMethodPackage))
 			{
 				packageManager.AddPackageElementToPackageDefinition(newId, saveViewResult.MethodName, saveViewResult.SelectedPackage);
 			}
 			else
 			{
-				if (currentMethodPackage != saveViewResult.SelectedPackage)
+				if (!string.Equals(saveViewResult.CurrentMethodPackage, saveViewResult.SelectedPackage))
 				{
-					var messageWindow = new MessageBoxWindow();
-					var dialogReuslt = messageWindow.ShowDialog(null,
-						$"The {saveViewResult.MethodName} method already attached to differernt package. Click OK to reasign package for this method.",
-						"Save method to Aras Innovator",
-						MessageButtons.OKCancel,
-						MessageIcon.None);
-
-					if (dialogReuslt == MessageDialogResult.OK)
-					{
-						packageManager.DeletePackageElementByNameFromPackageDefinition(saveViewResult.MethodName);
-						packageManager.AddPackageElementToPackageDefinition(newId, saveViewResult.MethodName, saveViewResult.SelectedPackage);
-					}
-					else
-					{
-						saveViewResult.SelectedPackage = currentMethodPackage;
-					}
+					packageManager.DeletePackageElementByNameFromPackageDefinition(saveViewResult.MethodName);
+					packageManager.AddPackageElementToPackageDefinition(newId, saveViewResult.MethodName, saveViewResult.SelectedPackage);
 				}
 			}
 

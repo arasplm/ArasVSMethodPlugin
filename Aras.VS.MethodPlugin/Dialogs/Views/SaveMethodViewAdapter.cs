@@ -31,6 +31,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 				SelectedIdentityId = viewModel.SelectedIdentityId,
 				SelectedIdentityKeyedName = viewModel.SelectedIdentityKeyedName,
 				SelectedPackage = viewModel.SelectedPackage,
+				CurrentMethodPackage = viewModel.CurrentMethodPackage,
 				TemplateName = viewModel.TemplateName
 			};
 		}
