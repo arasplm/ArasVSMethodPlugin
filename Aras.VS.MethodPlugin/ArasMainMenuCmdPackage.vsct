@@ -114,6 +114,11 @@
         <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_FOLDERNODE" />
       </Group>
 
+      <!--Save method folder groups-->
+      <Group guid="ArasFolderSaveGroupCmdSet" id="CreatePartialElementGroup" priority="0x0100">
+        <Parent guid="ArasFolderGroupCmdSet" id="ArasFolderMenu" />
+      </Group>
+
       <!--Create partial elemetn folder groups-->
       <Group guid="ArasFolderCreatePartialElementCmdSet" id="CreatePartialElementGroup" priority="0x0200">
         <Parent guid="ArasFolderGroupCmdSet" id="ArasFolderMenu" />
@@ -287,7 +292,21 @@
         </Strings>
       </Button>
 
+      <Button guid="ArasFolderSaveGroupCmdSet" id="ArasFolderSaveToArasCommandId" priority="0x0100" type="Button">
+        <Parent guid="ArasFolderSaveGroupCmdSet" id="CreatePartialElementGroup" />
+        <Icon guid="guidSaveToArasImages" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Save method to Aras Innovator</ButtonText>
+        </Strings>
+      </Button>
 
+      <Button guid="ArasFolderSaveGroupCmdSet" id="ArasFolderSaveToPackageCommandId" priority="0x0200" type="Button">
+        <Parent guid="ArasFolderSaveGroupCmdSet" id="CreatePartialElementGroup" />
+        <Icon guid="guidSaveToPackageImages" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Save method to AML package</ButtonText>
+        </Strings>
+      </Button>
 
       <Button guid="ArasItemSaveGroupCmdSet" id="ArasItemSaveToArasCommandId" priority="0x0101" type="Button">
         <Parent guid="ArasItemSaveGroupCmdSet" id="SaveMethodGroup" />
@@ -401,6 +420,13 @@
     <GuidSymbol name="ArasFolderGroupCmdSet" value="{4043fa7c-a89a-4597-a4b9-086c504c5871}">
       <IDSymbol name="ArasFolderMenu" value="0x1021" />
       <IDSymbol name="FolderGroup" value="0x1020" />
+    </GuidSymbol>
+
+    <GuidSymbol name="ArasFolderSaveGroupCmdSet" value="{ff7642f6-a539-425a-ac06-41f00e1e8c96}">
+      <IDSymbol name="CreatePartialElementGroup" value="0x0201" />
+      <IDSymbol name="FolderGroup" value="0x1020" />
+      <IDSymbol name="ArasFolderSaveToArasCommandId" value="0x0101" />
+      <IDSymbol name="ArasFolderSaveToPackageCommandId" value="0x0102" />
     </GuidSymbol>
 
     <GuidSymbol name="ArasFolderCreatePartialElementCmdSet" value="{714c822b-ebc4-4413-89b5-c93eaed863fc}">
