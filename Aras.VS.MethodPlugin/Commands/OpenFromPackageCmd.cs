@@ -131,7 +131,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			var methodInfo = new MethodInfo()
 			{
 				InnovatorMethodConfigId = openViewResult.MethodConfigId,
-				InnovatorMethodId = openViewResult.MethodConfigId,
+				InnovatorMethodId = openViewResult.MethodId,
 				MethodLanguage = openViewResult.MethodLanguage,
 				MethodName = openViewResult.MethodName,
 				MethodType = openViewResult.MethodType,

@@ -191,6 +191,7 @@ namespace Aras.VS.MethodPlugin.Commands
 
 			if (methodInformation.MethodName == saveViewResult.MethodName)
 			{
+				methodInformation.InnovatorMethodConfigId = currentMethodItem.getProperty("config_id");
 				methodInformation.InnovatorMethodId = newId;
 				methodInformation.PackageName = saveViewResult.SelectedPackage;
 				methodInformation.ExecutionAllowedToKeyedName = saveViewResult.SelectedIdentityKeyedName;

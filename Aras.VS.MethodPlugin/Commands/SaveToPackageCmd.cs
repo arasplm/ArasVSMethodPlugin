@@ -174,9 +174,22 @@ namespace Aras.VS.MethodPlugin.Commands
 				}
 			}
 
+			string methodId = null;
+			string methodFilePath = Path.Combine(rootPath, $"{saveViewResult.SelectedPackage}\\Import\\Method\\{saveViewResult.MethodName}.xml");
+			if (File.Exists(methodFilePath))
+			{
+				var methodXmlDocument = new XmlDocument();
+				methodXmlDocument.Load(methodFilePath);
+				methodId = methodXmlDocument.SelectSingleNode("/AML/Item/@id").InnerText;
+			}
+			else
+			{
+				methodId = saveViewResult.MethodInformation.InnovatorMethodConfigId;
+			}
+
 			string updateMethodCodeForSavingToAmlPackage = saveViewResult.MethodCode.Replace("]]", "]]]]><![CDATA[");
 			string methodTemplate = $@"<AML>
- <Item type=""Method"" id=""{saveViewResult.MethodInformation.InnovatorMethodConfigId}"" action=""add"">
+ <Item type=""Method"" id=""{methodId}"" action=""add"">
   <comments>{saveViewResult.MethodComment}</comments>
   <execution_allowed_to keyed_name=""{saveViewResult.SelectedIdentityKeyedName}"" type=""Identity"">{saveViewResult.SelectedIdentityId}</execution_allowed_to>
   <method_code><![CDATA[{updateMethodCodeForSavingToAmlPackage}]]></method_code>
@@ -184,7 +197,7 @@ namespace Aras.VS.MethodPlugin.Commands
   <name>{saveViewResult.MethodName}</name>
  </Item>
 </AML>";
-			string methodFilePath = Path.Combine(rootPath, $"{saveViewResult.SelectedPackage}\\Import\\Method\\{saveViewResult.MethodName}.xml");
+
 			XmlDocument resultXmlDoc = new XmlDocument();
 			resultXmlDoc.LoadXml(methodTemplate);
 			SaveToFile(methodFilePath, resultXmlDoc);
@@ -213,7 +226,6 @@ namespace Aras.VS.MethodPlugin.Commands
 
 		private void SaveToFile(string filePath, XmlDocument xmlDoc)
 		{
-
 			using (StreamWriter streamWriter = new StreamWriter(filePath, false, new UTF8Encoding(true)))
 			{
 				XmlWriterSettings xwSettings = new XmlWriterSettings
