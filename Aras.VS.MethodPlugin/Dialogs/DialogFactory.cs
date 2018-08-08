@@ -6,6 +6,7 @@
 
 using System;
 using System.Windows.Interop;
+using Aras.VS.MethodPlugin.ArasInnovator;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.Dialogs.ViewModels;
@@ -25,11 +26,14 @@ namespace Aras.VS.MethodPlugin.Dialogs
 	internal class DialogFactory : IDialogFactory
 	{
 		private IAuthenticationManager authManager;
+		private readonly IArasDataProvider arasDataProvider;
 
-		public DialogFactory(IAuthenticationManager authManager)
+		public DialogFactory(IAuthenticationManager authManager, IArasDataProvider arasDataProvider)
 		{
 			if (authManager == null) throw new ArgumentNullException(nameof(authManager));
+			if (arasDataProvider == null) throw new ArgumentNullException(nameof(arasDataProvider));
 
+			this.arasDataProvider = arasDataProvider;
 			this.authManager = authManager;
 		}
 
@@ -69,7 +73,7 @@ namespace Aras.VS.MethodPlugin.Dialogs
 		public CreateMethodViewAdapter GetCreateView(IVsUIShell uiShell, ProjectConfiguraiton projectConfiguration, TemplateLoader templateLoader, PackageManager packageManager, IProjectManager projectManager, string projectLanguage)
 		{
 			CreateMethodView view = new CreateMethodView();
-			CreateMethodViewModel viewModel = new CreateMethodViewModel(authManager, this, projectConfiguration, templateLoader, packageManager, projectManager, projectLanguage);
+			CreateMethodViewModel viewModel = new CreateMethodViewModel(authManager, this, projectConfiguration, templateLoader, packageManager, projectManager, arasDataProvider, projectLanguage);
 			view.DataContext = viewModel;
 
 			IntPtr hwnd;
@@ -140,6 +144,7 @@ namespace Aras.VS.MethodPlugin.Dialogs
 				projectConfigurationManager,
 				projectConfiguration,
 				packageManager,
+				arasDataProvider,
 				methodInformation,
 				methodCode,
 				projectConfigPath,
@@ -159,7 +164,7 @@ namespace Aras.VS.MethodPlugin.Dialogs
 		public SaveToPackageViewAdapter GetSaveToPackageView(IVsUIShell uiShell, ProjectConfiguraiton projectConfiguration, TemplateLoader templateLoader, PackageManager packageManager, ICodeProvider codeProvider,IProjectManager projectManager, MethodInfo methodInformation, string pathToFileForSave)
 		{
 			var saveToLocalPackageView = new SaveToPackageView();
-			var viewModel = new SaveToPackageViewModel(authManager, this, projectConfiguration, templateLoader, packageManager, codeProvider, projectManager, methodInformation, pathToFileForSave);
+			var viewModel = new SaveToPackageViewModel(authManager, this, projectConfiguration, templateLoader, packageManager, codeProvider, projectManager, arasDataProvider, methodInformation, pathToFileForSave);
 			saveToLocalPackageView.DataContext = viewModel;
 
 			IntPtr hwnd;

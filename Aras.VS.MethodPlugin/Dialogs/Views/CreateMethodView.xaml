@@ -88,7 +88,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Label Content="Comment:"/>
-                <TextBox x:Name="MethodComment" Text="{Binding Path=MethodComment, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" VerticalContentAlignment="Center" HorizontalAlignment="Stretch"/>
+                <TextBox x:Name="MethodComment" Text="{Binding Path=MethodComment, UpdateSourceTrigger=PropertyChanged}" MaxLength="{Binding Path=MethodCommentMaxLength}" Grid.Column="1" VerticalContentAlignment="Center" HorizontalAlignment="Stretch"/>
             </Grid>
 
             <Expander Grid.Row="3" Grid.ColumnSpan="3" Header="Template Preview" 
@@ -127,7 +127,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Label Content="Method Name:"/>
-                <TextBox x:Name="MethodName" Text="{Binding Path=MethodName, UpdateSourceTrigger=PropertyChanged}" PreviewTextInput="MethodName_PreviewTextInput" Grid.Column="1" VerticalContentAlignment="Center" HorizontalAlignment="Stretch"/>
+                <TextBox x:Name="MethodName" Text="{Binding Path=MethodName, UpdateSourceTrigger=PropertyChanged}" MaxLength="{Binding Path=MethodNameMaxLength}" PreviewTextInput="MethodName_PreviewTextInput" Grid.Column="1" VerticalContentAlignment="Center" HorizontalAlignment="Stretch"/>
             </Grid>
 
             <WrapPanel Visibility="Collapsed" Grid.Row="7" Margin="5">

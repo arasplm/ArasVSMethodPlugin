@@ -8,6 +8,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Aras.VS.MethodPlugin.ArasInnovator;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.Dialogs;
@@ -50,6 +51,7 @@ namespace Aras.VS.MethodPlugin
 		public const string PackageGuidString = "7afa5f12-ad2b-4fda-85d3-818f2d1e6c8c";
 
 		private IAuthenticationManager authManager;
+		private IArasDataProvider arasDataProvider;
 		private IDialogFactory dialogFactory;
 		private ProjectConfigurationManager projectConfigurationManager;
 		private IProjectManager projectManager;
@@ -81,7 +83,8 @@ namespace Aras.VS.MethodPlugin
 			var dllPath = Assembly.GetExecutingAssembly().Location;
 			
 			this.authManager = new AuthenticationManager();
-			this.dialogFactory = new DialogFactory(authManager);
+			this.arasDataProvider = new ArasDataProvider(authManager);
+			this.dialogFactory = new DialogFactory(authManager, arasDataProvider);
 			this.projectConfigurationManager = new ProjectConfigurationManager();
 			this.projectManager = new ProjectManager(this, dialogFactory);
 			this.defaultCodeProvider = new DefaultCodeProvider();

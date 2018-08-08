@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
+using Aras.VS.MethodPlugin.ArasInnovator;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.Dialogs.Directory.Data;
@@ -32,12 +33,16 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private readonly TemplateLoader templateLoader;
 		private readonly PackageManager packageManager;
 		private readonly IProjectManager projectManager;
+		private readonly IArasDataProvider arasDataProvider;
 
 		private MethodInfo methodInfo;
+		private MethodItemTypeInfo methodItemTypeInfo;
 
 		private string methodComments;
+		private int methodCommentMaxLength;
 		private string packagePath;
 		private string methodName;
+		private int methodNameMaxLength;
 		private string methodCode;
 		private string selectedPackage;
 		private string selectedIdentityKeyedName;
@@ -58,6 +63,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			PackageManager packageManager,
 			ICodeProvider codeProvider,
 			IProjectManager projectManager,
+			IArasDataProvider arasDataProvider,
 			MethodInfo methodInformation,
 			string pathToFileForSave)
 		{
@@ -68,6 +74,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			if (packageManager == null) throw new ArgumentNullException(nameof(packageManager));
 			if (codeProvider == null) throw new ArgumentNullException(nameof(codeProvider));
 			if (projectManager == null) throw new ArgumentNullException(nameof(projectManager));
+			if (arasDataProvider == null) throw new ArgumentNullException(nameof(arasDataProvider));
 			if (methodInformation == null) throw new ArgumentNullException(nameof(methodInformation));
 
 			this.authManager = authManager;
@@ -76,6 +83,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.templateLoader = templateLoader;
 			this.packageManager = packageManager;
 			this.projectManager = projectManager;
+			this.arasDataProvider = arasDataProvider;
 			this.MethodInformation = methodInformation;
 
 			this.folderBrowserCommand = new RelayCommand<object>(OnFolderBrowserClick);
@@ -84,6 +92,10 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.selectedIdentityCommand = new RelayCommand(SelectedIdentityCommandClick);
 
 			string sourceCode = File.ReadAllText(pathToFileForSave, new UTF8Encoding(true));
+
+			this.methodItemTypeInfo = arasDataProvider.GetMethodItemTypeInfo();
+			this.MethodNameMaxLength = methodItemTypeInfo.NameStoredLength;
+			this.MethodCommentMaxLength = methodItemTypeInfo.CommentsStoredLength;
 
 			MethodComment = MethodInformation.MethodComment;
 			PackagePath = projectConfiguration.LastSelectedDir;
@@ -124,8 +136,27 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			get { return methodComments; }
 			set
 			{
-				methodComments = value;
+				if (value != null && value.Length > this.MethodCommentMaxLength)
+				{
+					methodComments = value.Substring(0, this.MethodCommentMaxLength);
+				}
+				else
+				{
+					methodComments = value;
+				}
+
 				RaisePropertyChanged(nameof(MethodComment));
+			}
+		}
+
+		public int MethodCommentMaxLength
+		{
+			get { return methodCommentMaxLength; }
+			set
+			{
+				methodCommentMaxLength = value;
+				RaisePropertyChanged(nameof(MethodCommentMaxLength));
+				ValidateOkButton();
 			}
 		}
 
@@ -140,8 +171,27 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			get { return methodName; }
 			set
 			{
-				methodName = value;
+				if (value != null && value.Length > this.MethodNameMaxLength)
+				{
+					methodName = value.Substring(0, this.MethodNameMaxLength);
+				}
+				else
+				{
+					methodName = value;
+				}
+
 				RaisePropertyChanged(nameof(MethodName));
+				ValidateOkButton();
+			}
+		}
+
+		public int MethodNameMaxLength
+		{
+			get { return methodNameMaxLength; }
+			set
+			{
+				methodNameMaxLength = value;
+				RaisePropertyChanged(nameof(MethodNameMaxLength));
 				ValidateOkButton();
 			}
 		}

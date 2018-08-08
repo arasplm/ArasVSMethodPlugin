@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
+using Aras.VS.MethodPlugin.ArasInnovator;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.Dialogs.Views;
@@ -31,7 +32,10 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private readonly IDialogFactory dialogFactory;
 		private readonly ProjectConfiguraiton projectConfiguration;
 		private readonly PackageManager packageManager;
-		IProjectManager projectManager;
+		private readonly IProjectManager projectManager;
+		private readonly IArasDataProvider arasDataProvider;
+
+		private MethodItemTypeInfo methodItemTypeInfo;
 
 		private List<FilteredListInfo> allLanguages;
 
@@ -42,7 +46,9 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private TemplateInfo selectedTemplate;
 		private ObservableCollection<TemplateInfo> templates;
 		private string methodName = "Method1";
+		private int methodCommentMaxLength;
 		private string methodComment;
+		private int methodNameMaxLength;
 		private bool isOkButtonEnabled;
 
 		private string selectedIdentityKeyedName;
@@ -60,6 +66,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			TemplateLoader templateLoader,
 			PackageManager packageManager,
 			IProjectManager projectManager,
+			IArasDataProvider arasDataProvider,
 			string projectLanguage)
 		{
 			if (authenticationManager == null) throw new ArgumentNullException(nameof(authenticationManager));
@@ -68,6 +75,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			if (templateLoader == null) throw new ArgumentNullException(nameof(templateLoader));
 			if (packageManager == null) throw new ArgumentNullException(nameof(packageManager));
 			if (projectManager == null) throw new ArgumentNullException(nameof(projectManager));
+			if (arasDataProvider == null) throw new ArgumentNullException(nameof(arasDataProvider));
 
 			this.authenticationManager = authenticationManager;
 			this.dialogFactory = dialogFactory;
@@ -75,6 +83,11 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.templateLoader = templateLoader;
 			this.packageManager = packageManager;
 			this.projectManager = projectManager;
+			this.arasDataProvider = arasDataProvider;
+
+			this.methodItemTypeInfo = arasDataProvider.GetMethodItemTypeInfo();
+			this.MethodNameMaxLength = methodItemTypeInfo.NameStoredLength;
+			this.MethodCommentMaxLength = methodItemTypeInfo.CommentsStoredLength;
 
 			actionLocations = new ObservableCollection<ListInfo>();
 			foreach (var localtion in Utilities.Utils.GetValueListByName(authenticationManager.InnovatorInstance, "Action Locations"))
@@ -246,6 +259,17 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			}
 		}
 
+		public int MethodNameMaxLength
+		{
+			get { return methodNameMaxLength; }
+			set
+			{
+				methodNameMaxLength = value;
+				RaisePropertyChanged(nameof(MethodNameMaxLength));
+				ValidateOkButton();
+			}
+		}
+
 		public string MethodComment
 		{
 			get { return methodComment; }
@@ -253,6 +277,17 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			{
 				methodComment = value;
 				RaisePropertyChanged(nameof(MethodComment));
+			}
+		}
+
+		public int MethodCommentMaxLength
+		{
+			get { return methodCommentMaxLength; }
+			set
+			{
+				methodCommentMaxLength = value;
+				RaisePropertyChanged(nameof(MethodCommentMaxLength));
+				ValidateOkButton();
 			}
 		}
 

@@ -75,6 +75,9 @@
     <DeployExtension>False</DeployExtension>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ArasInnovator\ArasDataProvider.cs" />
+    <Compile Include="ArasInnovator\IArasDataProvider.cs" />
+    <Compile Include="ArasInnovator\MethodItemTypeInfo.cs" />
     <Compile Include="ArasMainMenuCmdPackage.cs" />
     <Compile Include="Authentication\AuthenticationManager.cs" />
     <Compile Include="Authentication\InnovatorUser.cs" />

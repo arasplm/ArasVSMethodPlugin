@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using Aras.VS.MethodPlugin.ArasInnovator;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.ItemSearch;
@@ -25,7 +26,10 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private readonly IDialogFactory dialogFactory;
 		private readonly ProjectConfigurationManager projectConfigurationManager;
 		private readonly PackageManager packageManager;
+		private readonly IArasDataProvider arasDataProvider;
+
 		private ProjectConfiguraiton projectConfiguration;
+		private MethodItemTypeInfo methodItemTypeInfo;
 
 		private string projectConfigPath;
 		private string projectName;
@@ -35,6 +39,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private string innovatorMethodId;
 
 		private string methodComment;
+		private int methodCommentMaxLength;
 		private string methodType;
 		private string methodLanguage;
 		private string templateName;
@@ -45,6 +50,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private string selectedPackage;
 		private string currentMethodPackage;
 		private string methodName;
+		private int methodNameMaxLength;
 
 		private bool isOkButtonEnabled;
 
@@ -59,6 +65,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			ProjectConfigurationManager projectConfigurationManager,
 			ProjectConfiguraiton projectConfiguration,
 			PackageManager packageManager,
+			IArasDataProvider arasDataProvider,
 			MethodInfo methodInformation,
 			string methodCode,
 			string projectConfigPath,
@@ -70,6 +77,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			if (projectConfigurationManager == null) throw new ArgumentNullException(nameof(projectConfigurationManager));
 			if (projectConfiguration == null) throw new ArgumentNullException(nameof(projectConfiguration));
 			if (packageManager == null) throw new ArgumentNullException(nameof(packageManager));
+			if (arasDataProvider == null) throw new ArgumentNullException(nameof(arasDataProvider));
 			if (methodInformation == null) throw new ArgumentNullException(nameof(methodInformation));
 
 			this.authManager = authManager;
@@ -77,6 +85,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.projectConfigurationManager = projectConfigurationManager;
 			this.projectConfiguration = projectConfiguration;
 			this.packageManager = packageManager;
+			this.arasDataProvider = arasDataProvider;
 
 			this.projectConfigPath = projectConfigPath;
 			this.projectName = projectName;
@@ -87,7 +96,11 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.editConnectionInfoCommand = new RelayCommand<object>(EditConnectionInfoCommandClick);
 			this.selectedIdentityCommand = new RelayCommand(SelectedIdentityCommandClick);
 
-			this.methodComment = methodInformation.MethodComment;
+			this.methodItemTypeInfo = arasDataProvider.GetMethodItemTypeInfo();
+			this.MethodNameMaxLength = methodItemTypeInfo.NameStoredLength;
+			this.MethodCommentMaxLength = methodItemTypeInfo.CommentsStoredLength;
+
+			this.MethodComment = methodInformation.MethodComment;
 			this.innovatorMethodId = methodInformation.InnovatorMethodId;
 
 			this.methodCode = methodCode;
@@ -98,7 +111,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.selectedIdentityKeyedName = methodInformation.ExecutionAllowedToKeyedName;
 			this.selectedIdentityId = methodInformation.ExecutionAllowedToId;
 			this.selectedPackage = methodInformation.PackageName;
-			this.methodName = methodInformation.MethodName;
+			this.MethodName = methodInformation.MethodName;
 
 			//TODO: How to know current connection?
 			ConnectionInformation = projectConfiguration.Connections.First(c => c.LastConnection);
@@ -188,8 +201,27 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			get { return methodName; }
 			set
 			{
-				methodName = value;
+				if (value != null && value.Length > this.MethodNameMaxLength)
+				{
+					methodName = value.Substring(0, this.MethodNameMaxLength);
+				}
+				else
+				{
+					methodName = value;
+				}
+
 				RaisePropertyChanged(nameof(MethodName));
+				ValidateOkButton();
+			}
+		}
+
+		public int MethodNameMaxLength
+		{
+			get { return methodNameMaxLength; }
+			set
+			{
+				methodNameMaxLength = value;
+				RaisePropertyChanged(nameof(MethodNameMaxLength));
 				ValidateOkButton();
 			}
 		}
@@ -199,8 +231,27 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			get { return methodComment; }
 			set
 			{
-				methodComment = value;
+				if (value != null && value.Length > this.MethodCommentMaxLength)
+				{
+					methodComment = value.Substring(0, this.MethodCommentMaxLength);
+				}
+				else
+				{
+					methodComment = value;
+				}
+
 				RaisePropertyChanged(nameof(MethodComment));
+			}
+		}
+
+		public int MethodCommentMaxLength
+		{
+			get { return methodCommentMaxLength; }
+			set
+			{
+				methodCommentMaxLength = value;
+				RaisePropertyChanged(nameof(MethodCommentMaxLength));
+				ValidateOkButton();
 			}
 		}
 
@@ -310,6 +361,12 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			{
 				projectConfigurationManager.Save(projectConfigPath, projectConfiguration);
 				ConnectionInformation = projectConfiguration.Connections.First(c => c.LastConnection);
+
+				this.methodItemTypeInfo = arasDataProvider.GetMethodItemTypeInfo();
+				this.MethodNameMaxLength = methodItemTypeInfo.NameStoredLength;
+				this.MethodCommentMaxLength = methodItemTypeInfo.CommentsStoredLength;
+				this.MethodName = this.MethodName;
+				this.MethodComment = this.MethodComment;
 			}
 		}
 
