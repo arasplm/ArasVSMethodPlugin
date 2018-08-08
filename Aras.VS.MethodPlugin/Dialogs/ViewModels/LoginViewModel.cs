@@ -100,7 +100,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				}
 				else
 				{
-					Login = string.Empty;
 					IsLoginEnabled = false;
 					IsPasswordEnabled = true;
 				}
