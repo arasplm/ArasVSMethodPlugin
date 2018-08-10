@@ -203,6 +203,20 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			return new CreatePartialElementViewAdapter(view);
 		}
 
+		public DebugMethodViewAdapter GetDebugMethodView(IVsUIShell uiShell, ProjectConfigurationManager projectConfigurationManager, ProjectConfiguraiton projectConfiguration, MethodInfo methodInformation, string methodCode, string projectConfigPath, string projectName, string projectFullName)
+		{
+			var viewModel = new DebugMethodViewModel(authManager, projectConfigurationManager, projectConfiguration, methodInformation, methodCode, projectConfigPath, projectName, projectFullName);
+			var view = new DebugMethodView();
+			view.DataContext = viewModel;
+
+			IntPtr hwnd;
+			uiShell.GetDialogOwnerHwnd(out hwnd);
+			var windowInteropHelper = new WindowInteropHelper(view);
+			windowInteropHelper.Owner = hwnd;
+
+			return new DebugMethodViewAdapter(view);
+		}
+
 		public MessageBoxWindow GetMessageBoxWindow(IVsUIShell uiShell)
 		{
 			var view = new MessageBoxWindow();

@@ -75,6 +75,11 @@ namespace Aras.VS.MethodPlugin.Authentication
 			return InnovatorUser.serverUrl;
 		}
 
+		public string GetServerDatabaseName()
+		{
+			return InnovatorUser.databaseName;
+		}
+
 		public List<string> GetUserIdentityList()
 		{
 			return new List<string>();
@@ -195,7 +200,8 @@ namespace Aras.VS.MethodPlugin.Authentication
 				currentProjectName = projectName,
 				serverUrl = serverUrl,
 				databaseName = databaseName,
-				userName = login
+				userName = login,
+				passwordHash = passwordHash
 			};
 
 			//Login succesed

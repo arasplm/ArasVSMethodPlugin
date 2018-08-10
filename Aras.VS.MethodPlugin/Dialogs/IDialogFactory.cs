@@ -76,6 +76,15 @@ namespace Aras.VS.MethodPlugin.Dialogs
 
 		CreatePartialElementViewAdapter GetCreatePartialClassView(IVsUIShell uiShell);
 
+		DebugMethodViewAdapter GetDebugMethodView(IVsUIShell uiShell,
+			ProjectConfigurationManager projectConfigurationManager,
+			ProjectConfiguraiton projectConfiguration,
+			MethodInfo methodInformation,
+			string methodCode,
+			string projectConfigPath,
+			string projectName,
+			string projectFullName);
+
 		MessageBoxWindow GetMessageBoxWindow(IVsUIShell uiShell);
 	}
 }

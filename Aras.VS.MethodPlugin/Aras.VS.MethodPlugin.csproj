@@ -110,6 +110,7 @@
     <Compile Include="Dialogs\Directory\Data\DirectoryItemType.cs" />
     <Compile Include="Dialogs\Directory\DirectoryStructure.cs" />
     <Compile Include="Dialogs\ViewModels\CreatePartialElementViewModel.cs" />
+    <Compile Include="Dialogs\ViewModels\DebugMethodViewModel.cs" />
     <Compile Include="Dialogs\ViewResult.cs" />
     <Compile Include="Dialogs\Views\ConnectionInfoViewAdapter.cs" />
     <Compile Include="Dialogs\Views\CreatePartialElementView.xaml.cs">
@@ -119,6 +120,11 @@
     <Compile Include="Dialogs\Views\CreatePartialElementViewAdapter.cs" />
     <Compile Include="Dialogs\Views\CreateMethodViewAdapter.cs" />
     <Compile Include="Dialogs\Views\CreateMethodViewResult.cs" />
+    <Compile Include="Dialogs\Views\DebugMethodView.xaml.cs">
+      <DependentUpon>DebugMethodView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Views\DebugMethodViewAdapter.cs" />
+    <Compile Include="Dialogs\Views\DebugMethodViewResult.cs" />
     <Compile Include="Dialogs\Views\OpenFromArasViewAdapter.cs" />
     <Compile Include="Dialogs\Views\OpenFromArasViewResult.cs" />
     <Compile Include="Dialogs\Views\OpenFromPackageViewAdapter.cs" />
@@ -525,6 +531,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Dialogs\Views\CreatePartialElementView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\Views\DebugMethodView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

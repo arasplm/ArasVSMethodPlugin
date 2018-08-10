@@ -1,17 +1,19 @@
 ﻿using System;
 using System.ComponentModel.Design;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Xml;
+using Aras.VS.MethodPlugin.Authentication;
+using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.Dialogs;
+using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.ProjectConfigurations;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Aras.VS.MethodPlugin.Commands
@@ -19,7 +21,7 @@ namespace Aras.VS.MethodPlugin.Commands
 	/// <summary>
 	/// Command handler
 	/// </summary>
-	internal sealed class DebugMethodCmd : CmdBase
+	internal sealed class DebugMethodCmd : AuthenticationCommandBase
 	{
 		/// <summary>
 		/// Command ID.
@@ -38,7 +40,7 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// </summary>
 		public static readonly Guid ToolbarCommandSet = new Guid("21D122E1-35BF-4156-B458-7E292CDD9C2D");
 
-		private DebugMethodCmd(IProjectManager projectManager, IDialogFactory dialogFactory, ProjectConfigurationManager projectConfigurationManager) : base(projectManager, dialogFactory, projectConfigurationManager)
+		private DebugMethodCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, ProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory)
 		{
 			if (projectManager.CommandService != null)
 			{
@@ -68,9 +70,10 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// <param name="authManager"></param>
 		/// <param name="dialogFactory"></param>
 		/// <param name="projectConfigurationManager"></param>
-		public static void Initialize(IProjectManager projectManager, IDialogFactory dialogFactory, ProjectConfigurationManager projectConfigurationManager)
+		/// <param name="codeProviderFactory"></param>
+		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, ProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory)
 		{
-			Instance = new DebugMethodCmd(projectManager, dialogFactory, projectConfigurationManager);
+			Instance = new DebugMethodCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
 		}
 
 		public override void ExecuteCommandImpl(object sender, EventArgs args, IVsUIShell uiShell)
@@ -81,7 +84,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			//var methodConfigPath = projectManager.MethodConfigPath;
 			EnvDTE.Configuration config = project.ConfigurationManager.ActiveConfiguration;
 			EnvDTE.Properties props = config.Properties;
-			
+
 			var outputPath = props.Item("OutputPath");
 			var dllFullPath = Path.Combine(project.Properties.Item("FullPath").Value.ToString(), outputPath.Value.ToString(), project.Properties.Item("OutputFileName").Value.ToString());
 			var selectedMethodName = projectManager.MethodName;
@@ -91,7 +94,7 @@ namespace Aras.VS.MethodPlugin.Commands
 
 			MethodInfo methodInformation = projectConfiguration.MethodInfos.FirstOrDefault(m => m.MethodName == selectedMethodName);
 			var pkgName = methodInformation.PackageName;
-			
+
 			string selectedMethodPath = projectManager.MethodPath;
 			string sourceCode = File.ReadAllText(selectedMethodPath, new UTF8Encoding(true));
 
@@ -111,16 +114,76 @@ namespace Aras.VS.MethodPlugin.Commands
 			var currentDllPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
 			var directoryPath = Path.GetDirectoryName(currentDllPath);
 			var launcherPath = Path.Combine(directoryPath, "MethodLauncher", "MethodLauncher.exe");
+
+			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language, projectConfiguration);
+			string methodCode = codeProvider.LoadMethodCode(sourceCode, methodInformation, projectManager.ServerMethodFolderPath);
+
+			var debugMethodView = dialogFactory.GetDebugMethodView(uiShell, projectConfigurationManager, projectConfiguration, methodInformation, methodCode, projectConfigPath, project.Name, project.FullName);
+			var debugMethodViewResult = debugMethodView.ShowDialog();
+			if (debugMethodViewResult?.DialogOperationResult != true)
+			{
+				return;
+			}
+
+			string projectDirectoryPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
+			string launcherConfigPath = Path.Combine(projectDirectoryPath, "LauncherConfig.xml");
+
+			CreateLauncherConfigFile(dllFullPath, className, methodName, debugMethodViewResult, launcherConfigPath);
+
 			ProcessStartInfo startInfo = new ProcessStartInfo(launcherPath);
 			startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-			startInfo.Arguments = dllFullPath + " " + className + " " + methodName;
+			startInfo.Arguments = launcherConfigPath + " " + authManager.InnovatorUser.passwordHash;
 
 			Process process = Process.Start(startInfo);
 
 			projectManager.AttachToProcess(process);
+		}
 
+		private void CreateLauncherConfigFile(string dllFullPath, string className, string methodName, DebugMethodViewResult debugMethodViewResult, string launcherConfigPath)
+		{
+			XmlDocument launcherConfig = new XmlDocument();
 
+			XmlElement launcherConfigXmlElement = launcherConfig.CreateElement("LauncherConfig");
+			launcherConfig.AppendChild(launcherConfigXmlElement);
 
+			XmlElement dllFullPathXmlElement = launcherConfig.CreateElement("dllFullPath");
+			dllFullPathXmlElement.InnerText = dllFullPath;
+			launcherConfigXmlElement.AppendChild(dllFullPathXmlElement);
+
+			XmlElement classNameXmlElement = launcherConfig.CreateElement("className");
+			classNameXmlElement.InnerText = className;
+			launcherConfigXmlElement.AppendChild(classNameXmlElement);
+
+			XmlElement methodNameXmlElement = launcherConfig.CreateElement("methodName");
+			methodNameXmlElement.InnerText = methodName;
+			launcherConfigXmlElement.AppendChild(methodNameXmlElement);
+
+			XmlElement сontextXmlElement = launcherConfig.CreateElement("сontext");
+			сontextXmlElement.InnerText = debugMethodViewResult.MethodContext;
+			launcherConfigXmlElement.AppendChild(сontextXmlElement);
+
+			XmlElement urlXmlElement = launcherConfig.CreateElement("url");
+			urlXmlElement.InnerText = authManager.GetServerUrl();
+			launcherConfigXmlElement.AppendChild(urlXmlElement);
+
+			XmlElement databaseXmlElement = launcherConfig.CreateElement("database");
+			databaseXmlElement.InnerText = authManager.GetServerDatabaseName();
+			launcherConfigXmlElement.AppendChild(databaseXmlElement);
+
+			XmlElement userNameXmlElement = launcherConfig.CreateElement("userName");
+			userNameXmlElement.InnerText = authManager.InnovatorUser.userName;
+			launcherConfigXmlElement.AppendChild(userNameXmlElement);
+
+			XmlWriterSettings settings = new XmlWriterSettings();
+			settings.Encoding = new UTF8Encoding(true);
+			settings.Indent = true;
+			settings.IndentChars = "\t";
+			settings.NewLineOnAttributes = false;
+			settings.OmitXmlDeclaration = true;
+			using (XmlWriter xmlWriter = XmlWriter.Create(launcherConfigPath, settings))
+			{
+				launcherConfig.Save(xmlWriter);
+			}
 		}
 
 		public static string GetFullName(NamespaceDeclarationSyntax node)

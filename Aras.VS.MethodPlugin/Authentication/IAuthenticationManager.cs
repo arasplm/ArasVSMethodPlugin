@@ -34,6 +34,8 @@ namespace Aras.VS.MethodPlugin.Authentication
 
 		string GetServerUrl();
 
+		string GetServerDatabaseName();
+
 		List<string> GetUserIdentityList();
 	}
 }
