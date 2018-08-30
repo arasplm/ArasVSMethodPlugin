@@ -28,17 +28,19 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private SelectPathViewModel selectPathViewModel;
 		private ICommand okCommand;
 		private ICommand closeCommand;
+	    private ICommand pathChangeCommand;
 
-		public OpenFromPackageTreeViewModel(string lastSelectedDir)
+        public OpenFromPackageTreeViewModel(string lastSelectedDir)
 		{
 
 			SelectPathViewModel = new SelectPathViewModel(DirectoryItemType.File, lastSelectedDir);
 			SelectPathViewModel.SelectionChanged += OnSelectDirectoryItem;
 			this.okCommand = new RelayCommand<object>(OkCommandClick);
 			this.closeCommand = new RelayCommand<object>(OnCloseCliked);
-		}
+		    this.pathChangeCommand = new RelayCommand<object>(OnPathChange);
+        }
 
-		#region Properties
+	    #region Properties
 
 		public SelectPathViewModel SelectPathViewModel
 		{
@@ -102,9 +104,11 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		public ICommand CloseCommand { get { return closeCommand; } }
 
-		#endregion
+	    public ICommand PathChangeCommand { get { return pathChangeCommand; } }
 
-		private void OnSelectDirectoryItem(string fullPath)
+        #endregion
+
+        private void OnSelectDirectoryItem(string fullPath)
 		{
 			this.rootFolderPath = Path.GetDirectoryName(fullPath);
 
@@ -150,5 +154,24 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		{
 			(view as Window).Close();
 		}
-	}
+
+        private void OnPathChange(object window)
+        {
+            var wnd = window as Window;
+            var path = SelectPathViewModel.SelectedPath;
+            if (System.IO.File.Exists(path) || System.IO.Directory.Exists(path))
+            {
+               selectPathViewModel.Navigate(selectPathViewModel.DirectoryItems, path.Split(Path.DirectorySeparatorChar).ToList());
+            }
+            else
+            {
+                var messageWindow = new MessageBoxWindow();
+                messageWindow.ShowDialog(wnd,
+                    "File or Folder were not found",
+                    "Open method from AML package",
+                    MessageButtons.OK,
+                    MessageIcon.None);
+            }
+        }
+    }
 }

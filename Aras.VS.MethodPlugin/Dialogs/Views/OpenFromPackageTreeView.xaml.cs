@@ -5,6 +5,9 @@
 //------------------------------------------------------------------------------
 
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+
 
 namespace Aras.VS.MethodPlugin.Dialogs.Views
 {

@@ -22,6 +22,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private ObservableCollection<DirectoryItemViewModel> directoryItems;
 		private DirectoryItemViewModel selectDirectoryItem;
 		private DirectoryItemType searchToLevel;
+	    private string selectedPath;
 
 		public event Action<string> SelectionChanged;
 
@@ -30,17 +31,20 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private ICommand deleteFolderCommand;
 		private ICommand okCommand;
 		private ICommand closeCommand;
-
-		public SelectPathViewModel(DirectoryItemType searchToLevel, string startPath = "")
+	    private ICommand pathChangeCommand;
+        
+        public SelectPathViewModel(DirectoryItemType searchToLevel, string startPath = "")
 		{
 			this.searchToLevel = searchToLevel;
-
-			this.newFolderCommand = new RelayCommand<object>(OnNewFolderClick);
+		    this.selectedPath = startPath;
+            this.newFolderCommand = new RelayCommand<object>(OnNewFolderClick);
 			this.renameFolderCommand = new RelayCommand<object>(OnRenameFolderClick);
 			this.deleteFolderCommand = new RelayCommand<object>(OnDeleteFolderClick);
 			this.okCommand = new RelayCommand<object>(OkCommandClick);
 			this.closeCommand = new RelayCommand<object>(OnCloseCliked);
-
+		    this.pathChangeCommand = new RelayCommand<object>(OnPathChange);
+            
+            this.SelectionChanged += OnFolderPathChange;
 			this.DirectoryItems = new ObservableCollection<DirectoryItemViewModel>();
 			var children = DirectoryStructure.GetLogicalDrives();
 
@@ -52,7 +56,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				this.DirectoryItems.Add(childViewModel);
 			}
 
-			if (!string.IsNullOrEmpty(startPath))
+			if (!string.IsNullOrEmpty(startPath) && System.IO.Directory.Exists(startPath))
 			{
 				var pathList = startPath.Split(Path.DirectorySeparatorChar).ToList();
 				Navigate(this.DirectoryItems, pathList);
@@ -60,7 +64,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			//TODO: navigate to path
 		}
 
-		public void Navigate(IList<DirectoryItemViewModel> currentItems, List<string> pathList)
+	    public void Navigate(IList<DirectoryItemViewModel> currentItems, List<string> pathList)
 		{
 			var currentPath = pathList.FirstOrDefault();
 			if (!string.IsNullOrEmpty(currentPath))
@@ -88,13 +92,13 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		public string SelectedPath
 		{
-			get { return selectDirectoryItem.FullPath; }
-			set { selectDirectoryItem.FullPath = value; RaisePropertyChanged(nameof(SelectedPath)); }
+		    get { return selectedPath; }
+			set { selectedPath = value; RaisePropertyChanged(nameof(SelectedPath)); }
 		}
+       
+        #endregion
 
-		#endregion
-
-		public ICommand NewFolderCommand { get { return newFolderCommand; } }
+        public ICommand NewFolderCommand { get { return newFolderCommand; } }
 
 		public ICommand RenameFolderCommand { get { return renameFolderCommand; } }
 
@@ -104,7 +108,10 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		public ICommand CloseCommand { get { return closeCommand; } }
 
-		private void OnCloseCliked(object window)
+	    public ICommand PathChangeCommand { get { return pathChangeCommand; } }
+
+	    
+        private void OnCloseCliked(object window)
 		{
 			var wnd = window as Window;
 			wnd.Close();
@@ -113,8 +120,21 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private void OkCommandClick(object window)
 		{
 			var wnd = window as Window;
-			wnd.DialogResult = true;
-			wnd.Close();
+		    if(!System.IO.Directory.Exists(SelectedPath))
+		    {
+		        var messageWindow = new MessageBoxWindow();
+		        messageWindow.ShowDialog(wnd,
+		            "Folder wasn't found",
+		            "Select path for saving",
+		            MessageButtons.OK,
+		            MessageIcon.None);
+		    }
+		    else
+		    {
+		        wnd.DialogResult = true;
+		        wnd.Close();
+            }
+            
 		}
 
 		private void OnSelectDirectoryItem(DirectoryItemViewModel selectDirectoryItem)
@@ -123,11 +143,16 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			var selectionChanged = SelectionChanged;
 			if (selectionChanged != null)
 			{
-				selectionChanged(this.SelectedPath);
+				selectionChanged(selectDirectoryItem.FullPath);
 			}
 		}
 
-		private void OnNewFolderClick(object window)
+	    private void OnFolderPathChange(string fullPath)
+	    {
+	        this.SelectedPath = fullPath;
+	    }
+
+	    private void OnNewFolderClick(object window)
 		{
 			var viewModel = new FolderNameViewModel();
 			var view = new FolderNameDialog();
@@ -240,5 +265,22 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				}
 			}
 		}
-	}
+	    private void OnPathChange(object window)
+	    {
+	        var wnd = window as Window;
+	        if (System.IO.File.Exists(selectedPath) || System.IO.Directory.Exists(selectedPath))
+	        {
+	            Navigate(DirectoryItems, selectedPath.Split(Path.DirectorySeparatorChar).ToList());
+	        }
+	        else
+	        {
+	            var messageWindow = new MessageBoxWindow();
+	            messageWindow.ShowDialog(wnd,
+	                "File or Folder were not found",
+	                "Saving method to local package",
+	                MessageButtons.OK,
+	                MessageIcon.None);
+	        }
+        }
+    }
 }

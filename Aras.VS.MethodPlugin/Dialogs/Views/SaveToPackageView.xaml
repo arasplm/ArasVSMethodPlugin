@@ -56,7 +56,7 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Row="0" Grid.Column="0" Content="Package path:" VerticalAlignment="Center" />
-                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=PackagePath, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" />
+                        <TextBox IsReadOnly="True" Grid.Row="0" Grid.Column="1" Text="{Binding Path=PackagePath, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" />
                         <Button Content="  ...  " Grid.Column="2" Command="{Binding Path=FolderBrowserCommand}" CommandParameter="{Binding ElementName=SaveToLocalPackageWindow}" VerticalAlignment="Center" Margin="5, 0"/>
                     </Grid>
                 </Grid>

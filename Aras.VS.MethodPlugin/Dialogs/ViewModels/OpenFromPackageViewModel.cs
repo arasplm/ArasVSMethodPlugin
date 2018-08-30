@@ -218,7 +218,10 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		private void OnFolderBrowserCommandClicked(object window)
 		{
-			var viewModel = new OpenFromPackageTreeViewModel(selectedFolderPath);
+		    var actualFolderPath = !string.IsNullOrWhiteSpace(MethodPath)
+		        ? Path.GetDirectoryName(MethodPath)
+		        : selectedFolderPath;
+            var viewModel = new OpenFromPackageTreeViewModel(actualFolderPath);
 			var view = new OpenFromPackageTreeView();
 			view.DataContext = viewModel;
 			view.Owner = window as Window;
@@ -256,6 +259,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				this.MethodName = nameTypeXmlNode.InnerText;
 				this.MethodConfigId = itemXmlNode.Attributes["id"].InnerText;
 				this.MethodId = itemXmlNode.Attributes["id"].InnerText;
+                
 
 				// TODO : duplicated with OpenFromArasViewModel
 				TemplateInfo template = null;
@@ -280,9 +284,10 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				{
 					template = templateLoader.Templates.Where(t => t.TemplateLanguage == methodLanguage && t.IsSupported).FirstOrDefault();
 				}
+                
 
 				this.SelectedTemplate = template;
-
+                
 				ValidateOkButton();
 			}
 		}
