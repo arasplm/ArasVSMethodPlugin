@@ -19,14 +19,18 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 		public OpenFromPackageTreeView()
 		{
 			InitializeComponent();
-			this.Loaded += OpenFromPackageView_Loaded;
+			this.Loaded += OpenFromPackageView_BringIntoView;
 		}
 
-		private void OpenFromPackageView_Loaded(object sender, RoutedEventArgs e)
+		private void OpenFromPackageView_BringIntoView(object sender, RoutedEventArgs e)
 		{
-			//TODO: bring into view does not work
-			FolderView.BringIntoView();
-		}
+		    TreeViewItem item = sender as TreeViewItem;
+		    if (item != null)
+		    {
+		        item.BringIntoView();
+		        e.Handled = true;
+		    }
+        }
 
 		private void CancelClick(object sender, RoutedEventArgs e)
 		{

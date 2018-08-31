@@ -59,6 +59,7 @@
                         <Setter Property="Foreground" Value="{DynamicResource {x:Static shell:EnvironmentColors.ComboBoxTextBrushKey}}"/>
                         <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
                         <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                        <EventSetter Event="Selected" Handler="OpenFromPackageView_BringIntoView" />
                     </Style>
                 </TreeView.ItemContainerStyle>
                 <TreeView.ItemTemplate>

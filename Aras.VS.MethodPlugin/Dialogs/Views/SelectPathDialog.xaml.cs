@@ -18,18 +18,23 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 		public SelectPathDialog()
 		{
 			InitializeComponent();
-		}
+		    this.Loaded += TreeViewItem_BringIntoView;
+        }
 
 		private void CancelClick(object sender, RoutedEventArgs e)
 		{
 			SelectPathWindow.Close();
 		}
 
-		private void FolderView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+		private void TreeViewItem_BringIntoView(object sender, RoutedEventArgs e)
 		{
-			//TODO: bring into view does not work
-			(sender as TreeView).BringIntoView();
-		}
+		    TreeViewItem item = sender as TreeViewItem;
+		    if (item != null)
+		    {
+		        item.BringIntoView();
+		        e.Handled = true;
+		    }
+        }
 
 		private void TreeViewItem_MouseRightButtonDown(object sender, MouseEventArgs e)
 		{
