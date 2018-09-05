@@ -143,7 +143,8 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 			get
 			{
 				string selectedFilePath = this.GetSelectedFiles().FirstOrDefault();
-				return selectedFilePath;
+			    string selectedFolder = Path.GetDirectoryName(selectedFilePath);
+                return selectedFolder;
 			}
 		}
 
