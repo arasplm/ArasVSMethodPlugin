@@ -55,9 +55,9 @@
             <TextBox Grid.Row="2" Grid.Column="1" Height="24"  VerticalContentAlignment="Center" Text="{Binding Path=Login}" IsReadOnly="{Binding IsLoginEnabled}" />
             <PasswordBox x:Name="PasswordPB" Grid.Row="3" Grid.Column="1" Height="24" VerticalContentAlignment="Center" IsEnabled="{Binding IsPasswordEnabled}"/>
             <Button Grid.Row="4" Grid.Column="1" Width="70" Height="24" HorizontalAlignment="Right" VerticalAlignment="Center" Content="Login"
-                    Command="{Binding Path=LoginClick}"
-                    IsDefault="True">
-                <Button.CommandParameter>
+                    Command="{Binding Path=LoginClick}" IsEnabled="{Binding IsLoginButtonEnabled}"
+                    IsDefault="True" >
+            <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource LoginViewMultiValueConverter}">
                         <Binding ElementName ="LoginWindow" />
                         <Binding ElementName="PasswordPB" />

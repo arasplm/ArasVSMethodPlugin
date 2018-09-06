@@ -30,10 +30,11 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		private bool isLoginEnabled;
 		private bool isPasswordEnabled;
+	    private bool isLoginButtonEnabled;
 
-		private string projectName;
+        private string projectName;
 		private string projectFullName;
-
+	    
 		public LoginViewModel(
 			IAuthenticationManager authManager,
 			ProjectConfiguraiton projectConfiguration,
@@ -66,7 +67,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 			this.loginClick = new RelayCommand<object>(OnLoginClicked);
 			this.closeClick = new RelayCommand<object>(OnCloseCliked);
-		}
+        }
 
 		#region Properties
 
@@ -80,7 +81,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 				string[] dataBases = authManager.GetBases(selectedUrl, projectFullName);
 				Databases = new ObservableCollection<string>(dataBases);
-			}
+			    ValidateLoginButton();
+            }
 		}
 
 		public string SelectedDatabase
@@ -103,7 +105,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 					IsLoginEnabled = false;
 					IsPasswordEnabled = true;
 				}
-			}
+			    ValidateLoginButton();
+            }
 		}
 
 		public ObservableCollection<string> UrlSource { get; set; }
@@ -120,7 +123,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				}
 
 				RaisePropertyChanged(nameof(Databases));
-			}
+            }
 		}
 
 		public string Login
@@ -130,7 +133,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			{
 				login = value;
 				RaisePropertyChanged(nameof(Login));
-			}
+			    ValidateLoginButton();
+            }
 		}
 
 		public bool IsLoginEnabled
@@ -153,11 +157,22 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			}
 		}
 
-		#endregion
+	    public bool IsLoginButtonEnabled
+	    {
+	        get { return isLoginButtonEnabled; }
+	        set
+	        {
+	            isLoginButtonEnabled = value;
+	            RaisePropertyChanged(nameof(IsLoginButtonEnabled));
+            }
 
-		#region Commands
+	    }
 
-		public ICommand LoginClick
+        #endregion
+
+        #region Commands
+
+        public ICommand LoginClick
 		{
 			get { return loginClick; }
 		}
@@ -190,5 +205,17 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		{
 			(view as Window).Close();
 		}
+
+	    private void ValidateLoginButton()
+	    {
+	        if (string.IsNullOrWhiteSpace(login) ||string.IsNullOrWhiteSpace(selectedUrl) || string.IsNullOrWhiteSpace(selectedDatabase))
+	        {
+	            IsLoginButtonEnabled = false;
+	        }
+	        else
+	        {
+	            IsLoginButtonEnabled = true;
+	        }
+	    }
 	}
 }
