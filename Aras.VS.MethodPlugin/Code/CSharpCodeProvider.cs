@@ -287,8 +287,8 @@ namespace Aras.VS.MethodPlugin.Code
 			var eventDataClass = eventData.EventDataClass;
 			var interfaceName = eventData.InterfaceName;
 			string methodNameWithOutSpases = methodName.Replace(' ', '_');
-			var clsname = "Aras_CLS_" + methodNameWithOutSpases;
-			var pkgname = "Aras_PKG_" + methodNameWithOutSpases;
+			var clsname = "ArasCLS" + methodNameWithOutSpases;
+			var pkgname = "ArasPKG" + methodNameWithOutSpases;
 
 			if (!wrapperCode.EndsWith("\r\n"))
 			{

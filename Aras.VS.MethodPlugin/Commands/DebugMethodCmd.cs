@@ -96,7 +96,7 @@ namespace Aras.VS.MethodPlugin.Commands
 				.OfType<NamespaceDeclarationSyntax>()
 				.FirstOrDefault();
 			var className = GetFullName(member);
-			var methodName = string.Format("Aras_PKG_{0}ItemMethod", methodInformation.MethodName);
+			var methodName = string.Format("ArasPKG{0}ItemMethod", methodInformation.MethodName);
 			//(me as IdentifierNameSyntax).Identifier.ValueText
 
 			//var selectedClassName =
