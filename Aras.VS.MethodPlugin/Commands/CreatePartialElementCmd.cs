@@ -29,14 +29,10 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// </summary>
 		public const int CommandId = 0x0101;
 
-		public const int ToolbarCommandId = 0x110;
-
 		/// <summary>
 		/// Command menu group (command set GUID).
 		/// </summary>
 		public static readonly Guid CommandSet = new Guid("714c822b-ebc4-4413-89b5-c93eaed863fc");
-
-		public static readonly Guid ToolbarCommandSet = new Guid("21D122E1-35BF-4156-B458-7E292CDD9C2D");
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CreatePartialElementCmd"/> class.
@@ -54,11 +50,8 @@ namespace Aras.VS.MethodPlugin.Commands
 			{
 				var menuCommandID = new CommandID(CommandSet, CommandId);
 				var menuItem = new MenuCommand(this.ExecuteCommand, menuCommandID);
-				var toolbarMenuCommandID = new CommandID(ToolbarCommandSet, ToolbarCommandId);
-				var toolbarMenuItem = new MenuCommand(this.ExecuteCommand, toolbarMenuCommandID);
 
 				projectManager.CommandService.AddCommand(menuItem);
-				projectManager.CommandService.AddCommand(toolbarMenuItem);
 			}
 		}
 

@@ -28,17 +28,10 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// </summary>
 		public const int CommandId = 0x0104;
 
-		public const int ToolbarCommandId = 0x111;
-
 		/// <summary>
 		/// Command menu group (command set GUID).
 		/// </summary>
 		public static readonly Guid CommandSet = new Guid("020DC4DF-2FC3-493E-97D3-4012DE93BCAB");
-
-		/// <summary>
-		/// Toolbar menu group (command set GUID).
-		/// </summary>
-		public static readonly Guid ToolbarCommandSet = new Guid("21D122E1-35BF-4156-B458-7E292CDD9C2D");
 
 		private DebugMethodCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, ProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory)
 		{
@@ -46,11 +39,8 @@ namespace Aras.VS.MethodPlugin.Commands
 			{
 				var menuCommandID = new CommandID(CommandSet, CommandId);
 				var menuItem = new MenuCommand(this.ExecuteCommand, menuCommandID);
-				var toolbarMenuCommandID = new CommandID(ToolbarCommandSet, ToolbarCommandId);
-				var toolbarMenuItem = new MenuCommand(this.ExecuteCommand, toolbarMenuCommandID);
 
 				projectManager.CommandService.AddCommand(menuItem);
-				projectManager.CommandService.AddCommand(toolbarMenuItem);
 			}
 		}
 

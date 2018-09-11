@@ -25,17 +25,10 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// </summary>
 		public const int CommandId = 0x0101;
 
-		public const int ToolbarCommandId = 0x109;
-
 		/// <summary>
 		/// Command menu group (command set GUID).
 		/// </summary>
 		public static readonly Guid CommandSet = new Guid("DB77AE9E-9CB5-4C13-9EB3-ED388DC94B66");
-
-		/// <summary>
-		/// Toolbar menu group (command set GUID).
-		/// </summary>
-		public static readonly Guid ToolbarCommandSet = new Guid("21D122E1-35BF-4156-B458-7E292CDD9C2D");
 
 		private RefreshConfigCmd(IProjectManager projectManager, IDialogFactory dialogFactory, ProjectConfigurationManager projectConfigurationManager)
 			: base(projectManager, dialogFactory, projectConfigurationManager)
@@ -44,11 +37,8 @@ namespace Aras.VS.MethodPlugin.Commands
 			{
 				var menuCommandID = new CommandID(CommandSet, CommandId);
 				var menuItem = new MenuCommand(this.ExecuteCommand, menuCommandID);
-				var toolbarMenuCommandID = new CommandID(ToolbarCommandSet, ToolbarCommandId);
-				var toolbarMenuItem = new MenuCommand(this.ExecuteCommand, toolbarMenuCommandID);
 
 				projectManager.CommandService.AddCommand(menuItem);
-				projectManager.CommandService.AddCommand(toolbarMenuItem);
 			}
 		}
 

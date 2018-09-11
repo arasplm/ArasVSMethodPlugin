@@ -29,14 +29,10 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// </summary>
 		public const int CommandId = 0x102;
 
-		public const int ToolbarCommandId = 0x103;
-
 		/// <summary>
 		/// Command menu group (command set GUID).
 		/// </summary>
 		public static readonly Guid CommandSet = new Guid("AEA8535B-C666-4112-9BDD-5ECFA4934B47");
-
-		public static readonly Guid ToolbarCommandSet = new Guid("21D122E1-35BF-4156-B458-7E292CDD9C2D");
 
 		private readonly IAuthenticationManager authManager;
 		private readonly ICodeProviderFactory codeProviderFactory;
@@ -55,11 +51,8 @@ namespace Aras.VS.MethodPlugin.Commands
 			{
 				var menuCommandID = new CommandID(CommandSet, CommandId);
 				var menuItem = new MenuCommand(this.ExecuteCommand, menuCommandID);
-				var toolbarMenuCommandID = new CommandID(ToolbarCommandSet, ToolbarCommandId);
-				var toolbarMenuItem = new MenuCommand(this.ExecuteCommand, toolbarMenuCommandID);
 
 				projectManager.CommandService.AddCommand(menuItem);
-				projectManager.CommandService.AddCommand(toolbarMenuItem);
 			}
 		}
 

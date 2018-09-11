@@ -35,18 +35,10 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// </summary>
 		public const int ItemCommandId = 0x102;
 
-		public const int FolderCommandId = 0x102;
-
-		public const int ToolbarCommandId = 0x107;
-
 		/// <summary>
 		/// Command menu group (command set GUID).
 		/// </summary>
 		public static readonly Guid ItemCommandSet = new Guid("694F6136-7CF1-46E1-B9E2-24296488AE96");
-
-		public static readonly Guid FolderCommandSet = new Guid("ff7642f6-a539-425a-ac06-41f00e1e8c96");
-
-		public static readonly Guid ToolbarCommandSet = new Guid("21D122E1-35BF-4156-B458-7E292CDD9C2D");
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SaveToPackageCmd"/> class.
@@ -60,15 +52,7 @@ namespace Aras.VS.MethodPlugin.Commands
 				var itemCommandID = new CommandID(ItemCommandSet, ItemCommandId);
 				var itemMenuItem = new MenuCommand(this.ExecuteCommand, itemCommandID);
 
-				var folderCommandID = new CommandID(FolderCommandSet, FolderCommandId);
-				var folderMenuItem = new MenuCommand(this.ExecuteCommand, folderCommandID);
-
-				var toolbarMenuCommandID = new CommandID(ToolbarCommandSet, ToolbarCommandId);
-				var toolbarMenuItem = new MenuCommand(this.ExecuteCommand, toolbarMenuCommandID);
-
 				projectManager.CommandService.AddCommand(itemMenuItem);
-				projectManager.CommandService.AddCommand(folderMenuItem);
-				projectManager.CommandService.AddCommand(toolbarMenuItem);
 			}
 		}
 

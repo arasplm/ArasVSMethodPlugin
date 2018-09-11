@@ -32,14 +32,10 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// </summary>
 		public const int CommandId = 0x0104;
 
-		public const int ToolbarCommandId = 0x0108;
-
 		/// <summary>
 		/// Command menu group (command set GUID).
 		/// </summary>
 		public static readonly Guid CommandSet = new Guid("CF767190-3696-4365-9857-3600622B097D");
-
-		public static readonly Guid ToolbarCommandSet = new Guid("21D122E1-35BF-4156-B458-7E292CDD9C2D");
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UpdateMethodCmd"/> class.
@@ -52,11 +48,8 @@ namespace Aras.VS.MethodPlugin.Commands
 			{
 				var menuCommandID = new CommandID(CommandSet, CommandId);
 				var menuItem = new MenuCommand(this.ExecuteCommand, menuCommandID);
-				var toolbarMenuCommandID = new CommandID(ToolbarCommandSet, ToolbarCommandId);
-				var toolbarMenuItem = new MenuCommand(this.ExecuteCommand, toolbarMenuCommandID);
 
 				projectManager.CommandService.AddCommand(menuItem);
-				projectManager.CommandService.AddCommand(toolbarMenuItem);
 			}
 		}
 
