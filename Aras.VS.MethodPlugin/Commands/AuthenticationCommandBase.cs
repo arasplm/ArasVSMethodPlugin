@@ -10,12 +10,9 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Aras.VS.MethodPlugin.Commands
 {
-	public abstract class AuthenticationCommandBase
+	public abstract class AuthenticationCommandBase : CmdBase
 	{
 		protected readonly IAuthenticationManager authManager;
-		protected readonly IDialogFactory dialogFactory;
-		protected readonly IProjectManager projectManager;
-		protected readonly ProjectConfigurationManager projectConfigurationManager;
 		protected readonly ICodeProviderFactory codeProviderFactory;
 
 		public AuthenticationCommandBase(
@@ -23,22 +20,16 @@ namespace Aras.VS.MethodPlugin.Commands
 			IDialogFactory dialogFactory,
 			IProjectManager projectManager,
 			ProjectConfigurationManager projectConfigurationManager,
-			ICodeProviderFactory codeProviderFactory)
+			ICodeProviderFactory codeProviderFactory) : base(projectManager, dialogFactory, projectConfigurationManager)
 		{
 			if (authManager == null) throw new ArgumentNullException(nameof(authManager));
-			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));
-			if (projectManager == null) throw new ArgumentNullException(nameof(projectManager));
-			if (projectConfigurationManager == null) throw new ArgumentNullException(nameof(projectConfigurationManager));
 			if (codeProviderFactory == null) throw new ArgumentNullException(nameof(codeProviderFactory));
 
 			this.authManager = authManager;
-			this.dialogFactory = dialogFactory;
-			this.projectManager = projectManager;
-			this.projectConfigurationManager = projectConfigurationManager;
 			this.codeProviderFactory = codeProviderFactory;
 		}
 
-		public void ExecuteCommand(object sender, EventArgs args)
+		public override void ExecuteCommand(object sender, EventArgs args)
 		{
 			IVsUIShell uiShell = projectManager.UIShell;
 			uiShell.EnableModeless(0);
@@ -81,7 +72,5 @@ namespace Aras.VS.MethodPlugin.Commands
 				uiShell.EnableModeless(1);
 			}
 		}
-
-		public abstract void ExecuteCommandImpl(object sender, EventArgs args, IVsUIShell uiShell);
 	}
 }

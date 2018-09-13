@@ -45,6 +45,8 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 
 		bool IsArasProject { get; }
 
+		bool SolutionHasProject{ get; }
+
 		IEnumerable<string> GetSelectedFiles();
 
 		string AddItemTemplateToProjectNew(CodeInfo codeInfo, bool openAfterCreation, int cursorIndex = -1);

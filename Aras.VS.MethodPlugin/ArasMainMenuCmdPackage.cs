@@ -42,7 +42,7 @@ namespace Aras.VS.MethodPlugin
 	[ProvideMenuResource("Menus.ctmenu", 1)]
 	[Guid(ArasMainMenuCmdPackage.PackageGuidString)]
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
-	[ProvideAutoLoad(VSConstants.UICONTEXT.NoSolution_string)]
+	[ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string)]
 	public sealed class ArasMainMenuCmdPackage : Package
 	{
 		/// <summary>

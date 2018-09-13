@@ -18,6 +18,7 @@ using Aras.VS.MethodPlugin.SolutionManagement;
 using Aras.VS.MethodPlugin.Templates;
 using EnvDTE;
 using EnvDTE80;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Aras.VS.MethodPlugin.Commands
@@ -47,7 +48,8 @@ namespace Aras.VS.MethodPlugin.Commands
 			if (projectManager.CommandService != null)
 			{
 				var menuCommandID = new CommandID(CommandSet, CommandId);
-				var menuItem = new MenuCommand(this.ExecuteCommand, menuCommandID);
+				var menuItem = new OleMenuCommand(this.ExecuteCommand, menuCommandID);
+				menuItem.BeforeQueryStatus += CheckCommandAccessibility;
 
 				projectManager.CommandService.AddCommand(menuItem);
 			}

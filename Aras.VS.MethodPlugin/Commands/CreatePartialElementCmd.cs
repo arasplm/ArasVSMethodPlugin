@@ -13,6 +13,7 @@ using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.ProjectConfigurations;
 using Aras.VS.MethodPlugin.SolutionManagement;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Aras.VS.MethodPlugin.Commands
@@ -49,7 +50,8 @@ namespace Aras.VS.MethodPlugin.Commands
 			if (projectManager.CommandService != null)
 			{
 				var menuCommandID = new CommandID(CommandSet, CommandId);
-				var menuItem = new MenuCommand(this.ExecuteCommand, menuCommandID);
+				var menuItem = new OleMenuCommand(this.ExecuteCommand, menuCommandID);
+				menuItem.BeforeQueryStatus += CheckCommandAccessibility;
 
 				projectManager.CommandService.AddCommand(menuItem);
 			}

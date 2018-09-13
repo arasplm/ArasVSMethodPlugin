@@ -164,6 +164,8 @@
           If you do not want an image next to your command, remove the Icon node />-->
 	<Button guid="ArasOpenCmdSet" id="ArasOpenFromArasCommandId" priority="0x0101" type="Button">
         <Icon guid="guidOpenFromArasImages" id="bmpPic1" />
+		<CommandFlag>DynamicVisibility</CommandFlag>
+		<CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
           <ButtonText>Open method from Aras Innovator</ButtonText>
         </Strings>
@@ -171,6 +173,9 @@
 
       <Button guid="ArasOpenCmdSet" id="ArasOpenFromPackageCommandId" priority="0x0102" type="Button">
         <Icon guid="guidOpenFromPackageImages" id="bmpPic1" />
+		  <CommandFlag></CommandFlag>
+		  <CommandFlag>DynamicVisibility</CommandFlag>
+		  <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
           <ButtonText>Open method from AML package</ButtonText>
         </Strings>
@@ -178,6 +183,8 @@
 
       <Button guid="ArasCreateCmdSet" id="ArasCreateMethodCommandId" priority="0x0103" type="Button">
         <Icon guid="guidCreateImages" id="bmpPic1" />
+		 <CommandFlag>DynamicVisibility</CommandFlag>
+		  <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
           <ButtonText>Create method</ButtonText>
         </Strings>
@@ -185,6 +192,8 @@
 
       <Button guid="ArasUpdateConfigCmdSet" id="ArasUpdateConfigCommandId" priority="0x0104" type="Button">
         <Icon guid="guidRefreshMethodFromArasImages" id="bmpPic1" />
+		  <CommandFlag>DynamicVisibility</CommandFlag>
+		  <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
           <ButtonText>Update project configuration</ButtonText>
         </Strings>
@@ -192,6 +201,8 @@
 
       <Button guid="ArasSettingCmdSet" id="ArasSedttingCommandId" priority="0x0105" type="Button">
         <Icon guid="guidArasImages" id="bmpPic1" />
+		  <CommandFlag>DynamicVisibility</CommandFlag>
+		  <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
           <ButtonText>Connection Info</ButtonText>
         </Strings>
@@ -199,6 +210,8 @@
 
       <Button guid="ArasCreatePartialElementCmdSet" id="ArasCreatePartialElementCommandId" priority="0x0101" type="Button">
         <Icon guid="guidCreateImages" id="bmpPic1" />
+		  <CommandFlag>DynamicVisibility</CommandFlag>
+		  <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
           <ButtonText>Create Partial Element</ButtonText>
         </Strings>
@@ -206,6 +219,8 @@
 		
       <Button guid="ArasSaveCmdSet" id="ArasSaveToArasCommandId" priority="0x0101" type="Button">
         <Icon guid="guidSaveToArasImages" id="bmpPic1" />
+		  <CommandFlag>DynamicVisibility</CommandFlag>
+		  <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
           <ButtonText>Save method to Aras Innovator</ButtonText>
         </Strings>
@@ -213,6 +228,8 @@
 
       <Button guid="ArasSaveCmdSet" id="ArasSaveToPackageCommandId" priority="0x0102" type="Button">
         <Icon guid="guidSaveToPackageImages" id="bmpPic1" />
+		  <CommandFlag>DynamicVisibility</CommandFlag>
+		  <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
           <ButtonText>Save method to AML package</ButtonText>
         </Strings>
@@ -220,6 +237,8 @@
 
       <Button guid="ArasUpdateMethodCmdSet" id="ArasUpdateMethodFormArasCommandId" priority="0x0103" type="Button">
         <Icon guid="guidRefreshMethodFromArasImages" id="bmpPic1" />
+		  <CommandFlag>DynamicVisibility</CommandFlag>
+		  <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
           <ButtonText>Update method from Aras Innovator</ButtonText>
         </Strings>
@@ -227,6 +246,8 @@
 
       <Button guid="ArasDebugMethodCmdSet" id="ArasDebugMethodCommandId" priority="0x0104" type="Button">
         <Icon guid="guidDebugMethodImages" id="bmpPic1" />
+		  <CommandFlag>DynamicVisibility</CommandFlag>
+		  <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
           <ButtonText>Debug method</ButtonText>
         </Strings>
@@ -255,9 +276,8 @@
       <Bitmap guid="guidRefreshMethodFromArasImages" href="Resources\refresh-16x16.png" usedList="bmpPic1" />
       <Bitmap guid="guidDebugMethodImages" href="Resources\16x16-Run.png" usedList="bmpPic1" />
     </Bitmaps>
- 
 </Commands>
-	
+
 <CommandPlacements>
 	<!--ToolBar-->
 	<CommandPlacement guid="ArasCreateCmdSet" id="ArasCreateMethodCommandId" priority="0x0101">
@@ -327,7 +347,7 @@
 		<Parent guid="ArasItemDebugGroupCmdSet" id="ItemDebugGroup"/>
 	</CommandPlacement>
 </CommandPlacements>
-
+	
   <Symbols>
     <GuidSymbol name="ArasToolbarGroupCmdSet" value="{21D122E1-35BF-4156-B458-7E292CDD9C2D}">
       <IDSymbol name="ArasToolbar" value="0x100" />

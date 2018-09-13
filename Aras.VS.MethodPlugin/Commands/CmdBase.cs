@@ -9,6 +9,7 @@ using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.ProjectConfigurations;
 using Aras.VS.MethodPlugin.SolutionManagement;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Aras.VS.MethodPlugin.Commands
@@ -36,7 +37,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			this.projectConfigurationManager = projectConfigurationManager;
 		}
 
-		public void ExecuteCommand(object sender, EventArgs args)
+		public virtual void ExecuteCommand(object sender, EventArgs args)
 		{
 			IVsUIShell uiShell = projectManager.UIShell;
 			uiShell.EnableModeless(0);
@@ -71,5 +72,17 @@ namespace Aras.VS.MethodPlugin.Commands
 		}
 		//TODO: remove uiShell from parameters
 		public abstract void ExecuteCommandImpl(object sender, EventArgs args, IVsUIShell uiShell);
+
+		protected void CheckCommandAccessibility(object sender, EventArgs e)
+		{
+			var command = (OleMenuCommand)sender;
+			if (this.projectManager.SolutionHasProject && this.projectManager.IsArasProject)
+			{
+				command.Enabled = true;
+				return;
+			}
+
+			command.Enabled = false;
+		}
 	}
 }

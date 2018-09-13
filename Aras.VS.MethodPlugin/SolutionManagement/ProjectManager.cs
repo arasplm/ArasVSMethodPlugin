@@ -143,8 +143,8 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 			get
 			{
 				string selectedFilePath = this.GetSelectedFiles().FirstOrDefault();
-			    string selectedFolder = Path.GetDirectoryName(selectedFilePath);
-                return selectedFolder;
+				string selectedFolder = Path.GetDirectoryName(selectedFilePath);
+				return selectedFolder;
 			}
 		}
 
@@ -215,6 +215,21 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 					selectedProject.ProjectItems.Exists(serverMethodsFolderName) &&
 					selectedProject.ProjectItems.Exists(methodConfigFileName) &&
 					selectedProject.ProjectItems.Exists(projectConfigFileName))
+				{
+					return true;
+				}
+
+				return false;
+			}
+		}
+
+		public bool SolutionHasProject
+		{
+			get
+			{
+				var dte = (DTE2)serviceProvider.GetService(typeof(DTE));
+				var countProject = dte.Solution.Projects.Count;
+				if (countProject > 0)
 				{
 					return true;
 				}
