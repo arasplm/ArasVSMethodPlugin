@@ -97,6 +97,17 @@ namespace Aras.VS.MethodPlugin.Commands
 				throw new Exception();
 			}
 
+			string manifastFileName;
+			if (methodInformation is PackageMethodInfo)
+			{
+				PackageMethodInfo packageMethodInfo = (PackageMethodInfo)methodInformation;
+				manifastFileName = packageMethodInfo.ManifestFileName;
+			}
+			else
+			{
+				manifastFileName = "imports.mf";
+			}
+
 			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language, projectConfiguration);
 			var saveView = dialogFactory.GetSaveToPackageView(uiShell, projectConfiguration, templateLoader, packageManager, codeProvider, projectManager, methodInformation, selectedMethodPath);
 			var saveViewResult = saveView.ShowDialog();
@@ -105,33 +116,22 @@ namespace Aras.VS.MethodPlugin.Commands
 				return;
 			}
 
+			string pathPackageToSaveMethod;
 			string rootPath = saveViewResult.PackagePath;
-			string methodPath = Path.Combine(rootPath, $"{saveViewResult.SelectedPackage}\\Import\\Method\\");
-			Directory.CreateDirectory(methodPath);
-
-			string importFilePath = Path.Combine(rootPath, "imports.mf");
+			string importFilePath = Path.Combine(rootPath, manifastFileName);
 			if (File.Exists(importFilePath))
 			{
 				var xmlDocument = new XmlDocument();
 				xmlDocument.Load(importFilePath);
 				XmlNode importsXmlNode = xmlDocument.SelectSingleNode("imports");
-				XmlNodeList packageXmlNodes = importsXmlNode.SelectNodes("package");
+				XmlNode packageXmlNode = importsXmlNode.SelectSingleNode($"package[@path='{saveViewResult.SelectedPackage}']");
 
-				bool isPackageExist = false;
-				foreach (XmlNode packageXmlNode in packageXmlNodes)
+				if (packageXmlNode == null)
 				{
-					if (packageXmlNode.Attributes["name"].InnerText == saveViewResult.SelectedPackage)
-					{
-						isPackageExist = true;
-						break;
-					}
-				}
-
-				if (!isPackageExist)
-				{
+					pathPackageToSaveMethod = $"{saveViewResult.SelectedPackage}\\Import";
 					XmlElement packageXmlElement = xmlDocument.CreateElement("package");
 					packageXmlElement.SetAttribute("name", saveViewResult.SelectedPackage);
-					packageXmlElement.SetAttribute("path", $"{saveViewResult.SelectedPackage}\\Import");
+					packageXmlElement.SetAttribute("path", pathPackageToSaveMethod);
 					importsXmlNode.AppendChild(packageXmlElement);
 
 					XmlWriterSettings settings = new XmlWriterSettings();
@@ -140,15 +140,21 @@ namespace Aras.VS.MethodPlugin.Commands
 					{
 						xmlDocument.Save(xmlWriter);
 					}
+
+				}
+				else 
+				{
+					pathPackageToSaveMethod = saveViewResult.SelectedPackage;
 				}
 			}
 			else
 			{
+				pathPackageToSaveMethod = $"{saveViewResult.SelectedPackage}\\Import";
 				var xmlDocument = new XmlDocument();
 				XmlElement importsXmlNode = xmlDocument.CreateElement("imports");
 				XmlElement packageXmlElement = xmlDocument.CreateElement("package");
 				packageXmlElement.SetAttribute("name", saveViewResult.SelectedPackage);
-				packageXmlElement.SetAttribute("path", $"{saveViewResult.SelectedPackage}\\Import");
+				packageXmlElement.SetAttribute("path", pathPackageToSaveMethod);
 				importsXmlNode.AppendChild(packageXmlElement);
 				xmlDocument.AppendChild(importsXmlNode);
 
@@ -160,8 +166,11 @@ namespace Aras.VS.MethodPlugin.Commands
 				}
 			}
 
+			string methodPath = Path.Combine(rootPath, $"{pathPackageToSaveMethod}\\Method\\");
+			Directory.CreateDirectory(methodPath);
+
 			string methodId = null;
-			string methodFilePath = Path.Combine(rootPath, $"{saveViewResult.SelectedPackage}\\Import\\Method\\{saveViewResult.MethodName}.xml");
+			string methodFilePath = Path.Combine(methodPath, $"{saveViewResult.MethodName}.xml");
 			if (File.Exists(methodFilePath))
 			{
 				var methodXmlDocument = new XmlDocument();

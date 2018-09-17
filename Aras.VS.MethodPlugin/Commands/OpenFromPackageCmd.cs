@@ -123,7 +123,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			GeneratedCodeInfo codeInfo = codeProvider.GenerateCodeInfo(openViewResult.SelectedTemplate, openViewResult.SelectedEventSpecificData, openViewResult.MethodName, false, openViewResult.MethodCode);
 			projectManager.CreateMethodTree(codeInfo);
 
-			var methodInfo = new MethodInfo()
+			var methodInfo = new PackageMethodInfo()
 			{
 				InnovatorMethodConfigId = openViewResult.MethodConfigId,
 				InnovatorMethodId = openViewResult.MethodId,
@@ -136,7 +136,8 @@ namespace Aras.VS.MethodPlugin.Commands
 				EventData = openViewResult.SelectedEventSpecificData.EventSpecificData,
 				ExecutionAllowedToId = openViewResult.IdentityId,
 				ExecutionAllowedToKeyedName = openViewResult.IdentityKeyedName,
-				PartialClasses = codeInfo.PartialCodeInfoList.Select(pci => pci.Path).ToList()
+				PartialClasses = codeInfo.PartialCodeInfoList.Select(pci => pci.Path).ToList(),
+				ManifestFileName = openViewResult.SelectedManifestFile
 			};
 
 			projectConfiguration.LastSelectedDir = openViewResult.SelectedFolderPath;

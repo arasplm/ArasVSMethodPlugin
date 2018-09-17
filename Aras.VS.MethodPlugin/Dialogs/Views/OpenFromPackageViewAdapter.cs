@@ -35,7 +35,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 				Package = viewModel.Package,
 				SelectedTemplate = viewModel.SelectedTemplate,
 				SelectedEventSpecificData = viewModel.SelectedEventSpecificData,
-				SelectedFolderPath = viewModel.SelectedFolderPath
+				SelectedFolderPath = viewModel.SelectedFolderPath,
+				SelectedManifestFile = viewModel.SelectedManifestFile
 			};
 		}
 	}

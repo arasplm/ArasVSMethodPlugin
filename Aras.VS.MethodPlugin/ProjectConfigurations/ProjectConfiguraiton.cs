@@ -45,7 +45,16 @@ namespace Aras.VS.MethodPlugin.ProjectConfigurations
 					continue;
 				}
 
-				var updatedMethodInfo = new MethodInfo(methodInfo);
+				MethodInfo updatedMethodInfo;
+				if (methodInfo is PackageMethodInfo)
+				{
+					updatedMethodInfo = new PackageMethodInfo((PackageMethodInfo)methodInfo);
+				}
+				else
+				{
+					updatedMethodInfo = new MethodInfo(methodInfo);
+				}
+
 				updatedMethodInfo.PartialClasses.Clear();
 
 				foreach (string partialClassPath in methodInfo.PartialClasses)

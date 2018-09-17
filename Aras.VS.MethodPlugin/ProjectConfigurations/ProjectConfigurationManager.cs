@@ -120,6 +120,14 @@ namespace Aras.VS.MethodPlugin.ProjectConfigurations
 				executionAllowedToKeyedName.InnerText = methodInfo.ExecutionAllowedToKeyedName;
 				executionAllowedTo.Attributes.Append(executionAllowedToKeyedName);
 				metohdInfoNode.AppendChild(executionAllowedTo);
+				if (methodInfo is PackageMethodInfo)
+				{
+					var packageMethodInfo = (PackageMethodInfo)methodInfo;
+					XmlElement manifestFileName = xmlDoc.CreateElement("manifestFileName");
+					manifestFileName.InnerText = packageMethodInfo.ManifestFileName;
+					metohdInfoNode.AppendChild(manifestFileName);
+				}
+			
 
 				XmlElement partialClasses = xmlDoc.CreateElement("partialClasses");
 				foreach (string path in methodInfo.PartialClasses)
@@ -196,7 +204,19 @@ namespace Aras.VS.MethodPlugin.ProjectConfigurations
 			var methodInfoXmlNodes = xmlDoc.SelectNodes("projectinfo/methods/methodInfo");
 			foreach (XmlNode methodInfoNode in methodInfoXmlNodes)
 			{
-				var methodInfo = new MethodInfo();
+				XmlNode manifestFileNameNode = methodInfoNode.SelectSingleNode("manifestFileName");
+				MethodInfo methodInfo;
+				if (manifestFileNameNode != null)
+				{
+					methodInfo = new PackageMethodInfo()
+					{
+						ManifestFileName = manifestFileNameNode.InnerText
+					};
+				}
+				else
+				{
+					methodInfo = new MethodInfo();
+				}
 
 				methodInfo.InnovatorMethodConfigId = methodInfoNode.SelectSingleNode("configId").InnerText;
 				methodInfo.InnovatorMethodId = methodInfoNode.SelectSingleNode("id").InnerText;

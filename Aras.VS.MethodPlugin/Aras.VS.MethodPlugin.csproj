@@ -218,6 +218,7 @@
     <Compile Include="ProjectConfigurations\ConnectionInfo.cs" />
     <Compile Include="ProjectConfigurations\MethodInfo.cs" />
     <Compile Include="ProjectConfigurations\ProjectConfiguraiton.cs" />
+    <Compile Include="ProjectConfigurations\PackageMethodInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs" />
     <Compile Include="Properties\Resources1.Designer.cs">
       <AutoGen>True</AutoGen>

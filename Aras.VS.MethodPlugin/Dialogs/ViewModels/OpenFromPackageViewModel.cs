@@ -204,6 +204,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			set { methodId = value; }
 		}
 
+		public string SelectedManifestFile { get; set; }
+
 		#endregion
 
 		#region Commands
@@ -231,6 +233,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				this.MethodPath = viewModel.SelectedMethodValue;
 				this.SelectedFolderPath = Path.GetDirectoryName(viewModel.SelectPathViewModel.SelectedPath);
 				this.Package = viewModel.SelectedPackageValue.Split('\\')[0];
+				this.SelectedManifestFile = Path.GetFileName(viewModel.SelectPathViewModel.SelectedPath);
 
 				var xmlDocument = new XmlDocument();
 				xmlDocument.Load(this.methodPath);

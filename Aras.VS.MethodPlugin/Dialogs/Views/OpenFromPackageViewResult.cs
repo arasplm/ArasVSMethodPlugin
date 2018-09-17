@@ -24,5 +24,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 		public string IdentityId { get; set; }
 		public string IdentityKeyedName { get; set; }
 		public string SelectedFolderPath { get; set; }
+		public string SelectedManifestFile { get; set; }
 	}
 }
