@@ -230,7 +230,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 			if (view.ShowDialog() == true)
 			{
-				this.MethodPath = viewModel.SelectedMethodValue;
+				this.MethodPath = viewModel.SelectedMethod.FullName;
 				this.SelectedFolderPath = Path.GetDirectoryName(viewModel.SelectPathViewModel.SelectedPath);
 				this.Package = viewModel.SelectedPackageValue.Split('\\')[0];
 				this.SelectedManifestFile = Path.GetFileName(viewModel.SelectPathViewModel.SelectedPath);

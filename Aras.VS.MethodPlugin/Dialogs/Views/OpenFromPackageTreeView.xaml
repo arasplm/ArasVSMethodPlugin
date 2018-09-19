@@ -85,19 +85,41 @@
                 </ListBox.ItemTemplate>
             </ListBox>
 
-            <GridSplitter Grid.Column="3" Width="5" HorizontalAlignment="Stretch" />
-
-            <ListBox Grid.Column="4" x:Name="MethodsView" ItemsSource="{Binding Methods}"
-                     SelectedValuePath="Value"
-                     SelectedValue="{Binding Path=SelectedMethodValue}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Key}" />
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-
-            <Grid Grid.Row="1" Grid.ColumnSpan="5" Margin="0,10">
+			<GridSplitter Grid.Column="3" Width="5" HorizontalAlignment="Stretch" />
+			<ListBox Grid.Column="4" x:Name="MethodsView" ItemsSource="{Binding Methods}"
+                     SelectedItem="{Binding Path=SelectedMethod}">
+				<ListBox.ItemContainerStyle>
+					<Style TargetType="ListBoxItem">
+						<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+						<Style.Triggers>
+							<EventTrigger RoutedEvent="Control.PreviewMouseLeftButtonDown">
+								<BeginStoryboard>
+									<Storyboard Storyboard.TargetProperty="(Selector.IsSelected)">
+										<BooleanAnimationUsingKeyFrames Duration="0:0:0">
+											<DiscreteBooleanKeyFrame Value="True" />
+										</BooleanAnimationUsingKeyFrames>
+									</Storyboard>
+								</BeginStoryboard>
+							</EventTrigger>
+						</Style.Triggers>
+					</Style>
+				</ListBox.ItemContainerStyle>
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<Expander Header="{Binding Name}" IsExpanded="{Binding IsExpended}">
+							<Grid>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*"></ColumnDefinition>
+									<ColumnDefinition Width="*"></ColumnDefinition>
+								</Grid.ColumnDefinitions>
+								<TextBlock Text="Language" Grid.Column="0"/>
+								<TextBlock Text="{Binding MethodType}" Grid.Column="1"/>
+							</Grid>
+						</Expander>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+			</ListBox>
+			<Grid Grid.Row="1" Grid.ColumnSpan="5" Margin="0,10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>

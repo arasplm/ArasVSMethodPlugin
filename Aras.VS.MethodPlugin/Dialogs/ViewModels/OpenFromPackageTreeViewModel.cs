@@ -20,17 +20,17 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private const string importFileName = ".mf";
 
 		private Dictionary<string, string> packages;
-		private Dictionary<string, string> methods;
+		private List<ShortMethodInfoViewModel> methods;
 
 		private string selectedPackageValue;
-		private string selectedMethodValue;
+		private ShortMethodInfoViewModel selectedMethodValue;
 		private string rootFolderPath;
 		private SelectPathViewModel selectPathViewModel;
 		private ICommand okCommand;
 		private ICommand closeCommand;
 	    private ICommand pathChangeCommand;
 
-        public OpenFromPackageTreeViewModel(string lastSelectedDir)
+		public OpenFromPackageTreeViewModel(string lastSelectedDir)
 		{
 
 			SelectPathViewModel = new SelectPathViewModel(DirectoryItemType.File, lastSelectedDir, importFileName);
@@ -38,7 +38,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.okCommand = new RelayCommand<object>(OkCommandClick);
 			this.closeCommand = new RelayCommand<object>(OnCloseCliked);
 		    this.pathChangeCommand = new RelayCommand<object>(OnPathChange);
-        }
+		}
 
 	    #region Properties
 
@@ -54,7 +54,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			set
 			{
 				this.packages = value;
-				this.Methods = new Dictionary<string, string>();
+				this.Methods = new List<ShortMethodInfoViewModel>();
 				RaisePropertyChanged(nameof(Packages));
 			}
 		}
@@ -66,13 +66,13 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			{
 				selectedPackageValue = value;
 
-				var localMethods = new Dictionary<string, string>();
+				var localMethods = new List<ShortMethodInfoViewModel>();
 				if (!string.IsNullOrEmpty(selectedPackageValue))
 				{
 					string methodsPath = Path.Combine(rootFolderPath, selectedPackageValue, "Method");
 					if (System.IO.Directory.Exists(methodsPath))
 					{
-						localMethods = new DirectoryInfo(methodsPath).GetFiles("*.xml").ToDictionary(x => x.Name, x => x.FullName);
+						localMethods = new DirectoryInfo(methodsPath).GetFiles("*.xml").Select(x => new ShortMethodInfoViewModel(x.FullName)).ToList();
 					}
 				}
 
@@ -80,7 +80,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			}
 		}
 
-		public Dictionary<string, string> Methods
+		public List<ShortMethodInfoViewModel> Methods
 		{
 			get { return methods; }
 			set
@@ -90,7 +90,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			}
 		}
 
-		public string SelectedMethodValue
+		public ShortMethodInfoViewModel SelectedMethod
 		{
 			get { return selectedMethodValue; }
 			set { selectedMethodValue = value; }
@@ -105,7 +105,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		public ICommand CloseCommand { get { return closeCommand; } }
 
 	    public ICommand PathChangeCommand { get { return pathChangeCommand; } }
-
         #endregion
 
         private void OnSelectDirectoryItem(string fullPath)
@@ -134,7 +133,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		{
 			var wnd = window as Window;
 
-			if (string.IsNullOrEmpty(SelectedMethodValue))
+			if (SelectedMethod == null)
 			{
 				var messageWindow = new MessageBoxWindow();
 				messageWindow.ShowDialog(wnd,
@@ -173,5 +172,5 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
                     MessageIcon.None);
             }
         }
-    }
+	}
 }

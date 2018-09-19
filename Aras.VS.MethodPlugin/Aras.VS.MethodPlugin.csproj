@@ -219,6 +219,7 @@
     <Compile Include="ProjectConfigurations\MethodInfo.cs" />
     <Compile Include="ProjectConfigurations\ProjectConfiguraiton.cs" />
     <Compile Include="ProjectConfigurations\PackageMethodInfo.cs" />
+    <Compile Include="Dialogs\ViewModels\ShortMethodInfoViewModel.cs" />
     <Compile Include="Properties\Resources.Designer.cs" />
     <Compile Include="Properties\Resources1.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -364,6 +365,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Expression.Blend.Sdk.WPF.1.0.1\lib\net45\Microsoft.Expression.Interactions.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.CommandBars, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
