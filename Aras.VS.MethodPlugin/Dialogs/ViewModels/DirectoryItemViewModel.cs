@@ -18,6 +18,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private DirectoryItemType type;
 		private DirectoryItemType searchToLevel;
 
+		private string fileExtention;
+
 		private bool isSelected;
 
 		private DirectoryItemViewModel parent;
@@ -25,11 +27,12 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		public event Action<DirectoryItemViewModel> SelectDirectoryItem;
 
-		public DirectoryItemViewModel(string fullPath, DirectoryItemType type, DirectoryItemType searchToLevel)
+		public DirectoryItemViewModel(string fullPath, DirectoryItemType type, DirectoryItemType searchToLevel, string fileExtention = "")
 		{
 			this.FullPath = fullPath;
 			this.Type = type;
 			this.searchToLevel = searchToLevel;
+			this.fileExtention = fileExtention;
 			this.ExpandCommand = new RelayCommand(Expand);
 
 			this.ClearChildren();
@@ -166,6 +169,11 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			var directoryItems = DirectoryStructure.GetDirectoryContents(this.FullPath);
 			var children = new ObservableCollection<DirectoryItemViewModel>();
 
+			if (this.searchToLevel == DirectoryItemType.File && !string.IsNullOrEmpty(this.fileExtention))
+			{
+				directoryItems = directoryItems.Where(x => x.Type == DirectoryItemType.File ? IsCorectFileExtantion(x) : true).ToList();
+			}
+
 			foreach (DirectoryItem directoryItem in directoryItems)
 			{
 				if (directoryItem.Type != DirectoryItemType.Folder && this.searchToLevel == DirectoryItemType.Folder)
@@ -173,13 +181,23 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 					continue;
 				}
 
-				var childViewModel = new DirectoryItemViewModel(directoryItem.FullPath, directoryItem.Type, searchToLevel);
+				var childViewModel = new DirectoryItemViewModel(directoryItem.FullPath, directoryItem.Type, searchToLevel, this.fileExtention);
 				childViewModel.Parent = this;
 				childViewModel.SelectDirectoryItem += SelectDirectoryItem;
 				children.Add(childViewModel);
 			}
 
 			this.Children = children;
+		}
+
+		private bool IsCorectFileExtantion(DirectoryItem directoryItem)
+		{
+			if (System.IO.Path.GetExtension(directoryItem.FullPath) == this.fileExtention)
+			{
+				return true;
+			}
+
+			return false;
 		}
 	}
 }

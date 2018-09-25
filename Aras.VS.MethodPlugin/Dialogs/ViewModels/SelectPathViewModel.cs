@@ -32,8 +32,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private ICommand okCommand;
 		private ICommand closeCommand;
 	    private ICommand pathChangeCommand;
-        
-        public SelectPathViewModel(DirectoryItemType searchToLevel, string startPath = "")
+
+		public SelectPathViewModel(DirectoryItemType searchToLevel, string startPath = "", string fileExtantion = "")
 		{
 			this.searchToLevel = searchToLevel;
 		    this.selectedPath = startPath;
@@ -51,7 +51,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 			foreach (DirectoryItem drive in children)
 			{
-				var childViewModel = new DirectoryItemViewModel(drive.FullPath, drive.Type, searchToLevel);
+				var childViewModel = new DirectoryItemViewModel(drive.FullPath, drive.Type, searchToLevel, fileExtantion);
 				childViewModel.SelectDirectoryItem += OnSelectDirectoryItem;
 				this.DirectoryItems.Add(childViewModel);
 			}

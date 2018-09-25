@@ -33,7 +33,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
         public OpenFromPackageTreeViewModel(string lastSelectedDir)
 		{
 
-			SelectPathViewModel = new SelectPathViewModel(DirectoryItemType.File, lastSelectedDir);
+			SelectPathViewModel = new SelectPathViewModel(DirectoryItemType.File, lastSelectedDir, importFileName);
 			SelectPathViewModel.SelectionChanged += OnSelectDirectoryItem;
 			this.okCommand = new RelayCommand<object>(OkCommandClick);
 			this.closeCommand = new RelayCommand<object>(OnCloseCliked);
