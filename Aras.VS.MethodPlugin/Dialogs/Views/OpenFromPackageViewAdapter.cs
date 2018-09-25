@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.IO;
 using Aras.VS.MethodPlugin.Dialogs.ViewModels;
 
 namespace Aras.VS.MethodPlugin.Dialogs.Views
@@ -35,8 +36,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 				Package = viewModel.Package,
 				SelectedTemplate = viewModel.SelectedTemplate,
 				SelectedEventSpecificData = viewModel.SelectedEventSpecificData,
-				SelectedFolderPath = viewModel.SelectedFolderPath,
-				SelectedManifestFile = viewModel.SelectedManifestFile
+				SelectedFolderPath = Path.GetDirectoryName( viewModel.SelectedManifestFilePath),
+				SelectedManifestFile = Path.GetFileName(viewModel.SelectedManifestFilePath)
 			};
 		}
 	}

@@ -56,7 +56,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				this.DirectoryItems.Add(childViewModel);
 			}
 
-			if (!string.IsNullOrEmpty(startPath) && System.IO.Directory.Exists(startPath))
+			if (!string.IsNullOrEmpty(startPath) && (System.IO.Directory.Exists(startPath) || File.Exists(startPath)))
 			{
 				var pathList = startPath.Split(Path.DirectorySeparatorChar).ToList();
 				Navigate(this.DirectoryItems, pathList);
