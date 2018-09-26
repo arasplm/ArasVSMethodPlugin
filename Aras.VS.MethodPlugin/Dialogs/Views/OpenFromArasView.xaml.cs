@@ -17,10 +17,5 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 		{
 			InitializeComponent();
 		}
-
-		private void CancelClick(object sender, RoutedEventArgs e)
-		{
-			this.Close();
-		}
 	}
 }

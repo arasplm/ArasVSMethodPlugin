@@ -38,7 +38,7 @@
         <TextBox x:Name="FileNameTextBlock" Grid.Column="1" Text="{Binding Path=FileName, UpdateSourceTrigger=PropertyChanged}" Height="24" TextWrapping="Wrap" VerticalContentAlignment="Center" Margin="0, 5, 5, 5" />
 
         <WrapPanel Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-            <Button x:Name="OkButton" Content="OK" IsEnabled="{Binding IsOkButtonEnabled}" Command="{Binding Path=OKCommand}" CommandParameter="{Binding ElementName=CreatePartialElementWindow}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70" Margin="5"/>
+            <Button x:Name="OkButton" Content="OK" Command="{Binding Path=OKCommand}" CommandParameter="{Binding ElementName=CreatePartialElementWindow}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70" Margin="5"/>
             <Button x:Name="CancelButton" Content="Cancel" Command="{Binding Path=CancelCommand}" CommandParameter="{Binding ElementName=CreatePartialElementWindow}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70" Margin="5"/>
         </WrapPanel>
 

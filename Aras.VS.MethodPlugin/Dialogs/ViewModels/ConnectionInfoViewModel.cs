@@ -22,7 +22,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private readonly ProjectConfigurationManager configurationManager;
 		private readonly IProjectManager projectManager;
 
-		private bool isLogOutButtonEnabled;
 		private ProjectConfiguraiton projectConfiguration;
 		private ConnectionInfo connectionInfo;
 
@@ -51,10 +50,9 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 			this.closeCommand = new RelayCommand<object>(OnCloseCliked);
 			this.editConnectionInfoCommand = new RelayCommand<object>(OnEditConnectionInfoCommandCliked);
-			this.logOutCommand = new RelayCommand<object>(OnLogOutCommandCliked);
+			this.logOutCommand = new RelayCommand<object>(OnLogOutCommandCliked, LogOutButtonIsEnabled);
 
 			ConnectionInformation = authenticationManager.InnovatorInstance == null ? null : projectConfiguration.Connections.First(c => c.LastConnection);
-			ValidateLogOutButton();
 		}
 
 		#region Properties
@@ -66,16 +64,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			{
 				connectionInfo = value;
 				RaisePropertyChanged(nameof(ConnectionInformation));
-			}
-		}
-
-		public bool IsLogOutButtonEnabled
-		{
-			get { return isLogOutButtonEnabled; }
-			set
-			{
-				isLogOutButtonEnabled = value;
-				RaisePropertyChanged(nameof(IsLogOutButtonEnabled));
 			}
 		}
 
@@ -104,7 +92,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			{
 				configurationManager.Save(projectManager.ProjectConfigPath, projectConfiguration);
 				ConnectionInformation = projectConfiguration.Connections.First(c => c.LastConnection);
-				ValidateLogOutButton();
 			}
 		}
 
@@ -114,16 +101,14 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			(view as Window).Close();
 		}
 
-		private void ValidateLogOutButton()
+		private bool LogOutButtonIsEnabled(object obj)
 		{
 			if (authenticationManager.InnovatorInstance == null)
 			{
-				this.IsLogOutButtonEnabled = false;
+				return false;
 			}
-			else
-			{
-				this.IsLogOutButtonEnabled = true;
-			}
+
+			return true;
 		}
 	}
 }

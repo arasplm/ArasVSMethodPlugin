@@ -36,7 +36,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private ICommand okCommand;
 		private ICommand cancelCommand;
 		private ICommand closeCommand;
-
 		public MethodInformationViewModel(dynamic innovatorInstance, TemplateLoader templateLoader, MethodInfo currentMethodInfo, PackageManager packageManager)
 		{
 			if (innovatorInstance == null) throw new ArgumentNullException(nameof(innovatorInstance));
@@ -160,7 +159,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		public ICommand CancelCommand { get { return cancelCommand; } }
 
 		public ICommand CloseCommand { get { return closeCommand; } }
-
 		private void OnCancelClick(object window)
 		{
 			var wnd = window as Window;

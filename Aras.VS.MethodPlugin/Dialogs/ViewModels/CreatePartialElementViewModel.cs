@@ -19,7 +19,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		public CreatePartialElementViewModel()
 		{
-			this.okCommand = new RelayCommand<object>(OnOKCliked);
+			this.okCommand = new RelayCommand<object>(OnOKCliked, IsEnabledOkButton);
 			this.cancelCommand = new RelayCommand<object>(OnCancelCliked);
 			this.closeCommand = new RelayCommand<object>(OnCloseCliked);
 
@@ -35,7 +35,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			{
 				this.fileName = value;
 				RaisePropertyChanged(nameof(FileName));
-				ValidateOkButton();
 			}
 		}
 
@@ -81,16 +80,14 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			window.Close();
 		}
 
-		private void ValidateOkButton()
+		private bool IsEnabledOkButton(object obj)
 		{
 			if (string.IsNullOrEmpty(this.fileName))
 			{
-				this.IsOkButtonEnabled = false;
+				return false;
 			}
-			else
-			{
-				this.IsOkButtonEnabled = true;
-			}
+
+			return true;
 		}
 	}
 }

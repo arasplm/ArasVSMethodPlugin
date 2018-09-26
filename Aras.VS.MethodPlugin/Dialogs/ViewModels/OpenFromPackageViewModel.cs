@@ -25,7 +25,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private string selectedFolderPath;
 
 		private EventSpecificDataType selectedEventSpecificData;
-		private bool isOkButtonEnabled;
 
 		private string methodComment;
 		private string methodType;
@@ -53,7 +52,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.selectedFolderPath = lastSelectedDirectory;
 
 			folderBrowserCommand = new RelayCommand<object>(OnFolderBrowserCommandClicked);
-			okCommand = new RelayCommand<object>(OnOkClicked);
+			okCommand = new RelayCommand<object>(OnOkClicked, IsOkButtonEnabled);
 			closeCommand = new RelayCommand<object>(OnCloseCliked);
 
 			SelectedEventSpecificData = EventSpecificData.First();
@@ -73,16 +72,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			}
 		}
 
-		public bool IsOkButtonEnabled
-		{
-			get { return isOkButtonEnabled; }
-			set
-			{
-				isOkButtonEnabled = value;
-				RaisePropertyChanged(nameof(IsOkButtonEnabled));
-			}
-		}
-		
 		public string MethodComment
 		{
 			get { return methodComment; }
@@ -172,7 +161,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			{
 				methodName = value;
 				RaisePropertyChanged(nameof(MethodName));
-				ValidateOkButton();
 			}
 		}
 
@@ -188,7 +176,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			set { methodId = value; }
 		}
 
-		public string SelectedManifestFilePath 
+		public string SelectedManifestFilePath
 		{
 			get { return selectedManifestFilePath; }
 			set
@@ -212,10 +200,10 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		private void OnFolderBrowserCommandClicked(object window)
 		{
-		    var actualFolderPath = !string.IsNullOrWhiteSpace(this.SelectedManifestFilePath)
-		        ? this.SelectedManifestFilePath
+			var actualFolderPath = !string.IsNullOrWhiteSpace(this.SelectedManifestFilePath)
+				? this.SelectedManifestFilePath
 				: selectedFolderPath;
-            var viewModel = new OpenFromPackageTreeViewModel(actualFolderPath, this.Package, this.MethodName);
+			var viewModel = new OpenFromPackageTreeViewModel(actualFolderPath, this.Package, this.MethodName);
 			var view = new OpenFromPackageTreeView();
 			view.DataContext = viewModel;
 			view.Owner = window as Window;
@@ -252,7 +240,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				this.MethodName = nameTypeXmlNode.InnerText;
 				this.MethodConfigId = itemXmlNode.Attributes["id"].InnerText;
 				this.MethodId = itemXmlNode.Attributes["id"].InnerText;
-                
+
 
 				// TODO : duplicated with OpenFromArasViewModel
 				TemplateInfo template = null;
@@ -277,11 +265,9 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				{
 					template = templateLoader.Templates.Where(t => t.TemplateLanguage == methodLanguage && t.IsSupported).FirstOrDefault();
 				}
-                
+
 
 				this.SelectedTemplate = template;
-                
-				ValidateOkButton();
 			}
 		}
 
@@ -310,16 +296,14 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			(view as Window).Close();
 		}
 
-		private void ValidateOkButton()
+		private bool IsOkButtonEnabled(object window)
 		{
 			if (string.IsNullOrEmpty(this.selectedManifestFilePath))
 			{
-				IsOkButtonEnabled = false;
+				return false;
 			}
-			else
-			{
-				IsOkButtonEnabled = true;
-			}
+
+			return true;
 		}
 	}
 }

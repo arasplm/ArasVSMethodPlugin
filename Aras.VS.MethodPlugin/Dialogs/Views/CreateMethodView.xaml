@@ -137,9 +137,9 @@
 
             <WrapPanel Grid.Row="7" Grid.Column="2" HorizontalAlignment="Right">
                 <Button Content="OK" Width="70" Margin="5" 
-                        Command="{Binding Path=OkCommand}" CommandParameter="{Binding ElementName=CreateMethodWindow}"
-                        IsEnabled="{Binding IsOkButtonEnabled}"/>
-                <Button Grid.Row="4" Grid.Column="2" Content="Cancel" Width="70" Margin="5" Click="Cancel_Click"/>
+                        Command="{Binding Path=OkCommand}" CommandParameter="{Binding ElementName=CreateMethodWindow}"/>
+				<Button Grid.Row="4" Grid.Column="2" Content="Cancel" Width="70" Margin="5" 
+						Command="{Binding Path=CancelCommand}" CommandParameter="{Binding ElementName=CreateMethodWindow}"/>
             </WrapPanel>
 
         </Grid>

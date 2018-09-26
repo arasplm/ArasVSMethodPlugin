@@ -20,18 +20,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 			InitializeComponent();
 		}
 
-		private void Ok_Click(object sender, RoutedEventArgs e)
-		{
-			this.DialogResult = true;
-			this.Close();
-		}
-
-		private void Cancel_Click(object sender, RoutedEventArgs e)
-		{
-			this.DialogResult = false;
-			this.Close();
-		}
-
 		private void MethodName_PreviewTextInput(object sender, TextCompositionEventArgs e)
 		{
 			e.Handled = !Regex.IsMatch(e.Text, @"^\w$|^\w[\w, -]*\w$");

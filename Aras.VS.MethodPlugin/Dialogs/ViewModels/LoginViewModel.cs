@@ -30,7 +30,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		private bool isLoginEnabled;
 		private bool isPasswordEnabled;
-	    private bool isLoginButtonEnabled;
 
         private string projectName;
 		private string projectFullName;
@@ -65,7 +64,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				}
 			}
 
-			this.loginClick = new RelayCommand<object>(OnLoginClicked);
+			this.loginClick = new RelayCommand<object>(OnLoginClicked, IsEnabledLoginCommand);
 			this.closeClick = new RelayCommand<object>(OnCloseCliked);
         }
 
@@ -81,7 +80,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 				string[] dataBases = authManager.GetBases(selectedUrl, projectFullName);
 				Databases = new ObservableCollection<string>(dataBases);
-			    ValidateLoginButton();
             }
 		}
 
@@ -105,7 +103,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 					IsLoginEnabled = false;
 					IsPasswordEnabled = true;
 				}
-			    ValidateLoginButton();
             }
 		}
 
@@ -133,7 +130,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			{
 				login = value;
 				RaisePropertyChanged(nameof(Login));
-			    ValidateLoginButton();
             }
 		}
 
@@ -156,17 +152,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				RaisePropertyChanged(nameof(IsPasswordEnabled));
 			}
 		}
-
-	    public bool IsLoginButtonEnabled
-	    {
-	        get { return isLoginButtonEnabled; }
-	        set
-	        {
-	            isLoginButtonEnabled = value;
-	            RaisePropertyChanged(nameof(IsLoginButtonEnabled));
-            }
-
-	    }
 
         #endregion
 
@@ -206,16 +191,14 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			(view as Window).Close();
 		}
 
-	    private void ValidateLoginButton()
-	    {
-	        if (string.IsNullOrWhiteSpace(login) ||string.IsNullOrWhiteSpace(selectedUrl) || string.IsNullOrWhiteSpace(selectedDatabase))
-	        {
-	            IsLoginButtonEnabled = false;
-	        }
-	        else
-	        {
-	            IsLoginButtonEnabled = true;
-	        }
-	    }
+		private bool IsEnabledLoginCommand(object obj)
+		{
+			if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(selectedUrl) || string.IsNullOrWhiteSpace(selectedDatabase))
+			{
+				return false;
+			}
+
+			return true;
+		}
 	}
 }

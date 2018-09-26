@@ -48,8 +48,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private string selectedIdentityKeyedName;
 		private string selectedIdentityId;
 
-		private bool isOkButtonEnabled;
-
 		private ICommand folderBrowserCommand;
 		private ICommand okCommand;
 		private ICommand closeCommand;
@@ -87,7 +85,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.MethodInformation = methodInformation;
 
 			this.folderBrowserCommand = new RelayCommand<object>(OnFolderBrowserClick);
-			this.okCommand = new RelayCommand<object>(OkCommandClick);
+			this.okCommand = new RelayCommand<object>(OkCommandClick, IsEnabledOkButton);
 			this.closeCommand = new RelayCommand<object>(OnCloseCliked);
 			this.selectedIdentityCommand = new RelayCommand(SelectedIdentityCommandClick);
 
@@ -104,8 +102,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			SelectedPackage = MethodInformation.PackageName;
 			selectedIdentityKeyedName = MethodInformation.ExecutionAllowedToKeyedName;
 			selectedIdentityId = MethodInformation.ExecutionAllowedToId;
-
-			ValidateOkButton();
 		}
 
 		#region Properties
@@ -117,7 +113,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			{
 				packagePath = value;
 				RaisePropertyChanged(nameof(PackagePath));
-				ValidateOkButton();
 			}
 		}
 
@@ -156,7 +151,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			{
 				methodCommentMaxLength = value;
 				RaisePropertyChanged(nameof(MethodCommentMaxLength));
-				ValidateOkButton();
 			}
 		}
 
@@ -181,7 +175,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				}
 
 				RaisePropertyChanged(nameof(MethodName));
-				ValidateOkButton();
 			}
 		}
 
@@ -192,7 +185,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			{
 				methodNameMaxLength = value;
 				RaisePropertyChanged(nameof(MethodNameMaxLength));
-				ValidateOkButton();
 			}
 		}
 
@@ -211,17 +203,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			{
 				selectedPackage = value;
 				RaisePropertyChanged(nameof(SelectedPackage));
-				ValidateOkButton();
-			}
-		}
-
-		public bool IsOkButtonEnabled
-		{
-			get { return isOkButtonEnabled; }
-			set
-			{
-				isOkButtonEnabled = value;
-				RaisePropertyChanged(nameof(IsOkButtonEnabled));
 			}
 		}
 
@@ -232,7 +213,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			{
 				this.selectedIdentityKeyedName = value;
 				RaisePropertyChanged(nameof(SelectedIdentityKeyedName));
-				ValidateOkButton();
 			}
 		}
 
@@ -301,18 +281,18 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			(view as Window).Close();
 		}
 
-		private void ValidateOkButton()
+		private bool IsEnabledOkButton(object obj)
 		{
 			if (string.IsNullOrEmpty(this.selectedPackage) ||
 				string.IsNullOrEmpty(this.methodName) ||
 				string.IsNullOrEmpty(this.packagePath) ||
 				string.IsNullOrEmpty(this.selectedIdentityKeyedName))
 			{
-				IsOkButtonEnabled = false;
+				return false;
 			}
 			else
 			{
-				IsOkButtonEnabled = true;
+				return true;
 			}
 		}
 

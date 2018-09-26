@@ -154,7 +154,7 @@
             <WrapPanel Grid.Row="4" Grid.Column="2" HorizontalAlignment="Right">
                 <Button Content="OK" Width="70" Margin="5"
                         Command="{Binding Path=OkCommand}" CommandParameter="{Binding ElementName=DebugMethodWindow}"/>
-                <Button Grid.Row="4" Grid.Column="2" Content="Cancel" Width="70" Margin="5" Click="CancelClick"/>
+				<Button Grid.Row="4" Grid.Column="2" Content="Cancel" Width="70" Margin="5" Command="{Binding CloseCommand}" CommandParameter="{Binding ElementName=DebugMethodWindow}"/>
             </WrapPanel>
 
         </Grid>

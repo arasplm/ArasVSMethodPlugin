@@ -184,9 +184,8 @@
             </Grid>
             <WrapPanel Grid.Row="4" Grid.Column="2" HorizontalAlignment="Right">
                 <Button Content="OK" Width="70" Margin="5"
-                        Command="{Binding Path=OkCommand}" CommandParameter="{Binding ElementName=SaveMethodWindow}"
-                        IsEnabled="{Binding IsOkButtonEnabled}"/>
-                <Button Grid.Row="4" Grid.Column="2" Content="Cancel" Width="70" Margin="5" Click="CancelClick"/>
+                        Command="{Binding Path=OkCommand}" CommandParameter="{Binding ElementName=SaveMethodWindow}"/>
+				<Button Grid.Row="4" Grid.Column="2" Content="Cancel" Width="70" Margin="5" Command="{Binding Path=CloseCommand}" CommandParameter="{Binding ElementName=SaveMethodWindow}"/>
             </WrapPanel>
 
         </Grid>

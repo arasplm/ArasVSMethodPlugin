@@ -19,11 +19,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 			InitializeComponent();
 		}
 
-		private void CancelClick(object sender, RoutedEventArgs e)
-		{
-			SaveMethodWindow.Close();
-		}
-
 		private void MethodName_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
 		{
 			e.Handled = !Regex.IsMatch(e.Text, @"^\w$|^\w[\w, -]*\w$");

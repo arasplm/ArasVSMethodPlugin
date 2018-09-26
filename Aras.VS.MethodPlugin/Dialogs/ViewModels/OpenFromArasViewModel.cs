@@ -49,7 +49,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private string identityKeyedName;
 		private string identityId;
 		private string package;
-		private bool isOkButtonEnabled;
 
 		private ICommand editConnectionInfoCommand;
 		private ICommand searchMethodDialogCommand;
@@ -89,7 +88,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 			this.editConnectionInfoCommand = new RelayCommand<object>(EditConnectionInfoCommandClicked);
 			this.searchMethodDialogCommand = new RelayCommand<object>(SearchMethodDialogCommandClicked);
-			this.okCommand = new RelayCommand<object>(OkCommandCliked);
+			this.okCommand = new RelayCommand<object>(OkCommandCliked, IsEnabledOkButton);
 			this.closeCommand = new RelayCommand<object>(OnCloseCliked);
 
 			ConnectionInformation = projectConfiguration.Connections.First(c => c.LastConnection);
@@ -173,7 +172,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			{
 				methodName = value;
 				RaisePropertyChanged(nameof(MethodName));
-				ValidateOkButton();
 			}
 		}
 
@@ -222,16 +220,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			{
 				package = value;
 				RaisePropertyChanged(nameof(Package));
-			}
-		}
-
-		public bool IsOkButtonEnabled
-		{
-			get { return isOkButtonEnabled; }
-			set
-			{
-				isOkButtonEnabled = value;
-				RaisePropertyChanged(nameof(IsOkButtonEnabled));
 			}
 		}
 
@@ -374,8 +362,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				{
 					projectConfiguration.LastSavedSearch.Add(result.ItemType, result.LastSavedSearch);
 				}
-
-				ValidateOkButton();
 			}
 		}
 
@@ -392,16 +378,14 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			(view as Window).Close();
 		}
 
-		private void ValidateOkButton()
+		private bool IsEnabledOkButton(object obj)
 		{
 			if (string.IsNullOrEmpty(methodName))
 			{
-				this.IsOkButtonEnabled = false;
+				return false;
 			}
-			else
-			{
-				this.IsOkButtonEnabled = true;
-			}
+
+			return true;
 		}
 	}
 }

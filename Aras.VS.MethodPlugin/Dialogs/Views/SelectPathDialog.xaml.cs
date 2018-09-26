@@ -21,11 +21,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 		    this.Loaded += TreeViewItem_BringIntoView;
         }
 
-		private void CancelClick(object sender, RoutedEventArgs e)
-		{
-			SelectPathWindow.Close();
-		}
-
 		private void TreeViewItem_BringIntoView(object sender, RoutedEventArgs e)
 		{
 		    TreeViewItem item = sender as TreeViewItem;

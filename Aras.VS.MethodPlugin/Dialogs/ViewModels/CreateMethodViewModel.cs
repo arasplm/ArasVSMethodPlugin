@@ -49,7 +49,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private int methodCommentMaxLength;
 		private string methodComment;
 		private int methodNameMaxLength;
-		private bool isOkButtonEnabled;
 
 		private string selectedIdentityKeyedName;
 		private string selectedIdentityId;
@@ -118,13 +117,12 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 			SelectedActionLocation = actionLocations.First(al => string.Equals(al.Value.ToLowerInvariant(), "server"));
 
-			okCommand = new RelayCommand<object>(OnOkClick);
-			cancelCommand = new RelayCommand(OnCancelClick);
+			okCommand = new RelayCommand<object>(OnOkClick, IsEnabledOkButton);
+			cancelCommand = new RelayCommand<object>(OnCancelClick);
 			closeCommand = new RelayCommand<object>(OnCloseCliked);
 			selectedIdentityCommand = new RelayCommand(SelectedIdentityCommandClick);
 
 			SelectedEventSpecificData = EventSpecificData.First();
-			ValidateOkButton();
 		}
 
 		#region Properties
@@ -224,7 +222,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			{
 				selectedPackage = value;
 				RaisePropertyChanged(nameof(SelectedPackage));
-				ValidateOkButton();
 			}
 		}
 
@@ -261,7 +258,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			{
 				methodName = value;
 				RaisePropertyChanged(nameof(MethodName));
-				ValidateOkButton();
 			}
 		}
 
@@ -272,7 +268,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			{
 				methodNameMaxLength = value;
 				RaisePropertyChanged(nameof(MethodNameMaxLength));
-				ValidateOkButton();
 			}
 		}
 
@@ -293,17 +288,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			{
 				methodCommentMaxLength = value;
 				RaisePropertyChanged(nameof(MethodCommentMaxLength));
-				ValidateOkButton();
-			}
-		}
-
-		public bool IsOkButtonEnabled
-		{
-			get { return isOkButtonEnabled; }
-			set
-			{
-				isOkButtonEnabled = value;
-				RaisePropertyChanged(nameof(IsOkButtonEnabled));
 			}
 		}
 
@@ -337,9 +321,11 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		#endregion Commands
 
-		private void OnCancelClick()
+		private void OnCancelClick(object window)
 		{
-			throw new NotImplementedException();
+			var wnd = window as System.Windows.Window;
+			wnd.DialogResult = false;
+			wnd.Close();
 		}
 
 		private void OnCloseCliked(object view)
@@ -372,7 +358,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				}
 			}
 
-			
 			wnd.DialogResult = true;
 			wnd.Close();
 		}
@@ -382,16 +367,14 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			return allLanguages.Where(l => string.Equals(l.Filter.ToLowerInvariant(), value)).ToList();
 		}
 
-		private void ValidateOkButton()
+		private bool IsEnabledOkButton(object obj)
 		{
 			if (string.IsNullOrEmpty(this.methodName))
 			{
-				IsOkButtonEnabled = false;
+				return false;
 			}
-			else
-			{
-				IsOkButtonEnabled = true;
-			}
+
+			return true;
 		}
 
 		private void SelectedIdentityCommandClick()

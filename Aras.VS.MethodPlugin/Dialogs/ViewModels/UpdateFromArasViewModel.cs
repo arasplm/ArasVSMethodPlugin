@@ -44,8 +44,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private string executionIdentityId;
 		private string packageName;
 
-		private bool isOkButtonEnabled;
-
 		private ICommand editConnectionInfoCommand;
 		private ICommand okCommand;
 		private ICommand closeCommand;
@@ -81,7 +79,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.eventData = methodInfo.EventData;
 
 			this.editConnectionInfoCommand = new RelayCommand<object>(EditConnectionInfoCommandClick);
-			this.okCommand = new RelayCommand<object>(OkCommandClick);
+			this.okCommand = new RelayCommand<object>(OkCommandClick, IsEnabledOkButton);
 			this.closeCommand = new RelayCommand<object>(OnCloseCliked);
 
 			ConnectionInformation = projectConfiguration.Connections.First(c => c.LastConnection);
@@ -179,16 +177,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			set { }
 		}
 
-		public bool IsOkButtonEnabled
-		{
-			get { return isOkButtonEnabled; }
-			set
-			{
-				isOkButtonEnabled = value;
-				RaisePropertyChanged(nameof(IsOkButtonEnabled));
-			}
-		}
-
 		#endregion
 
 		#region Commands
@@ -231,16 +219,14 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			(view as Window).Close();
 		}
 
-		private void ValidateOkButton()
+		private bool IsEnabledOkButton(object obj)
 		{
 			if (string.IsNullOrEmpty(methodType) || string.IsNullOrEmpty(methodLanguage))
 			{
-				IsOkButtonEnabled = false;
+				return false;
 			}
-			else
-			{
-				IsOkButtonEnabled = true;
-			}
+
+			return true;
 		}
 
 		private void UpdateMethodView(Window view)
@@ -326,7 +312,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			}
 
 			RaisePropertyChanged(string.Empty);
-			ValidateOkButton();
 		}
 	}
 }

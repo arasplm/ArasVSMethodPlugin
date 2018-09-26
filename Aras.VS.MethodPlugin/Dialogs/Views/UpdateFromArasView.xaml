@@ -195,9 +195,8 @@
 
             <WrapPanel Grid.Row="3" Grid.ColumnSpan="5" HorizontalAlignment="Right">
                 <Button Content="OK" Width="70" Margin="5"
-                        Command="{Binding Path=OkCommand}" CommandParameter="{Binding ElementName=UpdateFromArasViewWindow}"
-                        IsEnabled="{Binding IsOkButtonEnabled}" />
-                <Button Grid.Row="4" Grid.Column="2" Content="Cancel" Width="70" Margin="5" Click="CancelClick"/>
+                        Command="{Binding Path=OkCommand}" CommandParameter="{Binding ElementName=UpdateFromArasViewWindow}"/>
+				<Button Grid.Row="4" Grid.Column="2" Content="Cancel" Width="70" Margin="5" Command="{Binding Path = CloseCommand}" CommandParameter="{Binding ElementName=UpdateFromArasViewWindow}"/>
             </WrapPanel>
         </Grid>
     </Border>

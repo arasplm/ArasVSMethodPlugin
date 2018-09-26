@@ -134,7 +134,7 @@
             
             <WrapPanel Grid.Row="2" Grid.ColumnSpan="5" HorizontalAlignment="Right">
                 <Button Content="OK" Width="70" Margin="5" Command="{Binding Path=OkCommand}" CommandParameter="{Binding ElementName=OpenFromPackageTreeWindow}"/>
-                <Button Grid.Row="4" Grid.Column="2" Content="Cancel" Width="70" Margin="5" Click="CancelClick"/>
+				<Button Grid.Row="4" Grid.Column="2" Content="Cancel" Width="70" Margin="5" Command="{Binding OkCommand}" CommandParameter="{Binding ElementName=OpenFromPackageTreeWindow}"/>
             </WrapPanel>
         </Grid>
     </Border>
