@@ -7,14 +7,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Aras.VS.MethodPlugin.ItemSearch.Preferences
 {
 	public class PreferenceProvider : IPreferenceProvider
 	{
 		private readonly dynamic innovatorInstance;
-
 
 		private List<ItemGridLayout> itemGridLayouts = new List<ItemGridLayout>();
 		private List<dynamic> itemTypesInstances = new List<dynamic>();
@@ -95,38 +93,7 @@ namespace Aras.VS.MethodPlugin.ItemSearch.Preferences
 				return;
 			}
 
-			StringBuilder colOrder = new StringBuilder();
-			StringBuilder colWidths = new StringBuilder();
-			colOrder.AppendFormat("{0};", "L");
-			colWidths.AppendFormat("{0};", "24");
-
-			dynamic properties = itemType.getRelationships("Property");
-			dynamic property;
-
-			for (int i = 0; i < properties.getItemCount(); i++)
-			{
-				property = properties.getItemByIndex(i);
-				if (!string.Equals("0", property.getProperty("is_hidden")))
-				{
-					continue;
-				}
-
-				colOrder.AppendFormat("{0}_D;", property.getProperty("name"));
-				colWidths.AppendFormat("{0};", property.getProperty("column_width", "100"));
-			}
-
-			string pageSize = itemType.getProperty("default_page_size", "0");
-
-			int tmp;
-			if (!int.TryParse(pageSize, out tmp) || tmp <= 0)
-			{
-				pageSize = "25";
-			}
-
-			layout.UpdateLayout(
-				colOrder.ToString(0, colOrder.Length - 1),
-				colWidths.ToString(0, colWidths.Length - 1),
-				pageSize);
+			layout.UpdateLayout(itemType);
 		}
 
 		private string GetAliasIdentity()
