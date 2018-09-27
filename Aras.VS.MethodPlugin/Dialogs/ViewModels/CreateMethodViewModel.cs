@@ -92,7 +92,13 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			actionLocations = new ObservableCollection<ListInfo>();
 			foreach (var localtion in Utilities.Utils.GetValueListByName(authenticationManager.InnovatorInstance, "Action Locations"))
 			{
-				actionLocations.Add(new ListInfo(localtion.getProperty("value"), localtion.getProperty("label")));
+				string value = localtion.getProperty("value", string.Empty);
+				if (string.Equals(value, "client"))
+				{
+					continue;
+				}
+
+				actionLocations.Add(new ListInfo(value, localtion.getProperty("label", string.Empty)));
 			}
 
 			allLanguages = new List<FilteredListInfo>();
