@@ -20,6 +20,7 @@ using EnvDTE;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.VisualStudio.ComponentModelHost;
 
 namespace Aras.VS.MethodPlugin.Code
 {
@@ -254,7 +255,7 @@ namespace Aras.VS.MethodPlugin.Code
 		//	LoadCodeToProject(methodLanguage, methodCode, methodLocation, methodName, innovatorMethodConfigId, innovatorMethodId, eventData, packageName, methodExecutionAllowedToId, methodExecutionAllowedToKeyedName);
 		//}
 
-		public string LoadMethodCode(string sourceCode, MethodInfo methodInformation,string serverMethodFolderPath)
+		public string LoadMethodCode(string sourceCode, MethodInfo methodInformation, string serverMethodFolderPath)
 		{
 			var userCode = GetSourceCodeBetweenRegion(sourceCode);
 			string partialCode = this.LoadPartialClassesCode(methodInformation.PartialClasses, serverMethodFolderPath);
@@ -329,7 +330,7 @@ namespace Aras.VS.MethodPlugin.Code
 			}
 
 			GeneratedCodeInfo resultInfo = new GeneratedCodeInfo();
-			resultInfo.WrapperCodeInfo.Code = resultCode;
+			resultInfo.WrapperCodeInfo.Code = FormatingCode(resultCode);
 			resultInfo.WrapperCodeInfo.Path = Path.Combine(methodName, methodName + "Wrapper.cs");
 			resultInfo.MethodName = methodName;
 			resultInfo.ClassName = clsname;
@@ -355,7 +356,9 @@ namespace Aras.VS.MethodPlugin.Code
 				var defaultCode = GetSourceCodeBetweenRegion(code);
 				code = code.Replace(defaultCode, codeToInsert);
 			}
-			generatedCodeInfo.MethodCodeInfo.Code = code;
+
+			string formatedCode = this.FormatingCode(code);
+			generatedCodeInfo.MethodCodeInfo.Code = formatedCode;
 			generatedCodeInfo.MethodCodeInfo.Path = Path.Combine(methodName, methodName + ".cs");
 
 			return generatedCodeInfo;
@@ -390,7 +393,7 @@ namespace Aras.VS.MethodPlugin.Code
 			foreach (var member in members)
 			{
 				var path = member.AttributeInfo.ArgumentList.Arguments.FirstOrDefault()?.ToString();
-				path = path.Replace("/", "\\").Replace("\"",string.Empty);
+				path = path.Replace("/", "\\").Replace("\"", string.Empty);
 				path = Path.Combine(resultGeneratedCode.MethodName, path);
 				if (path != null)
 				{
@@ -450,7 +453,8 @@ namespace Aras.VS.MethodPlugin.Code
 			string partialClassTemplate = "{0}using Common;\r\nnamespace {3} \r\n{{public partial class {1} \r\n{{\r\n{2}\r\n}}\r\n}}";
 			foreach (var partialCodeInfo in resultGeneratedCode.PartialCodeInfoList)
 			{
-				partialCodeInfo.Code = string.Format(partialClassTemplate, partialUsings, resultGeneratedCode.MethodCodeParentClassName, partialCodeInfo.Code, resultGeneratedCode.Namespace);
+				string formatedCode = FormatingCode(string.Format(partialClassTemplate, partialUsings, resultGeneratedCode.MethodCodeParentClassName, partialCodeInfo.Code, resultGeneratedCode.Namespace));
+				partialCodeInfo.Code = formatedCode;
 			}
 
 			return resultGeneratedCode;
@@ -484,7 +488,7 @@ namespace Aras.VS.MethodPlugin.Code
 			EventSpecificDataType eventData = CommonData.EventSpecificDataTypeList.First(x => x.EventSpecificData == methodInformation.EventData);
 			GeneratedCodeInfo codeInfo = this.CreateWrapper(template, eventData, methodName);
 
-			string methodCode = File.ReadAllText(projectManager.MethodPath,new UTF8Encoding(true));
+			string methodCode = File.ReadAllText(projectManager.MethodPath, new UTF8Encoding(true));
 			var tree = CSharpSyntaxTree.ParseText(methodCode);
 			var root = tree.GetRoot();
 
@@ -500,7 +504,7 @@ namespace Aras.VS.MethodPlugin.Code
 			var partialCodeInfo = new CodeInfo()
 			{
 				Path = partialPath,
-				Code = string.Format(partialClassTemplate, partialUsings, codeInfo.MethodCodeParentClassName, partialAttributePath, codeInfo.Namespace)
+				Code = FormatingCode(string.Format(partialClassTemplate, partialUsings, codeInfo.MethodCodeParentClassName, partialAttributePath, codeInfo.Namespace))
 			};
 
 			return partialCodeInfo;
@@ -515,7 +519,8 @@ namespace Aras.VS.MethodPlugin.Code
 			code = code.Replace("$(pkgname)", resultCodeInfo.Namespace);
 			code = code.Replace("$(clsname)", resultCodeInfo.ClassName);
 
-			resultCodeInfo.TestsCodeInfo.Code = code;
+			string formatedCode = FormatingCode(code);
+			resultCodeInfo.TestsCodeInfo.Code = formatedCode;
 			resultCodeInfo.TestsCodeInfo.Path = Path.Combine(methodName, methodName + "Tests.cs");
 
 			return resultCodeInfo;
@@ -618,6 +623,16 @@ namespace Aras.VS.MethodPlugin.Code
 			var updatedCode = codeWithRegion.Substring(userCodeStartIndex, userCodeLength);
 
 			return updatedCode;
+		}
+
+		private string FormatingCode(string code)
+		{
+			SyntaxTree tree = CSharpSyntaxTree.ParseText(code);
+			SyntaxNode node = tree.GetRoot();
+
+			node = Microsoft.CodeAnalysis.Formatting.Formatter.Format(node, this.projectManager.VisualStudioWorkspace);
+			string formatedCode = node.ToString();
+			return formatedCode;
 		}
 	}
 }

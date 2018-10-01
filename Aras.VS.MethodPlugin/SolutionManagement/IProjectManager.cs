@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.ProjectConfigurations;
 using EnvDTE;
+using Microsoft.VisualStudio.LanguageServices;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
@@ -42,6 +43,8 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 		ProjectItems ServerMethodFolderItems { get; }
 
 		OleMenuCommandService CommandService { get; }
+
+		VisualStudioWorkspace VisualStudioWorkspace { get; }
 
 		bool IsArasProject { get; }
 

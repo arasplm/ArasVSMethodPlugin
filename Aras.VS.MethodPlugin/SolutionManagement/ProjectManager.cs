@@ -19,6 +19,8 @@ using Aras.VS.MethodPlugin.Extensions;
 using Aras.VS.MethodPlugin.ProjectConfigurations;
 using EnvDTE;
 using EnvDTE80;
+using Microsoft.VisualStudio.ComponentModelHost;
+using Microsoft.VisualStudio.LanguageServices;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
@@ -31,6 +33,8 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 		private const string serverMethodsFolderName = "ServerMethods";
 		private const string projectConfigFileName = "projectConfig.xml";
 		private const string methodConfigFileName = "method-config.xml";
+
+		private VisualStudioWorkspace visualStudioWorkspace;
 
 		private readonly IServiceProvider serviceProvider;
 		private readonly IDialogFactory dialogFactory;
@@ -235,6 +239,20 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 				}
 
 				return false;
+			}
+		}
+
+		public VisualStudioWorkspace VisualStudioWorkspace
+		{
+			get
+			{
+				if (this.visualStudioWorkspace == null)
+				{
+					var componentModel = (IComponentModel)Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(SComponentModel));
+					this.visualStudioWorkspace = componentModel.GetService<VisualStudioWorkspace>();
+				}
+
+				return this.visualStudioWorkspace;
 			}
 		}
 
