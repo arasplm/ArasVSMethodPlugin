@@ -30,18 +30,21 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private ICommand closeCommand;
 	    private ICommand pathChangeCommand;
 
-		public OpenFromPackageTreeViewModel(string lastSelectedManifestFile, string lastSelectedPackage, string lastSelectedMethod)
+		public OpenFromPackageTreeViewModel(string lastSelectedManifestFilePath, string lastSelectedPackage, string lastSelectedMethod)
 		{
 
-			SelectPathViewModel = new SelectPathViewModel(DirectoryItemType.File, lastSelectedManifestFile, importFileName);
+			SelectPathViewModel = new SelectPathViewModel(DirectoryItemType.File, lastSelectedManifestFilePath, importFileName);
 			SelectPathViewModel.SelectionChanged += OnSelectDirectoryItem;
 			this.okCommand = new RelayCommand<object>(OkCommandClick);
 			this.closeCommand = new RelayCommand<object>(OnCloseCliked);
 		    this.pathChangeCommand = new RelayCommand<object>(OnPathChange);
 
-			OnSelectDirectoryItem(lastSelectedManifestFile);
-			this.SelectedPackageValue = lastSelectedPackage;
-			this.SelectedMethod = this.Methods.FirstOrDefault(x => x.Name == lastSelectedMethod);
+			if (!string.IsNullOrEmpty(lastSelectedManifestFilePath))
+			{
+				OnSelectDirectoryItem(lastSelectedManifestFilePath);
+				this.SelectedPackageValue = lastSelectedPackage;
+				this.SelectedMethod = this.Methods.FirstOrDefault(x => x.Name == lastSelectedMethod);
+			}
 		}
 
 	    #region Properties
