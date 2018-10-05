@@ -5,11 +5,18 @@ using System.Reflection;
 using System.Threading;
 using System.Xml;
 
+
 namespace MethodLauncher
 {
 	class Program
 	{
-		static void Main(string[] args)
+        private static string eventClass;
+        private static string directoryPath;
+        private static string userName;
+        private static string templateName;
+        private static object serverConnection;
+
+        static void Main(string[] args)
 		{
 			try
 			{
@@ -24,25 +31,27 @@ namespace MethodLauncher
 				string methodContext = xmlDocument.SelectSingleNode("/LauncherConfig/сontext").InnerText;
 				string url = xmlDocument.SelectSingleNode("/LauncherConfig/url").InnerText;
 				string database = xmlDocument.SelectSingleNode("/LauncherConfig/database").InnerText;
-				string userName = xmlDocument.SelectSingleNode("/LauncherConfig/userName").InnerText;
-				string password = args[1];
-
-				var pathToPdb = pathToDll.Replace(".dll", ".pdb");
+				userName = xmlDocument.SelectSingleNode("/LauncherConfig/userName").InnerText;
+                eventClass = xmlDocument.SelectSingleNode("/LauncherConfig/eventClass").InnerText;
+                templateName = xmlDocument.SelectSingleNode("/LauncherConfig/templateName").InnerText;
+                string password = args[1];
+                
+                var pathToPdb = pathToDll.Replace(".dll", ".pdb");
 				var as1 = Assembly.LoadFrom(pathToDll);
 				Type type = as1.GetType(className);
-				string IOMDirectoryPath = Path.GetDirectoryName(pathToDll);
-				string IOMPath = Path.Combine(IOMDirectoryPath, "IOM.dll");
-				var asmIom = Assembly.LoadFrom(IOMPath);
-				Type IomFactoryType = asmIom.GetType("Aras.IOM.IomFactory");
-
-				MethodInfo CreateHttpServerConnectionMethodInfo = IomFactoryType.GetMethod(
+				directoryPath = Path.GetDirectoryName(pathToDll);
+				string IOMPath = Path.Combine(directoryPath, "IOM.dll");
+                var asmIom = Assembly.LoadFrom(IOMPath);
+                Type IomFactoryType = asmIom.GetType("Aras.IOM.IomFactory");
+                
+                MethodInfo CreateHttpServerConnectionMethodInfo = IomFactoryType.GetMethod(
 					"CreateHttpServerConnection",
 					BindingFlags.Static | BindingFlags.Public,
 					null,
 					new Type[] { typeof(string), typeof(string), typeof(string), typeof(string) },
 					null);
 
-				var serverConnection = CreateHttpServerConnectionMethodInfo.Invoke(null, new object[] { url, database, userName, password });
+				serverConnection = CreateHttpServerConnectionMethodInfo.Invoke(null, new object[] { url, database, userName, password });
 
 				Type httpServerConnectionType = asmIom.GetType("Aras.IOM.HttpServerConnection");
 				MethodInfo loginMethodInfo = httpServerConnectionType.GetMethod("Login");
@@ -57,20 +66,50 @@ namespace MethodLauncher
 				{
 					MethodInfo methodInfo = type.GetMethod(selectedMethodName);
 					var constructor = type.GetConstructors().First();
-					var arg = constructor.GetParameters().First().ParameterType;
-					//var serverConnection = Substitute.For(new Type[] { arg }, new object[] { });
-
-					var classInstance = Activator.CreateInstance(type, serverConnection);
+                    var ctorParamsInfo = constructor.GetParameters();
+                    var ctorParams = GetInstanseByParameterType(ctorParamsInfo);
+                    var classInstance = Activator.CreateInstance(type, ctorParams);
 					MethodInfo loadAMLInfo = type.GetMethod("loadAML");
-					loadAMLInfo.Invoke(classInstance, new object[] { methodContext });
+                    if (loadAMLInfo != null)
+                        loadAMLInfo.Invoke(classInstance, new object[] { methodContext });
 
-					methodInfo.Invoke(classInstance, new object[] { null, null });
-				}
+                    var methodParamsInfo = methodInfo.GetParameters();
+
+                    var methodParams = GetInstanseByParameterType(methodParamsInfo);
+                    methodInfo.Invoke(classInstance, methodParams);
+                }
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine(ex);
+                Console.WriteLine(ex);
 			}
 		}
-	}
+        private static object[] GetInstanseByParameterType(ParameterInfo[] parameters)
+        {
+            if (parameters.Count() == 0)
+                return null;
+
+            string innovatorCorePath = Path.Combine(directoryPath, "InnovatorCore.dll");
+            var innCoreAssembly = Assembly.LoadFrom(innovatorCorePath);
+
+            object[] paramsInstances = new object[parameters.Length];
+            for (int i = 0; i < parameters.Length; i++)
+            {
+                if (!string.IsNullOrWhiteSpace(eventClass) && parameters[i].ParameterType.Name.Contains("EventArgs"))
+                {
+                    Type eventType = innCoreAssembly.GetType(eventClass);
+                    var eventCtor = eventType.GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance).FirstOrDefault();
+                    var eventObject = eventCtor.Invoke(new object[eventCtor.GetParameters().Length]);
+                    paramsInstances[i] = eventObject;
+                }
+                else if (parameters[i].ParameterType.Name == "IServerConnection")
+                {
+                    paramsInstances[i] = serverConnection;
+                }
+                else
+                    paramsInstances[i] = null;
+            }
+            return paramsInstances;
+        }
+    }
 }

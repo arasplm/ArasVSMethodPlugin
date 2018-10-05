@@ -95,8 +95,9 @@ namespace Aras.VS.MethodPlugin.Commands
 			var member = root.DescendantNodes()
 				.OfType<NamespaceDeclarationSyntax>()
 				.FirstOrDefault();
-			var className = GetFullName(member);
-			var methodName = string.Format("ArasPKG{0}ItemMethod", methodInformation.MethodName);
+			var className = GetFullClassName(member);
+            var methodName = GetMethodName(member);
+            
 			//(me as IdentifierNameSyntax).Identifier.ValueText
 
 			//var selectedClassName =
@@ -120,7 +121,8 @@ namespace Aras.VS.MethodPlugin.Commands
 			string projectDirectoryPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
 			string launcherConfigPath = Path.Combine(projectDirectoryPath, "LauncherConfig.xml");
 
-			CreateLauncherConfigFile(dllFullPath, className, methodName, debugMethodViewResult, launcherConfigPath);
+			CreateLauncherConfigFile(dllFullPath, className, methodName, debugMethodViewResult, launcherConfigPath,
+                CommonData.EventSpecificDataTypeList.FirstOrDefault(ev => ev.EventSpecificData.ToString() == methodInformation.EventData.ToString()).EventDataClass, methodInformation.TemplateName);
 
 			ProcessStartInfo startInfo = new ProcessStartInfo(launcherPath);
 			startInfo.WindowStyle = ProcessWindowStyle.Hidden;
@@ -131,7 +133,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			projectManager.AttachToProcess(process);
 		}
 
-		private void CreateLauncherConfigFile(string dllFullPath, string className, string methodName, DebugMethodViewResult debugMethodViewResult, string launcherConfigPath)
+        private void CreateLauncherConfigFile(string dllFullPath, string className, string methodName, DebugMethodViewResult debugMethodViewResult, string launcherConfigPath, string eventName, string templateName)
 		{
 			XmlDocument launcherConfig = new XmlDocument();
 
@@ -166,7 +168,15 @@ namespace Aras.VS.MethodPlugin.Commands
 			userNameXmlElement.InnerText = authManager.InnovatorUser.userName;
 			launcherConfigXmlElement.AppendChild(userNameXmlElement);
 
-			XmlWriterSettings settings = new XmlWriterSettings();
+            XmlElement eventClassXmlElement = launcherConfig.CreateElement("eventClass");
+            eventClassXmlElement.InnerText = eventName;
+            launcherConfigXmlElement.AppendChild(eventClassXmlElement);
+
+            XmlElement templateNameXmlElement = launcherConfig.CreateElement("templateName");
+            templateNameXmlElement.InnerText = templateName;
+            launcherConfigXmlElement.AppendChild(templateNameXmlElement);
+
+            XmlWriterSettings settings = new XmlWriterSettings();
 			settings.Encoding = new UTF8Encoding(true);
 			settings.Indent = true;
 			settings.IndentChars = "\t";
@@ -178,19 +188,33 @@ namespace Aras.VS.MethodPlugin.Commands
 			}
 		}
 
-		public static string GetFullName(NamespaceDeclarationSyntax node)
+		private static string GetFullClassName(NamespaceDeclarationSyntax node)
 		{
 			var cls = node.DescendantNodes().OfType<ClassDeclarationSyntax>().FirstOrDefault();
+            if (cls == null)
+            {
+                throw new ArgumentException("Class not found in namespace");
+            }
 			string clsName = cls.Identifier.ValueText;
 			string namespaceName = string.Empty;
 			if (node.Parent is NamespaceDeclarationSyntax)
 				namespaceName = String.Format("{0}.{1}",
-					GetFullName((NamespaceDeclarationSyntax)node.Parent),
+					GetFullClassName((NamespaceDeclarationSyntax)node.Parent),
 					((IdentifierNameSyntax)node.Name).Identifier.ToString());
 			else
 				namespaceName =((IdentifierNameSyntax)node.Name).Identifier.ToString();
 
 			return string.Format("{0}.{1}", namespaceName, clsName);
 		}
-	}
+
+        private string GetMethodName(NamespaceDeclarationSyntax node)
+        {
+            var methodName = node.DescendantNodes().OfType<MethodDeclarationSyntax>().FirstOrDefault()?.Identifier.ValueText;
+            if (string.IsNullOrEmpty(methodName))
+            {
+                throw new ArgumentException("Method not found in class");
+            }
+            return methodName;
+        }
+    }
 }

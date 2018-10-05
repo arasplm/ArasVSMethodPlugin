@@ -316,18 +316,14 @@ namespace Aras.VS.MethodPlugin.Code
 
 			var clss = root.DescendantNodes()
 						.OfType<ClassDeclarationSyntax>()
-						.Where(a => a.Identifier.Text.ToString() == parentClassName)
-						.First();
-
-			var clsWithModifier = clss.AddModifiers(SyntaxFactory.Token(SyntaxKind.PartialKeyword));
-			clsWithModifier = clsWithModifier.NormalizeWhitespace();
-			root = root.ReplaceNode(clss, clsWithModifier);
+						.FirstOrDefault(a => a.Identifier.Text.ToString() == parentClassName);
+		    if (clss != null)
+		    {
+		        var clsWithModifier = clss.AddModifiers(SyntaxFactory.Token(SyntaxKind.PartialKeyword));
+		        clsWithModifier = clsWithModifier.NormalizeWhitespace();
+		        root = root.ReplaceNode(clss, clsWithModifier);
+            }
 			resultCode = root.ToString().Replace("[WrapperMethod]", string.Empty);
-
-			if (eventData.EventSpecificData != EventSpecificData.None)
-			{
-				resultCode = resultCode.Insert(0, "#define EventDataIsAvailable\r\n");
-			}
 
 			GeneratedCodeInfo resultInfo = new GeneratedCodeInfo();
 			resultInfo.WrapperCodeInfo.Code = FormatingCode(resultCode);
@@ -337,7 +333,13 @@ namespace Aras.VS.MethodPlugin.Code
 			resultInfo.Namespace = pkgname;
 			resultInfo.MethodCodeParentClassName = parentClassName;
 
-			return resultInfo;
+            //TODO formating code doesn't support define
+            if (eventData.EventSpecificData != EventSpecificData.None)
+            {
+                resultInfo.WrapperCodeInfo.Code = resultInfo.WrapperCodeInfo.Code.Insert(0, "#define EventDataIsAvailable\r\n");
+            }
+
+            return resultInfo;
 		}
 
 		public GeneratedCodeInfo CreateMainNew(GeneratedCodeInfo generatedCodeInfo,
@@ -350,15 +352,18 @@ namespace Aras.VS.MethodPlugin.Code
 			DefaultCodeTemplate defaultTemplate = LoadDefaultCodeTemplate(template, eventData);
 			string code = useAdvancedCode ? defaultTemplate.AdvancedSourceCode : defaultTemplate.SimpleSourceCode;
 			code = code.Replace("$(pkgname)", generatedCodeInfo.Namespace);
+		    code = code.Replace("$(clsname)", generatedCodeInfo.ClassName);
 
 			if (!string.IsNullOrEmpty(codeToInsert))
 			{
 				var defaultCode = GetSourceCodeBetweenRegion(code);
-				code = code.Replace(defaultCode, codeToInsert);
+				code = code.Replace("#region MethodCode\r\n" + defaultCode, "#region MethodCode\r\n" + codeToInsert);
 			}
-
-			string formatedCode = this.FormatingCode(code);
-			generatedCodeInfo.MethodCodeInfo.Code = formatedCode;
+            if (eventData.EventSpecificData != EventSpecificData.None)
+            {
+                code = code.Insert(0, "#define EventDataIsAvailable\r\n");
+            }
+            generatedCodeInfo.MethodCodeInfo.Code = code;
 			generatedCodeInfo.MethodCodeInfo.Path = Path.Combine(methodName, methodName + ".cs");
 
 			return generatedCodeInfo;
@@ -528,8 +533,8 @@ namespace Aras.VS.MethodPlugin.Code
 
 		private DefaultCodeTemplate LoadDefaultCodeTemplate(TemplateInfo template, EventSpecificDataType eventData)
 		{
-			var defaultTemplate = defaultCodeProvider.GetDefaultCodeTemplates(projectManager.DefaultCodeTemplatesPath)
-				.FirstOrDefault(dct => dct.TempalteName == template.TemplateName && dct.EventDataType == eventData.EventSpecificData);
+		    var defaultTemplate = defaultCodeProvider.GetDefaultCodeTemplate(projectManager.DefaultCodeTemplatesPath, 
+		        template.TemplateName, eventData.EventSpecificData.ToString());
 			if (defaultTemplate == null)
 			{
 				throw new FileNotFoundException($"Default code template file with templateName=\"{template.TemplateName}\" eventData=\"{eventData.EventSpecificData}\" not found.");
@@ -607,8 +612,8 @@ namespace Aras.VS.MethodPlugin.Code
 
 		private string GetSourceCodeBetweenRegion(string codeWithRegion)
 		{
-			string startRegionPattern = @"#region MethodCode[\s]*\r\n";
-			string endRegionPattern = @"\r\n[\s]*#endregion MethodCode";
+			string startRegionPattern = @"#region MethodCode[\s]*";
+			string endRegionPattern = @"#endregion MethodCode";
 
 			var startMatch = Regex.Match(codeWithRegion, startRegionPattern);
 			var endMatch = Regex.Match(codeWithRegion, endRegionPattern);

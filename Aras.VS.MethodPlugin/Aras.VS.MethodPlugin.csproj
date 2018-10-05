@@ -266,6 +266,7 @@
     <Compile Include="ItemSearch\Preferences\PreferenceProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Templates\TemplateLoader.cs" />
+    <Compile Include="Templates\TemplateMapper.cs" />
     <Compile Include="Utilities\ItemExtensions.cs" />
     <Compile Include="Utilities\Utils.cs" />
     <Compile Include="Utilities\XmlNodeExt.cs" />
