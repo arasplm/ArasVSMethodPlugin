@@ -124,7 +124,7 @@ namespace Aras.VS.MethodPlugin.Commands
 				var xmlDocument = new XmlDocument();
 				xmlDocument.Load(importFilePath);
 				XmlNode importsXmlNode = xmlDocument.SelectSingleNode("imports");
-				XmlNode packageXmlNode = importsXmlNode.SelectSingleNode($"package[@path='{saveViewResult.SelectedPackage}']");
+				XmlNode packageXmlNode = importsXmlNode.SelectSingleNode($"package[@name='{saveViewResult.SelectedPackage}']");
 
 				if (packageXmlNode == null)
 				{
@@ -147,7 +147,7 @@ namespace Aras.VS.MethodPlugin.Commands
 				}
 				else
 				{
-					pathPackageToSaveMethod = saveViewResult.SelectedPackage;
+					pathPackageToSaveMethod = packageXmlNode.Attributes["path"].Value;
 				}
 			}
 			else

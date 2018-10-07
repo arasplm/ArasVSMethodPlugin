@@ -22,13 +22,13 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private Dictionary<string, string> packages;
 		private List<ShortMethodInfoViewModel> methods;
 
-		private string selectedPackageValue;
+		private string selectedPackageName;
 		private ShortMethodInfoViewModel selectedMethodValue;
 		private string rootFolderPath;
 		private SelectPathViewModel selectPathViewModel;
 		private ICommand okCommand;
 		private ICommand closeCommand;
-	    private ICommand pathChangeCommand;
+		private ICommand pathChangeCommand;
 
 		public OpenFromPackageTreeViewModel(string lastSelectedManifestFilePath, string lastSelectedPackage, string lastSelectedMethod)
 		{
@@ -37,17 +37,17 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			SelectPathViewModel.SelectionChanged += OnSelectDirectoryItem;
 			this.okCommand = new RelayCommand<object>(OkCommandClick);
 			this.closeCommand = new RelayCommand<object>(OnCloseCliked);
-		    this.pathChangeCommand = new RelayCommand<object>(OnPathChange);
+			this.pathChangeCommand = new RelayCommand<object>(OnPathChange);
 
 			if (!string.IsNullOrEmpty(lastSelectedManifestFilePath))
 			{
 				OnSelectDirectoryItem(lastSelectedManifestFilePath);
-				this.SelectedPackageValue = lastSelectedPackage;
+				this.SelectedPackageName = lastSelectedPackage;
 				this.SelectedMethod = this.Methods.FirstOrDefault(x => x.Name == lastSelectedMethod);
 			}
 		}
 
-	    #region Properties
+		#region Properties
 
 		public SelectPathViewModel SelectPathViewModel
 		{
@@ -66,17 +66,17 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			}
 		}
 
-		public string SelectedPackageValue
+		public string SelectedPackageName
 		{
-			get { return selectedPackageValue; }
+			get { return selectedPackageName; }
 			set
 			{
-				selectedPackageValue = value;
+				selectedPackageName = value;
 
 				var localMethods = new List<ShortMethodInfoViewModel>();
-				if (!string.IsNullOrEmpty(selectedPackageValue))
+				if (!string.IsNullOrEmpty(selectedPackageName))
 				{
-					string methodsPath = Path.Combine(rootFolderPath, selectedPackageValue, "Method");
+					string methodsPath = Path.Combine(rootFolderPath, Packages[selectedPackageName], "Method");
 					if (System.IO.Directory.Exists(methodsPath))
 					{
 						localMethods = new DirectoryInfo(methodsPath).GetFiles("*.xml").Select(x => new ShortMethodInfoViewModel(x.FullName)).ToList();
@@ -111,15 +111,15 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		public ICommand CloseCommand { get { return closeCommand; } }
 
-	    public ICommand PathChangeCommand { get { return pathChangeCommand; } }
-        #endregion
+		public ICommand PathChangeCommand { get { return pathChangeCommand; } }
+		#endregion
 
-        private void OnSelectDirectoryItem(string fullPath)
+		private void OnSelectDirectoryItem(string fullPath)
 		{
 			this.rootFolderPath = Path.GetDirectoryName(fullPath);
 
 			var localPackages = new Dictionary<string, string>();
-			var extension =  Path.GetExtension(fullPath);
+			var extension = Path.GetExtension(fullPath);
 			if (string.Equals(extension, importFileName))
 			{
 				var xmlDocument = new XmlDocument();
@@ -161,23 +161,23 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			(view as Window).Close();
 		}
 
-        private void OnPathChange(object window)
-        {
-            var wnd = window as Window;
-            var path = SelectPathViewModel.SelectedPath;
-            if (System.IO.File.Exists(path) || System.IO.Directory.Exists(path))
-            {
-               selectPathViewModel.Navigate(selectPathViewModel.DirectoryItems, path.Split(Path.DirectorySeparatorChar).ToList());
-            }
-            else
-            {
-                var messageWindow = new MessageBoxWindow();
-                messageWindow.ShowDialog(wnd,
-                    "File or Folder were not found",
-                    "Open method from AML package",
-                    MessageButtons.OK,
-                    MessageIcon.None);
-            }
-        }
+		private void OnPathChange(object window)
+		{
+			var wnd = window as Window;
+			var path = SelectPathViewModel.SelectedPath;
+			if (System.IO.File.Exists(path) || System.IO.Directory.Exists(path))
+			{
+				selectPathViewModel.Navigate(selectPathViewModel.DirectoryItems, path.Split(Path.DirectorySeparatorChar).ToList());
+			}
+			else
+			{
+				var messageWindow = new MessageBoxWindow();
+				messageWindow.ShowDialog(wnd,
+					"File or Folder were not found",
+					"Open method from AML package",
+					MessageButtons.OK,
+					MessageIcon.None);
+			}
+		}
 	}
 }

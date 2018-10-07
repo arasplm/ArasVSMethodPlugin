@@ -76,8 +76,8 @@
             <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
 
             <ListBox Grid.Column="2" x:Name="PackagesView" ItemsSource="{Binding Packages}"
-                     SelectedValuePath="Value"
-                     SelectedValue="{Binding Path=SelectedPackageValue}">
+                     SelectedValuePath="Key"
+                     SelectedValue="{Binding Path=SelectedPackageName}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Key}" />

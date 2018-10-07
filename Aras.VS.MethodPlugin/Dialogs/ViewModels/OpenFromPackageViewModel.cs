@@ -214,7 +214,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 			if (view.ShowDialog() == true)
 			{
-				this.Package = viewModel.SelectedPackageValue.Split('\\')[0];
+				this.Package = viewModel.SelectedPackageName.Split('\\')[0];
 				this.SelectedManifestFilePath = viewModel.SelectPathViewModel.SelectedPath;
 
 				var xmlDocument = new XmlDocument();
