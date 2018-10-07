@@ -136,13 +136,16 @@ namespace Aras.VS.MethodPlugin.Commands
 
 					XmlWriterSettings settings = new XmlWriterSettings();
 					settings.Encoding = new UTF8Encoding(true);
+					settings.Indent = true;
+					settings.IndentChars = "\t";
+					settings.OmitXmlDeclaration = true;
 					using (XmlWriter xmlWriter = XmlWriter.Create(importFilePath, settings))
 					{
 						xmlDocument.Save(xmlWriter);
 					}
 
 				}
-				else 
+				else
 				{
 					pathPackageToSaveMethod = saveViewResult.SelectedPackage;
 				}
@@ -159,6 +162,9 @@ namespace Aras.VS.MethodPlugin.Commands
 				xmlDocument.AppendChild(importsXmlNode);
 
 				XmlWriterSettings settings = new XmlWriterSettings();
+				settings.Indent = true;
+				settings.IndentChars = "\t";
+				settings.OmitXmlDeclaration = true;
 				settings.Encoding = new UTF8Encoding(true);
 				using (XmlWriter xmlWriter = XmlWriter.Create(importFilePath, settings))
 				{
@@ -196,7 +202,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			XmlDocument resultXmlDoc = new XmlDocument();
 			resultXmlDoc.LoadXml(methodTemplate);
 			SaveToFile(methodFilePath, resultXmlDoc);
-			
+
 			if (methodInformation.MethodName == saveViewResult.MethodName)
 			{
 				methodInformation.PackageName = saveViewResult.SelectedPackage;
