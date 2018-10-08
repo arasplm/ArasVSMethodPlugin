@@ -13,12 +13,7 @@ namespace Aras.VS.MethodPlugin.Code
 	{
 		string Language { get; }
 
-		void LoadCodeToProject(string methodLanguage, string methodCode, string methodLocation, string methodName, string innovatorMethodConfigId, string innovatorMethodId, EventSpecificDataType eventData, string packageName, string executionAllowedToId, string executionAllowedToKeyedName);
-
-		//void LoadCodeToProject(dynamic methodItem, EventSpecificDataType eventData, string packageName);
-
 		string LoadMethodCode(string sourceCode, MethodInfo methodInformation, string serverMethodFolderPath);
-
 
 		GeneratedCodeInfo GenerateCodeInfo(TemplateInfo template, EventSpecificDataType eventData, string methodName, bool useAdvancedCode, string codeToInsert);
 
