@@ -99,12 +99,31 @@ namespace MethodLauncher
                 {
                     Type eventType = innCoreAssembly.GetType(eventClass);
                     var eventCtor = eventType.GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance).FirstOrDefault();
-                    var eventObject = eventCtor.Invoke(new object[eventCtor.GetParameters().Length]);
+                    var ctorArgs = GetInstanseByParameterType(eventCtor.GetParameters());
+                    var eventObject = eventCtor.Invoke(ctorArgs);
                     paramsInstances[i] = eventObject;
                 }
                 else if (parameters[i].ParameterType.Name == "IServerConnection")
                 {
                     paramsInstances[i] = serverConnection;
+                }
+                else if (parameters[i].ParameterType.Name == "String" && parameters[i].Name == "loginName")
+                {
+                    paramsInstances[i] = userName;
+                }
+                else if (parameters[i].ParameterType.Name == "IContextState" && parameters[i].Name == "RequestState")
+                {
+                    var requestStateType = innCoreAssembly.GetType("Aras.Server.Core.RequestState");
+                    if (innCoreAssembly.GetType("Aras.Server.Core.IContextState").IsAssignableFrom(requestStateType))
+                    {
+                        var requestStateCtor = requestStateType.GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance).FirstOrDefault();
+                        var requestStateObject = requestStateCtor.Invoke(null);
+                        paramsInstances[i] = requestStateObject;
+                    }
+                    else
+                    {
+                        paramsInstances[i] = null;
+                    }
                 }
                 else
                     paramsInstances[i] = null;
