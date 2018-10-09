@@ -304,12 +304,16 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				this.MethodId = item.getProperty("id", string.Empty);
 				this.MethodConfigId = item.getProperty("config_id", string.Empty);
 				this.MethodLanguage = item.getProperty("method_type", string.Empty);
-				this.MethodCode = item.getProperty("method_code", string.Empty);
 				this.IdentityKeyedName = item.getPropertyAttribute("execution_allowed_to", "keyed_name", string.Empty);
 				this.IdentityId = item.getProperty("execution_allowed_to", string.Empty);
 				this.MethodComment = item.getProperty("comments", string.Empty);
 
-				if (methodLanguage == "C#" || methodLanguage == "VB")
+                var methodCode = item.getProperty("method_code", string.Empty);
+                this.MethodCode = Regex.Replace(methodCode, @"//MethodTemplateName=[\S]+\r\n", "");
+             
+
+
+                if (methodLanguage == "C#" || methodLanguage == "VB")
 				{
 					this.MethodType = "server";
 				}
