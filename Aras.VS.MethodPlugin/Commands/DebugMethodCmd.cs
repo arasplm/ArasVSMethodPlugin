@@ -118,7 +118,7 @@ namespace Aras.VS.MethodPlugin.Commands
 				return;
 			}
 
-			string projectDirectoryPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
+            string projectDirectoryPath = Path.GetDirectoryName(projectManager.SelectedProject.FileName);  
 			string launcherConfigPath = Path.Combine(projectDirectoryPath, "LauncherConfig.xml");
 
 			CreateLauncherConfigFile(dllFullPath, className, methodName, debugMethodViewResult, launcherConfigPath,
