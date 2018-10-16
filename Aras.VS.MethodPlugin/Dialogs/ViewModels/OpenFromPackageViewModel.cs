@@ -203,6 +203,10 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			var actualFolderPath = !string.IsNullOrWhiteSpace(this.SelectedManifestFilePath)
 				? this.SelectedManifestFilePath
 				: selectedFolderPath;
+            if (string.IsNullOrWhiteSpace(actualFolderPath))
+            {
+                actualFolderPath = @"C:\";
+            }
 			var viewModel = new OpenFromPackageTreeViewModel(actualFolderPath, this.Package, this.MethodName);
 			var view = new OpenFromPackageTreeView();
 			view.DataContext = viewModel;
