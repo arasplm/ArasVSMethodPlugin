@@ -9,8 +9,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private readonly string fullName;
 		
 		private string methodType;
-		private string comment;
-		private bool isExpended;
 
 		public ShortMethodInfoViewModel(string fullName)
 		{
@@ -44,7 +42,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		{
 			get
 			{
-				if (string.IsNullOrEmpty(this.methodType) && this.IsExpended)
+				if (string.IsNullOrEmpty(this.methodType))
 				{
 					this.methodType = LoadMethodType();
 				}
@@ -52,26 +50,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				return this.methodType;
 			}
 			set
-			{
-				this.methodType = value;
-				RaisePropertyChanged(nameof(MethodType));
-			}
-		}
-
-		public bool IsExpended
-		{ 
-			get
-			{
-				return this.isExpended;
-			}
-			set
-			{
-				this.isExpended = value;
-				if (this.isExpended)
-				{ 
-					RaisePropertyChanged(nameof(this.MethodType));
-				}
-			}
+			{ }
 		}
 
 		private string LoadMethodType()

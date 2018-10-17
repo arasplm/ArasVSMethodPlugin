@@ -31,5 +31,14 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 		        e.Handled = true;
 		    }
         }
+
+		private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			ListBox listBox = sender as ListBox;
+			if (listBox != null)
+			{
+				listBox.ScrollIntoView(listBox.SelectedItem);
+			}
+		}
 	}
 }
