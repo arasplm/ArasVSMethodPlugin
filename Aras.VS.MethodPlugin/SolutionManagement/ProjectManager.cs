@@ -158,6 +158,10 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 			{
 				var dte = (DTE2)serviceProvider.GetService(typeof(DTE));
 				var solutionProjects = dte.ActiveSolutionProjects as Array;
+                if (solutionProjects.Length == 0)
+                {
+                    return null;
+                }
 				return solutionProjects.GetValue(0) as Project;
 			}
 		}
@@ -214,6 +218,10 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 			get
 			{
 				Project selectedProject = SelectedProject;
+                if (selectedProject == null)
+                {
+                    return false;
+                }
 				if (selectedProject.ProjectItems.Exists(arasLibsFolderName) &&
 					selectedProject.ProjectItems.Exists(defaultCodeTemplatesFolderName) &&
 					selectedProject.ProjectItems.Exists(serverMethodsFolderName) &&
