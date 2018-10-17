@@ -143,7 +143,7 @@ namespace Aras.VS.MethodPlugin.Code
 			if (!string.IsNullOrEmpty(codeToInsert))
 			{
 				var defaultCode = GetSourceCodeBetweenRegion(code);
-				code = code.Replace("#region MethodCode\r\n" + defaultCode, "#region MethodCode\r\n" + codeToInsert);
+				code = code.Replace(defaultCode + "#endregion MethodCode", codeToInsert + "#endregion MethodCode");
 			}
             if (eventData.EventSpecificData != EventSpecificData.None)
             {
