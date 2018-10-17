@@ -34,7 +34,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 				MethodComment = viewModel.MethodComment,
 				Package = viewModel.Package,
 				SelectedTemplate = viewModel.SelectedTemplate,
-				SelectedEventSpecificData = viewModel.SelectedEventSpecificData
+				SelectedEventSpecificData = viewModel.SelectedEventSpecificData,
+				IsUseVSFormattingCode = viewModel.IsUseVSFormattingCode
 			};
 		}
 	}

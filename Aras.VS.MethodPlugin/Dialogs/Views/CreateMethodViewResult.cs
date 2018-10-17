@@ -30,5 +30,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 		public FilteredListInfo SelectedLanguage { get; set; }
 
 		public string SelectedIdentityKeyedName { get; set; }
+
+		public bool IsUseVSFormatingCode { get; set; }
 	}
 }

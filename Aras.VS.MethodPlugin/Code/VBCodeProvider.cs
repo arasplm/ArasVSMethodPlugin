@@ -228,7 +228,7 @@ End Class
 			throw new NotImplementedException();
 		}
 
-		public GeneratedCodeInfo CreateWrapper(TemplateInfo template, EventSpecificDataType eventData, string methodName)
+		public GeneratedCodeInfo CreateWrapper(TemplateInfo template, EventSpecificDataType eventData, string methodName, bool useCodeFormating)
 		{
 			throw new NotImplementedException();
 		}
@@ -258,7 +258,7 @@ End Class
 			throw new NotImplementedException();
 		}
 
-		public CodeInfo CreatePartialCodeInfo(MethodInfo methodInfo, string fileName)
+		public CodeInfo CreatePartialCodeInfo(MethodInfo methodInfo, string fileName, bool useCodeFormating)
 		{
 			throw new NotImplementedException();
 		}
@@ -268,7 +268,7 @@ End Class
 			throw new NotImplementedException();
 		}
 
-		public GeneratedCodeInfo GenerateCodeInfo(TemplateInfo template, EventSpecificDataType eventData, string methodName, bool useAdvancedCode, string codeToInsert)
+		public GeneratedCodeInfo GenerateCodeInfo(TemplateInfo template, EventSpecificDataType eventData, string methodName, bool useAdvancedCode, string codeToInsert, bool useCodeFormating)
 		{
 			throw new NotImplementedException();
 		}

@@ -9,5 +9,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 	public class CreatePartialElementViewResult : ViewResult
 	{
 		public string FileName { get; set; }
+
+		public bool IsUseVSFormatingCode { get; set; }
 	}
 }

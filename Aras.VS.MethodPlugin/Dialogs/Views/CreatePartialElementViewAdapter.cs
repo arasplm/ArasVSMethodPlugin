@@ -22,7 +22,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 			return new CreatePartialElementViewResult()
 			{
 				DialogOperationResult = result,
-				FileName = viewModel.FileName
+				FileName = viewModel.FileName,
+				IsUseVSFormatingCode = viewModel.IsUseVSFormattingCode
 			};
 		}
 	}

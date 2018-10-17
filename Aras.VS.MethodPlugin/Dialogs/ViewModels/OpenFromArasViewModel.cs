@@ -49,6 +49,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private string identityKeyedName;
 		private string identityId;
 		private string package;
+		private bool isUseVSFormattingCode = true;
 
 		private ICommand editConnectionInfoCommand;
 		private ICommand searchMethodDialogCommand;
@@ -221,6 +222,12 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				package = value;
 				RaisePropertyChanged(nameof(Package));
 			}
+		}
+
+		public bool IsUseVSFormattingCode
+		{ 
+			get{ return isUseVSFormattingCode; }
+			set{ isUseVSFormattingCode = value; }
 		}
 
 		#endregion

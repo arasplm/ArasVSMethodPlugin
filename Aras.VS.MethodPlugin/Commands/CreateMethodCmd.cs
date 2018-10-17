@@ -86,7 +86,7 @@ namespace Aras.VS.MethodPlugin.Commands
 				return;
 			}
 
-			GeneratedCodeInfo codeInfo = codeProvider.GenerateCodeInfo(createViewResult.SelectedTemplate, createViewResult.SelectedEventSpecificData, createViewResult.MethodName, createViewResult.UseRecommendedDefaultCode, string.Empty);
+			GeneratedCodeInfo codeInfo = codeProvider.GenerateCodeInfo(createViewResult.SelectedTemplate, createViewResult.SelectedEventSpecificData, createViewResult.MethodName, createViewResult.UseRecommendedDefaultCode, string.Empty, createViewResult.IsUseVSFormatingCode);
 			projectManager.CreateMethodTree(codeInfo);
 
 			string newInnovatorMethodId = authManager.InnovatorInstance.getNewID();

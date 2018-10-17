@@ -23,5 +23,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 		public string Package { get; set; }
 		public string SelectedIdentityId { get; set; }
 		public string SelectedIdentityKeyedName { get; set; }
+		public bool IsUseVSFormattingCode { get; set; }
 	}
 }

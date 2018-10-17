@@ -120,7 +120,7 @@ namespace Aras.VS.MethodPlugin.Commands
 				}
 			}
 
-			GeneratedCodeInfo codeInfo = codeProvider.GenerateCodeInfo(openViewResult.SelectedTemplate, openViewResult.SelectedEventSpecificData, openViewResult.MethodName, false, openViewResult.MethodCode);
+			GeneratedCodeInfo codeInfo = codeProvider.GenerateCodeInfo(openViewResult.SelectedTemplate, openViewResult.SelectedEventSpecificData, openViewResult.MethodName, false, openViewResult.MethodCode, openViewResult.IsUseVSFormattingCode);
 			projectManager.CreateMethodTree(codeInfo);
 
 			var methodInfo = new PackageMethodInfo()

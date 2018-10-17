@@ -52,6 +52,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		private string selectedIdentityKeyedName;
 		private string selectedIdentityId;
+		private bool isUseVSFormattingCode = true;
 
 		private ICommand okCommand;
 		private ICommand cancelCommand;
@@ -305,6 +306,12 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		{
 			get { return this.selectedIdentityId; }
 			set { }
+		}
+
+		public bool IsUseVSFormattingCode
+		{
+			get { return isUseVSFormattingCode; }
+			set { isUseVSFormattingCode = value; }
 		}
 
 		#endregion Properties

@@ -60,9 +60,9 @@ namespace Aras.VS.MethodPlugin.Code
 			return userCode;
 		}
 
-		public GeneratedCodeInfo GenerateCodeInfo(TemplateInfo template, EventSpecificDataType eventData, string methodName, bool useAdvancedCode, string codeToInsert)
+		public GeneratedCodeInfo GenerateCodeInfo(TemplateInfo template, EventSpecificDataType eventData, string methodName, bool useAdvancedCode, string codeToInsert, bool useCodeFormating)
 		{
-			GeneratedCodeInfo codeInfo = this.CreateWrapper(template, eventData, methodName);
+			GeneratedCodeInfo codeInfo = this.CreateWrapper(template, eventData, methodName, useCodeFormating);
 			codeInfo = this.CreateMainNew(codeInfo, template, eventData, methodName, useAdvancedCode, codeToInsert);
 			codeInfo = this.CreatePartialClasses(codeInfo);
 			codeInfo = this.CreateTestsNew(codeInfo, template, eventData, methodName, useAdvancedCode);
@@ -70,7 +70,7 @@ namespace Aras.VS.MethodPlugin.Code
 			return codeInfo;
 		}
 
-		public GeneratedCodeInfo CreateWrapper(TemplateInfo template, EventSpecificDataType eventData, string methodName)
+		public GeneratedCodeInfo CreateWrapper(TemplateInfo template, EventSpecificDataType eventData, string methodName, bool useVSFormating)
 		{
 			DefaultCodeTemplate defaultTemplate = LoadDefaultCodeTemplate(template, eventData);
 			string wrapperCode = defaultTemplate.WrapperSourceCode;
@@ -117,18 +117,13 @@ namespace Aras.VS.MethodPlugin.Code
 			resultCode = root.ToString().Replace("[WrapperMethod]", string.Empty);
 
 			GeneratedCodeInfo resultInfo = new GeneratedCodeInfo();
-			resultInfo.WrapperCodeInfo.Code = FormatingCode(resultCode);
+			resultInfo.WrapperCodeInfo.Code = useVSFormating ? FormatingCode(resultCode) : resultCode;
 			resultInfo.WrapperCodeInfo.Path = Path.Combine(methodName, methodName + "Wrapper.cs");
 			resultInfo.MethodName = methodName;
 			resultInfo.ClassName = clsname;
 			resultInfo.Namespace = pkgname;
 			resultInfo.MethodCodeParentClassName = parentClassName;
-
-            //TODO formating code doesn't support define
-            if (eventData.EventSpecificData != EventSpecificData.None)
-            {
-                resultInfo.WrapperCodeInfo.Code = resultInfo.WrapperCodeInfo.Code.Insert(0, "#define EventDataIsAvailable\r\n");
-            }
+			resultInfo.IsUseVSFormating = useVSFormating;
 
             return resultInfo;
 		}
@@ -154,6 +149,8 @@ namespace Aras.VS.MethodPlugin.Code
             {
                 code = code.Insert(0, "#define EventDataIsAvailable\r\n");
             }
+			
+			code = generatedCodeInfo.IsUseVSFormating ? this.FormatingCode(code) : code;
             generatedCodeInfo.MethodCodeInfo.Code = code;
 			generatedCodeInfo.MethodCodeInfo.Path = Path.Combine(methodName, methodName + ".cs");
 
@@ -249,14 +246,14 @@ namespace Aras.VS.MethodPlugin.Code
 			string partialClassTemplate = "{0}using Common;\r\nnamespace {3} \r\n{{public partial class {1} \r\n{{\r\n{2}\r\n}}\r\n}}";
 			foreach (var partialCodeInfo in resultGeneratedCode.PartialCodeInfoList)
 			{
-				string formatedCode = FormatingCode(string.Format(partialClassTemplate, partialUsings, resultGeneratedCode.MethodCodeParentClassName, partialCodeInfo.Code, resultGeneratedCode.Namespace));
-				partialCodeInfo.Code = formatedCode;
+				string code = string.Format(partialClassTemplate, partialUsings, resultGeneratedCode.MethodCodeParentClassName, partialCodeInfo.Code, resultGeneratedCode.Namespace);
+				partialCodeInfo.Code = resultGeneratedCode.IsUseVSFormating ? FormatingCode(code) : code;
 			}
 
 			return resultGeneratedCode;
 		}
 
-		public CodeInfo CreatePartialCodeInfo(MethodInfo methodInformation, string fileName)
+		public CodeInfo CreatePartialCodeInfo(MethodInfo methodInformation, string fileName, bool useVSFormating)
 		{
 			string serverMethodFolderPath = projectManager.ServerMethodFolderPath;
 			string selectedFolderPath = projectManager.SelectedFolderPath;
@@ -282,7 +279,7 @@ namespace Aras.VS.MethodPlugin.Code
 			}
 
 			EventSpecificDataType eventData = CommonData.EventSpecificDataTypeList.First(x => x.EventSpecificData == methodInformation.EventData);
-			GeneratedCodeInfo codeInfo = this.CreateWrapper(template, eventData, methodName);
+			GeneratedCodeInfo codeInfo = this.CreateWrapper(template, eventData, methodName, useVSFormating);
 
 			string methodCode = File.ReadAllText(projectManager.MethodPath, new UTF8Encoding(true));
 			var tree = CSharpSyntaxTree.ParseText(methodCode);
@@ -297,10 +294,11 @@ namespace Aras.VS.MethodPlugin.Code
 			}
 
 			string partialClassTemplate = "{0}using Common;\r\nnamespace {3} \r\n{{public partial class {1} \r\n{{\r\n//[PartialPath(\"{2}\")]\r\n}}\r\n}}";
+			string code = string.Format(partialClassTemplate, partialUsings, codeInfo.MethodCodeParentClassName, partialAttributePath, codeInfo.Namespace);
 			var partialCodeInfo = new CodeInfo()
 			{
 				Path = partialPath,
-				Code = FormatingCode(string.Format(partialClassTemplate, partialUsings, codeInfo.MethodCodeParentClassName, partialAttributePath, codeInfo.Namespace))
+				Code = useVSFormating ? FormatingCode(code) : code
 			};
 
 			return partialCodeInfo;
@@ -315,8 +313,7 @@ namespace Aras.VS.MethodPlugin.Code
 			code = code.Replace("$(pkgname)", resultCodeInfo.Namespace);
 			code = code.Replace("$(clsname)", resultCodeInfo.ClassName);
 
-			string formatedCode = FormatingCode(code);
-			resultCodeInfo.TestsCodeInfo.Code = formatedCode;
+			resultCodeInfo.TestsCodeInfo.Code = resultCodeInfo.IsUseVSFormating ? FormatingCode(code) : code;
 			resultCodeInfo.TestsCodeInfo.Path = Path.Combine(methodName, methodName + "Tests.cs");
 
 			return resultCodeInfo;

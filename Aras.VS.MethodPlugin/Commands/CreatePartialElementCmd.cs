@@ -107,7 +107,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			}
 
 			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language, projectConfiguration);
-			CodeInfo partialCodeInfo = codeProvider.CreatePartialCodeInfo(methodInformation, viewResult.FileName);
+			CodeInfo partialCodeInfo = codeProvider.CreatePartialCodeInfo(methodInformation, viewResult.FileName, viewResult.IsUseVSFormatingCode);
 
 			projectManager.AddItemTemplateToProjectNew(partialCodeInfo, true, 0);
 

@@ -12,6 +12,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 	{
 		private string fileName;
 		private bool isOkButtonEnabled;
+		private bool isUseVSFormatingCode = true;
 
 		private ICommand okCommand;
 		private ICommand cancelCommand;
@@ -46,6 +47,12 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				this.isOkButtonEnabled = value;
 				RaisePropertyChanged(nameof(IsOkButtonEnabled));
 			}
+		}
+
+		public bool IsUseVSFormattingCode
+		{
+			get { return isUseVSFormatingCode; }
+			set { isUseVSFormatingCode = value; }
 		}
 
 		#endregion

@@ -105,7 +105,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			var eventData = CommonData.EventSpecificDataTypeList.First(x => x.EventSpecificData == updateViewResult.EventSpecificData);
 
 			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language, projectConfiguration);
-			GeneratedCodeInfo codeInfo = codeProvider.GenerateCodeInfo(updateViewResult.SelectedTemplate, eventData, updateViewResult.MethodName, false, updateViewResult.MethodCode);
+			GeneratedCodeInfo codeInfo = codeProvider.GenerateCodeInfo(updateViewResult.SelectedTemplate, eventData, updateViewResult.MethodName, false, updateViewResult.MethodCode, updateViewResult.IsUseVSFormattingCode);
 			projectManager.CreateMethodTree(codeInfo);
 
 			var methodInfo = new MethodInfo()

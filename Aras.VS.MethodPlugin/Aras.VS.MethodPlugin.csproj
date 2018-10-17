@@ -588,6 +588,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Dialogs\Views\Styles\CheckBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Dialogs\Views\UpdateFromArasView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

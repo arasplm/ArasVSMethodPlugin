@@ -31,7 +31,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 				SelectedLanguage = viewModel.SelectedLanguage,
 				SelectedPackage = viewModel.SelectedPackage,
 				SelectedTemplate = viewModel.SelectedTemplate,
-				UseRecommendedDefaultCode = viewModel.UseRecommendedDefaultCode
+				UseRecommendedDefaultCode = viewModel.UseRecommendedDefaultCode,
+				IsUseVSFormatingCode = viewModel.IsUseVSFormattingCode
 			};
 		}
 	}

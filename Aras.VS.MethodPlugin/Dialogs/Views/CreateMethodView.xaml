@@ -27,6 +27,7 @@
                 <ResourceDictionary Source="Styles/LabelControl.xaml" />
                 <ResourceDictionary Source="Styles/TextBoxControl.xaml" />
                 <ResourceDictionary Source="Styles/Window.xaml" />
+                <ResourceDictionary Source="Styles/CheckBox.xaml" /> 
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -134,6 +135,16 @@
                 <Label Content="Use Recommended Default Code"/>
                 <CheckBox VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding Path=UseRecommendedDefaultCode}"/>
             </WrapPanel>
+
+            <Grid Grid.Row="7" HorizontalAlignment="Left">
+                <CheckBox Content="Use Visual Studio formating" FlowDirection="RightToLeft" Margin="10" IsChecked ="{Binding IsUseVSFormattingCode}" >
+                    <CheckBox.Resources>
+                        <Style TargetType="{x:Type Path}">
+                            <Setter Property="FlowDirection" Value="LeftToRight"/>
+                        </Style>
+                    </CheckBox.Resources>
+                </CheckBox>
+            </Grid>
 
             <WrapPanel Grid.Row="7" Grid.Column="2" HorizontalAlignment="Right">
                 <Button Content="OK" Width="70" Margin="5" 

@@ -15,9 +15,9 @@ namespace Aras.VS.MethodPlugin.Code
 
 		string LoadMethodCode(string sourceCode, MethodInfo methodInformation, string serverMethodFolderPath);
 
-		GeneratedCodeInfo GenerateCodeInfo(TemplateInfo template, EventSpecificDataType eventData, string methodName, bool useAdvancedCode, string codeToInsert);
+		GeneratedCodeInfo GenerateCodeInfo(TemplateInfo template, EventSpecificDataType eventData, string methodName, bool useAdvancedCode, string codeToInsert, bool useCodeFormating);
 
-		GeneratedCodeInfo CreateWrapper(TemplateInfo template, EventSpecificDataType eventData, string methodName);
+		GeneratedCodeInfo CreateWrapper(TemplateInfo template, EventSpecificDataType eventData, string methodName, bool useCodeFormating);
 
 		GeneratedCodeInfo CreateMainNew(GeneratedCodeInfo generatedCodeInfo,
 			TemplateInfo template,
@@ -28,7 +28,7 @@ namespace Aras.VS.MethodPlugin.Code
 
 		GeneratedCodeInfo CreatePartialClasses(GeneratedCodeInfo methodInfo);
 
-		CodeInfo CreatePartialCodeInfo(MethodInfo methodInfo, string fileName);
+		CodeInfo CreatePartialCodeInfo(MethodInfo methodInfo, string fileName, bool useCodeFormating);
 
 		GeneratedCodeInfo CreateTestsNew(GeneratedCodeInfo generatedCodeInfo, TemplateInfo template, EventSpecificDataType eventData, string methodName, bool useAdvancedCode);
 	}

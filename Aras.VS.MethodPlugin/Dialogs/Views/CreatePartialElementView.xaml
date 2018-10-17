@@ -5,7 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             Width="300"
+             Width="350"
              SizeToContent="Height" ResizeMode="NoResize"
              Title="Create partial element"
              Icon="/Aras.VS.MethodPlugin;component/Resources/aras.ico"
@@ -36,6 +36,14 @@
 
         <Label x:Name="FileNameLabel" Grid.Column="0" Content="File Name: " VerticalContentAlignment="Center" Margin="5, 5, 0, 5"/>
         <TextBox x:Name="FileNameTextBlock" Grid.Column="1" Text="{Binding Path=FileName, UpdateSourceTrigger=PropertyChanged}" Height="24" TextWrapping="Wrap" VerticalContentAlignment="Center" Margin="0, 5, 5, 5" />
+
+        <CheckBox Content="Use Visual Studio formating" FlowDirection="RightToLeft" Margin = "10"  VerticalAlignment="Center" HorizontalAlignment="Left" IsChecked ="{Binding IsUseVSFormattingCode}"  Grid.Row="1" Grid.ColumnSpan="2">
+            <CheckBox.Resources>
+                <Style TargetType="{x:Type Path}">
+                    <Setter Property="FlowDirection" Value="LeftToRight"/>
+                </Style>
+            </CheckBox.Resources>
+        </CheckBox>
 
         <WrapPanel Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom">
             <Button x:Name="OkButton" Content="OK" Command="{Binding Path=OKCommand}" CommandParameter="{Binding ElementName=CreatePartialElementWindow}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70" Margin="5"/>

@@ -38,6 +38,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private string methodConfigId;
 		private string methodId;
 		private string selectedManifestFilePath;
+		private bool isUseVSFormattingCode = true;
 
 		private ICommand folderBrowserCommand;
 		private ICommand okCommand;
@@ -184,6 +185,12 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				selectedManifestFilePath = value;
 				RaisePropertyChanged(nameof(SelectedManifestFilePath));
 			}
+		}
+
+		public bool IsUseVSFormattingCode
+		{
+			get { return isUseVSFormattingCode; }
+			set { isUseVSFormattingCode = value; }
 		}
 
 		#endregion
