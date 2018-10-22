@@ -136,22 +136,31 @@ namespace Aras.VS.MethodPlugin.Code
 			string codeToInsert)
 		{
 			DefaultCodeTemplate defaultTemplate = LoadDefaultCodeTemplate(template, eventData);
-			string code = useAdvancedCode ? defaultTemplate.AdvancedSourceCode : defaultTemplate.SimpleSourceCode;
+			StringBuilder code = new StringBuilder(useAdvancedCode ? defaultTemplate.AdvancedSourceCode : defaultTemplate.SimpleSourceCode);
 			code = code.Replace("$(pkgname)", generatedCodeInfo.Namespace);
 		    code = code.Replace("$(clsname)", generatedCodeInfo.ClassName);
 
 			if (!string.IsNullOrEmpty(codeToInsert))
 			{
-				var defaultCode = GetSourceCodeBetweenRegion(code);
-				code = code.Replace(defaultCode + "#endregion MethodCode", codeToInsert + "#endregion MethodCode");
+                string codeString = code.ToString();
+				var defaultCode = GetSourceCodeBetweenRegion(codeString);
+                if (string.IsNullOrWhiteSpace(defaultCode))
+                {
+                    var insertPattern = "#region MethodCode\r\n";
+                    var insertIndex = codeString.IndexOf(insertPattern);
+                    code = code.Insert(insertIndex + insertPattern.Length, codeToInsert);
+                }
+                else
+                {
+                    code = code.Replace(defaultCode, codeToInsert);
+                }
 			}
             if (eventData.EventSpecificData != EventSpecificData.None)
             {
                 code = code.Insert(0, "#define EventDataIsAvailable\r\n");
             }
 			
-			code = generatedCodeInfo.IsUseVSFormating ? this.FormatingCode(code) : code;
-            generatedCodeInfo.MethodCodeInfo.Code = code;
+            generatedCodeInfo.MethodCodeInfo.Code = generatedCodeInfo.IsUseVSFormating ? this.FormatingCode(code.ToString()) : code.ToString();
 			generatedCodeInfo.MethodCodeInfo.Path = Path.Combine(methodName, methodName + ".cs");
 
 			return generatedCodeInfo;
@@ -199,7 +208,8 @@ namespace Aras.VS.MethodPlugin.Code
 						int indexofEndRegion = partialString.IndexOf("#endregion MethodCode");
 						stringForReplace = partialString.Substring(indexofEndRegion, partialString.Length - indexofEndRegion);
 						partialString = partialString.Replace(stringForReplace, "}");
-					}
+                        stringForReplace = '\t' + stringForReplace;
+                    }
 
 					var existingPartialInfo = resultGeneratedCode.PartialCodeInfoList.FirstOrDefault(pi => pi.Path == path);
 					if (existingPartialInfo != null)
@@ -224,10 +234,15 @@ namespace Aras.VS.MethodPlugin.Code
 						}
 						while (endMethodIndex > 0 && currentCharacter != '}');
 
-						var stringBuilder = new StringBuilder(resultGeneratedCode.MethodCodeInfo.Code);
-						stringBuilder.Replace(Environment.NewLine, string.Empty, endMethodIndex + 2, endRegionIndex - endMethodIndex - 3);
-						stringBuilder.Remove(endMethodIndex + 1, 1);
-						resultGeneratedCode.MethodCodeInfo.Code = stringBuilder.ToString();
+                        currentCharacter = default(char);
+                        while (currentCharacter != '\r')
+                        {
+                            currentCharacter = resultGeneratedCode.MethodCodeInfo.Code[endRegionIndex];
+                            endRegionIndex--;
+                        }
+                        var endRegionEndString = resultGeneratedCode.MethodCodeInfo.Code.Substring(endRegionIndex + 1);
+                        var beginRegionEndString = resultGeneratedCode.MethodCodeInfo.Code.Remove(endMethodIndex + 1).TrimEnd(new char[] {' ', '\r','\n'});
+                        resultGeneratedCode.MethodCodeInfo.Code = beginRegionEndString + endRegionEndString;
 					}
 				}
 			}
