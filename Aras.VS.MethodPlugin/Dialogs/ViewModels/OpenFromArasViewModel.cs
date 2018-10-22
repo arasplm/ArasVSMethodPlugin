@@ -49,7 +49,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private string identityKeyedName;
 		private string identityId;
 		private string package;
-		private bool isUseVSFormattingCode = true;
+		private bool isUseVSFormattingCode;
 
 		private ICommand editConnectionInfoCommand;
 		private ICommand searchMethodDialogCommand;
@@ -86,8 +86,10 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.projectName = projectName;
 			this.projectFullName = projectFullName;
 			this.projectLanguage = projectLanguage;
+            this.isUseVSFormattingCode = projectConfiguration.UseVSFormatting;
 
-			this.editConnectionInfoCommand = new RelayCommand<object>(EditConnectionInfoCommandClicked);
+
+            this.editConnectionInfoCommand = new RelayCommand<object>(EditConnectionInfoCommandClicked);
 			this.searchMethodDialogCommand = new RelayCommand<object>(SearchMethodDialogCommandClicked);
 			this.okCommand = new RelayCommand<object>(OkCommandCliked, IsEnabledOkButton);
 			this.closeCommand = new RelayCommand<object>(OnCloseCliked);

@@ -130,6 +130,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			};
 
 			projectConfiguration.AddMethodInfo(methodInfo);
+            projectConfiguration.UseVSFormatting = openViewResult.IsUseVSFormattingCode;
 			projectConfigurationManager.Save(projectConfigPath, projectConfiguration);
 		}
 	}

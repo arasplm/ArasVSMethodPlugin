@@ -121,9 +121,9 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			return new OpenFromArasViewAdapter(view);
 		}
 
-		public OpenFromPackageViewAdapter GetOpenFromPackageView(IVsUIShell uiShell, TemplateLoader templateLoader, string projectLanguage, string lastSelectedDirectory)
+		public OpenFromPackageViewAdapter GetOpenFromPackageView(IVsUIShell uiShell, TemplateLoader templateLoader, string projectLanguage, string lastSelectedDirectory, bool useVSFormattingCode)
 		{
-			var viewModel = new OpenFromPackageViewModel(templateLoader, projectLanguage, lastSelectedDirectory);
+			var viewModel = new OpenFromPackageViewModel(templateLoader, projectLanguage, lastSelectedDirectory, useVSFormattingCode);
 			var view = new OpenFromPackageView();
 			view.DataContext = viewModel;
 
@@ -189,9 +189,9 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			return new UpdateFromArasViewAdapter(view);
 		}
 
-		public CreatePartialElementViewAdapter GetCreatePartialClassView(IVsUIShell uiShell)
+		public CreatePartialElementViewAdapter GetCreatePartialClassView(IVsUIShell uiShell, bool usedVSFormatting)
 		{
-			var viewModel = new CreatePartialElementViewModel();
+			var viewModel = new CreatePartialElementViewModel(usedVSFormatting);
 			var view = new CreatePartialElementView();
 			view.DataContext = viewModel;
 

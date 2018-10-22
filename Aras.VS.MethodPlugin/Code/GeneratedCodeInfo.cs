@@ -16,7 +16,7 @@ namespace Aras.VS.MethodPlugin.Code
 			this.Namespace = codeInfo.Namespace;
 			this.MethodName = codeInfo.MethodName;
 			this.MethodCodeParentClassName = codeInfo.MethodCodeParentClassName;
-			this.IsUseVSFormating = codeInfo.IsUseVSFormating;
+			this.IsUseVSFormatting = codeInfo.IsUseVSFormatting;
 			WrapperCodeInfo = new CodeInfo() { Code = codeInfo.WrapperCodeInfo.Code, Path = codeInfo.WrapperCodeInfo.Path };
 			MethodCodeInfo = new CodeInfo() { Code = codeInfo.MethodCodeInfo.Code, Path = codeInfo.MethodCodeInfo.Path };
 			PartialCodeInfoList = new List<CodeInfo>(codeInfo.PartialCodeInfoList); // check references in list
@@ -48,6 +48,6 @@ namespace Aras.VS.MethodPlugin.Code
 
 		public CodeInfo TestsCodeInfo { get; set; }
 
-		public bool IsUseVSFormating{ get; set; }
+		public bool IsUseVSFormatting{ get; set; }
 	}
 }

@@ -90,7 +90,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			var templateLoader = new TemplateLoader();
 			templateLoader.Load(methodConfigPath);
 
-			var openView = dialogFactory.GetOpenFromPackageView(projectManager.UIShell, templateLoader, codeProvider.Language, projectConfiguration.LastSelectedDir);
+			var openView = dialogFactory.GetOpenFromPackageView(projectManager.UIShell, templateLoader, codeProvider.Language, projectConfiguration.LastSelectedDir, projectConfiguration.UseVSFormatting);
 
 			var openViewResult = openView.ShowDialog();
 			if (openViewResult?.DialogOperationResult != true)
@@ -141,6 +141,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			};
 
 			projectConfiguration.LastSelectedDir = openViewResult.SelectedFolderPath;
+            projectConfiguration.UseVSFormatting = openViewResult.IsUseVSFormattingCode;
 			projectConfiguration.AddMethodInfo(methodInfo);
 			projectConfigurationManager.Save(projectConfigPath, projectConfiguration);
 		}

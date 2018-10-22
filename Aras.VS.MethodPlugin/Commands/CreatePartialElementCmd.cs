@@ -91,7 +91,7 @@ namespace Aras.VS.MethodPlugin.Commands
 				throw new Exception($"Configurations for the {selectedMethodName} method not found.");
 			}
 			
-			CreatePartialElementViewAdapter view = dialogFactory.GetCreatePartialClassView(uiShell);
+			CreatePartialElementViewAdapter view = dialogFactory.GetCreatePartialClassView(uiShell, projectConfiguration.UseVSFormatting);
 			var viewResult = view.ShowDialog();
 			if (viewResult?.DialogOperationResult != true)
 			{
@@ -107,11 +107,11 @@ namespace Aras.VS.MethodPlugin.Commands
 			}
 
 			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language, projectConfiguration);
-			CodeInfo partialCodeInfo = codeProvider.CreatePartialCodeInfo(methodInformation, viewResult.FileName, viewResult.IsUseVSFormatingCode);
+			CodeInfo partialCodeInfo = codeProvider.CreatePartialCodeInfo(methodInformation, viewResult.FileName, viewResult.IsUseVSFormattingCode);
 
 			projectManager.AddItemTemplateToProjectNew(partialCodeInfo, true, 0);
-
 			methodInformation.PartialClasses.Add(partialCodeInfo.Path);
+            projectConfiguration.UseVSFormatting = viewResult.IsUseVSFormattingCode;
 			projectConfigurationManager.Save(projectManager.ProjectConfigPath, projectConfiguration);
 		}
 	}

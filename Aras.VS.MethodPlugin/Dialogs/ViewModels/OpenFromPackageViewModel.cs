@@ -38,21 +38,22 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private string methodConfigId;
 		private string methodId;
 		private string selectedManifestFilePath;
-		private bool isUseVSFormattingCode = true;
+		private bool isUseVSFormattingCode;
 
 		private ICommand folderBrowserCommand;
 		private ICommand okCommand;
 		private ICommand closeCommand;
 
-		public OpenFromPackageViewModel(TemplateLoader templateLoader, string projectLanguage, string lastSelectedDirectory)
+		public OpenFromPackageViewModel(TemplateLoader templateLoader, string projectLanguage, string lastSelectedDirectory, bool useVSFormatting)
 		{
 			if (templateLoader == null) throw new ArgumentNullException(nameof(templateLoader));
 
 			this.templateLoader = templateLoader;
 			this.projectLanguage = projectLanguage;
 			this.selectedFolderPath = lastSelectedDirectory;
+            this.isUseVSFormattingCode = useVSFormatting;
 
-			folderBrowserCommand = new RelayCommand<object>(OnFolderBrowserCommandClicked);
+            folderBrowserCommand = new RelayCommand<object>(OnFolderBrowserCommandClicked);
 			okCommand = new RelayCommand<object>(OnOkClicked, IsOkButtonEnabled);
 			closeCommand = new RelayCommand<object>(OnCloseCliked);
 

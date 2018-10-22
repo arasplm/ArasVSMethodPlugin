@@ -86,7 +86,7 @@ namespace Aras.VS.MethodPlugin.Commands
 				return;
 			}
 
-			GeneratedCodeInfo codeInfo = codeProvider.GenerateCodeInfo(createViewResult.SelectedTemplate, createViewResult.SelectedEventSpecificData, createViewResult.MethodName, createViewResult.UseRecommendedDefaultCode, string.Empty, createViewResult.IsUseVSFormatingCode);
+			GeneratedCodeInfo codeInfo = codeProvider.GenerateCodeInfo(createViewResult.SelectedTemplate, createViewResult.SelectedEventSpecificData, createViewResult.MethodName, createViewResult.UseRecommendedDefaultCode, string.Empty, createViewResult.IsUseVSFormattingCode);
 			projectManager.CreateMethodTree(codeInfo);
 
 			string newInnovatorMethodId = authManager.InnovatorInstance.getNewID();
@@ -107,7 +107,8 @@ namespace Aras.VS.MethodPlugin.Commands
 			};
 
 			projectConfiguration.AddMethodInfo(methodInfo);
-			projectConfigurationManager.Save(projectManager.ProjectConfigPath, projectConfiguration);
+            projectConfiguration.UseVSFormatting = createViewResult.IsUseVSFormattingCode;
+            projectConfigurationManager.Save(projectManager.ProjectConfigPath, projectConfiguration);
 		}
 	}
 }

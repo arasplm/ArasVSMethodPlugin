@@ -43,7 +43,7 @@ namespace Aras.VS.MethodPlugin.Dialogs
 		   string projectFullName,
 		   string projectLanguage);
 
-		OpenFromPackageViewAdapter GetOpenFromPackageView(IVsUIShell uiShell, TemplateLoader templateLoader, string projectLanguage, string lastSelectedDirectory);
+		OpenFromPackageViewAdapter GetOpenFromPackageView(IVsUIShell uiShell, TemplateLoader templateLoader, string projectLanguage, string lastSelectedDirectory, bool useVSFormatting);
 
 		SaveMethodViewAdapter GetSaveToArasView(IVsUIShell uiShell,
 			ProjectConfigurationManager projectConfigurationManager,
@@ -74,7 +74,7 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			string projectName,
 			string projectFullName);
 
-		CreatePartialElementViewAdapter GetCreatePartialClassView(IVsUIShell uiShell);
+		CreatePartialElementViewAdapter GetCreatePartialClassView(IVsUIShell uiShell, bool usedVSFormatting);
 
 		DebugMethodViewAdapter GetDebugMethodView(IVsUIShell uiShell,
 			ProjectConfigurationManager projectConfigurationManager,

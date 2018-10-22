@@ -32,7 +32,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 				SelectedPackage = viewModel.SelectedPackage,
 				SelectedTemplate = viewModel.SelectedTemplate,
 				UseRecommendedDefaultCode = viewModel.UseRecommendedDefaultCode,
-				IsUseVSFormatingCode = viewModel.IsUseVSFormattingCode
+				IsUseVSFormattingCode = viewModel.IsUseVSFormattingCode
 			};
 		}
 	}

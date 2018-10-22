@@ -52,7 +52,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		private string selectedIdentityKeyedName;
 		private string selectedIdentityId;
-		private bool isUseVSFormattingCode = true;
+		private bool isUseVSFormattingCode;
 
 		private ICommand okCommand;
 		private ICommand cancelCommand;
@@ -84,6 +84,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.packageManager = packageManager;
 			this.projectManager = projectManager;
 			this.arasDataProvider = arasDataProvider;
+            this.isUseVSFormattingCode = projectConfiguration.UseVSFormatting;
 
 			this.methodItemTypeInfo = arasDataProvider.GetMethodItemTypeInfo();
 			this.MethodNameMaxLength = methodItemTypeInfo.NameStoredLength;
