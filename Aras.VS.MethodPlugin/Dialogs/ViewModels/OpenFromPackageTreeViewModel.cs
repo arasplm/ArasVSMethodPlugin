@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -29,6 +30,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private ICommand okCommand;
 		private ICommand closeCommand;
 		private ICommand pathChangeCommand;
+        private ICommand cancelCommand;
 
 		public OpenFromPackageTreeViewModel(string lastSelectedManifestFilePath, string lastSelectedPackage, string lastSelectedMethod)
 		{
@@ -38,6 +40,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.okCommand = new RelayCommand<object>(OkCommandClick);
 			this.closeCommand = new RelayCommand<object>(OnCloseCliked);
 			this.pathChangeCommand = new RelayCommand<object>(OnPathChange);
+            this.cancelCommand = new RelayCommand<object>(OnCloseCliked);
 
 			if (!string.IsNullOrEmpty(lastSelectedManifestFilePath))
 			{
@@ -47,9 +50,9 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			}
 		}
 
-		#region Properties
+        #region Properties
 
-		public SelectPathViewModel SelectPathViewModel
+        public SelectPathViewModel SelectPathViewModel
 		{
 			get { return selectPathViewModel; }
 			set { selectPathViewModel = value; RaisePropertyChanged(nameof(SelectPathViewModel)); }
@@ -112,9 +115,11 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		public ICommand CloseCommand { get { return closeCommand; } }
 
 		public ICommand PathChangeCommand { get { return pathChangeCommand; } }
-		#endregion
 
-		private void OnSelectDirectoryItem(string fullPath)
+        public ICommand CancelCommand { get { return cancelCommand; } }
+        #endregion
+
+        private void OnSelectDirectoryItem(string fullPath)
 		{
 			this.rootFolderPath = Path.GetDirectoryName(fullPath);
 
@@ -161,7 +166,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			(view as Window).Close();
 		}
 
-		private void OnPathChange(object window)
+        private void OnPathChange(object window)
 		{
 			var wnd = window as Window;
 			var path = SelectPathViewModel.SelectedPath;

@@ -284,7 +284,7 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 
 			return from item in items.Cast<UIHierarchyItem>()
 				   let pi = item.Object as ProjectItem
-				   select pi.FileNames[1];
+				   select pi?.FileNames[1];
 		}
 
 		public void CreateMethodTree(GeneratedCodeInfo generatedCodeInfo)

@@ -41,12 +41,15 @@ namespace Aras.VS.MethodPlugin.ProjectConfigurations
 		private XmlDocument MapProjectConfigToXmlDoc(ProjectConfiguraiton configuration)
 		{
 			//TODO: Refactoring: move to constant. All hardcoded sting should be constants if using more then 2 times.
-			string configTempalte = "<?xml version = '1.0\' encoding = 'utf-8' ?><projectinfo><lastSelectedDir></lastSelectedDir><connections></connections><methods></methods><lastSavedSearch></lastSavedSearch><useVSFormatting></useVSFormatting></projectinfo>";
+			string configTempalte = "<?xml version = '1.0\' encoding = 'utf-8' ?><projectinfo><lastSelectedDir></lastSelectedDir><lastSelectedMfFile></lastSelectedMfFile><connections></connections><methods></methods><lastSavedSearch></lastSavedSearch><useVSFormatting></useVSFormatting></projectinfo>";
 
 			var xmlDoc = new XmlDocument();
 			xmlDoc.LoadXml(configTempalte);
 			var lastSelectedDir = xmlDoc.SelectSingleNode("projectinfo/lastSelectedDir");
 			lastSelectedDir.InnerText = configuration.LastSelectedDir;
+
+            var lastSelectedMfFile = xmlDoc.SelectSingleNode("projectinfo/lastSelectedMfFile");
+            lastSelectedMfFile.InnerText = configuration.LastSelectedMfFile;
 
             var usedVSFormat = xmlDoc.SelectSingleNode("projectinfo/useVSFormatting");
             usedVSFormat.InnerText = configuration.UseVSFormatting.ToString();
@@ -187,9 +190,8 @@ namespace Aras.VS.MethodPlugin.ProjectConfigurations
 			var projectConfiguration = new ProjectConfiguraiton();
 
 			projectConfiguration.LastSelectedDir = xmlDoc.SelectSingleNode("projectinfo/lastSelectedDir")?.InnerText;
-
+            projectConfiguration.LastSelectedMfFile = xmlDoc.SelectSingleNode("projectinfo/lastSelectedMfFile")?.InnerText;
             bool.TryParse(xmlDoc.SelectSingleNode("projectinfo/useVSFormatting")?.InnerText, out bool isUsedVSFormatting);
-
             projectConfiguration.UseVSFormatting = isUsedVSFormatting;
 
             var connectionInfoXmlNodes = xmlDoc.SelectNodes("projectinfo/connections/connectionInfo");

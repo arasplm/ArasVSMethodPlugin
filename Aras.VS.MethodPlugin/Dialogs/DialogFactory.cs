@@ -121,9 +121,9 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			return new OpenFromArasViewAdapter(view);
 		}
 
-		public OpenFromPackageViewAdapter GetOpenFromPackageView(IVsUIShell uiShell, TemplateLoader templateLoader, string projectLanguage, string lastSelectedDirectory, bool useVSFormattingCode)
+		public OpenFromPackageViewAdapter GetOpenFromPackageView(IVsUIShell uiShell, TemplateLoader templateLoader, string projectLanguage, ProjectConfiguraiton projectConfiguration)
 		{
-			var viewModel = new OpenFromPackageViewModel(templateLoader, projectLanguage, lastSelectedDirectory, useVSFormattingCode);
+			var viewModel = new OpenFromPackageViewModel(templateLoader, projectLanguage, projectConfiguration);
 			var view = new OpenFromPackageView();
 			view.DataContext = viewModel;
 

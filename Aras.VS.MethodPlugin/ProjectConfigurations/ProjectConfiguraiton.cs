@@ -138,6 +138,8 @@ namespace Aras.VS.MethodPlugin.ProjectConfigurations
 
 		public string LastSelectedDir { get; set; }
 
+        public string LastSelectedMfFile { get; set; }
+
         public bool UseVSFormatting { get; set; }
 
 		public List<ConnectionInfo> Connections { get; private set; }

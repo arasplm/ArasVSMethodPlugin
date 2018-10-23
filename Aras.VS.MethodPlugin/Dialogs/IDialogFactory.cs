@@ -43,7 +43,7 @@ namespace Aras.VS.MethodPlugin.Dialogs
 		   string projectFullName,
 		   string projectLanguage);
 
-		OpenFromPackageViewAdapter GetOpenFromPackageView(IVsUIShell uiShell, TemplateLoader templateLoader, string projectLanguage, string lastSelectedDirectory, bool useVSFormatting);
+		OpenFromPackageViewAdapter GetOpenFromPackageView(IVsUIShell uiShell, TemplateLoader templateLoader, string projectLanguage, ProjectConfiguraiton projectConfiguraiton);
 
 		SaveMethodViewAdapter GetSaveToArasView(IVsUIShell uiShell,
 			ProjectConfigurationManager projectConfigurationManager,
