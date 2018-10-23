@@ -415,7 +415,7 @@ namespace Aras.VS.MethodPlugin.Code
 
 		private string GetSourceCodeBetweenRegion(string codeWithRegion)
 		{
-			string startRegionPattern = @"#region MethodCode[\s]*";
+			string startRegionPattern = @"#region MethodCode\r\n";
 			string endRegionPattern = @"#endregion MethodCode";
 
 			var startMatch = Regex.Match(codeWithRegion, startRegionPattern);
