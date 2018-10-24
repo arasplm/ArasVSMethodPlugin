@@ -190,9 +190,9 @@ namespace Aras.VS.MethodPlugin.Commands
 
 			string updateMethodCodeForSavingToAmlPackage = saveViewResult.MethodCode.Replace("]]", "]]]]><![CDATA[");
 			string methodTemplate = $@"<AML>
- <Item type=""Method"" id=""{methodId}"" action=""add"">
-  <comments>{saveViewResult.MethodComment}</comments>
-  <execution_allowed_to keyed_name=""{saveViewResult.SelectedIdentityKeyedName}"" type=""Identity"">{saveViewResult.SelectedIdentityId}</execution_allowed_to>
+ <Item type=""Method"" id=""{methodId}"" action=""add"">" + 
+  (!string.IsNullOrWhiteSpace(saveViewResult.MethodComment) ? $"<comments>{saveViewResult.MethodComment}</comments>" : "") +
+  $@"<execution_allowed_to keyed_name=""{saveViewResult.SelectedIdentityKeyedName}"" type=""Identity"">{saveViewResult.SelectedIdentityId}</execution_allowed_to>
   <method_code><![CDATA[{updateMethodCodeForSavingToAmlPackage}]]></method_code>
   <method_type>{saveViewResult.MethodInformation.MethodLanguage}</method_type>
   <name>{saveViewResult.MethodName}</name>
