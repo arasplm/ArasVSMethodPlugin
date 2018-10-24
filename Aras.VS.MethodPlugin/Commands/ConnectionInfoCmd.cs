@@ -25,10 +25,10 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// </summary>
 		public const int CommandId = 0x104;
 
-		/// <summary>
-		/// Command menu group (command set GUID).
-		/// </summary>
-		public static readonly Guid CommandSet = new Guid("E15DDF0A-1B6E-46A8-8B78-AEC2A7BB4922");
+        /// <summary>
+        /// Command menu group (command set GUID).
+        /// </summary>
+        public static readonly Guid CommandSet = CommandIds.ConnectionInfo;
 
 		private readonly IAuthenticationManager authManager;
 

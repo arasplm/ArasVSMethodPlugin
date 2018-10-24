@@ -76,7 +76,7 @@ namespace Aras.VS.MethodPlugin.Commands
 		protected void CheckCommandAccessibility(object sender, EventArgs e)
 		{
 			var command = (OleMenuCommand)sender;
-			if (this.projectManager.SolutionHasProject && this.projectManager.IsArasProject)
+			if (this.projectManager.SolutionHasProject && this.projectManager.IsArasProject && this.projectManager.IsCommandForMethod(command.CommandID.Guid))
 			{
 				command.Enabled = true;
 				return;

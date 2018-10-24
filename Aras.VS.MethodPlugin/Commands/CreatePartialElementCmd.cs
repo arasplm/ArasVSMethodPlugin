@@ -30,17 +30,17 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// </summary>
 		public const int CommandId = 0x0101;
 
-		/// <summary>
-		/// Command menu group (command set GUID).
-		/// </summary>
-		public static readonly Guid CommandSet = new Guid("714c822b-ebc4-4413-89b5-c93eaed863fc");
+        /// <summary>
+        /// Command menu group (command set GUID).
+        /// </summary>
+        public static readonly Guid CommandSet = CommandIds.CreatePartialElement;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="CreatePartialElementCmd"/> class.
-		/// Adds our command handlers for menu (commands must exist in the command table file)
-		/// </summary>
-		/// <param name="package">Owner package, not null.</param>
-		private CreatePartialElementCmd(IProjectManager projectManager,IDialogFactory dialogFactory, ProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CreatePartialElementCmd"/> class.
+        /// Adds our command handlers for menu (commands must exist in the command table file)
+        /// </summary>
+        /// <param name="package">Owner package, not null.</param>
+        private CreatePartialElementCmd(IProjectManager projectManager,IDialogFactory dialogFactory, ProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory)
 			: base(projectManager, dialogFactory, projectConfigurationManager)
 		{
 			if (codeProviderFactory == null) throw new ArgumentNullException(nameof(codeProviderFactory));

@@ -26,12 +26,13 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// </summary>
 		public const int CommandId = 0x0101;
 
-		/// <summary>
-		/// Command menu group (command set GUID).
-		/// </summary>
-		public static readonly Guid CommandSet = new Guid("DB77AE9E-9CB5-4C13-9EB3-ED388DC94B66");
+        /// <summary>
+        /// Command menu group (command set GUID).
+        /// </summary>
+        public static readonly Guid CommandSet = CommandIds.RefreshConfig;
 
-		private RefreshConfigCmd(IProjectManager projectManager, IDialogFactory dialogFactory, ProjectConfigurationManager projectConfigurationManager)
+
+        private RefreshConfigCmd(IProjectManager projectManager, IDialogFactory dialogFactory, ProjectConfigurationManager projectConfigurationManager)
 			: base(projectManager, dialogFactory, projectConfigurationManager)
 		{
 			if (projectManager.CommandService != null)

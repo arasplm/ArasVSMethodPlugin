@@ -86,6 +86,7 @@
     <Compile Include="Code\ICodeProviderFactory.cs" />
     <Compile Include="Commands\AuthenticationCommandBase.cs" />
     <Compile Include="Commands\CmdBase.cs" />
+    <Compile Include="Commands\CommandIdsList.cs" />
     <Compile Include="Commands\DebugMethodCmd.cs" />
     <Compile Include="Commands\RefreshConfigCmd.cs" />
     <Compile Include="Commands\CreatePartialElementCmd.cs" />

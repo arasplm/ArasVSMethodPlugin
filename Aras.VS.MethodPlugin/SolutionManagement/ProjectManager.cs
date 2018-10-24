@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Interop;
 using Aras.VS.MethodPlugin.Code;
+using Aras.VS.MethodPlugin.Commands;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.Extensions;
@@ -106,7 +107,7 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 
 				if (string.IsNullOrEmpty(mainFilePath))
 				{
-					throw new Exception("Method not found.");
+                    return null;
 				}
 
 				return mainFilePath;
@@ -250,7 +251,27 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 			}
 		}
 
-		public VisualStudioWorkspace VisualStudioWorkspace
+        public bool IsCommandForMethod(Guid commandId)
+        {
+                var listOfMethodNotDependentOfSelection = new List<Guid> {
+                    CommandIds.CreateMethod,
+                    CommandIds.OpenFromAras,
+                    CommandIds.OpenFromPackage,
+                    CommandIds.ConnectionInfo,
+                    CommandIds.RefreshConfig,
+                };
+                if (listOfMethodNotDependentOfSelection.Contains(commandId))
+                {
+                    return true;
+                }
+                if(string.IsNullOrEmpty(MethodName))
+                {
+                    return false;
+                }
+                return true;
+        }
+
+        public VisualStudioWorkspace VisualStudioWorkspace
 		{
 			get
 			{
@@ -264,7 +285,7 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 			}
 		}
 
-		private Project GetFirstSelectedProject()
+        private Project GetFirstSelectedProject()
 		{
 			var dte2 = (DTE2)serviceProvider.GetService(typeof(DTE));
 			var solutionProjects = dte2.ActiveSolutionProjects as Array;
