@@ -1,0 +1,21 @@
+﻿using Aras.IOM;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Web;
+using System.Web.SessionState;
+using System.Xml;
+using System.Collections;
+using Common;
+namespace ArasPKGCreatePartialCodeInfo 
+{public partial class ItemMethod 
+{
+//[PartialPath("TestFile")]
+}
+}

@@ -1,0 +1,78 @@
+﻿using Aras.IOM;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Web;
+using System.Web.SessionState;
+using System.Xml;
+
+namespace ArasPKGTestMethod
+{
+public partial class ItemMethod : Item
+{
+    public ItemMethod(IServerConnection arg): base (arg)
+    {
+    }
+
+#if EventDataIsAvailable
+		public Item methodCode()
+		{
+			return methodCode( null );
+		}
+
+		public Item methodCode( eventData)
+ #else
+    public Item methodCode()
+#endif
+    {
+        Aras.Server.Core.CallContext CCO = ((Aras.Server.Core.IOMConnection)serverConnection).CCO;
+        Aras.Server.Core.IContextState RequestState = CCO.RequestState;
+     return 
+    ArasPKGTestMethodItemMethod(CCO, RequestState);
+}    }
+  
+    public class ArasCLSTestMethod: Aras.Server.Core.IInnovatorServerMethod
+    {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1725:ParameterNamesShouldMatchBaseDeclaration", MessageId = "0#")]
+#if EventDataIsAvailable
+        public void FNCMethod(IServerConnection InnovatorServerASP, XmlDocument inDom,  eventData, XmlDocument outDom)
+#else
+        public void FNCMethod(IServerConnection InnovatorServerASP, XmlDocument inDom, XmlDocument outDom)
+#endif
+        {
+        ItemMethod inItem = null;
+        Item outItem = null;
+        inItem = new ItemMethod(InnovatorServerASP);
+        if (inDom != null)
+        {
+            inItem.dom = inDom;
+            XmlNodeList nodes = inDom.SelectNodes("//Item[not(ancestor::node()[local-name()='Item'])]");
+            if (nodes.Count == 1)
+            {
+                inItem.node = (XmlElement)nodes[0];
+            }
+            else
+            {
+                inItem.node = null;
+                inItem.nodeList = nodes;
+            }
+        }
+
+#if EventDataIsAvailable
+      outItem = inItem.methodCode(eventData);
+#else
+      outItem = inItem.methodCode();
+#endif
+      if (outItem != null && outDom != null)
+      {
+          outDom.ReplaceChild(outDom.ImportNode(outItem.dom.DocumentElement, true), outDom.FirstChild);
+      }
+    }
+  }
+}

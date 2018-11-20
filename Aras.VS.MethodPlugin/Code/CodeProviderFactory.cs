@@ -25,7 +25,7 @@ namespace Aras.VS.MethodPlugin.Code
 			this.defaultCodeProvider = defaultCodeProvider;
 		}
 
-		public ICodeProvider GetCodeProvider(string projectLanguageCode, ProjectConfiguraiton projectConfiguration)
+		public ICodeProvider GetCodeProvider(string projectLanguageCode, IProjectConfiguraiton projectConfiguration)
 		{
 			string projectLanguage = string.Empty;
 			ICodeProvider codeProvider = null;

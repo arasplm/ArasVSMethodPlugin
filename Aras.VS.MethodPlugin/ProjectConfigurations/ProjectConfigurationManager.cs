@@ -13,16 +13,16 @@ using Aras.VS.MethodPlugin.ItemSearch;
 
 namespace Aras.VS.MethodPlugin.ProjectConfigurations
 {
-	public class ProjectConfigurationManager
-	{
-		public ProjectConfiguraiton Load(string configFilePath)
+	public class ProjectConfigurationManager : IProjectConfigurationManager
+    {
+		public IProjectConfiguraiton Load(string configFilePath)
 		{
 			XmlDocument doc = new XmlDocument();
 			doc.Load(configFilePath);
 			return MapXmlDocToProjectConfig(doc);
 		}
 
-		public void Save(string configFilePath, ProjectConfiguraiton configuration)
+		public void Save(string configFilePath, IProjectConfiguraiton configuration)
 		{
 			XmlDocument xmlDoc = MapProjectConfigToXmlDoc(configuration);
 			XmlWriterSettings settings = new XmlWriterSettings();
@@ -38,7 +38,7 @@ namespace Aras.VS.MethodPlugin.ProjectConfigurations
 			//xmlDoc.Save(configFilePath);
 		}
 
-		private XmlDocument MapProjectConfigToXmlDoc(ProjectConfiguraiton configuration)
+		private XmlDocument MapProjectConfigToXmlDoc(IProjectConfiguraiton configuration)
 		{
 			//TODO: Refactoring: move to constant. All hardcoded sting should be constants if using more then 2 times.
 			string configTempalte = "<?xml version = '1.0\' encoding = 'utf-8' ?><projectinfo><lastSelectedDir></lastSelectedDir><lastSelectedMfFile></lastSelectedMfFile><connections></connections><methods></methods><lastSavedSearch></lastSavedSearch><useVSFormatting></useVSFormatting></projectinfo>";
@@ -185,7 +185,7 @@ namespace Aras.VS.MethodPlugin.ProjectConfigurations
 			return xmlDoc;
 		}
 
-		private ProjectConfiguraiton MapXmlDocToProjectConfig(XmlDocument xmlDoc)
+		private IProjectConfiguraiton MapXmlDocToProjectConfig(XmlDocument xmlDoc)
 		{
 			var projectConfiguration = new ProjectConfiguraiton();
 

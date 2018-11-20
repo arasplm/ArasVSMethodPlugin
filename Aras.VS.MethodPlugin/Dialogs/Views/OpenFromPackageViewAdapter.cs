@@ -11,7 +11,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 {
 	public class OpenFromPackageViewAdapter : ViewAdaper<OpenFromPackageView, OpenFromPackageViewResult>
 	{
-		public OpenFromPackageViewAdapter(OpenFromPackageView view) : base(view)
+        public OpenFromPackageViewAdapter(OpenFromPackageView view) : base(view)
 		{
 		}
 

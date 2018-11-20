@@ -32,7 +32,7 @@ namespace Aras.VS.MethodPlugin.Commands
 
 		private readonly IAuthenticationManager authManager;
 
-		private ConnectionInfoCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, ProjectConfigurationManager projectConfigurationManager)
+		private ConnectionInfoCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager)
 			: base(projectManager, dialogFactory, projectConfigurationManager)
 		{
 			if (authManager == null) throw new ArgumentNullException(nameof(authManager));
@@ -61,7 +61,7 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// Initializes the singleton instance of the command.
 		/// </summary>
 		/// <param name="package">Owner package, not null.</param>
-		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, ProjectConfigurationManager projectConfigurationManager)
+		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager)
 		{
 			Instance = new ConnectionInfoCmd(projectManager, authManager, dialogFactory, projectConfigurationManager);
 		}

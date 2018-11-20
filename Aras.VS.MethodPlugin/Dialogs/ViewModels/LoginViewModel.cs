@@ -18,7 +18,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 	public class LoginViewModel : BaseViewModel
 	{
 		private readonly IAuthenticationManager authManager;
-		private readonly ProjectConfiguraiton projectConfiguration;
+		private readonly IProjectConfiguraiton projectConfiguration;
 
 		private ICommand loginClick;
 		private ICommand closeClick;
@@ -36,7 +36,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 	    
 		public LoginViewModel(
 			IAuthenticationManager authManager,
-			ProjectConfiguraiton projectConfiguration,
+			IProjectConfiguraiton projectConfiguration,
 			string projectName,
 			string projectFullName)
 		{

@@ -27,7 +27,7 @@ namespace Aras.VS.MethodPlugin.Code
 	internal class CSharpCodeProvider : ICodeProvider
 	{
 		private IProjectManager projectManager;
-		private readonly ProjectConfiguraiton projectConfiguration;
+		private readonly IProjectConfiguraiton projectConfiguration;
 		private readonly DefaultCodeProvider defaultCodeProvider;
 
 		public string Language
@@ -35,7 +35,7 @@ namespace Aras.VS.MethodPlugin.Code
 			get { return "C#"; }
 		}
 
-		public CSharpCodeProvider(IProjectManager projectManager, ProjectConfiguraiton projectConfiguration, DefaultCodeProvider defaultCodeProvider)
+		public CSharpCodeProvider(IProjectManager projectManager, IProjectConfiguraiton projectConfiguration, DefaultCodeProvider defaultCodeProvider)
 		{
 			if (projectManager == null) throw new ArgumentNullException(nameof(projectManager));
 			if (projectConfiguration == null) throw new ArgumentNullException(nameof(projectConfiguration));
@@ -72,6 +72,10 @@ namespace Aras.VS.MethodPlugin.Code
 
 		public GeneratedCodeInfo CreateWrapper(TemplateInfo template, EventSpecificDataType eventData, string methodName, bool useVSFormatting)
 		{
+            if (string.IsNullOrEmpty(methodName))
+            {
+                throw new ArgumentException("Method name can not be empty");
+            }
 			DefaultCodeTemplate defaultTemplate = LoadDefaultCodeTemplate(template, eventData);
 			string wrapperCode = defaultTemplate.WrapperSourceCode;
 

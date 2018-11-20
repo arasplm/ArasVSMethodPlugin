@@ -21,8 +21,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 	public class UpdateFromArasViewModel : BaseViewModel
 	{
 		private readonly IAuthenticationManager authManager;
-		private readonly ProjectConfigurationManager projectConfigurationManager;
-		private readonly ProjectConfiguraiton projectConfiguration;
+		private readonly IProjectConfigurationManager projectConfigurationManager;
+		private readonly IProjectConfiguraiton projectConfiguration;
 		private readonly TemplateLoader templateLoader;
 		private readonly PackageManager packageManager;
 		private string projectConfigPath;
@@ -51,8 +51,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		public UpdateFromArasViewModel(
 			IAuthenticationManager authManager,
-			ProjectConfigurationManager projectConfigurationManager,
-			ProjectConfiguraiton projectConfiguration,
+			IProjectConfigurationManager projectConfigurationManager,
+			IProjectConfiguraiton projectConfiguration,
 			TemplateLoader templateLoader,
 			PackageManager packageManager,
 			MethodInfo methodInfo,

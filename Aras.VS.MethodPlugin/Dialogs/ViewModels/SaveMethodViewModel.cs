@@ -24,11 +24,11 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 	{
 		private readonly IAuthenticationManager authManager;
 		private readonly IDialogFactory dialogFactory;
-		private readonly ProjectConfigurationManager projectConfigurationManager;
+		private readonly IProjectConfigurationManager projectConfigurationManager;
 		private readonly PackageManager packageManager;
 		private readonly IArasDataProvider arasDataProvider;
 
-		private ProjectConfiguraiton projectConfiguration;
+		private IProjectConfiguraiton projectConfiguration;
 		private MethodItemTypeInfo methodItemTypeInfo;
 
 		private string projectConfigPath;
@@ -60,8 +60,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		public SaveMethodViewModel(
 			IAuthenticationManager authManager,
 			IDialogFactory dialogFactory,
-			ProjectConfigurationManager projectConfigurationManager,
-			ProjectConfiguraiton projectConfiguration,
+			IProjectConfigurationManager projectConfigurationManager,
+			IProjectConfiguraiton projectConfiguration,
 			PackageManager packageManager,
 			IArasDataProvider arasDataProvider,
 			MethodInfo methodInformation,

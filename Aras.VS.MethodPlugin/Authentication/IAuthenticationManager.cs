@@ -14,11 +14,11 @@ namespace Aras.VS.MethodPlugin.Authentication
 	{
 		dynamic ServerConnection { get; }
 
-		dynamic InnovatorInstance { get; }
+        dynamic InnovatorInstance { get; }
 
 		InnovatorUser InnovatorUser { get; }
 
-		IOMWrapper IOMWrapperInstance { get; }
+		IIOMWrapper IOMWrapperInstance { get; }
 
 		string[] GetBases(string innovatorURL, string projectFullName);
 

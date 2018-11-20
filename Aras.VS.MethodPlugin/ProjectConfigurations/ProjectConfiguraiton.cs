@@ -16,8 +16,8 @@ using EnvDTE;
 
 namespace Aras.VS.MethodPlugin.ProjectConfigurations
 {
-	public class ProjectConfiguraiton
-	{
+	public class ProjectConfiguraiton : IProjectConfiguraiton
+    {
 		private const string serverMethodsFolderName = "ServerMethods";
 
 		public ProjectConfiguraiton()
@@ -114,7 +114,7 @@ namespace Aras.VS.MethodPlugin.ProjectConfigurations
 
 		public void RemoveFromMethodInfo(string methodName, ProjectItem projectItem)
 		{
-			string filePath = projectItem.FileNames[0];
+            string filePath = projectItem.FileNames[0];
 			int index = filePath.IndexOf(serverMethodsFolderName);
 			if (index == 1)
 			{
@@ -124,17 +124,27 @@ namespace Aras.VS.MethodPlugin.ProjectConfigurations
 			string partialPath = filePath.Substring(index + serverMethodsFolderName.Length + 1);
 			partialPath = Path.ChangeExtension(partialPath, null);
 
-			string methodPath = methodName + "\\" + methodName;
-			if (methodPath == partialPath)
+			string fodlerPath = methodName + "\\";
+
+
+            if (fodlerPath == partialPath)
 			{
 				MethodInfos.RemoveAll(x => x.MethodName == methodName);
+                return;
 			}
-			else
-			{
-				MethodInfo methodInformation = this.MethodInfos.FirstOrDefault(m => m.MethodName == methodName);
-				methodInformation.PartialClasses.RemoveAll(x => x == partialPath);
-			}
-		}
+            MethodInfo methodInfos = this.MethodInfos.FirstOrDefault(m => m.MethodName == methodName);
+
+            List<string> classesForRemoving = new List<string>();
+
+            foreach (var partialClass in methodInfos.PartialClasses)
+            {
+                if (partialClass.IndexOf(partialPath) == 0)
+                {
+                    classesForRemoving.Add(partialClass);
+                }
+            }
+            classesForRemoving.ForEach(cfr => methodInfos.PartialClasses.Remove(cfr));
+        }
 
 		public string LastSelectedDir { get; set; }
 

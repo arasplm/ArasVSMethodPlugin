@@ -46,7 +46,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private ICommand okCommand;
 		private ICommand closeCommand;
 
-		public OpenFromPackageViewModel(TemplateLoader templateLoader, string projectLanguage, ProjectConfiguraiton projectConfiguration)
+		public OpenFromPackageViewModel(TemplateLoader templateLoader, string projectLanguage, IProjectConfiguraiton projectConfiguration)
 		{
 			if (templateLoader == null) throw new ArgumentNullException(nameof(templateLoader));
 

@@ -19,14 +19,14 @@ namespace Aras.VS.MethodPlugin.Code
 	public class VBCodeProvider : ICodeProvider
 	{
 		private readonly Project project;
-		private readonly ProjectConfiguraiton projectConfiguration;
+		private readonly IProjectConfiguraiton projectConfiguration;
 
 		public string Language
 		{
 			get { return "VB"; }
 		}
 
-		public VBCodeProvider(Project project, ProjectConfiguraiton projectConfiguration)
+		public VBCodeProvider(Project project, IProjectConfiguraiton projectConfiguration)
 		{
 			if (project == null) throw new ArgumentNullException(nameof(project));
 			if (projectConfiguration == null) throw new ArgumentNullException(nameof(projectConfiguration));

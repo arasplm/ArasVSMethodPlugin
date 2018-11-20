@@ -21,12 +21,12 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// </summary>
 		protected readonly IDialogFactory dialogFactory;
 		protected readonly IProjectManager projectManager;
-		protected readonly ProjectConfigurationManager projectConfigurationManager;
+		protected readonly IProjectConfigurationManager projectConfigurationManager;
 
 		public CmdBase(
 			IProjectManager projectManager,
 			IDialogFactory dialogFactory, 
-			ProjectConfigurationManager projectConfigurationManager)
+			IProjectConfigurationManager projectConfigurationManager)
 		{
 			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));
 			if (projectManager == null) throw new ArgumentNullException(nameof(projectManager));
@@ -45,7 +45,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			try
 			{
 				string projectConfigPath = projectManager.ProjectConfigPath;
-				ProjectConfiguraiton projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
+				var projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
 
 				projectConfiguration.Update(projectManager);
 				projectConfigurationManager.Save(projectConfigPath, projectConfiguration);
