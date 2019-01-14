@@ -30,7 +30,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private readonly TemplateLoader templateLoader;
 		private readonly IAuthenticationManager authenticationManager;
 		private readonly IDialogFactory dialogFactory;
-		private readonly ProjectConfiguraiton projectConfiguration;
+		private readonly IProjectConfiguraiton projectConfiguration;
 		private readonly PackageManager packageManager;
 		private readonly IProjectManager projectManager;
 		private readonly IArasDataProvider arasDataProvider;
@@ -52,7 +52,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		private string selectedIdentityKeyedName;
 		private string selectedIdentityId;
-		private bool isUseVSFormattingCode = true;
+		private bool isUseVSFormattingCode;
 
 		private ICommand okCommand;
 		private ICommand cancelCommand;
@@ -62,7 +62,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		public CreateMethodViewModel(
 			IAuthenticationManager authenticationManager,
 			IDialogFactory dialogFactory,
-			ProjectConfiguraiton projectConfiguration,
+			IProjectConfiguraiton projectConfiguration,
 			TemplateLoader templateLoader,
 			PackageManager packageManager,
 			IProjectManager projectManager,
@@ -84,6 +84,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.packageManager = packageManager;
 			this.projectManager = projectManager;
 			this.arasDataProvider = arasDataProvider;
+            this.isUseVSFormattingCode = projectConfiguration.UseVSFormatting;
 
 			this.methodItemTypeInfo = arasDataProvider.GetMethodItemTypeInfo();
 			this.MethodNameMaxLength = methodItemTypeInfo.NameStoredLength;

@@ -29,12 +29,13 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// </summary>
 		public const int CommandId = 0x0104;
 
-		/// <summary>
-		/// Command menu group (command set GUID).
-		/// </summary>
-		public static readonly Guid CommandSet = new Guid("020DC4DF-2FC3-493E-97D3-4012DE93BCAB");
+        /// <summary>
+        /// Command menu group (command set GUID).
+        /// </summary>
+        public static readonly Guid CommandSet = CommandIds.DebugMethod;
 
-		private DebugMethodCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, ProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory)
+
+        private DebugMethodCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory)
 		{
 			if (projectManager.CommandService != null)
 			{
@@ -63,7 +64,7 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// <param name="dialogFactory"></param>
 		/// <param name="projectConfigurationManager"></param>
 		/// <param name="codeProviderFactory"></param>
-		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, ProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory)
+		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory)
 		{
 			Instance = new DebugMethodCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
 		}
@@ -82,7 +83,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			var selectedMethodName = projectManager.MethodName;
 
 			var projectConfigPath = projectManager.ProjectConfigPath;
-			ProjectConfiguraiton projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
+			var projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
 
 			MethodInfo methodInformation = projectConfiguration.MethodInfos.FirstOrDefault(m => m.MethodName == selectedMethodName);
 			var pkgName = methodInformation.PackageName;

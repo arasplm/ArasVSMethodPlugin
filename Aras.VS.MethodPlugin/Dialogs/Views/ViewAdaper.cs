@@ -9,8 +9,8 @@ using System.Windows;
 
 namespace Aras.VS.MethodPlugin.Dialogs
 {
-	public abstract class ViewAdaper<TView, TResult>
-		where TResult : ViewResult, new()
+	public abstract class ViewAdaper<TView, TResult> : IViewAdaper<TView, TResult>
+        where TResult : ViewResult, new()
 		where TView : Window
 	{
 		protected TView view;
@@ -23,4 +23,10 @@ namespace Aras.VS.MethodPlugin.Dialogs
 
 		public abstract TResult ShowDialog();
 	}
+
+    public interface IViewAdaper<TView, TResult>
+    {
+        TResult ShowDialog();
+    }
 }
+

@@ -195,7 +195,7 @@
             </GroupBox>
 
             <Grid Grid.Row="3" HorizontalAlignment="Left">
-                <CheckBox Content="Use Visual Studio formating" FlowDirection="RightToLeft" Margin="10" IsChecked ="{Binding IsUseVSFormattingCode}" >
+                <CheckBox Content="Use Visual Studio formatting" FlowDirection="RightToLeft" Margin="10" IsChecked ="{Binding IsUseVSFormattingCode}" >
                     <CheckBox.Resources>
                         <Style TargetType="{x:Type Path}">
                             <Setter Property="FlowDirection" Value="LeftToRight"/>

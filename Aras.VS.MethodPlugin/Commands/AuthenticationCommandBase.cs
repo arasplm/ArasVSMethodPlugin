@@ -19,7 +19,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			IAuthenticationManager authManager,
 			IDialogFactory dialogFactory,
 			IProjectManager projectManager,
-			ProjectConfigurationManager projectConfigurationManager,
+			IProjectConfigurationManager projectConfigurationManager,
 			ICodeProviderFactory codeProviderFactory) : base(projectManager, dialogFactory, projectConfigurationManager)
 		{
 			if (authManager == null) throw new ArgumentNullException(nameof(authManager));
@@ -37,7 +37,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			try
 			{
 				string projectConfigPath = projectManager.ProjectConfigPath;
-				ProjectConfiguraiton projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
+				var projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
 
 				var lastConnection = projectConfiguration.Connections.FirstOrDefault(c => c.LastConnection);
 				if (!authManager.IsLoginedForCurrentProject(projectManager.SelectedProject.Name, lastConnection))

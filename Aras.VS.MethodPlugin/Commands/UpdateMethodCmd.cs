@@ -33,17 +33,17 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// </summary>
 		public const int CommandId = 0x0104;
 
-		/// <summary>
-		/// Command menu group (command set GUID).
-		/// </summary>
-		public static readonly Guid CommandSet = new Guid("CF767190-3696-4365-9857-3600622B097D");
+        /// <summary>
+        /// Command menu group (command set GUID).
+        /// </summary>
+        public static readonly Guid CommandSet = CommandIds.UpdateMethod;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="UpdateMethodCmd"/> class.
-		/// Adds our command handlers for menu (commands must exist in the command table file)
-		/// </summary>
-		/// <param name="package">Owner package, not null.</param>
-		private UpdateMethodCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, ProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UpdateMethodCmd"/> class.
+        /// Adds our command handlers for menu (commands must exist in the command table file)
+        /// </summary>
+        /// <param name="package">Owner package, not null.</param>
+        private UpdateMethodCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory)
 		{
 			if (projectManager.CommandService != null)
 			{
@@ -68,7 +68,7 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// Initializes the singleton instance of the command.
 		/// </summary>
 		/// <param name="package">Owner package, not null.</param>
-		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, ProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory)
+		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory)
 		{
 			Instance = new UpdateMethodCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
 		}
@@ -80,7 +80,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			string projectConfigPath = projectManager.ProjectConfigPath;
 			string methodConfigPath = projectManager.MethodConfigPath;
 
-			ProjectConfiguraiton projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
+            var projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
 
 			string selectedMethodPath = projectManager.MethodPath;
 			string selectedMethodName = Path.GetFileNameWithoutExtension(selectedMethodPath);
@@ -125,7 +125,8 @@ namespace Aras.VS.MethodPlugin.Commands
 			};
 
 			projectConfiguration.AddMethodInfo(methodInfo);
-			projectConfigurationManager.Save(projectConfigPath, projectConfiguration);
+            projectConfiguration.UseVSFormatting = updateViewResult.IsUseVSFormattingCode;
+            projectConfigurationManager.Save(projectConfigPath, projectConfiguration);
 		}
 	}
 }

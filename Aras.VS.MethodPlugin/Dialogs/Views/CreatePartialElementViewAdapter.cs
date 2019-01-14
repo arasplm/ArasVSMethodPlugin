@@ -23,7 +23,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 			{
 				DialogOperationResult = result,
 				FileName = viewModel.FileName,
-				IsUseVSFormatingCode = viewModel.IsUseVSFormattingCode
+				IsUseVSFormattingCode = viewModel.IsUseVSFormattingCode
 			};
 		}
 	}

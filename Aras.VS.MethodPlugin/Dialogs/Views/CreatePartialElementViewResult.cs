@@ -10,6 +10,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 	{
 		public string FileName { get; set; }
 
-		public bool IsUseVSFormatingCode { get; set; }
+		public bool IsUseVSFormattingCode { get; set; }
 	}
 }

@@ -30,17 +30,17 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// </summary>
 		public const int CommandId = 0x0101;
 
-		/// <summary>
-		/// Command menu group (command set GUID).
-		/// </summary>
-		public static readonly Guid CommandSet = new Guid("714c822b-ebc4-4413-89b5-c93eaed863fc");
+        /// <summary>
+        /// Command menu group (command set GUID).
+        /// </summary>
+        public static readonly Guid CommandSet = CommandIds.CreatePartialElement;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="CreatePartialElementCmd"/> class.
-		/// Adds our command handlers for menu (commands must exist in the command table file)
-		/// </summary>
-		/// <param name="package">Owner package, not null.</param>
-		private CreatePartialElementCmd(IProjectManager projectManager,IDialogFactory dialogFactory, ProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CreatePartialElementCmd"/> class.
+        /// Adds our command handlers for menu (commands must exist in the command table file)
+        /// </summary>
+        /// <param name="package">Owner package, not null.</param>
+        private CreatePartialElementCmd(IProjectManager projectManager,IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory)
 			: base(projectManager, dialogFactory, projectConfigurationManager)
 		{
 			if (codeProviderFactory == null) throw new ArgumentNullException(nameof(codeProviderFactory));
@@ -70,7 +70,7 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// Initializes the singleton instance of the command.
 		/// </summary>
 		/// <param name="package">Owner package, not null.</param>
-		public static void Initialize(IProjectManager projectManager, IDialogFactory dialogFactory, ProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory)
+		public static void Initialize(IProjectManager projectManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory)
 		{
 			Instance = new CreatePartialElementCmd(projectManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
 		}
@@ -84,14 +84,14 @@ namespace Aras.VS.MethodPlugin.Commands
 			string selectedFolderPath = projectManager.SelectedFolderPath;
 			string projectConfigPath = projectManager.ProjectConfigPath;
 
-			ProjectConfiguraiton projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
+            var projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
 			MethodInfo methodInformation = projectConfiguration.MethodInfos.FirstOrDefault(m => m.MethodName == selectedMethodName);
 			if (methodInformation == null)
 			{
 				throw new Exception($"Configurations for the {selectedMethodName} method not found.");
 			}
 			
-			CreatePartialElementViewAdapter view = dialogFactory.GetCreatePartialClassView(uiShell);
+			var view = dialogFactory.GetCreatePartialClassView(uiShell, projectConfiguration.UseVSFormatting);
 			var viewResult = view.ShowDialog();
 			if (viewResult?.DialogOperationResult != true)
 			{
@@ -107,11 +107,11 @@ namespace Aras.VS.MethodPlugin.Commands
 			}
 
 			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language, projectConfiguration);
-			CodeInfo partialCodeInfo = codeProvider.CreatePartialCodeInfo(methodInformation, viewResult.FileName, viewResult.IsUseVSFormatingCode);
+			CodeInfo partialCodeInfo = codeProvider.CreatePartialCodeInfo(methodInformation, viewResult.FileName, viewResult.IsUseVSFormattingCode);
 
 			projectManager.AddItemTemplateToProjectNew(partialCodeInfo, true, 0);
-
 			methodInformation.PartialClasses.Add(partialCodeInfo.Path);
+            projectConfiguration.UseVSFormatting = viewResult.IsUseVSFormattingCode;
 			projectConfigurationManager.Save(projectManager.ProjectConfigPath, projectConfiguration);
 		}
 	}

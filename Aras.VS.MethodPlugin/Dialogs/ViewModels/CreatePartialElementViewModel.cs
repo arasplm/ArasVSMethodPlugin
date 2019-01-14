@@ -12,19 +12,19 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 	{
 		private string fileName;
 		private bool isOkButtonEnabled;
-		private bool isUseVSFormatingCode = true;
+		private bool isUseVSFormattingCode;
 
 		private ICommand okCommand;
 		private ICommand cancelCommand;
 		private ICommand closeCommand;
 
-		public CreatePartialElementViewModel()
+		public CreatePartialElementViewModel(bool usedVSFormatting)
 		{
 			this.okCommand = new RelayCommand<object>(OnOKCliked, IsEnabledOkButton);
 			this.cancelCommand = new RelayCommand<object>(OnCancelCliked);
 			this.closeCommand = new RelayCommand<object>(OnCloseCliked);
-
-			this.FileName = "File1";
+            this.isUseVSFormattingCode = usedVSFormatting;
+            this.FileName = "File1";
 		}
 
 		#region Properties
@@ -51,8 +51,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		public bool IsUseVSFormattingCode
 		{
-			get { return isUseVSFormatingCode; }
-			set { isUseVSFormatingCode = value; }
+			get { return isUseVSFormattingCode; }
+			set { isUseVSFormattingCode = value; }
 		}
 
 		#endregion

@@ -53,7 +53,7 @@ namespace Aras.VS.MethodPlugin
 		private IAuthenticationManager authManager;
 		private IArasDataProvider arasDataProvider;
 		private IDialogFactory dialogFactory;
-		private ProjectConfigurationManager projectConfigurationManager;
+		private IProjectConfigurationManager projectConfigurationManager;
 		private IProjectManager projectManager;
 		private DefaultCodeProvider defaultCodeProvider;
 		private ICodeProviderFactory codeProviderFactory;
@@ -120,7 +120,7 @@ namespace Aras.VS.MethodPlugin
 				}
 
 				string projectConfigPath = this.projectManager.ProjectConfigPath;
-				ProjectConfiguraiton projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
+				var projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
 
 				string methodName = this.projectManager.MethodName;
 
@@ -143,7 +143,7 @@ namespace Aras.VS.MethodPlugin
 				}
 
 				string projectConfigPath = this.projectManager.ProjectConfigPath;
-				ProjectConfiguraiton projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
+				var projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
 
 				string methodName = this.projectManager.MethodName;
 

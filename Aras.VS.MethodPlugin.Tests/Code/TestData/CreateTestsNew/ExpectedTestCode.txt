@@ -1,0 +1,50 @@
+﻿
+using System;
+using System.IO;
+using Aras.IOM;
+using NSubstitute;
+using NUnit.Framework;
+
+namespace  ArasPKGMethodTest
+{
+    [TestFixture]
+    public static class  ArasPKGMethodTestTests
+    {
+        [Test]
+        public static void  ArasPKGMethodTestItemMethodShouldReturnNull()
+        {
+            // Arrange
+            var serverConnectionMock = Substitute.For<IServerConnection>();
+            ItemMethod itemMethod = new ItemMethod(serverConnectionMock);
+
+            // Act
+            var resultItem = itemMethod. ArasPKGMethodTestItemMethod(null, null);
+
+            // Assert
+            Assert.IsNull(resultItem);
+        }
+
+        ///// <summary>
+        ///// Simple test with loading Item context from Aml file
+        ///// </summary>
+        ///// <param name="path">Path to context file for related method</param>
+        ///// <returns></returns>
+        //[TestCase("<path>")]
+        //public static void ArasPKGMethodTestItemMethodShouldReturnNull(string path)
+        //{
+        //    // Arrange
+        //    var serverConnectionMock = Substitute.For<IServerConnection>();
+        //    string itemContext = File.ReadAllText(path);
+
+        //    ItemMethod itemMethod = new ItemMethod(serverConnectionMock);
+        //    itemMethod.loadAML(itemContext);
+
+        //    // Act
+        //    var resultItem = itemMethod.ArasPKGMethodTestItemMethod(null, null);
+
+        //    // Assert
+        //    Assert.IsNull(resultItem);
+        //}
+    }
+}
+        

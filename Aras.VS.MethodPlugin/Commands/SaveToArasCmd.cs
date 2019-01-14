@@ -33,12 +33,13 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// </summary>
 		public const int ItemCommandId = 0x101;
 
-		/// <summary>
-		/// Command menu group (command set GUID).
-		/// </summary>
-		public static readonly Guid ItemCommandSet = new Guid("694F6136-7CF1-46E1-B9E2-24296488AE96");
+        /// <summary>
+        /// Command menu group (command set GUID).
+        /// </summary>
+        public static readonly Guid ItemCommandSet = CommandIds.SaveToAras;
 
-		private SaveToArasCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, ProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory)
+
+        private SaveToArasCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory)
 		{
 			if (projectManager.CommandService != null)
 			{
@@ -59,7 +60,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			private set;
 		}
 
-		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, ProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory)
+		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory)
 		{
 			Instance = new SaveToArasCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
 		}
@@ -92,7 +93,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			var projectConfigPath = projectManager.ProjectConfigPath;
 			var methodConfigPath = projectManager.MethodConfigPath;
 
-			ProjectConfiguraiton projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
+            var projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
 
 			string selectedMethodPath = projectManager.MethodPath;
 			string sourceCode = File.ReadAllText(selectedMethodPath, new UTF8Encoding(true));
@@ -188,7 +189,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			}
 
 			string message = string.Format("Method \"{0}\" saved", saveViewResult.MethodName);
-			var messageBoxWindow = new MessageBoxWindow();
+            var messageBoxWindow = dialogFactory.GetMessageBoxWindow(uiShell);
 			messageBoxWindow.ShowDialog(null,
 				message,
 				string.Empty,

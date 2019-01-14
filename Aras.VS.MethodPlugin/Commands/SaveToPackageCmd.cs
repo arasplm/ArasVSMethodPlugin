@@ -36,17 +36,17 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// </summary>
 		public const int ItemCommandId = 0x102;
 
-		/// <summary>
-		/// Command menu group (command set GUID).
-		/// </summary>
-		public static readonly Guid ItemCommandSet = new Guid("694F6136-7CF1-46E1-B9E2-24296488AE96");
+        /// <summary>
+        /// Command menu group (command set GUID).
+        /// </summary>
+        public static readonly Guid ItemCommandSet = CommandIds.SaveToPackage;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="SaveToPackageCmd"/> class.
-		/// Adds our command handlers for menu (commands must exist in the command table file)
-		/// </summary>
-		/// <param name="package">Owner package, not null.</param>
-		private SaveToPackageCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, ProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SaveToPackageCmd"/> class.
+        /// Adds our command handlers for menu (commands must exist in the command table file)
+        /// </summary>
+        /// <param name="package">Owner package, not null.</param>
+        private SaveToPackageCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory)
 		{
 			if (projectManager.CommandService != null)
 			{
@@ -71,7 +71,7 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// Initializes the singleton instance of the command.
 		/// </summary>
 		/// <param name="package">Owner package, not null.</param>
-		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, ProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory)
+		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory)
 		{
 			Instance = new SaveToPackageCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
 		}
@@ -82,7 +82,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			string projectConfigPath = projectManager.ProjectConfigPath;
 			string methodConfigPath = projectManager.MethodConfigPath;
 
-			ProjectConfiguraiton projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
+            var projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
 
 			var templateLoader = new TemplateLoader();
 			templateLoader.Load(methodConfigPath);
@@ -190,9 +190,9 @@ namespace Aras.VS.MethodPlugin.Commands
 
 			string updateMethodCodeForSavingToAmlPackage = saveViewResult.MethodCode.Replace("]]", "]]]]><![CDATA[");
 			string methodTemplate = $@"<AML>
- <Item type=""Method"" id=""{methodId}"" action=""add"">
-  <comments>{saveViewResult.MethodComment}</comments>
-  <execution_allowed_to keyed_name=""{saveViewResult.SelectedIdentityKeyedName}"" type=""Identity"">{saveViewResult.SelectedIdentityId}</execution_allowed_to>
+ <Item type=""Method"" id=""{methodId}"" action=""add"">" + 
+  (!string.IsNullOrWhiteSpace(saveViewResult.MethodComment) ? $"<comments>{saveViewResult.MethodComment}</comments>" : "") +
+  $@"<execution_allowed_to keyed_name=""{saveViewResult.SelectedIdentityKeyedName}"" type=""Identity"">{saveViewResult.SelectedIdentityId}</execution_allowed_to>
   <method_code><![CDATA[{updateMethodCodeForSavingToAmlPackage}]]></method_code>
   <method_type>{saveViewResult.MethodInformation.MethodLanguage}</method_type>
   <name>{saveViewResult.MethodName}</name>
@@ -216,9 +216,9 @@ namespace Aras.VS.MethodPlugin.Commands
 
 			string message = string.Format("Method \"{0}\" saved to package \"{1}\"", saveViewResult.MethodName, saveViewResult.SelectedPackage);
 
-			// Show a message box to prove we were here
-			var messageWindow = new MessageBoxWindow();
-			messageWindow.ShowDialog(null,
+            // Show a message box to prove we were here
+            var messageWindow = dialogFactory.GetMessageBoxWindow(uiShell);
+            messageWindow.ShowDialog(null,
 				message,
 				string.Empty,
 				MessageButtons.OK,

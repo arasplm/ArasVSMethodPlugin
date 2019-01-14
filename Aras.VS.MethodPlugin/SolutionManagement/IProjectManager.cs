@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.ProjectConfigurations;
@@ -50,7 +51,9 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 
 		bool SolutionHasProject{ get; }
 
-		IEnumerable<string> GetSelectedFiles();
+        bool IsCommandForMethod(Guid commandId);
+
+        IEnumerable<string> GetSelectedFiles();
 
 		string AddItemTemplateToProjectNew(CodeInfo codeInfo, bool openAfterCreation, int cursorIndex = -1);
 

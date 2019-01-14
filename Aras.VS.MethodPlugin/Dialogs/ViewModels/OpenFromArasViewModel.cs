@@ -26,7 +26,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 	{
 		private readonly IAuthenticationManager authenticationManager;
 		private readonly IDialogFactory dialogFactory;
-		private readonly ProjectConfigurationManager configurationManager;
+		private readonly IProjectConfigurationManager configurationManager;
 		private readonly TemplateLoader templateLoader;
 		private readonly PackageManager packageManager;
 		private string pathToProjectConfigFile;
@@ -34,7 +34,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private string projectFullName;
 		private string projectLanguage;
 
-		private ProjectConfiguraiton projectConfiguration;
+		private IProjectConfiguraiton projectConfiguration;
 		private ConnectionInfo connectionInfo;
 
 		private string methodComment;
@@ -49,7 +49,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private string identityKeyedName;
 		private string identityId;
 		private string package;
-		private bool isUseVSFormattingCode = true;
+		private bool isUseVSFormattingCode;
 
 		private ICommand editConnectionInfoCommand;
 		private ICommand searchMethodDialogCommand;
@@ -59,8 +59,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		public OpenFromArasViewModel(
 			IAuthenticationManager authenticationManager,
 			IDialogFactory dialogFactory,
-			ProjectConfigurationManager configurationManager,
-			ProjectConfiguraiton projectConfiguration,
+			IProjectConfigurationManager configurationManager,
+			IProjectConfiguraiton projectConfiguration,
 			TemplateLoader templateLoader,
 			PackageManager packageManager,
 			string pathToProjectConfigFile,
@@ -86,8 +86,10 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.projectName = projectName;
 			this.projectFullName = projectFullName;
 			this.projectLanguage = projectLanguage;
+            this.isUseVSFormattingCode = projectConfiguration.UseVSFormatting;
 
-			this.editConnectionInfoCommand = new RelayCommand<object>(EditConnectionInfoCommandClicked);
+
+            this.editConnectionInfoCommand = new RelayCommand<object>(EditConnectionInfoCommandClicked);
 			this.searchMethodDialogCommand = new RelayCommand<object>(SearchMethodDialogCommandClicked);
 			this.okCommand = new RelayCommand<object>(OkCommandCliked, IsEnabledOkButton);
 			this.closeCommand = new RelayCommand<object>(OnCloseCliked);

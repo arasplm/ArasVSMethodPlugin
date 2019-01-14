@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Xml;
 using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.Dialogs.Views;
+using Aras.VS.MethodPlugin.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Templates;
 
 namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
@@ -23,8 +24,9 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private readonly TemplateLoader templateLoader;
 		private string projectLanguage;
 		private string selectedFolderPath;
+        private string lastSelectedMFFile;
 
-		private EventSpecificDataType selectedEventSpecificData;
+        private EventSpecificDataType selectedEventSpecificData;
 
 		private string methodComment;
 		private string methodType;
@@ -38,21 +40,23 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private string methodConfigId;
 		private string methodId;
 		private string selectedManifestFilePath;
-		private bool isUseVSFormattingCode = true;
+		private bool isUseVSFormattingCode;
 
 		private ICommand folderBrowserCommand;
 		private ICommand okCommand;
 		private ICommand closeCommand;
 
-		public OpenFromPackageViewModel(TemplateLoader templateLoader, string projectLanguage, string lastSelectedDirectory)
+		public OpenFromPackageViewModel(TemplateLoader templateLoader, string projectLanguage, IProjectConfiguraiton projectConfiguration)
 		{
 			if (templateLoader == null) throw new ArgumentNullException(nameof(templateLoader));
 
 			this.templateLoader = templateLoader;
 			this.projectLanguage = projectLanguage;
-			this.selectedFolderPath = lastSelectedDirectory;
+			this.selectedFolderPath = projectConfiguration.LastSelectedDir;
+            this.lastSelectedMFFile = projectConfiguration.LastSelectedMfFile;
+            this.isUseVSFormattingCode = projectConfiguration.UseVSFormatting;
 
-			folderBrowserCommand = new RelayCommand<object>(OnFolderBrowserCommandClicked);
+            folderBrowserCommand = new RelayCommand<object>(OnFolderBrowserCommandClicked);
 			okCommand = new RelayCommand<object>(OnOkClicked, IsOkButtonEnabled);
 			closeCommand = new RelayCommand<object>(OnCloseCliked);
 
@@ -207,13 +211,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		private void OnFolderBrowserCommandClicked(object window)
 		{
-			var actualFolderPath = !string.IsNullOrWhiteSpace(this.SelectedManifestFilePath)
-				? this.SelectedManifestFilePath
-				: selectedFolderPath;
-            if (string.IsNullOrWhiteSpace(actualFolderPath))
-            {
-                actualFolderPath = @"C:\";
-            }
+            var actualFolderPath = GetActualFolderPath();
 			var viewModel = new OpenFromPackageTreeViewModel(actualFolderPath, this.Package, this.MethodName);
 			var view = new OpenFromPackageTreeView();
 			view.DataContext = viewModel;
@@ -282,7 +280,24 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			}
 		}
 
-		private void OnOkClicked(object view)
+        private string GetActualFolderPath()
+        {
+            if (!string.IsNullOrWhiteSpace(SelectedManifestFilePath))
+            {
+                return SelectedManifestFilePath;
+            }
+            if (!string.IsNullOrWhiteSpace(lastSelectedMFFile))
+            {
+                return lastSelectedMFFile;
+            }
+            if (!string.IsNullOrWhiteSpace(selectedFolderPath))
+            {
+                return selectedFolderPath;
+            }
+            return @"C:\";
+        }
+
+        private void OnOkClicked(object view)
 		{
 			var window = view as Window;
 

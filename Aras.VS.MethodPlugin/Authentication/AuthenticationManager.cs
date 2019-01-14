@@ -12,48 +12,48 @@ using Aras.VS.MethodPlugin.ProjectConfigurations;
 
 namespace Aras.VS.MethodPlugin.Authentication
 {
-	public class AuthenticationManager : IAuthenticationManager
-	{
-		private dynamic serverConnection;
-		private dynamic innovator;
-		private InnovatorUser innovatorUser;
-		private IOMWrapper iOMWrapper;
+    public class AuthenticationManager : IAuthenticationManager
+    {
+        private dynamic serverConnection;
+        private dynamic innovator;
+        private InnovatorUser innovatorUser;
+        private IIOMWrapper iOMWrapper;
 
-		public dynamic InnovatorInstance
-		{
-			get
-			{
-				return innovator;
-			}
-		}
+        public dynamic InnovatorInstance
+        {
+            get
+            {
+                return innovator;
+            }
+        }
 
-		public dynamic ServerConnection
-		{
-			get
-			{
-				return serverConnection;
-			}
-		}
+        public dynamic ServerConnection
+        {
+            get
+            {
+                return serverConnection;
+            }
+        }
 
-		public InnovatorUser InnovatorUser
-		{
-			get
-			{
-				return innovatorUser;
-			}
-			private set
-			{
-				innovatorUser = value;
-			}
-		}
+        public InnovatorUser InnovatorUser
+        {
+            get
+            {
+                return innovatorUser;
+            }
+            private set
+            {
+                innovatorUser = value;
+            }
+        }
 
-		public IOMWrapper IOMWrapperInstance
-		{
-			get
-			{
-				return iOMWrapper;
-			}
-		}
+        public IIOMWrapper IOMWrapperInstance
+        {
+            get
+            {
+                return iOMWrapper;
+            }
+        }
 
 		public string[] GetBases(string innovatorURL, string projectFullName)
 		{

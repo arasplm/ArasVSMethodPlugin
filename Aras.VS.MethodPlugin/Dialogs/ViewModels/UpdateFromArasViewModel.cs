@@ -21,8 +21,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 	public class UpdateFromArasViewModel : BaseViewModel
 	{
 		private readonly IAuthenticationManager authManager;
-		private readonly ProjectConfigurationManager projectConfigurationManager;
-		private readonly ProjectConfiguraiton projectConfiguration;
+		private readonly IProjectConfigurationManager projectConfigurationManager;
+		private readonly IProjectConfiguraiton projectConfiguration;
 		private readonly TemplateLoader templateLoader;
 		private readonly PackageManager packageManager;
 		private string projectConfigPath;
@@ -43,7 +43,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private string executionIdentityKeyedName;
 		private string executionIdentityId;
 		private string packageName;
-		private bool isUseVSFormatingCode = true;
+		private bool isUseVSFormattingCode;
 
 		private ICommand editConnectionInfoCommand;
 		private ICommand okCommand;
@@ -51,8 +51,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		public UpdateFromArasViewModel(
 			IAuthenticationManager authManager,
-			ProjectConfigurationManager projectConfigurationManager,
-			ProjectConfiguraiton projectConfiguration,
+			IProjectConfigurationManager projectConfigurationManager,
+			IProjectConfiguraiton projectConfiguration,
 			TemplateLoader templateLoader,
 			PackageManager packageManager,
 			MethodInfo methodInfo,
@@ -75,8 +75,9 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.projectConfigPath = projectConfigPath;
 			this.projectName = projectName;
 			this.projectFullName = projectFullName;
+            this.isUseVSFormattingCode = projectConfiguration.UseVSFormatting;
 
-			this.methodName = methodInfo.MethodName;
+            this.methodName = methodInfo.MethodName;
 			this.eventData = methodInfo.EventData;
 
 			this.editConnectionInfoCommand = new RelayCommand<object>(EditConnectionInfoCommandClick);
@@ -180,8 +181,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		public bool IsUseVSFormattingCode
 		{
-			get { return isUseVSFormatingCode; }
-			set { isUseVSFormatingCode = value; }
+			get { return isUseVSFormattingCode; }
+			set { isUseVSFormattingCode = value; }
 		}
 
 		#endregion
@@ -271,8 +272,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				executionIdentityKeyedName = methodItem.getPropertyAttribute("execution_allowed_to", "keyed_name", string.Empty);
 				executionIdentityId = methodItem.getProperty("execution_allowed_to", string.Empty);
 				methodComment = methodItem.getProperty("comments", string.Empty);
-
-				if (methodLanguage == "C#" || methodLanguage == "VB")
+                
+                if (methodLanguage == "C#" || methodLanguage == "VB")
 				{
 					methodType = "server";
 				}
@@ -306,7 +307,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				}
 
 				this.SelectedTemplate = template;
-
+                
 				var packageName = string.Empty;
 
 				try

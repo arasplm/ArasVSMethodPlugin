@@ -21,6 +21,7 @@
                 <ResourceDictionary Source="Styles/GroupBoxControl.xaml" />
                 <ResourceDictionary Source="Styles/TextBoxControl.xaml" />
                 <ResourceDictionary Source="Styles/Window.xaml" />
+                <ResourceDictionary Source="Styles/CheckBox.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -37,7 +38,7 @@
         <Label x:Name="FileNameLabel" Grid.Column="0" Content="File Name: " VerticalContentAlignment="Center" Margin="5, 5, 0, 5"/>
         <TextBox x:Name="FileNameTextBlock" Grid.Column="1" Text="{Binding Path=FileName, UpdateSourceTrigger=PropertyChanged}" Height="24" TextWrapping="Wrap" VerticalContentAlignment="Center" Margin="0, 5, 5, 5" />
 
-        <CheckBox Content="Use Visual Studio formating" FlowDirection="RightToLeft" Margin = "10"  VerticalAlignment="Center" HorizontalAlignment="Left" IsChecked ="{Binding IsUseVSFormattingCode}"  Grid.Row="1" Grid.ColumnSpan="2">
+        <CheckBox Content="Use Visual Studio formatting" FlowDirection="RightToLeft" Margin = "10"  VerticalAlignment="Center" HorizontalAlignment="Left" IsChecked ="{Binding IsUseVSFormattingCode}"  Grid.Row="1" Grid.ColumnSpan="2">
             <CheckBox.Resources>
                 <Style TargetType="{x:Type Path}">
                     <Setter Property="FlowDirection" Value="LeftToRight"/>

@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<default_code_template templateName="CSharp" eventData="None">
+
+				<wrapper_code>
+						<![CDATA[ 
+        return $(pkgname)ItemMethod(CCO, RequestState);
+      ]]>
+				</wrapper_code>
+				<simple_code>
+
+						<source_code>
+								<![CDATA[using Aras.IOM;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Web;
+using System.Web.SessionState;
+using System.Xml;
+
+namespace $(pkgname)
+{
+    public partial class ItemMethod
+    {
+        public Item $(pkgname)ItemMethod(Aras.Server.Core.CallContext CCO, Aras.Server.Core.IContextState RequestState)
+        {
+// start your code inside region MethodCode - DO NOT CHANGE CODE ABOVE
+#region MethodCode
+            return this;
+#endregion MethodCode
+// end your code inside region MethodCode - DO NOT CHANGE CODE BELOW
+        }
+    }
+}
+        ]]>
+						</source_code>
+						<test_code>
+								<![CDATA[
+using System;
+using System.IO;
+using Aras.IOM;
+using NSubstitute;
+using NUnit.Framework;
+
+namespace  $(pkgname)
+{
+    [TestFixture]
+    public static class  $(pkgname)Tests
+    {
+        [Test]
+        public static void  $(pkgname)ItemMethodShouldReturnNull()
+        {
+            // Arrange
+            var serverConnectionMock = Substitute.For<IServerConnection>();
+            ItemMethod itemMethod = new ItemMethod(serverConnectionMock);
+
+            // Act
+            var resultItem = itemMethod. $(pkgname)ItemMethod(null, null);
+
+            // Assert
+            Assert.IsNull(resultItem);
+        }
+
+        ///// <summary>
+        ///// Simple test with loading Item context from Aml file
+        ///// </summary>
+        ///// <param name="path">Path to context file for related method</param>
+        ///// <returns></returns>
+        //[TestCase("<path>")]
+        //public static void $(pkgname)ItemMethodShouldReturnNull(string path)
+        //{
+        //    // Arrange
+        //    var serverConnectionMock = Substitute.For<IServerConnection>();
+        //    string itemContext = File.ReadAllText(path);
+
+        //    ItemMethod itemMethod = new ItemMethod(serverConnectionMock);
+        //    itemMethod.loadAML(itemContext);
+
+        //    // Act
+        //    var resultItem = itemMethod.$(pkgname)ItemMethod(null, null);
+
+        //    // Assert
+        //    Assert.IsNull(resultItem);
+        //}
+    }
+}
+        ]]>
+						</test_code>
+
+				</simple_code>
+		</default_code_template>

@@ -25,14 +25,14 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// </summary>
 		public const int CommandId = 0x104;
 
-		/// <summary>
-		/// Command menu group (command set GUID).
-		/// </summary>
-		public static readonly Guid CommandSet = new Guid("E15DDF0A-1B6E-46A8-8B78-AEC2A7BB4922");
+        /// <summary>
+        /// Command menu group (command set GUID).
+        /// </summary>
+        public static readonly Guid CommandSet = CommandIds.ConnectionInfo;
 
 		private readonly IAuthenticationManager authManager;
 
-		private ConnectionInfoCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, ProjectConfigurationManager projectConfigurationManager)
+		private ConnectionInfoCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager)
 			: base(projectManager, dialogFactory, projectConfigurationManager)
 		{
 			if (authManager == null) throw new ArgumentNullException(nameof(authManager));
@@ -61,7 +61,7 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// Initializes the singleton instance of the command.
 		/// </summary>
 		/// <param name="package">Owner package, not null.</param>
-		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, ProjectConfigurationManager projectConfigurationManager)
+		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager)
 		{
 			Instance = new ConnectionInfoCmd(projectManager, authManager, dialogFactory, projectConfigurationManager);
 		}

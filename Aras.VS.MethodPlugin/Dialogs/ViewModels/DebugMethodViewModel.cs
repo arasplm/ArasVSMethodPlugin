@@ -18,9 +18,9 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 	public class DebugMethodViewModel : BaseViewModel
 	{
 		private readonly IAuthenticationManager authManager;
-		private readonly ProjectConfigurationManager projectConfigurationManager;
+		private readonly IProjectConfigurationManager projectConfigurationManager;
 
-		private ProjectConfiguraiton projectConfiguration;
+		private IProjectConfiguraiton projectConfiguration;
 		private MethodItemTypeInfo methodItemTypeInfo;
 
 		private string projectConfigPath;
@@ -43,8 +43,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		public DebugMethodViewModel(
 			IAuthenticationManager authManager,
-			ProjectConfigurationManager projectConfigurationManager,
-			ProjectConfiguraiton projectConfiguration,
+			IProjectConfigurationManager projectConfigurationManager,
+			IProjectConfiguraiton projectConfiguration,
 			MethodInfo methodInformation,
 			string methodCode,
 			string projectConfigPath,

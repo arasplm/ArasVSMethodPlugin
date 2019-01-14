@@ -86,6 +86,7 @@
     <Compile Include="Code\ICodeProviderFactory.cs" />
     <Compile Include="Commands\AuthenticationCommandBase.cs" />
     <Compile Include="Commands\CmdBase.cs" />
+    <Compile Include="Commands\CommandIdsList.cs" />
     <Compile Include="Commands\DebugMethodCmd.cs" />
     <Compile Include="Commands\RefreshConfigCmd.cs" />
     <Compile Include="Commands\CreatePartialElementCmd.cs" />
@@ -125,6 +126,7 @@
     </Compile>
     <Compile Include="Dialogs\Views\DebugMethodViewAdapter.cs" />
     <Compile Include="Dialogs\Views\DebugMethodViewResult.cs" />
+    <Compile Include="Dialogs\Views\IMessageBoxWindow.cs" />
     <Compile Include="Dialogs\Views\OpenFromArasViewAdapter.cs" />
     <Compile Include="Dialogs\Views\OpenFromArasViewResult.cs" />
     <Compile Include="Dialogs\Views\OpenFromPackageViewAdapter.cs" />
@@ -200,6 +202,7 @@
     <Compile Include="Extensions\ProjectItemsExtensions.cs" />
     <Compile Include="Code\GeneratedCodeInfo.cs" />
     <Compile Include="Code\ICodeProvider.cs" />
+    <Compile Include="IIOMWrapper.cs" />
     <Compile Include="IOMWrapper.cs" />
     <Compile Include="ItemSearch\DataGridViewCalendarCell.cs" />
     <Compile Include="ItemSearch\DataGridViewCalendarEditingControl.cs">
@@ -214,6 +217,8 @@
     <Compile Include="MessageMenager.cs" />
     <Compile Include="PackageManagement\PackageManager.cs" />
     <Compile Include="Code\PartialCodeInfo.cs" />
+    <Compile Include="ProjectConfigurations\IProjectConfiguraiton.cs" />
+    <Compile Include="ProjectConfigurations\IProjectConfigurationManager.cs" />
     <Compile Include="ProjectConfigurations\ProjectConfigurationManager.cs" />
     <Compile Include="ProjectConfigurations\ConnectionInfo.cs" />
     <Compile Include="ProjectConfigurations\MethodInfo.cs" />

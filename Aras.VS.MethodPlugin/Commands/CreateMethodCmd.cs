@@ -28,17 +28,17 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// </summary>
 		public const int CommandId = 0x0103;
 
-		/// <summary>
-		/// Command menu group (command set GUID).
-		/// </summary>
-		public static readonly Guid CommandSet = new Guid("B69B1AC9-3D7E-4553-9786-A852B873DF01");
+        /// <summary>
+        /// Command menu group (command set GUID).
+        /// </summary>
+        public static readonly Guid CommandSet = CommandIds.CreateMethod;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="CreateMethodCmd"/> class.
-		/// Adds our command handlers for menu (commands must exist in the command table file)
-		/// </summary>
-		/// <param name="package">Owner package, not null.</param>
-		private CreateMethodCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, ProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CreateMethodCmd"/> class.
+        /// Adds our command handlers for menu (commands must exist in the command table file)
+        /// </summary>
+        /// <param name="package">Owner package, not null.</param>
+        private CreateMethodCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory)
 		{
 			if (projectManager.CommandService != null)
 			{
@@ -63,7 +63,7 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// Initializes the singleton instance of the command.
 		/// </summary>
 		/// <param name="package">Owner package, not null.</param>
-		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, ProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory)
+		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory)
 		{
 			Instance = new CreateMethodCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
 		}
@@ -71,7 +71,7 @@ namespace Aras.VS.MethodPlugin.Commands
 		public override void ExecuteCommandImpl(object sender, EventArgs args, IVsUIShell uiShell)
 		{
 			var project = projectManager.SelectedProject;
-			ProjectConfiguraiton projectConfiguration = projectConfigurationManager.Load(projectManager.ProjectConfigPath);
+            var projectConfiguration = projectConfigurationManager.Load(projectManager.ProjectConfigPath);
 
 			var templateLoader = new Templates.TemplateLoader();
 			templateLoader.Load(projectManager.MethodConfigPath);
@@ -86,7 +86,7 @@ namespace Aras.VS.MethodPlugin.Commands
 				return;
 			}
 
-			GeneratedCodeInfo codeInfo = codeProvider.GenerateCodeInfo(createViewResult.SelectedTemplate, createViewResult.SelectedEventSpecificData, createViewResult.MethodName, createViewResult.UseRecommendedDefaultCode, string.Empty, createViewResult.IsUseVSFormatingCode);
+			GeneratedCodeInfo codeInfo = codeProvider.GenerateCodeInfo(createViewResult.SelectedTemplate, createViewResult.SelectedEventSpecificData, createViewResult.MethodName, createViewResult.UseRecommendedDefaultCode, string.Empty, createViewResult.IsUseVSFormattingCode);
 			projectManager.CreateMethodTree(codeInfo);
 
 			string newInnovatorMethodId = authManager.InnovatorInstance.getNewID();
@@ -107,7 +107,8 @@ namespace Aras.VS.MethodPlugin.Commands
 			};
 
 			projectConfiguration.AddMethodInfo(methodInfo);
-			projectConfigurationManager.Save(projectManager.ProjectConfigPath, projectConfiguration);
+            projectConfiguration.UseVSFormatting = createViewResult.IsUseVSFormattingCode;
+            projectConfigurationManager.Save(projectManager.ProjectConfigPath, projectConfiguration);
 		}
 	}
 }

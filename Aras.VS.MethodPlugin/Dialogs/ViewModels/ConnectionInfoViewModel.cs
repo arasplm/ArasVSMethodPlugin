@@ -19,10 +19,10 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 	{
 		private readonly IAuthenticationManager authenticationManager;
 		private readonly IDialogFactory dialogFactory;
-		private readonly ProjectConfigurationManager configurationManager;
+		private readonly IProjectConfigurationManager configurationManager;
 		private readonly IProjectManager projectManager;
 
-		private ProjectConfiguraiton projectConfiguration;
+		private IProjectConfiguraiton projectConfiguration;
 		private ConnectionInfo connectionInfo;
 
 		private ICommand closeCommand;
@@ -32,9 +32,9 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		public ConnectionInfoViewModel(
 			IAuthenticationManager authenticationManager,
 			IDialogFactory dialogFactory,
-			ProjectConfigurationManager configurationManager,
+			IProjectConfigurationManager configurationManager,
 			IProjectManager projectManager,
-			ProjectConfiguraiton projectConfiguration)
+			IProjectConfiguraiton projectConfiguration)
 		{
 			if (authenticationManager == null) throw new ArgumentNullException(nameof(authenticationManager));
 			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));

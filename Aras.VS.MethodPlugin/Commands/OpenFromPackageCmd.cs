@@ -30,15 +30,16 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// </summary>
 		public const int CommandId = 0x102;
 
-		/// <summary>
-		/// Command menu group (command set GUID).
-		/// </summary>
-		public static readonly Guid CommandSet = new Guid("AEA8535B-C666-4112-9BDD-5ECFA4934B47");
+        /// <summary>
+        /// Command menu group (command set GUID).
+        /// </summary>
+        public static readonly Guid CommandSet = CommandIds.OpenFromPackage;
 
-		private readonly IAuthenticationManager authManager;
+
+        private readonly IAuthenticationManager authManager;
 		private readonly ICodeProviderFactory codeProviderFactory;
 
-		private OpenFromPackageCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, ProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory)
+		private OpenFromPackageCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory)
 			: base(projectManager, dialogFactory, projectConfigurationManager)
 		{
 			if (authManager == null) throw new ArgumentNullException(nameof(authManager));
@@ -71,7 +72,7 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// Initializes the singleton instance of the command.
 		/// </summary>
 		/// <param name="package">Owner package, not null.</param>
-		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, ProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory)
+		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory)
 		{
 			Instance = new OpenFromPackageCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
 		}
@@ -84,13 +85,13 @@ namespace Aras.VS.MethodPlugin.Commands
 			string projectConfigPath = projectManager.ProjectConfigPath;
 			string methodConfigPath = projectManager.MethodConfigPath;
 
-			ProjectConfiguraiton projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
+            var projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
 			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language, projectConfiguration);
 
 			var templateLoader = new TemplateLoader();
 			templateLoader.Load(methodConfigPath);
 
-			var openView = dialogFactory.GetOpenFromPackageView(projectManager.UIShell, templateLoader, codeProvider.Language, projectConfiguration.LastSelectedDir);
+			var openView = dialogFactory.GetOpenFromPackageView(projectManager.UIShell, templateLoader, codeProvider.Language, projectConfiguration);
 
 			var openViewResult = openView.ShowDialog();
 			if (openViewResult?.DialogOperationResult != true)
@@ -137,10 +138,12 @@ namespace Aras.VS.MethodPlugin.Commands
 				ExecutionAllowedToId = openViewResult.IdentityId,
 				ExecutionAllowedToKeyedName = openViewResult.IdentityKeyedName,
 				PartialClasses = codeInfo.PartialCodeInfoList.Select(pci => pci.Path).ToList(),
-				ManifestFileName = openViewResult.SelectedManifestFile
+				ManifestFileName = openViewResult.SelectedManifestFileName
 			};
 
 			projectConfiguration.LastSelectedDir = openViewResult.SelectedFolderPath;
+            projectConfiguration.LastSelectedMfFile = openViewResult.SelectedManifestFullPath;
+            projectConfiguration.UseVSFormatting = openViewResult.IsUseVSFormattingCode;
 			projectConfiguration.AddMethodInfo(methodInfo);
 			projectConfigurationManager.Save(projectConfigPath, projectConfiguration);
 		}

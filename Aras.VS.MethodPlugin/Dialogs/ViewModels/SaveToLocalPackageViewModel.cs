@@ -29,7 +29,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 	{
 		private readonly IAuthenticationManager authManager;
 		private readonly IDialogFactory dialogFactory;
-		private readonly ProjectConfiguraiton projectConfiguration;
+		private readonly IProjectConfiguraiton projectConfiguration;
 		private readonly TemplateLoader templateLoader;
 		private readonly PackageManager packageManager;
 		private readonly IProjectManager projectManager;
@@ -56,7 +56,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		public SaveToPackageViewModel(
 			IAuthenticationManager authManager,
 			IDialogFactory dialogFactory,
-			ProjectConfiguraiton projectConfiguration,
+			IProjectConfiguraiton projectConfiguration,
 			TemplateLoader templateLoader,
 			PackageManager packageManager,
 			ICodeProvider codeProvider,

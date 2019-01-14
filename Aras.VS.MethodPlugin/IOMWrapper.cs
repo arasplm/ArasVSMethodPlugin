@@ -10,7 +10,7 @@ using System.Reflection;
 
 namespace Aras.VS.MethodPlugin
 {
-	public class IOMWrapper
+	public class IOMWrapper : IIOMWrapper
 	{
 		private const string IOMnamespace = "Aras.IOM";
 		private const string localIOMPath = "ArasLibs\\IOM.dll";

@@ -27,7 +27,7 @@ namespace Aras.VS.MethodPlugin.Code
 	internal class CSharpCodeProvider : ICodeProvider
 	{
 		private IProjectManager projectManager;
-		private readonly ProjectConfiguraiton projectConfiguration;
+		private readonly IProjectConfiguraiton projectConfiguration;
 		private readonly DefaultCodeProvider defaultCodeProvider;
 
 		public string Language
@@ -35,7 +35,7 @@ namespace Aras.VS.MethodPlugin.Code
 			get { return "C#"; }
 		}
 
-		public CSharpCodeProvider(IProjectManager projectManager, ProjectConfiguraiton projectConfiguration, DefaultCodeProvider defaultCodeProvider)
+		public CSharpCodeProvider(IProjectManager projectManager, IProjectConfiguraiton projectConfiguration, DefaultCodeProvider defaultCodeProvider)
 		{
 			if (projectManager == null) throw new ArgumentNullException(nameof(projectManager));
 			if (projectConfiguration == null) throw new ArgumentNullException(nameof(projectConfiguration));
@@ -60,9 +60,9 @@ namespace Aras.VS.MethodPlugin.Code
 			return userCode;
 		}
 
-		public GeneratedCodeInfo GenerateCodeInfo(TemplateInfo template, EventSpecificDataType eventData, string methodName, bool useAdvancedCode, string codeToInsert, bool useCodeFormating)
+		public GeneratedCodeInfo GenerateCodeInfo(TemplateInfo template, EventSpecificDataType eventData, string methodName, bool useAdvancedCode, string codeToInsert, bool useCodeFormatting)
 		{
-			GeneratedCodeInfo codeInfo = this.CreateWrapper(template, eventData, methodName, useCodeFormating);
+			GeneratedCodeInfo codeInfo = this.CreateWrapper(template, eventData, methodName, useCodeFormatting);
 			codeInfo = this.CreateMainNew(codeInfo, template, eventData, methodName, useAdvancedCode, codeToInsert);
 			codeInfo = this.CreatePartialClasses(codeInfo);
 			codeInfo = this.CreateTestsNew(codeInfo, template, eventData, methodName, useAdvancedCode);
@@ -70,8 +70,12 @@ namespace Aras.VS.MethodPlugin.Code
 			return codeInfo;
 		}
 
-		public GeneratedCodeInfo CreateWrapper(TemplateInfo template, EventSpecificDataType eventData, string methodName, bool useVSFormating)
+		public GeneratedCodeInfo CreateWrapper(TemplateInfo template, EventSpecificDataType eventData, string methodName, bool useVSFormatting)
 		{
+            if (string.IsNullOrEmpty(methodName))
+            {
+                throw new ArgumentException("Method name can not be empty");
+            }
 			DefaultCodeTemplate defaultTemplate = LoadDefaultCodeTemplate(template, eventData);
 			string wrapperCode = defaultTemplate.WrapperSourceCode;
 
@@ -117,13 +121,13 @@ namespace Aras.VS.MethodPlugin.Code
 			resultCode = root.ToString().Replace("[WrapperMethod]", string.Empty);
 
 			GeneratedCodeInfo resultInfo = new GeneratedCodeInfo();
-			resultInfo.WrapperCodeInfo.Code = useVSFormating ? FormatingCode(resultCode) : resultCode;
+			resultInfo.WrapperCodeInfo.Code = useVSFormatting ? FormattingCode(resultCode) : resultCode;
 			resultInfo.WrapperCodeInfo.Path = Path.Combine(methodName, methodName + "Wrapper.cs");
 			resultInfo.MethodName = methodName;
 			resultInfo.ClassName = clsname;
 			resultInfo.Namespace = pkgname;
 			resultInfo.MethodCodeParentClassName = parentClassName;
-			resultInfo.IsUseVSFormating = useVSFormating;
+			resultInfo.IsUseVSFormatting = useVSFormatting;
 
             return resultInfo;
 		}
@@ -136,22 +140,31 @@ namespace Aras.VS.MethodPlugin.Code
 			string codeToInsert)
 		{
 			DefaultCodeTemplate defaultTemplate = LoadDefaultCodeTemplate(template, eventData);
-			string code = useAdvancedCode ? defaultTemplate.AdvancedSourceCode : defaultTemplate.SimpleSourceCode;
+			StringBuilder code = new StringBuilder(useAdvancedCode ? defaultTemplate.AdvancedSourceCode : defaultTemplate.SimpleSourceCode);
 			code = code.Replace("$(pkgname)", generatedCodeInfo.Namespace);
 		    code = code.Replace("$(clsname)", generatedCodeInfo.ClassName);
 
 			if (!string.IsNullOrEmpty(codeToInsert))
 			{
-				var defaultCode = GetSourceCodeBetweenRegion(code);
-				code = code.Replace(defaultCode + "#endregion MethodCode", codeToInsert + "#endregion MethodCode");
+                string codeString = code.ToString();
+				var defaultCode = GetSourceCodeBetweenRegion(codeString);
+                if (string.IsNullOrWhiteSpace(defaultCode))
+                {
+                    var insertPattern = "#region MethodCode\r\n";
+                    var insertIndex = codeString.IndexOf(insertPattern);
+                    code = code.Insert(insertIndex + insertPattern.Length, codeToInsert);
+                }
+                else
+                {
+                    code = code.Replace(defaultCode, codeToInsert);
+                }
 			}
             if (eventData.EventSpecificData != EventSpecificData.None)
             {
                 code = code.Insert(0, "#define EventDataIsAvailable\r\n");
             }
 			
-			code = generatedCodeInfo.IsUseVSFormating ? this.FormatingCode(code) : code;
-            generatedCodeInfo.MethodCodeInfo.Code = code;
+            generatedCodeInfo.MethodCodeInfo.Code = generatedCodeInfo.IsUseVSFormatting ? this.FormattingCode(code.ToString()) : code.ToString();
 			generatedCodeInfo.MethodCodeInfo.Path = Path.Combine(methodName, methodName + ".cs");
 
 			return generatedCodeInfo;
@@ -199,7 +212,8 @@ namespace Aras.VS.MethodPlugin.Code
 						int indexofEndRegion = partialString.IndexOf("#endregion MethodCode");
 						stringForReplace = partialString.Substring(indexofEndRegion, partialString.Length - indexofEndRegion);
 						partialString = partialString.Replace(stringForReplace, "}");
-					}
+                        stringForReplace = '\t' + stringForReplace;
+                    }
 
 					var existingPartialInfo = resultGeneratedCode.PartialCodeInfoList.FirstOrDefault(pi => pi.Path == path);
 					if (existingPartialInfo != null)
@@ -224,10 +238,15 @@ namespace Aras.VS.MethodPlugin.Code
 						}
 						while (endMethodIndex > 0 && currentCharacter != '}');
 
-						var stringBuilder = new StringBuilder(resultGeneratedCode.MethodCodeInfo.Code);
-						stringBuilder.Replace(Environment.NewLine, string.Empty, endMethodIndex + 2, endRegionIndex - endMethodIndex - 3);
-						stringBuilder.Remove(endMethodIndex + 1, 1);
-						resultGeneratedCode.MethodCodeInfo.Code = stringBuilder.ToString();
+                        currentCharacter = default(char);
+                        while (currentCharacter != '\r')
+                        {
+                            currentCharacter = resultGeneratedCode.MethodCodeInfo.Code[endRegionIndex];
+                            endRegionIndex--;
+                        }
+                        var endRegionEndString = resultGeneratedCode.MethodCodeInfo.Code.Substring(endRegionIndex + 1);
+                        var beginRegionEndString = resultGeneratedCode.MethodCodeInfo.Code.Remove(endMethodIndex + 1).TrimEnd(new char[] {' ', '\r','\n'});
+                        resultGeneratedCode.MethodCodeInfo.Code = beginRegionEndString + endRegionEndString;
 					}
 				}
 			}
@@ -247,13 +266,13 @@ namespace Aras.VS.MethodPlugin.Code
 			foreach (var partialCodeInfo in resultGeneratedCode.PartialCodeInfoList)
 			{
 				string code = string.Format(partialClassTemplate, partialUsings, resultGeneratedCode.MethodCodeParentClassName, partialCodeInfo.Code, resultGeneratedCode.Namespace);
-				partialCodeInfo.Code = resultGeneratedCode.IsUseVSFormating ? FormatingCode(code) : code;
+				partialCodeInfo.Code = resultGeneratedCode.IsUseVSFormatting ? FormattingCode(code) : code;
 			}
 
 			return resultGeneratedCode;
 		}
 
-		public CodeInfo CreatePartialCodeInfo(MethodInfo methodInformation, string fileName, bool useVSFormating)
+		public CodeInfo CreatePartialCodeInfo(MethodInfo methodInformation, string fileName, bool useVSFormatting)
 		{
 			string serverMethodFolderPath = projectManager.ServerMethodFolderPath;
 			string selectedFolderPath = projectManager.SelectedFolderPath;
@@ -279,7 +298,7 @@ namespace Aras.VS.MethodPlugin.Code
 			}
 
 			EventSpecificDataType eventData = CommonData.EventSpecificDataTypeList.First(x => x.EventSpecificData == methodInformation.EventData);
-			GeneratedCodeInfo codeInfo = this.CreateWrapper(template, eventData, methodName, useVSFormating);
+			GeneratedCodeInfo codeInfo = this.CreateWrapper(template, eventData, methodName, useVSFormatting);
 
 			string methodCode = File.ReadAllText(projectManager.MethodPath, new UTF8Encoding(true));
 			var tree = CSharpSyntaxTree.ParseText(methodCode);
@@ -298,7 +317,7 @@ namespace Aras.VS.MethodPlugin.Code
 			var partialCodeInfo = new CodeInfo()
 			{
 				Path = partialPath,
-				Code = useVSFormating ? FormatingCode(code) : code
+				Code = useVSFormatting ? FormattingCode(code) : code
 			};
 
 			return partialCodeInfo;
@@ -313,7 +332,7 @@ namespace Aras.VS.MethodPlugin.Code
 			code = code.Replace("$(pkgname)", resultCodeInfo.Namespace);
 			code = code.Replace("$(clsname)", resultCodeInfo.ClassName);
 
-			resultCodeInfo.TestsCodeInfo.Code = resultCodeInfo.IsUseVSFormating ? FormatingCode(code) : code;
+			resultCodeInfo.TestsCodeInfo.Code = resultCodeInfo.IsUseVSFormatting ? FormattingCode(code) : code;
 			resultCodeInfo.TestsCodeInfo.Path = Path.Combine(methodName, methodName + "Tests.cs");
 
 			return resultCodeInfo;
@@ -400,7 +419,7 @@ namespace Aras.VS.MethodPlugin.Code
 
 		private string GetSourceCodeBetweenRegion(string codeWithRegion)
 		{
-			string startRegionPattern = @"#region MethodCode[\s]*";
+			string startRegionPattern = @"#region MethodCode\r\n";
 			string endRegionPattern = @"#endregion MethodCode";
 
 			var startMatch = Regex.Match(codeWithRegion, startRegionPattern);
@@ -418,7 +437,7 @@ namespace Aras.VS.MethodPlugin.Code
 			return updatedCode;
 		}
 
-		private string FormatingCode(string code)
+		private string FormattingCode(string code)
 		{
 			SyntaxTree tree = CSharpSyntaxTree.ParseText(code);
 			SyntaxNode node = tree.GetRoot();

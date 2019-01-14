@@ -17,8 +17,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 	/// <summary>
 	/// Interaction logic for ConnectionInfoView.xaml
 	/// </summary>
-	public partial class MessageBoxWindow : Window
-	{
+	public partial class MessageBoxWindow : Window, IMessageBoxWindow
+    {
 		private MessageDialogResult dialogResult = MessageDialogResult.Cancel;
 
 		public MessageBoxWindow()
