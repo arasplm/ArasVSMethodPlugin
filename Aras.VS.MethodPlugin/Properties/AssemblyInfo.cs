@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("© 2017-2018 Aras Corporation. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: InternalsVisibleTo("Aras.VS.MethodPlugin.Tests, PublicKey=0024000004800000940000000602000000240000525341310004000001000100c9c61abc73a4b2fa96b272eee9ecbe978cdcddfcc36ea28b335e37fc8d393ef2512a7e9d5e0d58f1cd13885484df76cab88f1a8d7932335a9401f2c95242de68fe326f2c1b706e359b82c3c60f354f885d32ae0b36f8ce1380350946c12bc50890689864be9d2a2c85c438bd1b0a91dce8804cc2d6a7d1ac026421167129299c")]
+[assembly: InternalsVisibleTo("Aras.VS.MethodPlugin.Tests, PublicKey=002400000480000094000000060200000024000052534131000400000100010041a363e667fa2f8992977956a1168182e2902e09ae3ca7c42fd7b018498cc8b83c78df355364ad5be1e6d95ca8916b7cad3f568306d6a2be66f2ac3c6bd54390454868371e4b554f9d71108d006f43f50eb7f8cab190100fc01ba4dc8acd0fa42593410fbb7de452fe47cb852860d05865ff1d7c9c07deabc234f3ebc7d978d9")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
