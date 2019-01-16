@@ -7,11 +7,11 @@
 - [x] Save method to AML package
 - [x] Partial class generation
 - [x] Possibility to debug server method
-- [ ] Formatting code after method opened or created
-- [ ] Add support for CSharp:Aras.Server.Core.Configurator for SP 12
+- [x] Formatting code after method opened or created
+- [x] Add support for CSharp:Aras.Server.Core.Configurator for SP 12
 - [ ] Add Hotkey for plugin actions
-- [ ] Add project tempalte for SP 15
-- [ ]Add Aras code anylizer to project templates
+- [x] Add project tempalte for SP 15
+- [ ] Add Aras code anylizer to project templates
 
 
 Features that have a checkmark are complete and available for
@@ -22,6 +22,14 @@ download in the
 
 These are the changes to each version that has been released
 on the official Visual Studio extension gallery.
+
+## 1.4
+- [x] Added file filter for showing only *.mf files in "Open from AML package" dialog.
+- [x] Added possibility view type of method in "Open method from AML package" dialog.
+- [x] Added update Aras VS buttons enabled/disabled states based on selected project
+- [x] Formatting code after method opened or created
+- [x] Added support for CSharp:Aras.Server.Core.Configurator for SP 12
+- [x] Added SP 15 project template
 
 ## 1.3
 - [x] Possibility to debug server method and pass context

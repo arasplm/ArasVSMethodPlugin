@@ -43,7 +43,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>Key.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <DelaySign>false</DelaySign>
@@ -162,7 +162,7 @@
     <Compile Include="Stubs\MethodItemStub.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Key.pfx" />
+    <None Include="Key.snk" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
