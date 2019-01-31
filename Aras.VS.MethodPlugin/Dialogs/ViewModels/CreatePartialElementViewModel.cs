@@ -4,7 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
+using Aras.VS.MethodPlugin.Code;
 
 namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 {
@@ -13,6 +17,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private string fileName;
 		private bool isOkButtonEnabled;
 		private bool isUseVSFormattingCode;
+
+		private CodeElementType selectedElementType;
 
 		private ICommand okCommand;
 		private ICommand cancelCommand;
@@ -23,8 +29,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.okCommand = new RelayCommand<object>(OnOKCliked, IsEnabledOkButton);
 			this.cancelCommand = new RelayCommand<object>(OnCancelCliked);
 			this.closeCommand = new RelayCommand<object>(OnCloseCliked);
-            this.isUseVSFormattingCode = usedVSFormatting;
-            this.FileName = "File1";
+			this.isUseVSFormattingCode = usedVSFormatting;
+			this.FileName = "File1";
 		}
 
 		#region Properties
@@ -53,6 +59,18 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		{
 			get { return isUseVSFormattingCode; }
 			set { isUseVSFormattingCode = value; }
+		}
+
+		public ObservableCollection<CodeElementType> ElementTypes
+		{
+			get { return new ObservableCollection<CodeElementType>(Enum.GetValues(typeof(CodeElementType)).Cast<CodeElementType>()); }
+			set { }
+		}
+
+		public CodeElementType SelectedElementType
+		{
+			get { return this.selectedElementType; }
+			set { this.selectedElementType = value; RaisePropertyChanged(nameof(SelectedElementType)); }
 		}
 
 		#endregion

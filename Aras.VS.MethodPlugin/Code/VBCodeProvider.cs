@@ -258,7 +258,7 @@ End Class
 			throw new NotImplementedException();
 		}
 
-		public CodeInfo CreatePartialCodeInfo(MethodInfo methodInfo, string fileName, bool useCodeFormating)
+		public CodeInfo CreatePartialCodeInfo(MethodInfo methodInfo, string fileName, CodeElementType elementType, bool useCodeFormating)
 		{
 			throw new NotImplementedException();
 		}

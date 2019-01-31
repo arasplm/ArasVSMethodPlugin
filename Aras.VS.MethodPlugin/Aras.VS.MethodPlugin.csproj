@@ -83,7 +83,9 @@
     <Compile Include="Authentication\InnovatorUser.cs" />
     <Compile Include="Code\CodeProviderFactory.cs" />
     <Compile Include="Code\CodeInfo.cs" />
+    <Compile Include="Code\CSharpCodeElementTypeProvider.cs" />
     <Compile Include="Code\ICodeProviderFactory.cs" />
+    <Compile Include="Code\ICodeElementTypeProvider.cs" />
     <Compile Include="Commands\AuthenticationCommandBase.cs" />
     <Compile Include="Commands\CmdBase.cs" />
     <Compile Include="Commands\CommandIdsList.cs" />
