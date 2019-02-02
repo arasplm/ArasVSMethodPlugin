@@ -4,10 +4,12 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
+using Aras.VS.MethodPlugin.Dialogs;
+using Aras.VS.MethodPlugin.Dialogs.Views;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows;
 using System.Xml;
 
 namespace Aras.VS.MethodPlugin.Templates
@@ -61,23 +63,30 @@ namespace Aras.VS.MethodPlugin.Templates
 			}
 		}
 
-		public TemplateInfo GetTemplateFromCodeString(string code, string language)
-		{
-			TemplateInfo template = null;
-			string methodTemplatePattern = @"//MethodTemplateName\s*=\s*(?<templatename>[^\W]*)\s*";
-			Match methodTemplateNameMatch = Regex.Match(code, methodTemplatePattern);
-			if (methodTemplateNameMatch.Success)
-			{
-				string value = methodTemplateNameMatch.Groups["templatename"].Value;
-				template = Templates.Where(t => t.TemplateLanguage == language && t.TemplateName == value).FirstOrDefault();
-			}
-			if (template == null)
-			{
-				template = Templates.Where(t => t.TemplateLanguage == language && t.IsSupported).FirstOrDefault();
-			}
-			if (template == null)
-			{
-				throw new Exception(string.Empty);
+        public TemplateInfo GetTemplateFromCodeString(string methodCode, string methodLanguage, string operationName, Window ownerWindow)
+        {
+            TemplateInfo template = null;
+            string methodTemplatePattern = @"//MethodTemplateName\s*=\s*(?<templatename>[^\W]*:?[\w.]*\(?[\w.:]*\)?)\s*";
+            Match methodTemplateNameMatch = Regex.Match(methodCode, methodTemplatePattern);
+
+            if (methodTemplateNameMatch.Success)
+            {
+                string templateName = methodTemplateNameMatch.Groups["templatename"].Value;
+                template = Templates.Where(t => t.TemplateLanguage == methodLanguage && t.TemplateName == templateName).FirstOrDefault();
+
+                if (template == null)
+                {
+                    var messageWindow = new MessageBoxWindow();
+                    messageWindow.ShowDialog(ownerWindow as Window,
+                        $"The template {templateName} from selected method not found. Default template will be used.",
+                        operationName,
+                        MessageButtons.OK,
+                        MessageIcon.Information);
+                }
+            }
+            if (template == null)
+            {
+                template = Templates.Where(t => t.TemplateLanguage == methodLanguage && t.IsSupported).FirstOrDefault();
 			}
 
 			return template;

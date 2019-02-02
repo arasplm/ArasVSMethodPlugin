@@ -281,34 +281,10 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				{
 					methodType = "client";
 				}
-
-				// TODO : duplicated with OpenFromPackageView
-				TemplateInfo template = null;
-				string methodTemplatePattern = @"//MethodTemplateName\s*=\s*(?<templatename>[^\W]*)\s*";
-				Match methodTemplateNameMatch = Regex.Match(methodCode, methodTemplatePattern);
-				if (methodTemplateNameMatch.Success)
-				{
-					string templateName = methodTemplateNameMatch.Groups["templatename"].Value;
-					template = templateLoader.Templates.Where(t => t.TemplateLanguage == methodLanguage && t.TemplateName == templateName).FirstOrDefault();
-
-					if (template == null)
-					{
-						var messageWindow = new MessageBoxWindow();
-						messageWindow.ShowDialog(view,
-							$"The template {templateName} from {methodName} method not found. Default template will be used.",
-							"Update method from Aras Innovator",
-							MessageButtons.OK,
-							MessageIcon.Information);
-					}
-				}
-				if (template == null)
-				{
-					template = templateLoader.Templates.Where(t => t.TemplateLanguage == methodLanguage && t.IsSupported).FirstOrDefault();
-				}
-
-				this.SelectedTemplate = template;
                 
-				var packageName = string.Empty;
+				this.SelectedTemplate = templateLoader.GetTemplateFromCodeString(methodCode, methodLanguage, "Update method from Aras Innovator", view as Window);
+
+                var packageName = string.Empty;
 
 				try
 				{
