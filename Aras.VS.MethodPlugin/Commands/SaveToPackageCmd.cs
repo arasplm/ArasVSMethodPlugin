@@ -188,7 +188,7 @@ namespace Aras.VS.MethodPlugin.Commands
 				methodId = saveViewResult.MethodInformation.InnovatorMethodConfigId;
 			}
 
-			string updateMethodCodeForSavingToAmlPackage = saveViewResult.MethodCode.Replace("]]", "]]]]><![CDATA[");
+			string updateMethodCodeForSavingToAmlPackage = saveViewResult.MethodCode.Replace("]]>", "]]]]><![CDATA[>");
 			string methodTemplate = $@"<AML>
  <Item type=""Method"" id=""{methodId}"" action=""add"">" + 
   (!string.IsNullOrWhiteSpace(saveViewResult.MethodComment) ? $"<comments>{saveViewResult.MethodComment}</comments>" : "") +
