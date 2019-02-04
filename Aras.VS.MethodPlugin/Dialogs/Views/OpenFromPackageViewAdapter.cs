@@ -11,7 +11,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 {
 	public class OpenFromPackageViewAdapter : ViewAdaper<OpenFromPackageView, OpenFromPackageViewResult>
 	{
-        public OpenFromPackageViewAdapter(OpenFromPackageView view) : base(view)
+		public OpenFromPackageViewAdapter(OpenFromPackageView view) : base(view)
 		{
 		}
 
@@ -38,8 +38,9 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 				SelectedEventSpecificData = viewModel.SelectedEventSpecificData,
 				SelectedFolderPath = Path.GetDirectoryName(viewModel.SelectedManifestFilePath),
 				SelectedManifestFileName = Path.GetFileName(viewModel.SelectedManifestFilePath),
-                SelectedManifestFullPath = viewModel.SelectedManifestFilePath,
-                IsUseVSFormattingCode = viewModel.IsUseVSFormattingCode
+				SelectedManifestFullPath = viewModel.SelectedManifestFilePath,
+				IsUseVSFormattingCode = viewModel.IsUseVSFormattingCode,
+				SelectedSearchType = viewModel.SelectedSearchType
 			};
 		}
 	}

@@ -9,29 +9,31 @@ using System.Threading.Tasks;
 
 namespace Aras.VS.MethodPlugin.ProjectConfigurations
 {
-    public interface IProjectConfiguraiton
-    {
+	public interface IProjectConfiguraiton
+	{
 
-        string LastSelectedDir { get; set; }
+		string LastSelectedDir { get; set; }
 
-        string LastSelectedMfFile { get; set; }
+		string LastSelectedMfFile { get; set; }
 
-        bool UseVSFormatting { get; set; }
+		bool UseVSFormatting { get; set; }
 
-        List<ConnectionInfo> Connections { get; }
+		string LastSelectedSearchTypeInOpenFromPackage{ get; set; }
 
-        List<MethodInfo> MethodInfos { get; set; }
+		List<ConnectionInfo> Connections { get; }
 
-        Dictionary<string, List<PropertyInfo>> LastSavedSearch { get; set; }
+		List<MethodInfo> MethodInfos { get; set; }
 
-        void RemoveFromMethodInfo(string methodName, ProjectItem projectItem);
+		Dictionary<string, List<PropertyInfo>> LastSavedSearch { get; set; }
 
-        void UpdateMethodInfo(string methodName, ProjectItem projectItem, string oldName);
+		void RemoveFromMethodInfo(string methodName, ProjectItem projectItem);
 
-        void Update(IProjectManager projectManager);
+		void UpdateMethodInfo(string methodName, ProjectItem projectItem, string oldName);
 
-        void AddConnection(ConnectionInfo connection);
+		void Update(IProjectManager projectManager);
 
-        void AddMethodInfo(MethodInfo methodInfo);
-    }
+		void AddConnection(ConnectionInfo connection);
+
+		void AddMethodInfo(MethodInfo methodInfo);
+	}
 }

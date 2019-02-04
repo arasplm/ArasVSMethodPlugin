@@ -30,4 +30,35 @@
         </Setter>
     </Style>
 
+    <Style x:Key="WatermarkTextBox" TargetType="TextBox" >
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static shell:EnvironmentColors.ComboBoxTextBrushKey}}"/>
+        <Setter Property="Background" Value="{DynamicResource {x:Static shell:EnvironmentColors.ComboBoxBackgroundBrushKey}}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static shell:EnvironmentColors.ComboBoxBorderBrushKey}}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                        <Grid>
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                            <Label Margin="5,-2,0,0" x:Name="WaterMarkLabel" Content="{TemplateBinding Tag}" VerticalAlignment="Center" Visibility="Collapsed" Foreground="Gray" FontFamily="Arial"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static shell:EnvironmentColors.ComboBoxMouseOverBorderBrushKey}}"/>
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="Text" Value=""/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Visibility" TargetName="WaterMarkLabel" Value="Visible"/>
+                        </MultiTrigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="DimGray"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

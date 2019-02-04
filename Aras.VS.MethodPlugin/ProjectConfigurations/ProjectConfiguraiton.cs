@@ -17,7 +17,7 @@ using EnvDTE;
 namespace Aras.VS.MethodPlugin.ProjectConfigurations
 {
 	public class ProjectConfiguraiton : IProjectConfiguraiton
-    {
+	{
 		private const string serverMethodsFolderName = "ServerMethods";
 
 		public ProjectConfiguraiton()
@@ -114,7 +114,7 @@ namespace Aras.VS.MethodPlugin.ProjectConfigurations
 
 		public void RemoveFromMethodInfo(string methodName, ProjectItem projectItem)
 		{
-            string filePath = projectItem.FileNames[0];
+			string filePath = projectItem.FileNames[0];
 			int index = filePath.IndexOf(serverMethodsFolderName);
 			if (index == 1)
 			{
@@ -127,30 +127,32 @@ namespace Aras.VS.MethodPlugin.ProjectConfigurations
 			string fodlerPath = methodName + "\\";
 
 
-            if (fodlerPath == partialPath)
+			if (fodlerPath == partialPath)
 			{
 				MethodInfos.RemoveAll(x => x.MethodName == methodName);
-                return;
+				return;
 			}
-            MethodInfo methodInfos = this.MethodInfos.FirstOrDefault(m => m.MethodName == methodName);
+			MethodInfo methodInfos = this.MethodInfos.FirstOrDefault(m => m.MethodName == methodName);
 
-            List<string> classesForRemoving = new List<string>();
+			List<string> classesForRemoving = new List<string>();
 
-            foreach (var partialClass in methodInfos.PartialClasses)
-            {
-                if (partialClass.IndexOf(partialPath) == 0)
-                {
-                    classesForRemoving.Add(partialClass);
-                }
-            }
-            classesForRemoving.ForEach(cfr => methodInfos.PartialClasses.Remove(cfr));
-        }
+			foreach (var partialClass in methodInfos.PartialClasses)
+			{
+				if (partialClass.IndexOf(partialPath) == 0)
+				{
+					classesForRemoving.Add(partialClass);
+				}
+			}
+			classesForRemoving.ForEach(cfr => methodInfos.PartialClasses.Remove(cfr));
+		}
 
 		public string LastSelectedDir { get; set; }
 
-        public string LastSelectedMfFile { get; set; }
+		public string LastSelectedMfFile { get; set; }
 
-        public bool UseVSFormatting { get; set; }
+		public bool UseVSFormatting { get; set; }
+
+		public string LastSelectedSearchTypeInOpenFromPackage { get; set; }
 
 		public List<ConnectionInfo> Connections { get; private set; }
 

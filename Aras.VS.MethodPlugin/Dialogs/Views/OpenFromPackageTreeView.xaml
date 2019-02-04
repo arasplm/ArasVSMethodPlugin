@@ -73,6 +73,8 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
+
+            <converters:BitmapToBitmapImageConverter x:Key="bitmapToBitmapImageConverter"/>
         </ResourceDictionary>
     </Window.Resources>
     <Border Padding="5">
@@ -124,11 +126,49 @@
             </ListBox>
 
             <GridSplitter Grid.Column="3" Width="5" HorizontalAlignment="Stretch" />
-            <ListBox Grid.Column="4" x:Name="MethodsView" ItemsSource="{Binding Methods}"
+            <Grid Grid.Column="4">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="22"/>
+                    <RowDefinition Height="5"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="40"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Grid.Column="0" Text="{Binding SearchPattern, UpdateSourceTrigger=PropertyChanged}" Tag="Search" Style="{StaticResource WatermarkTextBox}"/>
+                    <ComboBox Grid.Column="1" ItemsSource="{Binding SearchTypes}" SelectedValue="{Binding SelectedSearchType}" SelectedValuePath="Key">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Image Source="{Binding Value.Icon, Converter={StaticResource bitmapToBitmapImageConverter }}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                        <ComboBox.ItemContainerStyle>
+                            <Style TargetType="{x:Type ComboBoxItem}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image  Source="{Binding Value.Icon, Converter={StaticResource bitmapToBitmapImageConverter }}" VerticalAlignment="Center"/>
+                                                <TextBlock Margin="3,0,0,0" Text="{Binding Value.TypeName}" VerticalAlignment="Center" ></TextBlock>
+                                            </StackPanel>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ComboBox.ItemContainerStyle>
+                    </ComboBox>
+                </Grid>
+                <ListBox Grid.Row="2" x:Name="MethodsView" ItemsSource="{Binding Methods}"
                      SelectedItem="{Binding Path=SelectedMethod}" 
                      ItemContainerStyle="{StaticResource MethodInfoListBoxItemStyle}" 
                      SelectionChanged="ListBox_SelectionChanged">
-            </ListBox>
+                </ListBox>
+            </Grid>
 
             <Grid Grid.Row="1" Grid.ColumnSpan="5" Margin="0,10">
                 <Grid.ColumnDefinitions>

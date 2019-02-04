@@ -30,13 +30,13 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// </summary>
 		public const int CommandId = 0x102;
 
-        /// <summary>
-        /// Command menu group (command set GUID).
-        /// </summary>
-        public static readonly Guid CommandSet = CommandIds.OpenFromPackage;
+		/// <summary>
+		/// Command menu group (command set GUID).
+		/// </summary>
+		public static readonly Guid CommandSet = CommandIds.OpenFromPackage;
 
 
-        private readonly IAuthenticationManager authManager;
+		private readonly IAuthenticationManager authManager;
 		private readonly ICodeProviderFactory codeProviderFactory;
 
 		private OpenFromPackageCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory)
@@ -85,7 +85,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			string projectConfigPath = projectManager.ProjectConfigPath;
 			string methodConfigPath = projectManager.MethodConfigPath;
 
-            var projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
+			var projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
 			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language, projectConfiguration);
 
 			var templateLoader = new TemplateLoader();
@@ -142,8 +142,9 @@ namespace Aras.VS.MethodPlugin.Commands
 			};
 
 			projectConfiguration.LastSelectedDir = openViewResult.SelectedFolderPath;
-            projectConfiguration.LastSelectedMfFile = openViewResult.SelectedManifestFullPath;
-            projectConfiguration.UseVSFormatting = openViewResult.IsUseVSFormattingCode;
+			projectConfiguration.LastSelectedMfFile = openViewResult.SelectedManifestFullPath;
+			projectConfiguration.UseVSFormatting = openViewResult.IsUseVSFormattingCode;
+			projectConfiguration.LastSelectedSearchTypeInOpenFromPackage = openViewResult.SelectedSearchType;
 			projectConfiguration.AddMethodInfo(methodInfo);
 			projectConfigurationManager.Save(projectConfigPath, projectConfiguration);
 		}

@@ -7,8 +7,10 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 	public class ShortMethodInfoViewModel : BaseViewModel
 	{
 		private readonly string fullName;
-		
+
+		private XmlDocument methodFile;
 		private string methodType;
+		private string methodCode;
 
 		public ShortMethodInfoViewModel(string fullName)
 		{
@@ -26,7 +28,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			{
 				return Path.GetFileNameWithoutExtension(this.fullName);
 			}
-			set { }
 		}
 
 		public string FullName
@@ -35,7 +36,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			{
 				return this.fullName;
 			}
-			set { }
 		}
 
 		public string MethodType
@@ -49,16 +49,43 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 				return this.methodType;
 			}
-			set
-			{ }
+		}
+
+		public string MethodCode
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(this.methodCode))
+				{
+					this.methodCode = LoadMethodCode();
+				}
+
+				return this.methodCode;
+			}
 		}
 
 		private string LoadMethodType()
 		{
-			XmlDocument xmlDocument = new XmlDocument();
-			xmlDocument.Load(this.fullName);
-			XmlNode xmlNode = xmlDocument.SelectSingleNode("//method_type");
-			return xmlNode.InnerText;
+			if (this.methodFile == null)
+			{
+				this.methodFile = new XmlDocument();
+				this.methodFile.Load(this.fullName);
+			}
+
+			XmlNode methodTypeNode = this.methodFile.SelectSingleNode("//method_type");
+			return methodTypeNode.InnerText;
+		}
+
+		private string LoadMethodCode()
+		{
+			if (this.methodFile == null)
+			{
+				this.methodFile = new XmlDocument();
+				this.methodFile.Load(this.fullName);
+			}
+
+			XmlNode methodCodeNode = this.methodFile.SelectSingleNode("//method_code");
+			return methodCodeNode.InnerText;
 		}
 	}
 }

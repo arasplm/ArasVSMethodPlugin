@@ -25,7 +25,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 		public string IdentityKeyedName { get; set; }
 		public string SelectedFolderPath { get; set; }
 		public string SelectedManifestFileName { get; set; }
-        public string SelectedManifestFullPath { get; set; }
-        public bool IsUseVSFormattingCode{ get; set; }
+		public string SelectedManifestFullPath { get; set; }
+		public bool IsUseVSFormattingCode { get; set; }
+		public string SelectedSearchType { get; set; }
 	}
 }

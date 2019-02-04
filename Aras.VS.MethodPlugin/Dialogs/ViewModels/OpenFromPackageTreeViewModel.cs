@@ -6,10 +6,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using System.Xml;
 using Aras.VS.MethodPlugin.Dialogs.Directory.Data;
 using Aras.VS.MethodPlugin.Dialogs.Views;
@@ -19,28 +21,41 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 	public class OpenFromPackageTreeViewModel : BaseViewModel
 	{
 		private const string importFileName = ".mf";
+		private const string searchMethodFilePatern = "*.xml";
+
+		private const string searchByContentKey = "MethodContent";
+		private const string searchByFileNameKey = "MethodName";
 
 		private Dictionary<string, string> packages;
 		private List<ShortMethodInfoViewModel> methods;
+
+		private List<ShortMethodInfoViewModel> allPackageMethods;
 
 		private string selectedPackageName;
 		private ShortMethodInfoViewModel selectedMethodValue;
 		private string rootFolderPath;
 		private SelectPathViewModel selectPathViewModel;
+		private string searchPattern;
 		private ICommand okCommand;
 		private ICommand closeCommand;
 		private ICommand pathChangeCommand;
-        private ICommand cancelCommand;
+		private ICommand cancelCommand;
 
-		public OpenFromPackageTreeViewModel(string lastSelectedManifestFilePath, string lastSelectedPackage, string lastSelectedMethod)
+		private DispatcherTimer dispatcherTimer;
+		private Dictionary<string, SearchType> searchTypes;
+
+		public OpenFromPackageTreeViewModel(string lastSelectedManifestFilePath, string lastSelectedPackage, string lastSelectedMethod, string lastUsedSearchType)
 		{
-
 			SelectPathViewModel = new SelectPathViewModel(DirectoryItemType.File, lastSelectedManifestFilePath, importFileName);
 			SelectPathViewModel.SelectionChanged += OnSelectDirectoryItem;
 			this.okCommand = new RelayCommand<object>(OkCommandClick);
 			this.closeCommand = new RelayCommand<object>(OnCloseCliked);
 			this.pathChangeCommand = new RelayCommand<object>(OnPathChange);
-            this.cancelCommand = new RelayCommand<object>(OnCloseCliked);
+			this.cancelCommand = new RelayCommand<object>(OnCloseCliked);
+
+			this.dispatcherTimer = new DispatcherTimer();
+			this.dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 750);
+			this.dispatcherTimer.Tick += DispatcherTimer_Tick;
 
 			if (!string.IsNullOrEmpty(lastSelectedManifestFilePath))
 			{
@@ -48,14 +63,33 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				this.SelectedPackageName = lastSelectedPackage;
 				this.SelectedMethod = this.Methods.FirstOrDefault(x => x.Name == lastSelectedMethod);
 			}
+
+			this.searchTypes = new Dictionary<string, SearchType>
+			{
+				{ searchByContentKey, new SearchType() { Icon = Properties.Resources.searchByContent, TypeName = "Search by method content" } },
+				{ searchByFileNameKey, new SearchType() { Icon = Properties.Resources.searchFile, TypeName = "Search by method name" } }
+			};
+
+			if (!string.IsNullOrEmpty(lastUsedSearchType) && this.searchTypes.TryGetValue(lastUsedSearchType, out SearchType searchType))
+			{
+				this.selectedSearchType = lastUsedSearchType;
+			}
+			else
+			{
+				this.selectedSearchType = searchByContentKey;
+			}
 		}
 
-        #region Properties
+		#region Properties
 
-        public SelectPathViewModel SelectPathViewModel
+		public SelectPathViewModel SelectPathViewModel
 		{
 			get { return selectPathViewModel; }
-			set { selectPathViewModel = value; RaisePropertyChanged(nameof(SelectPathViewModel)); }
+			set
+			{
+				selectPathViewModel = value;
+				RaisePropertyChanged(nameof(SelectPathViewModel));
+			}
 		}
 
 		public Dictionary<string, string> Packages
@@ -64,7 +98,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			set
 			{
 				this.packages = value;
-				this.Methods = new List<ShortMethodInfoViewModel>();
 				RaisePropertyChanged(nameof(Packages));
 			}
 		}
@@ -75,24 +108,18 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			set
 			{
 				selectedPackageName = value;
-
-				var localMethods = new List<ShortMethodInfoViewModel>();
-				if (!string.IsNullOrEmpty(selectedPackageName))
-				{
-					string methodsPath = Path.Combine(rootFolderPath, Packages[selectedPackageName], "Method");
-					if (System.IO.Directory.Exists(methodsPath))
-					{
-						localMethods = new DirectoryInfo(methodsPath).GetFiles("*.xml").Select(x => new ShortMethodInfoViewModel(x.FullName)).ToList();
-					}
-				}
-
-				this.Methods = localMethods;
+				LoadMethods();
+				RunSearchByCriteria();
+				RaisePropertyChanged(nameof(this.SelectedPackageName));
 			}
 		}
 
 		public List<ShortMethodInfoViewModel> Methods
 		{
-			get { return methods; }
+			get
+			{
+				return this.methods;
+			}
 			set
 			{
 				this.methods = value;
@@ -103,23 +130,59 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		public ShortMethodInfoViewModel SelectedMethod
 		{
 			get { return selectedMethodValue; }
-			set { selectedMethodValue = value; RaisePropertyChanged(nameof(SelectedMethod)); }
+			set
+			{
+				selectedMethodValue = value;
+				RaisePropertyChanged(nameof(SelectedMethod));
+			}
+		}
+
+
+		public string SearchPattern
+		{
+			get { return this.searchPattern; }
+			set
+			{
+				this.searchPattern = value;
+				this.dispatcherTimer.Stop();
+				this.dispatcherTimer.Start();
+				RaisePropertyChanged(nameof(this.SearchPattern));
+			}
+		}
+
+		public Dictionary<string, SearchType> SearchTypes
+		{
+			get { return this.searchTypes; }
+		}
+
+		private string selectedSearchType;
+		public string SelectedSearchType
+		{
+			get { return this.selectedSearchType; }
+			set
+			{
+				this.selectedSearchType = value;
+				if (!string.IsNullOrEmpty(this.searchPattern))
+				{
+					RunSearchByCriteria();
+				}
+			}
 		}
 
 		#endregion
 
 		#region Commands
-
-		public ICommand OkCommand { get { return okCommand; } }
+		public ICommand OkCommand
+		{ get { return okCommand; } }
 
 		public ICommand CloseCommand { get { return closeCommand; } }
 
 		public ICommand PathChangeCommand { get { return pathChangeCommand; } }
 
-        public ICommand CancelCommand { get { return cancelCommand; } }
-        #endregion
+		public ICommand CancelCommand { get { return cancelCommand; } }
+		#endregion
 
-        private void OnSelectDirectoryItem(string fullPath)
+		private void OnSelectDirectoryItem(string fullPath)
 		{
 			this.rootFolderPath = Path.GetDirectoryName(fullPath);
 
@@ -166,7 +229,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			(view as Window).Close();
 		}
 
-        private void OnPathChange(object window)
+		private void OnPathChange(object window)
 		{
 			var wnd = window as Window;
 			var path = SelectPathViewModel.SelectedPath;
@@ -184,5 +247,50 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 					MessageIcon.None);
 			}
 		}
+
+		private void LoadMethods()
+		{
+			this.allPackageMethods = new List<ShortMethodInfoViewModel>();
+			if (!string.IsNullOrEmpty(selectedPackageName))
+			{
+				string methodsPath = Path.Combine(rootFolderPath, Packages[selectedPackageName], "Method");
+				if (System.IO.Directory.Exists(methodsPath))
+				{
+					this.allPackageMethods = new DirectoryInfo(methodsPath).GetFiles(searchMethodFilePatern).Select(x => new ShortMethodInfoViewModel(x.FullName)).ToList();
+				}
+			}
+		}
+
+		private void RunSearchByCriteria()
+		{
+			List<ShortMethodInfoViewModel> localMethods = new List<ShortMethodInfoViewModel>();
+			if (!string.IsNullOrEmpty(this.SearchPattern))
+			{
+				if (this.SelectedSearchType == searchByContentKey)
+				{
+					this.Methods = this.allPackageMethods.Where(x => x.MethodCode.IndexOf(this.SearchPattern, StringComparison.InvariantCultureIgnoreCase) != -1).ToList();
+				}
+				else
+				{
+					this.Methods = this.allPackageMethods.Where(x => x.Name.IndexOf(this.SearchPattern, StringComparison.InvariantCultureIgnoreCase) != -1).ToList();
+				}
+			}
+			else
+			{
+				this.Methods = this.allPackageMethods;
+			}
+		}
+
+		private void DispatcherTimer_Tick(object sender, EventArgs e)
+		{
+			this.dispatcherTimer.Stop();
+			RunSearchByCriteria();
+		}
+	}
+
+	public class SearchType
+	{
+		public Bitmap Icon { get; set; }
+		public string TypeName { get; set; }
 	}
 }
