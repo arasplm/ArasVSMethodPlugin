@@ -31,7 +31,7 @@ namespace Aras.VS.MethodPlugin.Code
 			ICodeProvider codeProvider = null;
 			if (projectLanguageCode == CodeModelLanguageConstants.vsCMLanguageCSharp)
 			{
-				codeProvider = new CSharpCodeProvider(projectManager, projectConfiguration, defaultCodeProvider);
+				codeProvider = new CSharpCodeProvider(projectManager, projectConfiguration, defaultCodeProvider, new CSharpCodeElementTypeProvider());
 			}
 			else if (projectLanguageCode == CodeModelLanguageConstants.vsCMLanguageVB)
 			{

@@ -22,6 +22,7 @@
                 <ResourceDictionary Source="Styles/TextBoxControl.xaml" />
                 <ResourceDictionary Source="Styles/Window.xaml" />
                 <ResourceDictionary Source="Styles/CheckBox.xaml" />
+                <ResourceDictionary Source="Styles/ComboBoxControl.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -29,16 +30,20 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition  Width="3*"/>
+            <ColumnDefinition  Width="2.9*"/>
         </Grid.ColumnDefinitions>
 
-        <Label x:Name="FileNameLabel" Grid.Column="0" Content="File Name: " VerticalContentAlignment="Center" Margin="5, 5, 0, 5"/>
-        <TextBox x:Name="FileNameTextBlock" Grid.Column="1" Text="{Binding Path=FileName, UpdateSourceTrigger=PropertyChanged}" Height="24" TextWrapping="Wrap" VerticalContentAlignment="Center" Margin="0, 5, 5, 5" />
+        <Label x:Name="FileNameLabel" Content="File Name: " VerticalContentAlignment="Center" Margin="5, 5, 0, 5"/>
+        <TextBox x:Name="FileNameTextBlock" Grid.Column="1" Text="{Binding Path=FileName, UpdateSourceTrigger=PropertyChanged}" Height="24" TextWrapping="Wrap" VerticalContentAlignment="Center" Margin="5" />
 
-        <CheckBox Content="Use Visual Studio formatting" FlowDirection="RightToLeft" Margin = "10"  VerticalAlignment="Center" HorizontalAlignment="Left" IsChecked ="{Binding IsUseVSFormattingCode}"  Grid.Row="1" Grid.ColumnSpan="2">
+        <Label x:Name="ElementTypeLabel" Grid.Row="1" Content="Element Type: " VerticalContentAlignment="Center" Margin="5, 5, 0, 5"/>
+        <ComboBox x:Name="ElementTypeComboBox" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Path=ElementTypes}" SelectedItem="{Binding Path=SelectedElementType}" VerticalContentAlignment="Center" Margin="5"/>
+
+        <CheckBox Content="Use Visual Studio formatting" FlowDirection="RightToLeft" Margin = "10"  VerticalAlignment="Center" HorizontalAlignment="Left" IsChecked ="{Binding IsUseVSFormattingCode}"  Grid.Row="2" Grid.ColumnSpan="2">
             <CheckBox.Resources>
                 <Style TargetType="{x:Type Path}">
                     <Setter Property="FlowDirection" Value="LeftToRight"/>
@@ -46,7 +51,7 @@
             </CheckBox.Resources>
         </CheckBox>
 
-        <WrapPanel Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+        <WrapPanel Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom">
             <Button x:Name="OkButton" Content="OK" Command="{Binding Path=OKCommand}" CommandParameter="{Binding ElementName=CreatePartialElementWindow}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70" Margin="5"/>
             <Button x:Name="CancelButton" Content="Cancel" Command="{Binding Path=CancelCommand}" CommandParameter="{Binding ElementName=CreatePartialElementWindow}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70" Margin="5"/>
         </WrapPanel>
