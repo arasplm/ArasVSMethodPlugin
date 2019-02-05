@@ -19,6 +19,7 @@ namespace Aras.VS.MethodPlugin.ProjectConfigurations
 	public class ProjectConfiguraiton : IProjectConfiguraiton
 	{
 		private const string serverMethodsFolderName = "ServerMethods";
+		private string lastSelectedSearchTypeInOpenFromPackage;
 
 		public ProjectConfiguraiton()
 		{
@@ -152,7 +153,21 @@ namespace Aras.VS.MethodPlugin.ProjectConfigurations
 
 		public bool UseVSFormatting { get; set; }
 
-		public string LastSelectedSearchTypeInOpenFromPackage { get; set; }
+		public string LastSelectedSearchTypeInOpenFromPackage
+		{
+			get => lastSelectedSearchTypeInOpenFromPackage;
+			set
+			{
+				if (value == null)
+				{
+					lastSelectedSearchTypeInOpenFromPackage = string.Empty;
+				}
+				else
+				{
+					lastSelectedSearchTypeInOpenFromPackage = value;
+				}
+			}
+		}
 
 		public List<ConnectionInfo> Connections { get; private set; }
 
