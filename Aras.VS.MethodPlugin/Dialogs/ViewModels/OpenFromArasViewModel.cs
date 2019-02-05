@@ -320,8 +320,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
                 var methodCode = item.getProperty("method_code", string.Empty);
                 this.MethodCode = Regex.Replace(methodCode, @"//MethodTemplateName=[\S]+\r\n", "");
              
-
-
                 if (methodLanguage == "C#" || methodLanguage == "VB")
 				{
 					this.MethodType = "server";
@@ -341,33 +339,9 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 				this.Package = packageName;
 
-				// TODO : duplicated with OpenFromPackageView
-				TemplateInfo template = null;
-				string methodTemplatePattern = @"//MethodTemplateName\s*=\s*(?<templatename>[^\W]*)\s*";
-				Match methodTemplateNameMatch = Regex.Match(methodCode, methodTemplatePattern);
-				if (methodTemplateNameMatch.Success)
-				{
-					string templateName = methodTemplateNameMatch.Groups["templatename"].Value;
-					template = templateLoader.Templates.Where(t => t.TemplateLanguage == methodLanguage && t.TemplateName == templateName).FirstOrDefault();
-
-					if (template == null)
-					{
-						var messageWindow = new MessageBoxWindow();
-						messageWindow.ShowDialog(window as Window,
-							$"The template {templateName} from selected method not found. Default template will be used.",
-							"Open method from Aras Innovator",
-							MessageButtons.OK,
-							MessageIcon.Information);
-					}
-				}
-				if (template == null)
-				{
-					template = templateLoader.Templates.Where(t => t.TemplateLanguage == methodLanguage && t.IsSupported).FirstOrDefault();
-				}
-
-				this.SelectedTemplate = template;
-
-				if (projectConfiguration.LastSavedSearch.ContainsKey(result.ItemType))
+				this.SelectedTemplate = templateLoader.GetTemplateFromCodeString(methodCode, methodLanguage, "Open method from Aras Innovator", window as Window); 
+                                                                                                                                                               
+                if (projectConfiguration.LastSavedSearch.ContainsKey(result.ItemType))
 				{
 					projectConfiguration.LastSavedSearch[result.ItemType] = result.LastSavedSearch;
 				}

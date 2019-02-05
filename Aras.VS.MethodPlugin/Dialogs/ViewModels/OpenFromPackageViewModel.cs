@@ -250,34 +250,9 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				this.MethodConfigId = itemXmlNode.Attributes["id"].InnerText;
 				this.MethodId = itemXmlNode.Attributes["id"].InnerText;
 
+                this.SelectedTemplate = templateLoader.GetTemplateFromCodeString(methodCode, methodLanguage, "Open method from AML package", window as Window);
 
-				// TODO : duplicated with OpenFromArasViewModel
-				TemplateInfo template = null;
-				string methodTemplatePattern = @"//MethodTemplateName\s*=\s*(?<templatename>[^\W]*)\s*";
-				Match methodTemplateNameMatch = Regex.Match(methodCode, methodTemplatePattern);
-				if (methodTemplateNameMatch.Success)
-				{
-					string templateName = methodTemplateNameMatch.Groups["templatename"].Value;
-					template = templateLoader.Templates.Where(t => t.TemplateLanguage == methodLanguage && t.TemplateName == templateName).FirstOrDefault();
-
-					if (template == null)
-					{
-						var messageWindow = new MessageBoxWindow();
-						messageWindow.ShowDialog(window as Window,
-							$"The template {templateName} from selected method not found. Default template will be used.",
-							"Open method from AML package",
-							MessageButtons.OK,
-							MessageIcon.Information);
-					}
-				}
-				if (template == null)
-				{
-					template = templateLoader.Templates.Where(t => t.TemplateLanguage == methodLanguage && t.IsSupported).FirstOrDefault();
-				}
-
-
-				this.SelectedTemplate = template;
-			}
+            }
 		}
 
         private string GetActualFolderPath()
