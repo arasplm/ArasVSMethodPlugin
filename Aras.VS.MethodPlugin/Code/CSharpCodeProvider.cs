@@ -51,8 +51,7 @@ namespace Aras.VS.MethodPlugin.Code
 
 			if (!string.IsNullOrEmpty(partialCode))
 			{
-				partialCode = partialCode.Remove(partialCode.LastIndexOf('}'));
-				userCode += Environment.NewLine + "}" + partialCode;
+				userCode += Environment.NewLine + "}" + partialCode + Environment.NewLine;
 			}
 
 			return userCode;
@@ -373,7 +372,7 @@ namespace Aras.VS.MethodPlugin.Code
 
 		private string LoadPartialClassesCode(List<string> partialClasses, string serverMethodPath)
 		{
-			var resultCode = new StringBuilder();
+			var resultCodeBuilder = new StringBuilder();
 
 			foreach (string partialClassPath in partialClasses)
 			{
@@ -409,12 +408,23 @@ namespace Aras.VS.MethodPlugin.Code
 
 				foreach (var member in members)
 				{
-					resultCode.Append(Environment.NewLine + Environment.NewLine + member.Parent.ToString());
+					resultCodeBuilder.Append(Environment.NewLine + Environment.NewLine + member.Parent.ToString());
 				}
 			}
-			resultCode = resultCode.Replace("[PartialPath", "//[PartialPath");
 
-			return resultCode.ToString();
+			var partialCodeResult = resultCodeBuilder.ToString();
+
+			if (!string.IsNullOrEmpty(partialCodeResult))
+			{
+				partialCodeResult = partialCodeResult.Replace("[PartialPath", "//[PartialPath");
+
+				partialCodeResult = partialCodeResult.Remove(partialCodeResult.LastIndexOf('}'));
+
+				Regex removeNewLines = new Regex(@"(\r\n)*$");
+				partialCodeResult = removeNewLines.Replace(partialCodeResult, string.Empty);
+			}
+
+			return partialCodeResult;
 		}
 
 		private string GetSourceCodeBetweenRegion(string codeWithRegion)
