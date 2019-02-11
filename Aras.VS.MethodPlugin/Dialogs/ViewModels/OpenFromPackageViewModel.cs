@@ -120,6 +120,17 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			set
 			{
 				selectedTemplate = value;
+
+				if (selectedTemplate != null && !selectedTemplate.IsSuccessfullySupported)
+				{
+					var messageWindow = new MessageBoxWindow();
+					var dialogReuslt = messageWindow.ShowDialog(null,
+						selectedTemplate.Message,
+						"Open method from AML package",
+						MessageButtons.OK,
+						MessageIcon.None);
+				}
+
 				RaisePropertyChanged(nameof(TemplateName));
 			}
 		}

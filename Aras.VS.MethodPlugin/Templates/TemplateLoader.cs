@@ -35,6 +35,15 @@ namespace Aras.VS.MethodPlugin.Templates
 			foreach (XmlNode item in templateElements)
 			{
 				var templateName = item.Attributes["name"].InnerText;
+
+				bool isSuccessfullySupported = true;
+				bool value;
+				if (bool.TryParse(item.Attributes["isSupported"]?.InnerText, out value))
+				{
+					isSuccessfullySupported = value;
+				}
+
+				string message = item.Attributes["message"]?.InnerText;
 				var templateIsSupported = supportedTemplates.Contains(templateName);
 				var templateCode = item.InnerText;
 				string templateLanguage = string.Empty;
@@ -49,6 +58,8 @@ namespace Aras.VS.MethodPlugin.Templates
 				var template = new TemplateInfo()
 				{
 					TemplateName = templateName,
+					IsSuccessfullySupported = isSuccessfullySupported,
+					Message = message,
 					IsSupported = templateIsSupported,
 					TemplateCode = templateCode,
 					TemplateLanguage = templateLanguage

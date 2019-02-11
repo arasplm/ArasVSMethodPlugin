@@ -152,6 +152,17 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			set
 			{
 				selectedTemplate = value;
+
+				if (selectedTemplate != null && !selectedTemplate.IsSuccessfullySupported)
+				{
+					var messageWindow = new MessageBoxWindow();
+					var dialogReuslt = messageWindow.ShowDialog(null,
+						selectedTemplate.Message,
+						"Open method Aras Innovator",
+						MessageButtons.OK,
+						MessageIcon.None);
+				}
+
 				RaisePropertyChanged(nameof(TemplateName));
 			}
 		}
@@ -339,7 +350,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 				this.Package = packageName;
 
-				this.SelectedTemplate = templateLoader.GetTemplateFromCodeString(methodCode, methodLanguage, "Open method from Aras Innovator", window as Window); 
+				this.SelectedTemplate = templateLoader.GetTemplateFromCodeString(methodCode, methodLanguage, "Open method from Aras Innovator", window as Window);
                                                                                                                                                                
                 if (projectConfiguration.LastSavedSearch.ContainsKey(result.ItemType))
 				{
