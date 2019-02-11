@@ -21,6 +21,8 @@ namespace Aras.VS.MethodPlugin.Code
 {
 	internal class CSharpCodeProvider : ICodeProvider
 	{
+		private const string endMethodCodeRegion = "#endregion MethodCode";
+
 		private readonly IProjectManager projectManager;
 		private readonly IProjectConfiguraiton projectConfiguration;
 		private readonly DefaultCodeProvider defaultCodeProvider;
@@ -51,7 +53,7 @@ namespace Aras.VS.MethodPlugin.Code
 
 			if (!string.IsNullOrEmpty(partialCode))
 			{
-				userCode += Environment.NewLine + "}" + partialCode + Environment.NewLine;
+				userCode += Environment.NewLine + "}" + partialCode;
 			}
 
 			return userCode;
@@ -206,9 +208,9 @@ namespace Aras.VS.MethodPlugin.Code
 					string stringForReplace = string.Empty;
 					string shouldBeReplaced = partialString;
 
-					if (partialString.Contains("#endregion MethodCode"))
+					if (partialString.Contains(endMethodCodeRegion))
 					{
-						int indexofEndRegion = partialString.IndexOf("#endregion MethodCode");
+						int indexofEndRegion = partialString.IndexOf(endMethodCodeRegion);
 						stringForReplace = partialString.Substring(indexofEndRegion, partialString.Length - indexofEndRegion);
 						partialString = partialString.Replace(stringForReplace, "}");
 						stringForReplace = '\t' + stringForReplace;
@@ -227,25 +229,10 @@ namespace Aras.VS.MethodPlugin.Code
 					resultGeneratedCode.MethodCodeInfo.Code = resultGeneratedCode.MethodCodeInfo.Code.Replace(shouldBeReplaced, stringForReplace);
 					if (!string.IsNullOrEmpty(stringForReplace))
 					{
-						char currentCharacter = ' ';
-						int endRegionIndex = resultGeneratedCode.MethodCodeInfo.Code.IndexOf("#endregion MethodCode");
-						int endMethodIndex = endRegionIndex;
-						do
-						{
-							currentCharacter = resultGeneratedCode.MethodCodeInfo.Code[endMethodIndex];
-							endMethodIndex--;
-						}
-						while (endMethodIndex > 0 && currentCharacter != '}');
+						string pattern = string.Concat(@"}((\r\n)*?[ \t]*)*", endMethodCodeRegion);
 
-						currentCharacter = default(char);
-						while (currentCharacter != '\r')
-						{
-							currentCharacter = resultGeneratedCode.MethodCodeInfo.Code[endRegionIndex];
-							endRegionIndex--;
-						}
-						var endRegionEndString = resultGeneratedCode.MethodCodeInfo.Code.Substring(endRegionIndex + 1);
-						var beginRegionEndString = resultGeneratedCode.MethodCodeInfo.Code.Remove(endMethodIndex + 1).TrimEnd(new char[] { ' ', '\r', '\n' });
-						resultGeneratedCode.MethodCodeInfo.Code = beginRegionEndString + endRegionEndString;
+						string replacedCode = Regex.Replace(resultGeneratedCode.MethodCodeInfo.Code, pattern, endMethodCodeRegion);
+						resultGeneratedCode.MethodCodeInfo.Code = resultGeneratedCode.IsUseVSFormatting ? FormattingCode(replacedCode) : replacedCode;
 					}
 				}
 			}
@@ -413,15 +400,10 @@ namespace Aras.VS.MethodPlugin.Code
 			}
 
 			var partialCodeResult = resultCodeBuilder.ToString();
-
 			if (!string.IsNullOrEmpty(partialCodeResult))
 			{
 				partialCodeResult = partialCodeResult.Replace("[PartialPath", "//[PartialPath");
-
-				partialCodeResult = partialCodeResult.Remove(partialCodeResult.LastIndexOf('}'));
-
-				Regex removeNewLines = new Regex(@"(\r\n)*$");
-				partialCodeResult = removeNewLines.Replace(partialCodeResult, string.Empty);
+				partialCodeResult = Regex.Replace(partialCodeResult, @"(\r\n)??[ \t]*\}$", string.Empty);
 			}
 
 			return partialCodeResult;
@@ -430,7 +412,7 @@ namespace Aras.VS.MethodPlugin.Code
 		private string GetSourceCodeBetweenRegion(string codeWithRegion)
 		{
 			string startRegionPattern = @"#region MethodCode\r\n";
-			string endRegionPattern = @"(\r\n)??[ \t]*#endregion MethodCode";
+			string endRegionPattern = string.Concat(@"(\r\n)??[ \t]*", endMethodCodeRegion);
 
 			var startMatch = Regex.Match(codeWithRegion, startRegionPattern);
 			var endMatch = Regex.Match(codeWithRegion, endRegionPattern);
