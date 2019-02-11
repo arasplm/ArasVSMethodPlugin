@@ -18,6 +18,10 @@ namespace Aras.VS.MethodPlugin.Templates
 
 		public string TemplateLabel { get; set; }
 
+		public bool IsSuccessfullySupported { get; set; }
+
+		public string Message { get; set; }
+
 		public override string ToString()
 		{
 			return TemplateName;

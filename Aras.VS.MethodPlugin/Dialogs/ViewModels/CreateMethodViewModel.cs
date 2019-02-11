@@ -235,12 +235,26 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			set
 			{
 				selectedTemplate = value;
-				if (value != null && SelectedEventSpecificData != null)
+
+				if (selectedTemplate != null)
 				{
-					var resultCode = value.TemplateCode;
-					resultCode = resultCode.Replace("$(interfacename)", SelectedEventSpecificData.InterfaceName);
-					resultCode = resultCode.Replace("$(EventDataClass)", SelectedEventSpecificData.EventDataClass);
-					TemplatePreviewWithEventData = resultCode;
+					if (!selectedTemplate.IsSuccessfullySupported)
+					{
+						var messageWindow = new MessageBoxWindow();
+						var dialogReuslt = messageWindow.ShowDialog(null,
+							selectedTemplate.Message,
+							"Create new method",
+							MessageButtons.OK,
+							MessageIcon.None);
+					}
+
+					if (SelectedEventSpecificData != null)
+					{
+						var resultCode = value.TemplateCode;
+						resultCode = resultCode.Replace("$(interfacename)", SelectedEventSpecificData.InterfaceName);
+						resultCode = resultCode.Replace("$(EventDataClass)", SelectedEventSpecificData.EventDataClass);
+						TemplatePreviewWithEventData = resultCode;
+					}
 				}
 
 				RaisePropertyChanged(nameof(SelectedTemplate));
