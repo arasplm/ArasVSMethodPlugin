@@ -80,7 +80,7 @@ namespace Aras.VS.MethodPlugin.Code
 			const string fncname = "FNCMethod";
 			var eventDataClass = eventData.EventDataClass;
 			var interfaceName = eventData.InterfaceName;
-			string methodNameWithOutSpases = methodName.Replace(" ", string.Empty).Replace("_", string.Empty);
+			string methodNameWithOutSpases = Regex.Replace(methodName, "[^a-zA-Z0-9]+", string.Empty, RegexOptions.Compiled);
 			var clsname = "ArasCLS" + methodNameWithOutSpases;
 			var pkgname = "ArasPKG" + methodNameWithOutSpases;
 
