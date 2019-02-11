@@ -312,7 +312,7 @@ namespace Aras.VS.MethodPlugin.Code
 			}
 
 			string partialClassTemplate = this.codeElementTypeProvider.GetCodeElementTypeTemplate(elementType);
-			string code = string.Format(partialClassTemplate, partialUsings, codeInfo.MethodCodeParentClassName, partialAttributePath, codeInfo.Namespace);
+			string code = string.Format(partialClassTemplate, partialUsings, codeInfo.MethodCodeParentClassName, partialAttributePath, codeInfo.Namespace, fileName);
 			var partialCodeInfo = new CodeInfo()
 			{
 				Path = partialPath,
