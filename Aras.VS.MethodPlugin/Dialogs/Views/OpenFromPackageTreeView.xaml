@@ -35,6 +35,7 @@
                 <ResourceDictionary Source="Styles/TreeViewControl.xaml" />
                 <ResourceDictionary Source="Styles/Grid.xaml" />
                 <ResourceDictionary Source="Styles/Window.xaml" />
+                <ResourceDictionary Source="Styles/ScrollViewer.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate x:Key="ShortMethodInfo">
