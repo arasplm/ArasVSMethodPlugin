@@ -129,6 +129,8 @@ namespace Aras.VS.MethodPlugin.Commands
 				PartialClasses = codeInfo.PartialCodeInfoList.Select(pci => pci.Path).ToList()
 			};
 
+			projectManager.AddSuppression("assembly: System.Diagnostics.CodeAnalysis.SuppressMessage", "Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", "namespace", codeInfo.Namespace);
+
 			projectConfiguration.AddMethodInfo(methodInfo);
             projectConfiguration.UseVSFormatting = openViewResult.IsUseVSFormattingCode;
 			projectConfigurationManager.Save(projectConfigPath, projectConfiguration);
