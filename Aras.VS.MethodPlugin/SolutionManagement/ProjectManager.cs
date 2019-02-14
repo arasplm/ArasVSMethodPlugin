@@ -7,19 +7,18 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Windows.Interop;
 using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.Commands;
 using Aras.VS.MethodPlugin.Dialogs;
-using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.Extensions;
 using Aras.VS.MethodPlugin.ProjectConfigurations;
 using EnvDTE;
 using EnvDTE80;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.LanguageServices;
 using Microsoft.VisualStudio.Shell;
@@ -34,6 +33,7 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 		private const string serverMethodsFolderName = "ServerMethods";
 		private const string projectConfigFileName = "projectConfig.xml";
 		private const string methodConfigFileName = "method-config.xml";
+		private const string globalSuppressionsFileName = "GlobalSuppressions.cs";
 
 		private VisualStudioWorkspace visualStudioWorkspace;
 
@@ -75,6 +75,16 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 			{
 				var project = GetFirstSelectedProject();
 				ProjectItem defaultmethodConfigFile = project.ProjectItems.Item(defaultCodeTemplatesFolderName);
+				return defaultmethodConfigFile.FileNames[0];
+			}
+		}
+
+		public string GlobalSuppressionsPath
+		{
+			get
+			{
+				var project = GetFirstSelectedProject();
+				ProjectItem defaultmethodConfigFile = project.ProjectItems.Item(globalSuppressionsFileName);
 				return defaultmethodConfigFile.FileNames[0];
 			}
 		}
@@ -583,6 +593,39 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 					processToAttach.Attach();
 				}
 			}
+		}
+
+		public void AddSuppression(string suppressName, string ruleCategory, string ruleId, string scope = "", string target = "")
+		{
+			StringBuilder stringBuilder = new StringBuilder();
+			stringBuilder.AppendFormat("[{0}(\"{1}\", \"{2}\"", suppressName, ruleCategory, ruleId);
+			if (!string.IsNullOrEmpty(scope))
+			{
+				stringBuilder.AppendFormat(", Scope = \"{0}\"", scope);
+			}
+			if (!string.IsNullOrEmpty(target))
+			{
+				stringBuilder.AppendFormat(", Target = \"{0}\"", target);
+			}
+			stringBuilder.Append(")]");
+
+			var customAttribute = stringBuilder.ToString();
+
+			string globalSuppressionsContent = File.ReadAllText(GlobalSuppressionsPath, new UTF8Encoding(true));
+			var tree = CSharpSyntaxTree.ParseText(globalSuppressionsContent);
+			CompilationUnitSyntax root = (CompilationUnitSyntax) tree.GetRoot();
+
+			stringBuilder.Clear();
+
+			foreach (var attribute in root.AttributeLists)
+			{
+				stringBuilder.Append(attribute.ToFullString());
+			}
+
+			stringBuilder.Append(customAttribute);
+			stringBuilder.Append(Environment.NewLine);
+
+			File.WriteAllText(GlobalSuppressionsPath, stringBuilder.ToString(), new UTF8Encoding(true));
 		}
 	}
 }

@@ -70,5 +70,7 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 		void ExecuteCommand(string commandName);
 
 		void AttachToProcess(System.Diagnostics.Process process);
+
+		void AddSuppression(string suppressName, string ruleCategory, string ruleId, string scope = "", string target = "");
 	}
 }
