@@ -34,20 +34,27 @@ namespace Aras.VS.MethodPlugin.Code
 
 			if (File.Exists(path))
 			{
-				var xmlDocument = new XmlDocument();
-				xmlDocument.Load(path);
-				XmlNode itemXmlNode = xmlDocument.SelectSingleNode("AML/Item");
-				XmlNode nameTypeXmlNode = itemXmlNode.SelectSingleNode("name");
-				XmlNode methodTypeXmlNode = itemXmlNode.SelectSingleNode("method_type");
-				XmlNode methodCodeXmlNode = itemXmlNode.SelectSingleNode("method_code");
-
-				methodInfo = new XmlMethodInfo()
+				try
 				{
-					Path = path,
-					MethodName = nameTypeXmlNode.InnerText,
-					MethodType = methodTypeXmlNode.InnerText,
-					Code = methodCodeXmlNode.InnerText
-				};
+					var xmlDocument = new XmlDocument();
+					xmlDocument.Load(path);
+					XmlNode itemXmlNode = xmlDocument.SelectSingleNode("AML/Item");
+					XmlNode nameTypeXmlNode = itemXmlNode.SelectSingleNode("name");
+					XmlNode methodTypeXmlNode = itemXmlNode.SelectSingleNode("method_type");
+					XmlNode methodCodeXmlNode = itemXmlNode.SelectSingleNode("method_code");
+
+					methodInfo = new XmlMethodInfo()
+					{
+						Path = path,
+						MethodName = nameTypeXmlNode.InnerText,
+						MethodType = methodTypeXmlNode.InnerText,
+						Code = methodCodeXmlNode.InnerText
+					};
+				}
+				catch
+				{
+
+				}
 			}
 
 			return methodInfo;

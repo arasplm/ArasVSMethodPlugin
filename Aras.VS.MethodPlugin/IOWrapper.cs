@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="IIOWrapper.cs" company="Aras Corporation">
+// <copyright file="IOWrapper.cs" company="Aras Corporation">
 //     © 2017-2018 Aras Corporation. All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
