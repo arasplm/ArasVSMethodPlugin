@@ -88,6 +88,8 @@
     <Compile Include="Code\CSharpCodeElementTypeProvider.cs" />
     <Compile Include="Code\ICodeProviderFactory.cs" />
     <Compile Include="Code\ICodeElementTypeProvider.cs" />
+    <Compile Include="Code\XmlMethod.cs" />
+    <Compile Include="Code\XmlMethodLoader.cs" />
     <Compile Include="Commands\AuthenticationCommandBase.cs" />
     <Compile Include="Commands\CmdBase.cs" />
     <Compile Include="Commands\CommandIdsList.cs" />
@@ -109,6 +111,8 @@
     <Compile Include="Code\CSharpCodeProvider.cs" />
     <Compile Include="Code\DefaultCodeProvider.cs" />
     <Compile Include="Code\DefaultCodeTemplate.cs" />
+    <Compile Include="Configurations\GlobalConfiguration.cs" />
+    <Compile Include="Configurations\IGlobalConfiguration.cs" />
     <Compile Include="Dialogs\Converters\BitmapToBitmapImageConverter.cs" />
     <Compile Include="Dialogs\Converters\HeaderToImageConverter.cs" />
     <Compile Include="Dialogs\Converters\LoginViewMultiValueConverter.cs" />
@@ -208,7 +212,9 @@
     <Compile Include="Code\GeneratedCodeInfo.cs" />
     <Compile Include="Code\ICodeProvider.cs" />
     <Compile Include="IIOMWrapper.cs" />
+    <Compile Include="IIOWrapper.cs" />
     <Compile Include="IOMWrapper.cs" />
+    <Compile Include="IOWrapper.cs" />
     <Compile Include="ItemSearch\DataGridViewCalendarCell.cs" />
     <Compile Include="ItemSearch\DataGridViewCalendarEditingControl.cs">
       <SubType>Component</SubType>
@@ -222,13 +228,13 @@
     <Compile Include="MessageMenager.cs" />
     <Compile Include="PackageManagement\PackageManager.cs" />
     <Compile Include="Code\PartialCodeInfo.cs" />
-    <Compile Include="ProjectConfigurations\IProjectConfiguraiton.cs" />
-    <Compile Include="ProjectConfigurations\IProjectConfigurationManager.cs" />
-    <Compile Include="ProjectConfigurations\ProjectConfigurationManager.cs" />
-    <Compile Include="ProjectConfigurations\ConnectionInfo.cs" />
-    <Compile Include="ProjectConfigurations\MethodInfo.cs" />
-    <Compile Include="ProjectConfigurations\ProjectConfiguraiton.cs" />
-    <Compile Include="ProjectConfigurations\PackageMethodInfo.cs" />
+    <Compile Include="Configurations\ProjectConfigurations\IProjectConfiguraiton.cs" />
+    <Compile Include="Configurations\ProjectConfigurations\IProjectConfigurationManager.cs" />
+    <Compile Include="Configurations\ProjectConfigurations\ProjectConfigurationManager.cs" />
+    <Compile Include="Configurations\ProjectConfigurations\ConnectionInfo.cs" />
+    <Compile Include="Configurations\ProjectConfigurations\MethodInfo.cs" />
+    <Compile Include="Configurations\ProjectConfigurations\ProjectConfiguraiton.cs" />
+    <Compile Include="Configurations\ProjectConfigurations\PackageMethodInfo.cs" />
     <Compile Include="Dialogs\ViewModels\ShortMethodInfoViewModel.cs" />
     <Compile Include="Properties\Resources.Designer.cs" />
     <Compile Include="Properties\Resources1.Designer.cs">

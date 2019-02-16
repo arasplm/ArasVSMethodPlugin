@@ -7,7 +7,7 @@
 using System;
 using System.Collections.Generic;
 using Aras.VS.MethodPlugin.Code;
-using Aras.VS.MethodPlugin.ProjectConfigurations;
+using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using EnvDTE;
 using Microsoft.VisualStudio.LanguageServices;
 using Microsoft.VisualStudio.Shell;

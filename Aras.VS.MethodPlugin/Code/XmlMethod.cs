@@ -1,15 +1,19 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="ICodeProviderFactory.cs" company="Aras Corporation">
+// <copyright file="XmlMethodInfo.cs" company="Aras Corporation">
 //     © 2017-2018 Aras Corporation. All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
-
 namespace Aras.VS.MethodPlugin.Code
 {
-	public interface ICodeProviderFactory
+	public class XmlMethodInfo
 	{
-		ICodeProvider GetCodeProvider(string projectLanguageCode, IProjectConfiguraiton projectConfiguration);
+		public string Path { get; set; }
+
+		public string MethodName { get; set; }
+
+		public string MethodType { get; internal set; }
+
+		public string Code { get; set; }
 	}
 }

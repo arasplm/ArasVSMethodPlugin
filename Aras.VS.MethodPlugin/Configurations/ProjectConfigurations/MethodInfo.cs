@@ -7,7 +7,7 @@
 using System.Collections.Generic;
 using Aras.VS.MethodPlugin.Code;
 
-namespace Aras.VS.MethodPlugin.ProjectConfigurations
+namespace Aras.VS.MethodPlugin.Configurations.ProjectConfigurations
 {
 	public class MethodInfo
 	{
@@ -25,6 +25,7 @@ namespace Aras.VS.MethodPlugin.ProjectConfigurations
 			this.PartialClasses = new List<string>(methodInfo.PartialClasses);
 			this.ExecutionAllowedToKeyedName = methodInfo.ExecutionAllowedToKeyedName;
 			this.ExecutionAllowedToId = methodInfo.ExecutionAllowedToId;
+			this.MethodPath = methodInfo.MethodPath;
 		}
 
 		public MethodInfo()
@@ -55,5 +56,7 @@ namespace Aras.VS.MethodPlugin.ProjectConfigurations
 		public string ExecutionAllowedToKeyedName { get; set; }
 
 		public string ExecutionAllowedToId { get; set; }
+
+		public string MethodPath { get; set; }
 	}
 }

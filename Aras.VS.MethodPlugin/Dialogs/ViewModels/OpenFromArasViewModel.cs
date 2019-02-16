@@ -16,7 +16,7 @@ using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.ItemSearch;
 using Aras.VS.MethodPlugin.PackageManagement;
-using Aras.VS.MethodPlugin.ProjectConfigurations;
+using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Templates;
 using OfficeConnector.Dialogs;
 

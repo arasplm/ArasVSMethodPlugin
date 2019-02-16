@@ -1,13 +1,15 @@
-﻿using Aras.VS.MethodPlugin.ItemSearch;
+﻿//------------------------------------------------------------------------------
+// <copyright file="IProjectConfiguraiton.cs" company="Aras Corporation">
+//     © 2017-2018 Aras Corporation. All rights reserved.
+// </copyright>
+//------------------------------------------------------------------------------
+
+using System.Collections.Generic;
+using Aras.VS.MethodPlugin.ItemSearch;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using EnvDTE;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Aras.VS.MethodPlugin.ProjectConfigurations
+namespace Aras.VS.MethodPlugin.Configurations.ProjectConfigurations
 {
 	public interface IProjectConfiguraiton
 	{
@@ -18,7 +20,7 @@ namespace Aras.VS.MethodPlugin.ProjectConfigurations
 
 		bool UseVSFormatting { get; set; }
 
-		string LastSelectedSearchTypeInOpenFromPackage{ get; set; }
+		string LastSelectedSearchTypeInOpenFromPackage { get; set; }
 
 		List<ConnectionInfo> Connections { get; }
 

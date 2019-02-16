@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace Aras.VS.MethodPlugin.ProjectConfigurations
+namespace Aras.VS.MethodPlugin.Configurations.ProjectConfigurations
 {
 	public class ConnectionInfo
 	{

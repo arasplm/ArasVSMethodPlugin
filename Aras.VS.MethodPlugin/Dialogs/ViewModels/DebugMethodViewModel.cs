@@ -11,7 +11,7 @@ using System.Windows.Input;
 using Aras.VS.MethodPlugin.ArasInnovator;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Dialogs.Views;
-using Aras.VS.MethodPlugin.ProjectConfigurations;
+using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 
 namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 {

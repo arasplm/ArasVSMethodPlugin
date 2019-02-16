@@ -11,7 +11,7 @@ using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.Dialogs.Views;
-using Aras.VS.MethodPlugin.ProjectConfigurations;
+using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using Aras.VS.MethodPlugin.Templates;
 using EnvDTE;

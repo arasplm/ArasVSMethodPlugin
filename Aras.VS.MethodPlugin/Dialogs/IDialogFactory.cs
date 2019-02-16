@@ -8,12 +8,13 @@ using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.ItemSearch;
 using Aras.VS.MethodPlugin.PackageManagement;
-using Aras.VS.MethodPlugin.ProjectConfigurations;
+using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using Aras.VS.MethodPlugin.Templates;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell.Interop;
 using OfficeConnector.Dialogs;
+using Aras.VS.MethodPlugin.Configurations;
 
 namespace Aras.VS.MethodPlugin.Dialogs
 {
@@ -23,18 +24,19 @@ namespace Aras.VS.MethodPlugin.Dialogs
 
 		ItemSearchPresenter GetItemSearchPresenter(ISearcher searcher);
 
-        IViewAdaper<LoginView, ViewResult> GetLoginView(IProjectManager projectManager, IProjectConfiguraiton projectConfiguration);
+		IViewAdaper<LoginView, ViewResult> GetLoginView(IProjectManager projectManager, IProjectConfiguraiton projectConfiguration);
 
-        IViewAdaper<CreateMethodView, CreateMethodViewResult> GetCreateView(IVsUIShell uiShell,
+		IViewAdaper<CreateMethodView, CreateMethodViewResult> GetCreateView(IVsUIShell uiShell,
 			IProjectConfiguraiton projectConfiguration,
 			TemplateLoader templateLoader,
 			PackageManager packageManager,
 			IProjectManager projectManager,
-			string projectLanguage);
+			ICodeProvider codeProvider,
+			IGlobalConfiguration globalConfiguration);
 
-        IViewAdaper<ConnectionInfoView, ViewResult> GetConnectionInfoView(IProjectManager projectManager, IProjectConfigurationManager configurationManager);
+		IViewAdaper<ConnectionInfoView, ViewResult> GetConnectionInfoView(IProjectManager projectManager, IProjectConfigurationManager configurationManager);
 
-        IViewAdaper<OpenFromArasView, OpenFromArasViewResult> GetOpenFromArasView(IVsUIShell uiShell, IProjectConfigurationManager configurationManager,
+		IViewAdaper<OpenFromArasView, OpenFromArasViewResult> GetOpenFromArasView(IVsUIShell uiShell, IProjectConfigurationManager configurationManager,
 		   IProjectConfiguraiton projectConfiguration,
 		   TemplateLoader templateLoader,
 		   PackageManager packageManager,
@@ -45,8 +47,8 @@ namespace Aras.VS.MethodPlugin.Dialogs
 
 		IViewAdaper<OpenFromPackageView, OpenFromPackageViewResult> GetOpenFromPackageView(IVsUIShell uiShell, TemplateLoader templateLoader, string projectLanguage, IProjectConfiguraiton projectConfiguraiton);
 
-        IViewAdaper<SaveMethodView, SaveMethodViewResult> GetSaveToArasView(IVsUIShell uiShell,
-            IProjectConfigurationManager projectConfigurationManager,
+		IViewAdaper<SaveMethodView, SaveMethodViewResult> GetSaveToArasView(IVsUIShell uiShell,
+			IProjectConfigurationManager projectConfigurationManager,
 			IProjectConfiguraiton projectConfiguration,
 			PackageManager packageManager,
 			MethodInfo methodInformation,
@@ -55,7 +57,7 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			string projectName,
 			string projectFullName);
 
-        IViewAdaper<SaveToPackageView, SaveToPackageViewResult> GetSaveToPackageView(IVsUIShell uiShell,
+		IViewAdaper<SaveToPackageView, SaveToPackageViewResult> GetSaveToPackageView(IVsUIShell uiShell,
 			IProjectConfiguraiton projectConfiguration,
 			TemplateLoader templateLoader,
 			PackageManager packageManager,
@@ -64,8 +66,8 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			MethodInfo methodInformation,
 			string pathToFileForSave);
 
-        IViewAdaper<UpdateFromArasView, UpdateFromArasViewResult> GetUpdateFromArasView(IVsUIShell uiShell,
-            IProjectConfigurationManager projectConfigurationManager,
+		IViewAdaper<UpdateFromArasView, UpdateFromArasViewResult> GetUpdateFromArasView(IVsUIShell uiShell,
+			IProjectConfigurationManager projectConfigurationManager,
 			IProjectConfiguraiton projectConfiguration,
 			TemplateLoader templateLoader,
 			PackageManager packageManager,
@@ -74,10 +76,10 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			string projectName,
 			string projectFullName);
 
-        IViewAdaper<CreatePartialElementView, CreatePartialElementViewResult> GetCreatePartialClassView(IVsUIShell uiShell, bool usedVSFormatting);
+		IViewAdaper<CreatePartialElementView, CreatePartialElementViewResult> GetCreatePartialClassView(IVsUIShell uiShell, bool usedVSFormatting);
 
-        IViewAdaper<DebugMethodView, DebugMethodViewResult> GetDebugMethodView(IVsUIShell uiShell,
-            IProjectConfigurationManager projectConfigurationManager,
+		IViewAdaper<DebugMethodView, DebugMethodViewResult> GetDebugMethodView(IVsUIShell uiShell,
+			IProjectConfigurationManager projectConfigurationManager,
 			IProjectConfiguraiton projectConfiguration,
 			MethodInfo methodInformation,
 			string methodCode,

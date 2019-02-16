@@ -12,11 +12,12 @@ using Aras.VS.MethodPlugin.ArasInnovator;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.Dialogs;
-using Aras.VS.MethodPlugin.ProjectConfigurations;
+using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using EnvDTE;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
+using Aras.VS.MethodPlugin.Configurations;
 
 namespace Aras.VS.MethodPlugin
 {
@@ -57,6 +58,8 @@ namespace Aras.VS.MethodPlugin
 		private IProjectManager projectManager;
 		private DefaultCodeProvider defaultCodeProvider;
 		private ICodeProviderFactory codeProviderFactory;
+		private IIOWrapper iOWrapper;
+		private IGlobalConfiguration globalConfiguration;
 
 		private ProjectItemsEvents projectItemsEvents;
 
@@ -89,10 +92,12 @@ namespace Aras.VS.MethodPlugin
 			this.projectManager = new ProjectManager(this, dialogFactory);
 			this.defaultCodeProvider = new DefaultCodeProvider();
 			this.codeProviderFactory = new CodeProviderFactory(projectManager, defaultCodeProvider);
+			this.iOWrapper = new IOWrapper();
+			this.globalConfiguration = new GlobalConfiguration(this.iOWrapper);
 
 			Commands.OpenFromArasCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
 			Commands.OpenFromPackageCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
-			Commands.CreateMethodCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
+			Commands.CreateMethodCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, globalConfiguration);
 			Commands.SaveToArasCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
 			Commands.SaveToPackageCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
 			Commands.UpdateMethodCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);

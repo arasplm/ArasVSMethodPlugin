@@ -5,7 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System;
-using Aras.VS.MethodPlugin.ProjectConfigurations;
+using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using EnvDTE;
 

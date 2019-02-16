@@ -9,12 +9,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Aras.VS.MethodPlugin.Extensions;
 using Aras.VS.MethodPlugin.ItemSearch;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using EnvDTE;
 
-namespace Aras.VS.MethodPlugin.ProjectConfigurations
+namespace Aras.VS.MethodPlugin.Configurations.ProjectConfigurations
 {
 	public class ProjectConfiguraiton : IProjectConfiguraiton
 	{

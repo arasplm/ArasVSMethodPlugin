@@ -17,16 +17,20 @@ using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.Extensions;
 using Aras.VS.MethodPlugin.ItemSearch;
 using Aras.VS.MethodPlugin.PackageManagement;
-using Aras.VS.MethodPlugin.ProjectConfigurations;
+using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using Aras.VS.MethodPlugin.Templates;
 using EnvDTE;
 using OfficeConnector.Dialogs;
+using Aras.VS.MethodPlugin.Configurations;
+using System.Windows.Forms;
 
 namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 {
 	public class CreateMethodViewModel : BaseViewModel
 	{
+		private const string None = "None";
+
 		private readonly TemplateLoader templateLoader;
 		private readonly IAuthenticationManager authenticationManager;
 		private readonly IDialogFactory dialogFactory;
@@ -34,6 +38,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private readonly PackageManager packageManager;
 		private readonly IProjectManager projectManager;
 		private readonly IArasDataProvider arasDataProvider;
+		private readonly ICodeProvider codeProvider;
+		private readonly IGlobalConfiguration globalConfiguration;
 
 		private MethodItemTypeInfo methodItemTypeInfo;
 
@@ -49,6 +55,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private int methodCommentMaxLength;
 		private string methodComment;
 		private int methodNameMaxLength;
+		private ObservableCollection<KeyValuePair<string, XmlMethodInfo>> userCodeTemplates;
+		private KeyValuePair<string, XmlMethodInfo> selectedUserCodeTemplate;
 
 		private string selectedIdentityKeyedName;
 		private string selectedIdentityId;
@@ -58,6 +66,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private ICommand cancelCommand;
 		private ICommand closeCommand;
 		private ICommand selectedIdentityCommand;
+		private ICommand browseCodeTemplateCommand;
+		private ICommand deleteUserCodeTemplateCommand;
 
 		public CreateMethodViewModel(
 			IAuthenticationManager authenticationManager,
@@ -67,7 +77,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			PackageManager packageManager,
 			IProjectManager projectManager,
 			IArasDataProvider arasDataProvider,
-			string projectLanguage)
+			ICodeProvider codeProvider,
+			IGlobalConfiguration userConfiguration)
 		{
 			if (authenticationManager == null) throw new ArgumentNullException(nameof(authenticationManager));
 			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));
@@ -76,6 +87,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			if (packageManager == null) throw new ArgumentNullException(nameof(packageManager));
 			if (projectManager == null) throw new ArgumentNullException(nameof(projectManager));
 			if (arasDataProvider == null) throw new ArgumentNullException(nameof(arasDataProvider));
+			if (codeProvider == null) throw new ArgumentNullException(nameof(codeProvider));
+			if (userConfiguration == null) throw new ArgumentNullException(nameof(userConfiguration));
 
 			this.authenticationManager = authenticationManager;
 			this.dialogFactory = dialogFactory;
@@ -84,7 +97,12 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.packageManager = packageManager;
 			this.projectManager = projectManager;
 			this.arasDataProvider = arasDataProvider;
-            this.isUseVSFormattingCode = projectConfiguration.UseVSFormatting;
+			this.codeProvider = codeProvider;
+			this.globalConfiguration = userConfiguration;
+			this.isUseVSFormattingCode = projectConfiguration.UseVSFormatting;
+
+			this.UserCodeTemplates = LoadUserCodeTemplates();
+			this.SelectedUserCodeTemplate = this.userCodeTemplates.First();
 
 			this.methodItemTypeInfo = arasDataProvider.GetMethodItemTypeInfo();
 			this.MethodNameMaxLength = methodItemTypeInfo.NameStoredLength;
@@ -109,7 +127,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				string label = language.getProperty("label");
 				string filter = language.getProperty("filter");
 
-				if (string.Equals(filter, "server", StringComparison.CurrentCultureIgnoreCase) && !string.Equals(value, projectLanguage, StringComparison.CurrentCultureIgnoreCase))
+				if (string.Equals(filter, "server", StringComparison.CurrentCultureIgnoreCase) && !string.Equals(value, this.codeProvider.Language, StringComparison.CurrentCultureIgnoreCase))
 				{
 					continue;
 				}
@@ -123,6 +141,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			cancelCommand = new RelayCommand<object>(OnCancelClick);
 			closeCommand = new RelayCommand<object>(OnCloseCliked);
 			selectedIdentityCommand = new RelayCommand(SelectedIdentityCommandClick);
+			browseCodeTemplateCommand = new RelayCommand(BrowseCodeTemplateCommandClick);
+			deleteUserCodeTemplateCommand = new RelayCommand<KeyValuePair<string, XmlMethodInfo>>(DeleteUserCodeTemplateCommandClick);
 
 			SelectedEventSpecificData = EventSpecificData.First();
 		}
@@ -134,17 +154,13 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private EventSpecificDataType selectedEventSpecificData;
 		public EventSpecificDataType SelectedEventSpecificData
 		{
-			get { return selectedEventSpecificData; }
+			get { return this.selectedEventSpecificData; }
 			set
 			{
-				selectedEventSpecificData = value;
-
-				var resultCode = SelectedTemplate.TemplateCode;
-				resultCode = resultCode.Replace("$(interfacename)", value.InterfaceName);
-				resultCode = resultCode.Replace("$(EventDataClass)", value.EventDataClass);
-				TemplatePreviewWithEventData = resultCode;
+				this.selectedEventSpecificData = value;
 
 				RaisePropertyChanged(nameof(SelectedEventSpecificData));
+				RaisePropertyChanged(nameof(MethodCodePreview));
 			}
 		}
 
@@ -155,16 +171,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			get { return useRecommendedDefaultCode; }
 			set { useRecommendedDefaultCode = value; RaisePropertyChanged(nameof(UseRecommendedDefaultCode)); }
 		}
-
-
-		private string templatePreviewWithEventData;
-
-		public string TemplatePreviewWithEventData
-		{
-			get { return templatePreviewWithEventData; }
-			set { templatePreviewWithEventData = value; RaisePropertyChanged(nameof(TemplatePreviewWithEventData)); }
-		}
-
 
 		public ListInfo SelectedActionLocation
 		{
@@ -247,24 +253,21 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 							MessageButtons.OK,
 							MessageIcon.None);
 					}
-
-					if (SelectedEventSpecificData != null)
-					{
-						var resultCode = value.TemplateCode;
-						resultCode = resultCode.Replace("$(interfacename)", SelectedEventSpecificData.InterfaceName);
-						resultCode = resultCode.Replace("$(EventDataClass)", SelectedEventSpecificData.EventDataClass);
-						TemplatePreviewWithEventData = resultCode;
-					}
 				}
 
 				RaisePropertyChanged(nameof(SelectedTemplate));
+				RaisePropertyChanged(nameof(MethodCodePreview));
 			}
 		}
 
 		public ObservableCollection<TemplateInfo> Templates
 		{
 			get { return templates; }
-			set { templates = value; RaisePropertyChanged(nameof(Templates)); }
+			set
+			{
+				templates = value;
+				RaisePropertyChanged(nameof(Templates));
+			}
 		}
 
 		public string MethodName
@@ -274,6 +277,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			{
 				methodName = value;
 				RaisePropertyChanged(nameof(MethodName));
+				RaisePropertyChanged(nameof(MethodCodePreview));
 			}
 		}
 
@@ -326,7 +330,51 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		public bool IsUseVSFormattingCode
 		{
 			get { return isUseVSFormattingCode; }
-			set { isUseVSFormattingCode = value; }
+			set
+			{
+				isUseVSFormattingCode = value;
+				RaisePropertyChanged(nameof(MethodCodePreview));
+			}
+		}
+
+		public ObservableCollection<KeyValuePair<string, XmlMethodInfo>> UserCodeTemplates
+		{
+			get { return userCodeTemplates; }
+			set
+			{
+				userCodeTemplates = value;
+				RaisePropertyChanged(nameof(UserCodeTemplates));
+			}
+		}
+
+		public string MethodCodePreview
+		{
+			get
+			{
+				if(string.IsNullOrEmpty(methodName))
+				{
+					return string.Empty;
+				}
+				else
+				{
+					GeneratedCodeInfo codeInfo = codeProvider.CreateWrapper(selectedTemplate, selectedEventSpecificData, methodName, isUseVSFormattingCode);
+					codeInfo = codeProvider.CreateMainNew(codeInfo, selectedTemplate, selectedEventSpecificData, methodName, false, selectedUserCodeTemplate.Value?.Code);
+					return codeInfo.MethodCodeInfo.Code;
+				}
+			}
+			set { }
+		}
+
+		public KeyValuePair<string, XmlMethodInfo> SelectedUserCodeTemplate
+		{
+			get { return selectedUserCodeTemplate; }
+			set
+			{
+				selectedUserCodeTemplate = value;
+
+				RaisePropertyChanged(nameof(SelectedUserCodeTemplate));
+				RaisePropertyChanged(nameof(MethodCodePreview));
+			}
 		}
 
 		#endregion Properties
@@ -340,6 +388,10 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		public ICommand CloseCommand { get { return closeCommand; } }
 
 		public ICommand SelectedIdentityCommand { get { return selectedIdentityCommand; } }
+
+		public ICommand BrowseCodeTemplateCommand { get { return browseCodeTemplateCommand; } }
+
+		public ICommand DeleteUserCodeTemplateCommand { get { return deleteUserCodeTemplateCommand; } }
 
 		#endregion Commands
 
@@ -438,6 +490,90 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 					projectConfiguration.LastSavedSearch.Add(result.ItemType, result.LastSavedSearch);
 				}
 			}
+		}
+
+		private void BrowseCodeTemplateCommandClick()
+		{
+			OpenFileDialog openFileDialog = new OpenFileDialog()
+			{
+				Filter = "XML Files (*.xml)|*.xml",
+				FilterIndex = 0,
+				DefaultExt = "xml"
+			};
+
+			DialogResult dialogResult = openFileDialog.ShowDialog();
+			if (dialogResult == DialogResult.Cancel)
+			{
+				return;
+			}
+
+			XmlMethodInfo xmlMethodInfo = new XmlMethodLoader().LoadMethod(openFileDialog.FileName);
+			if (xmlMethodInfo == null)
+			{
+				var messageWindow = new MessageBoxWindow();
+				var dialogReuslt = messageWindow.ShowDialog(null,
+					$"User code template invalid format.",
+					"Warning",
+					MessageButtons.OK,
+					MessageIcon.Warning);
+
+				return;
+			}
+
+			if (xmlMethodInfo.MethodType != codeProvider.Language)
+			{
+				var messageWindow = new MessageBoxWindow();
+				var dialogReuslt = messageWindow.ShowDialog(null,
+					$"User code tamplate must be {codeProvider.Language} method type.",
+					"Warning",
+					MessageButtons.OK,
+					MessageIcon.Warning);
+
+				return;
+			}
+
+			KeyValuePair<string, XmlMethodInfo> userCodeTemplate = this.UserCodeTemplates.FirstOrDefault(x => x.Key == xmlMethodInfo.MethodName);
+			if (userCodeTemplate.Key == default(KeyValuePair<string, XmlMethodInfo>).Key)
+			{
+				this.globalConfiguration.AddUserCodeTemplatePath(xmlMethodInfo.Path);
+				this.globalConfiguration.Save();
+
+				userCodeTemplate = new KeyValuePair<string, XmlMethodInfo>(xmlMethodInfo.MethodName, xmlMethodInfo);
+				UserCodeTemplates.Add(userCodeTemplate);
+			}
+
+			SelectedUserCodeTemplate = userCodeTemplate;
+		}
+
+		private void DeleteUserCodeTemplateCommandClick(KeyValuePair<string, XmlMethodInfo> userCodeTemplate)
+		{
+			if (userCodeTemplate.Key == None)
+			{
+				return;
+			}
+
+			if (this.SelectedUserCodeTemplate.Key == userCodeTemplate.Key)
+			{
+				SelectedUserCodeTemplate = this.UserCodeTemplates.First(); // None
+			}
+
+			this.globalConfiguration.RemoveUserCodeTemplatePath(userCodeTemplate.Value.Path);
+			this.globalConfiguration.Save();
+			this.UserCodeTemplates.Remove(userCodeTemplate);
+		}
+
+		private ObservableCollection<KeyValuePair<string, XmlMethodInfo>> LoadUserCodeTemplates()
+		{
+			List<string> paths = this.globalConfiguration.GetUserCodeTemplatesPaths();
+			List<XmlMethodInfo> xmlMethodInfos = new XmlMethodLoader().LoadMethods(paths).Where(x => x.MethodType == this.codeProvider.Language).ToList();
+			ObservableCollection<KeyValuePair<string, XmlMethodInfo>> templates = new ObservableCollection<KeyValuePair<string, XmlMethodInfo>>();
+			templates.Add(new KeyValuePair<string, XmlMethodInfo>(None, null));
+			foreach (XmlMethodInfo xmlMethodInfo in xmlMethodInfos)
+			{
+				templates.Add(new KeyValuePair<string, XmlMethodInfo>(xmlMethodInfo.MethodName, xmlMethodInfo));
+			}
+
+			return templates;
 		}
 	}
 }

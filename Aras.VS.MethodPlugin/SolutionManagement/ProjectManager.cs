@@ -14,7 +14,7 @@ using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.Commands;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.Extensions;
-using Aras.VS.MethodPlugin.ProjectConfigurations;
+using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.CodeAnalysis.CSharp;

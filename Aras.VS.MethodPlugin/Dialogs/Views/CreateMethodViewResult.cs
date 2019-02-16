@@ -32,5 +32,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 		public string SelectedIdentityKeyedName { get; set; }
 
 		public bool IsUseVSFormattingCode { get; set; }
+
+		public XmlMethodInfo SelectedUserCodeTemplate { get; set; }
 	}
 }
