@@ -11,10 +11,11 @@ using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.PackageManagement;
-using Aras.VS.MethodPlugin.ProjectConfigurations;
+using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using Aras.VS.MethodPlugin.Configurations;
 
 namespace Aras.VS.MethodPlugin.Commands
 {
@@ -23,23 +24,27 @@ namespace Aras.VS.MethodPlugin.Commands
 	/// </summary>
 	internal sealed class CreateMethodCmd : AuthenticationCommandBase
 	{
+		protected readonly IGlobalConfiguration globalConfiguration;
+
 		/// <summary>
 		/// Command ID.
 		/// </summary>
 		public const int CommandId = 0x0103;
 
-        /// <summary>
-        /// Command menu group (command set GUID).
-        /// </summary>
-        public static readonly Guid CommandSet = CommandIds.CreateMethod;
+		/// <summary>
+		/// Command menu group (command set GUID).
+		/// </summary>
+		public static readonly Guid CommandSet = CommandIds.CreateMethod;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CreateMethodCmd"/> class.
-        /// Adds our command handlers for menu (commands must exist in the command table file)
-        /// </summary>
-        /// <param name="package">Owner package, not null.</param>
-        private CreateMethodCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CreateMethodCmd"/> class.
+		/// Adds our command handlers for menu (commands must exist in the command table file)
+		/// </summary>
+		/// <param name="package">Owner package, not null.</param>
+		private CreateMethodCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IGlobalConfiguration userConfiguration) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory)
 		{
+			this.globalConfiguration = userConfiguration ?? throw new ArgumentNullException(nameof(userConfiguration));
+
 			if (projectManager.CommandService != null)
 			{
 				var menuCommandID = new CommandID(CommandSet, CommandId);
@@ -63,15 +68,15 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// Initializes the singleton instance of the command.
 		/// </summary>
 		/// <param name="package">Owner package, not null.</param>
-		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory)
+		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IGlobalConfiguration userConfiguration)
 		{
-			Instance = new CreateMethodCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
+			Instance = new CreateMethodCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, userConfiguration);
 		}
 
 		public override void ExecuteCommandImpl(object sender, EventArgs args, IVsUIShell uiShell)
 		{
 			var project = projectManager.SelectedProject;
-            var projectConfiguration = projectConfigurationManager.Load(projectManager.ProjectConfigPath);
+			var projectConfiguration = projectConfigurationManager.Load(projectManager.ProjectConfigPath);
 
 			var templateLoader = new Templates.TemplateLoader();
 			templateLoader.Load(projectManager.MethodConfigPath);
@@ -79,14 +84,14 @@ namespace Aras.VS.MethodPlugin.Commands
 			PackageManager packageManager = new PackageManager(authManager);
 			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language, projectConfiguration);
 
-			var createView = dialogFactory.GetCreateView(uiShell, projectConfiguration, templateLoader, packageManager, projectManager, codeProvider.Language);
+			var createView = dialogFactory.GetCreateView(uiShell, projectConfiguration, templateLoader, packageManager, projectManager, codeProvider, globalConfiguration);
 			var createViewResult = createView.ShowDialog();
 			if (createViewResult?.DialogOperationResult != true)
 			{
 				return;
 			}
 
-			GeneratedCodeInfo codeInfo = codeProvider.GenerateCodeInfo(createViewResult.SelectedTemplate, createViewResult.SelectedEventSpecificData, createViewResult.MethodName, createViewResult.UseRecommendedDefaultCode, string.Empty, createViewResult.IsUseVSFormattingCode);
+			GeneratedCodeInfo codeInfo = codeProvider.GenerateCodeInfo(createViewResult.SelectedTemplate, createViewResult.SelectedEventSpecificData, createViewResult.MethodName, createViewResult.UseRecommendedDefaultCode, createViewResult.SelectedUserCodeTemplate.Code, createViewResult.IsUseVSFormattingCode);
 			projectManager.CreateMethodTree(codeInfo);
 
 			string newInnovatorMethodId = authManager.InnovatorInstance.getNewID();
@@ -107,8 +112,8 @@ namespace Aras.VS.MethodPlugin.Commands
 			};
 
 			projectConfiguration.AddMethodInfo(methodInfo);
-            projectConfiguration.UseVSFormatting = createViewResult.IsUseVSFormattingCode;
-            projectConfigurationManager.Save(projectManager.ProjectConfigPath, projectConfiguration);
+			projectConfiguration.UseVSFormatting = createViewResult.IsUseVSFormattingCode;
+			projectConfigurationManager.Save(projectManager.ProjectConfigPath, projectConfiguration);
 		}
 	}
 }

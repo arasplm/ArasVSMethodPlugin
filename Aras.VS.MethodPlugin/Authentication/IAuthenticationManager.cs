@@ -6,7 +6,7 @@
 
 using System.Collections.Generic;
 using System.Windows;
-using Aras.VS.MethodPlugin.ProjectConfigurations;
+using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 
 namespace Aras.VS.MethodPlugin.Authentication
 {

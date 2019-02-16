@@ -27,14 +27,14 @@
                 <ResourceDictionary Source="Styles/LabelControl.xaml" />
                 <ResourceDictionary Source="Styles/TextBoxControl.xaml" />
                 <ResourceDictionary Source="Styles/Window.xaml" />
-                <ResourceDictionary Source="Styles/CheckBox.xaml" /> 
+                <ResourceDictionary Source="Styles/CheckBox.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-
     <Border Margin="5">
         <Grid>
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -47,7 +47,6 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
-                
             </Grid.ColumnDefinitions>
             <Grid Margin="5">
                 <Grid.ColumnDefinitions>
@@ -83,7 +82,51 @@
                 <ComboBox Grid.Column="1" ItemsSource="{Binding Path=EventSpecificData}" SelectedItem="{Binding Path=SelectedEventSpecificData}" VerticalAlignment="Center"></ComboBox>
             </Grid>
 
-            <Grid Grid.Row="2" Grid.ColumnSpan="3" Margin="5,5">
+            <Grid Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="0" Margin="5" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0" Grid.Column="0" Content="Code Template Name:" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,5,0"/>
+                <ComboBox x:Name="UserCodeTemplatesComboBox" Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Path=UserCodeTemplates}" SelectedValue="{Binding Path=SelectedUserCodeTemplate }" VerticalAlignment="Center">
+                    <ComboBox.Resources>
+                        <ControlTemplate x:Key="ItemTemplate">
+                            <StackPanel>
+                                <TextBlock Text="{Binding Key}" />
+                            </StackPanel>
+                        </ControlTemplate>
+                        <ControlTemplate x:Key="ItemsTemplate">
+                            <Grid Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding Key}" HorizontalAlignment="Stretch" />
+                                <Button Content="Delete" Grid.Column="2" VerticalAlignment="Center" Command="{Binding ElementName=CreateMethodWindow, Path=DataContext.DeleteUserCodeTemplateCommand}" CommandParameter="{Binding}" />
+                            </Grid>
+                        </ControlTemplate>
+                    </ComboBox.Resources>
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <Control x:Name="theControl" Focusable="False" Template="{StaticResource ItemsTemplate}" />
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ComboBoxItem}}, Path=IsSelected}" Value="{x:Null}">
+                                    <Setter TargetName="theControl" Property="Template" Value="{StaticResource ItemTemplate}" />
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                    <ComboBox.ItemContainerStyle>
+                        <Style TargetType="ComboBoxItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
+                </ComboBox>
+                <Button Content="  ...  " Grid.Column="2" Command="{Binding Path=BrowseCodeTemplateCommand}" VerticalAlignment="Center" Margin="5, 0"/>
+            </Grid>
+
+            <Grid Grid.Row="3" Grid.ColumnSpan="3" Margin="5,5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
@@ -92,14 +135,14 @@
                 <TextBox x:Name="MethodComment" Text="{Binding Path=MethodComment, UpdateSourceTrigger=PropertyChanged}" MaxLength="{Binding Path=MethodCommentMaxLength}" Grid.Column="1" VerticalContentAlignment="Center" HorizontalAlignment="Stretch"/>
             </Grid>
 
-            <Expander Grid.Row="3" Grid.ColumnSpan="3" Header="Template Preview" 
+            <Expander Grid.Row="4" Grid.ColumnSpan="3" Header="Method Preview" 
                       VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5">
-                <TextBox x:Name="tempaltePreviewTextBox" HorizontalAlignment="Stretch" AcceptsReturn="True" IsReadOnly="True" MaxHeight="300"
-                         VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Text="{Binding Path=TemplatePreviewWithEventData}">
+                <TextBox x:Name="MetcodCodePreviewTextBox" HorizontalAlignment="Stretch" AcceptsReturn="True" IsReadOnly="True" MaxHeight="300"
+                         VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Text="{Binding Path=MethodCodePreview}">
                 </TextBox>
             </Expander>
 
-            <Grid Grid.Row="4" Grid.ColumnSpan="2" Grid.Column="0" Margin="5">
+            <Grid Grid.Row="5" Grid.ColumnSpan="2" Grid.Column="0" Margin="5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
@@ -110,7 +153,7 @@
                 <Button Content="  ...  " Grid.Column="2" Command="{Binding Path=SelectedIdentityCommand}" VerticalAlignment="Center" Margin="5, 0"/>
             </Grid>
 
-            <Grid Grid.Row="5" Grid.ColumnSpan="3" VerticalAlignment="Center"  Margin="5">
+            <Grid Grid.Row="6" Grid.ColumnSpan="3" VerticalAlignment="Center"  Margin="5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -122,7 +165,7 @@
                          Margin="5,0,0,0"/>
             </Grid>
 
-            <Grid Grid.Row="6" Grid.ColumnSpan="3" Margin="5,5">
+            <Grid Grid.Row="7" Grid.ColumnSpan="3" Margin="5,5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
@@ -136,7 +179,7 @@
                 <CheckBox VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding Path=UseRecommendedDefaultCode}"/>
             </WrapPanel>
 
-            <Grid Grid.Row="7" HorizontalAlignment="Left">
+            <Grid Grid.Row="8" HorizontalAlignment="Left">
                 <CheckBox Content="Use Visual Studio formatting" FlowDirection="RightToLeft" Margin="10" IsChecked ="{Binding IsUseVSFormattingCode}" >
                     <CheckBox.Resources>
                         <Style TargetType="{x:Type Path}">
@@ -146,10 +189,10 @@
                 </CheckBox>
             </Grid>
 
-            <WrapPanel Grid.Row="7" Grid.Column="2" HorizontalAlignment="Right">
+            <WrapPanel Grid.Row="8" Grid.Column="2" HorizontalAlignment="Right">
                 <Button Content="OK" Width="70" Margin="5" 
                         Command="{Binding Path=OkCommand}" CommandParameter="{Binding ElementName=CreateMethodWindow}"/>
-				<Button Grid.Row="4" Grid.Column="2" Content="Cancel" Width="70" Margin="5" 
+                <Button Grid.Row="4" Grid.Column="2" Content="Cancel" Width="70" Margin="5" 
 						Command="{Binding Path=CancelCommand}" CommandParameter="{Binding ElementName=CreateMethodWindow}"/>
             </WrapPanel>
 

@@ -10,7 +10,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.ProjectConfigurations;
+using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using System.Windows.Controls;
 
 namespace Aras.VS.MethodPlugin.Dialogs.ViewModels

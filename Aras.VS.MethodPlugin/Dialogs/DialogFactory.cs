@@ -14,12 +14,13 @@ using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.ItemSearch;
 using Aras.VS.MethodPlugin.ItemSearch.Preferences;
 using Aras.VS.MethodPlugin.PackageManagement;
-using Aras.VS.MethodPlugin.ProjectConfigurations;
+using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using Aras.VS.MethodPlugin.Templates;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell.Interop;
 using OfficeConnector.Dialogs;
+using Aras.VS.MethodPlugin.Configurations;
 
 namespace Aras.VS.MethodPlugin.Dialogs
 {
@@ -70,10 +71,10 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			return new LoginViewAdapter(view);
 		}
 
-		public IViewAdaper<CreateMethodView, CreateMethodViewResult> GetCreateView(IVsUIShell uiShell, IProjectConfiguraiton projectConfiguration, TemplateLoader templateLoader, PackageManager packageManager, IProjectManager projectManager, string projectLanguage)
+		public IViewAdaper<CreateMethodView, CreateMethodViewResult> GetCreateView(IVsUIShell uiShell, IProjectConfiguraiton projectConfiguration, TemplateLoader templateLoader, PackageManager packageManager, IProjectManager projectManager, ICodeProvider codeProvider, IGlobalConfiguration globalConfiguration)
 		{
 			CreateMethodView view = new CreateMethodView();
-			CreateMethodViewModel viewModel = new CreateMethodViewModel(authManager, this, projectConfiguration, templateLoader, packageManager, projectManager, arasDataProvider, projectLanguage);
+			CreateMethodViewModel viewModel = new CreateMethodViewModel(authManager, this, projectConfiguration, templateLoader, packageManager, projectManager, arasDataProvider, codeProvider, globalConfiguration);
 			view.DataContext = viewModel;
 
 			IntPtr hwnd;

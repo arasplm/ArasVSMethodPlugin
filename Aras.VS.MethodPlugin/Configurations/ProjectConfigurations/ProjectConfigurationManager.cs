@@ -11,7 +11,7 @@ using System.Xml;
 using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.ItemSearch;
 
-namespace Aras.VS.MethodPlugin.ProjectConfigurations
+namespace Aras.VS.MethodPlugin.Configurations.ProjectConfigurations
 {
 	public class ProjectConfigurationManager : IProjectConfigurationManager
 	{

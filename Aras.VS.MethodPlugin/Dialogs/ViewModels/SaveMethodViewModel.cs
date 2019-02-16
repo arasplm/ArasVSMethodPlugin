@@ -15,7 +15,7 @@ using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.ItemSearch;
 using Aras.VS.MethodPlugin.PackageManagement;
-using Aras.VS.MethodPlugin.ProjectConfigurations;
+using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using OfficeConnector.Dialogs;
 
 namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
