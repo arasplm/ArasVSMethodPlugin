@@ -567,7 +567,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			List<string> paths = this.globalConfiguration.GetUserCodeTemplatesPaths();
 			List<XmlMethodInfo> xmlMethodInfos = new XmlMethodLoader().LoadMethods(paths).Where(x => x.MethodType == this.codeProvider.Language).ToList();
 			ObservableCollection<KeyValuePair<string, XmlMethodInfo>> templates = new ObservableCollection<KeyValuePair<string, XmlMethodInfo>>();
-			templates.Add(new KeyValuePair<string, XmlMethodInfo>(None, null));
+			templates.Add(new KeyValuePair<string, XmlMethodInfo>(None, new XmlMethodInfo()));
 			foreach (XmlMethodInfo xmlMethodInfo in xmlMethodInfos)
 			{
 				templates.Add(new KeyValuePair<string, XmlMethodInfo>(xmlMethodInfo.MethodName, xmlMethodInfo));
