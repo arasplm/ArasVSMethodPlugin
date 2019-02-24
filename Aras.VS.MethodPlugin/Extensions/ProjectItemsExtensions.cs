@@ -12,6 +12,11 @@ namespace Aras.VS.MethodPlugin.Extensions
 	{
 		internal static bool Exists(this ProjectItems projectItems, string fileName)
 		{
+			if (projectItems == null)
+			{
+				return false;
+			}
+
 			foreach (ProjectItem projectItem in projectItems)
 			{
 				if (projectItem.Name.Equals(fileName))
