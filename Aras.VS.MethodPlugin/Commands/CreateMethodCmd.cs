@@ -108,7 +108,8 @@ namespace Aras.VS.MethodPlugin.Commands
 				EventData = createViewResult.SelectedEventSpecificData.EventSpecificData,
 				ExecutionAllowedToId = createViewResult.SelectedIdentityId,
 				ExecutionAllowedToKeyedName = createViewResult.SelectedIdentityKeyedName,
-				PartialClasses = codeInfo.PartialCodeInfoList.Select(pci => pci.Path).ToList()
+				PartialClasses = codeInfo.PartialCodeInfoList.Select(pci => pci.Path).ToList(),
+				ExternalItems = codeInfo.ExternalItemsInfoList.Select(pci => pci.Path).ToList()
 			};
 
 			projectConfiguration.AddMethodInfo(methodInfo);

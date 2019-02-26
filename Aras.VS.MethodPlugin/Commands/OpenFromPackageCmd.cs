@@ -138,6 +138,7 @@ namespace Aras.VS.MethodPlugin.Commands
 				ExecutionAllowedToId = openViewResult.IdentityId,
 				ExecutionAllowedToKeyedName = openViewResult.IdentityKeyedName,
 				PartialClasses = codeInfo.PartialCodeInfoList.Select(pci => pci.Path).ToList(),
+				ExternalItems = codeInfo.ExternalItemsInfoList.Select(pci => pci.Path).ToList(),
 				ManifestFileName = openViewResult.SelectedManifestFileName
 			};
 

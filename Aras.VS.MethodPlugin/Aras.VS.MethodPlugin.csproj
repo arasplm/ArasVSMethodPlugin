@@ -85,9 +85,9 @@
     <Compile Include="Authentication\InnovatorUser.cs" />
     <Compile Include="Code\CodeProviderFactory.cs" />
     <Compile Include="Code\CodeInfo.cs" />
-    <Compile Include="Code\CSharpCodeElementTypeProvider.cs" />
+    <Compile Include="Code\CSharpCodeItemProvider.cs" />
     <Compile Include="Code\ICodeProviderFactory.cs" />
-    <Compile Include="Code\ICodeElementTypeProvider.cs" />
+    <Compile Include="Code\ICodeItemProvider.cs" />
     <Compile Include="Code\XmlMethod.cs" />
     <Compile Include="Code\XmlMethodLoader.cs" />
     <Compile Include="Commands\AuthenticationCommandBase.cs" />
@@ -95,7 +95,7 @@
     <Compile Include="Commands\CommandIdsList.cs" />
     <Compile Include="Commands\DebugMethodCmd.cs" />
     <Compile Include="Commands\RefreshConfigCmd.cs" />
-    <Compile Include="Commands\CreatePartialElementCmd.cs" />
+    <Compile Include="Commands\CreateCodeItemCmd.cs" />
     <Compile Include="Commands\UpdateMethodCmd.cs" />
     <Compile Include="Commands\CreateMethodCmd.cs" />
     <Compile Include="Commands\ConnectionInfoCmd.cs" />
@@ -119,15 +119,15 @@
     <Compile Include="Dialogs\Directory\Data\DirectoryItem.cs" />
     <Compile Include="Dialogs\Directory\Data\DirectoryItemType.cs" />
     <Compile Include="Dialogs\Directory\DirectoryStructure.cs" />
-    <Compile Include="Dialogs\ViewModels\CreatePartialElementViewModel.cs" />
+    <Compile Include="Dialogs\ViewModels\CreateCodeItemViewModel.cs" />
     <Compile Include="Dialogs\ViewModels\DebugMethodViewModel.cs" />
     <Compile Include="Dialogs\ViewResult.cs" />
     <Compile Include="Dialogs\Views\ConnectionInfoViewAdapter.cs" />
-    <Compile Include="Dialogs\Views\CreatePartialElementView.xaml.cs">
-      <DependentUpon>CreatePartialElementView.xaml</DependentUpon>
+    <Compile Include="Dialogs\Views\CreateCodeItemView.xaml.cs">
+      <DependentUpon>CreateCodeItemView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\Views\CreatePartialElementViewResult.cs" />
-    <Compile Include="Dialogs\Views\CreatePartialElementViewAdapter.cs" />
+    <Compile Include="Dialogs\Views\CreateCodeItemViewResult.cs" />
+    <Compile Include="Dialogs\Views\CreateCodeItemViewAdapter.cs" />
     <Compile Include="Dialogs\Views\CreateMethodViewAdapter.cs" />
     <Compile Include="Dialogs\Views\CreateMethodViewResult.cs" />
     <Compile Include="Dialogs\Views\DebugMethodView.xaml.cs">
@@ -600,7 +600,7 @@
     <Content Include="Resources\Settings.png" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Dialogs\Views\CreatePartialElementView.xaml">
+    <Page Include="Dialogs\Views\CreateCodeItemView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

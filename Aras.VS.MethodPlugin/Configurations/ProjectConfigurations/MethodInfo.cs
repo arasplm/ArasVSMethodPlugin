@@ -23,6 +23,7 @@ namespace Aras.VS.MethodPlugin.Configurations.ProjectConfigurations
 			this.PackageName = methodInfo.PackageName;
 			this.EventData = methodInfo.EventData;
 			this.PartialClasses = new List<string>(methodInfo.PartialClasses);
+			this.ExternalItems = new List<string>(methodInfo.ExternalItems);
 			this.ExecutionAllowedToKeyedName = methodInfo.ExecutionAllowedToKeyedName;
 			this.ExecutionAllowedToId = methodInfo.ExecutionAllowedToId;
 			this.MethodPath = methodInfo.MethodPath;
@@ -31,6 +32,7 @@ namespace Aras.VS.MethodPlugin.Configurations.ProjectConfigurations
 		public MethodInfo()
 		{
 			this.PartialClasses = new List<string>();
+			this.ExternalItems = new List<string>();
 		}
 
 		public string InnovatorMethodId { get; set; }
@@ -52,6 +54,8 @@ namespace Aras.VS.MethodPlugin.Configurations.ProjectConfigurations
 		public EventSpecificData EventData { get; set; }
 
 		public List<string> PartialClasses { get; set; }
+
+		public List<string> ExternalItems { get; set; }
 
 		public string ExecutionAllowedToKeyedName { get; set; }
 

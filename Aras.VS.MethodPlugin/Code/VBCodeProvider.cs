@@ -5,7 +5,6 @@
 //------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Templates;
@@ -206,26 +205,6 @@ End Class
 			return resultCode;
 		}
 
-		private Dictionary<string, string> generateMethodParts(ref string methodCode)
-		{
-			return new Dictionary<string, string>();
-		}
-
-		public void LoadCodeToProject(string methodLanguage, string methodCode, string methodLocation, string methodName, string innovatorMethodConfigId, string innovatorMethodId, EventSpecificDataType eventData, string packageName, string executionAllowedToId, string executionAllowedToKeyedName)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void LoadCodeToProject(dynamic methodItem, EventSpecificDataType eventData, string packageName)
-		{
-			throw new NotImplementedException();
-		}
-
-		public string AddItemTemplateToProjectNew(ProjectItem folder, string methodName, string code, bool openAfterCreation)
-		{
-			throw new NotImplementedException();
-		}
-
 		public GeneratedCodeInfo CreateWrapper(TemplateInfo template, EventSpecificDataType eventData, string methodName, bool useCodeFormating)
 		{
 			throw new NotImplementedException();
@@ -236,27 +215,12 @@ End Class
 			throw new NotImplementedException();
 		}
 
-		public GeneratedCodeInfo UpdateSourceCodeWithPartialClasses(GeneratedCodeInfo methodInfo)
-		{
-			throw new NotImplementedException();
-		}
-
 		public GeneratedCodeInfo CreateTestsNew(GeneratedCodeInfo generatedCodeInfo, TemplateInfo template, EventSpecificDataType eventData, string methodName, bool useAdvancedCode)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void CreatePartialPart(PartialCodeInfo partialCodeInfo)
-		{
-			throw new NotImplementedException();
-		}
-
 		public GeneratedCodeInfo CreatePartialClasses(GeneratedCodeInfo methodInfo)
-		{
-			throw new NotImplementedException();
-		}
-
-		public CodeInfo CreatePartialCodeInfo(MethodInfo methodInfo, string fileName, CodeElementType elementType, bool useCodeFormating)
 		{
 			throw new NotImplementedException();
 		}
@@ -267,6 +231,11 @@ End Class
 		}
 
 		public GeneratedCodeInfo GenerateCodeInfo(TemplateInfo template, EventSpecificDataType eventData, string methodName, bool useAdvancedCode, string codeToInsert, bool useCodeFormating)
+		{
+			throw new NotImplementedException();
+		}
+
+		public CodeInfo CreateCodeItemInfo(MethodInfo methodInfo, string fileName, CodeType codeType, CodeElementType codeElementType, bool isUseVSFormattingCode)
 		{
 			throw new NotImplementedException();
 		}

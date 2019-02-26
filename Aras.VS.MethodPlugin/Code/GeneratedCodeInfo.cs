@@ -17,18 +17,20 @@ namespace Aras.VS.MethodPlugin.Code
 			this.MethodName = codeInfo.MethodName;
 			this.MethodCodeParentClassName = codeInfo.MethodCodeParentClassName;
 			this.IsUseVSFormatting = codeInfo.IsUseVSFormatting;
-			WrapperCodeInfo = new CodeInfo() { Code = codeInfo.WrapperCodeInfo.Code, Path = codeInfo.WrapperCodeInfo.Path };
-			MethodCodeInfo = new CodeInfo() { Code = codeInfo.MethodCodeInfo.Code, Path = codeInfo.MethodCodeInfo.Path };
-			PartialCodeInfoList = new List<CodeInfo>(codeInfo.PartialCodeInfoList); // check references in list
-			TestsCodeInfo = new CodeInfo() { Code = codeInfo.TestsCodeInfo.Code, Path = codeInfo.TestsCodeInfo.Path };
+			this.WrapperCodeInfo = new CodeInfo() { Code = codeInfo.WrapperCodeInfo.Code, Path = codeInfo.WrapperCodeInfo.Path };
+			this.MethodCodeInfo = new CodeInfo() { Code = codeInfo.MethodCodeInfo.Code, Path = codeInfo.MethodCodeInfo.Path };
+			this.PartialCodeInfoList = new List<CodeInfo>(codeInfo.PartialCodeInfoList);
+			this.ExternalItemsInfoList = new List<CodeInfo>(codeInfo.ExternalItemsInfoList);
+			this.TestsCodeInfo = new CodeInfo() { Code = codeInfo.TestsCodeInfo.Code, Path = codeInfo.TestsCodeInfo.Path };
 		}
 
 		public GeneratedCodeInfo()
 		{
-			WrapperCodeInfo = new CodeInfo();
-			MethodCodeInfo = new CodeInfo();
-			PartialCodeInfoList = new List<CodeInfo>();
-			TestsCodeInfo = new CodeInfo();
+			this.WrapperCodeInfo = new CodeInfo();
+			this.MethodCodeInfo = new CodeInfo();
+			this.PartialCodeInfoList = new List<CodeInfo>();
+			this.ExternalItemsInfoList = new List<CodeInfo>();
+			this.TestsCodeInfo = new CodeInfo();
 		}
 
 		public string Namespace { get; set; }
@@ -45,6 +47,8 @@ namespace Aras.VS.MethodPlugin.Code
 		public CodeInfo MethodCodeInfo { get; set; }
 
 		public List<CodeInfo> PartialCodeInfoList { get; set; }
+
+		public List<CodeInfo> ExternalItemsInfoList { get; set; }
 
 		public CodeInfo TestsCodeInfo { get; set; }
 

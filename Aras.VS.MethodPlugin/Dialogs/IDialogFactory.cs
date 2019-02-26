@@ -76,7 +76,7 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			string projectName,
 			string projectFullName);
 
-		IViewAdaper<CreatePartialElementView, CreatePartialElementViewResult> GetCreatePartialClassView(IVsUIShell uiShell, bool usedVSFormatting);
+		IViewAdaper<CreateCodeItemView, CreateCodeItemViewResult> GetCreateCodeItemView(IVsUIShell uiShell, ICodeItemProvider codeItemProvider, bool usedVSFormatting);
 
 		IViewAdaper<DebugMethodView, DebugMethodViewResult> GetDebugMethodView(IVsUIShell uiShell,
 			IProjectConfigurationManager projectConfigurationManager,

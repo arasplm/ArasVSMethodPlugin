@@ -126,13 +126,14 @@ namespace Aras.VS.MethodPlugin.Commands
 				EventData = openViewResult.SelectedEventSpecificData.EventSpecificData,
 				ExecutionAllowedToId = openViewResult.SelectedIdentityId,
 				ExecutionAllowedToKeyedName = openViewResult.SelectedIdentityKeyedName,
-				PartialClasses = codeInfo.PartialCodeInfoList.Select(pci => pci.Path).ToList()
+				PartialClasses = codeInfo.PartialCodeInfoList.Select(pci => pci.Path).ToList(),
+				ExternalItems = codeInfo.ExternalItemsInfoList.Select(pci => pci.Path).ToList()
 			};
 
 			projectManager.AddSuppression("assembly: System.Diagnostics.CodeAnalysis.SuppressMessage", "Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", "namespace", codeInfo.Namespace);
 
 			projectConfiguration.AddMethodInfo(methodInfo);
-            projectConfiguration.UseVSFormatting = openViewResult.IsUseVSFormattingCode;
+			projectConfiguration.UseVSFormatting = openViewResult.IsUseVSFormattingCode;
 			projectConfigurationManager.Save(projectConfigPath, projectConfiguration);
 		}
 	}

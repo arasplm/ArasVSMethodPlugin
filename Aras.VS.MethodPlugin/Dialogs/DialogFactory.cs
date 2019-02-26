@@ -190,10 +190,10 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			return new UpdateFromArasViewAdapter(view);
 		}
 
-        public IViewAdaper<CreatePartialElementView, CreatePartialElementViewResult> GetCreatePartialClassView(IVsUIShell uiShell, bool usedVSFormatting)
+		public IViewAdaper<CreateCodeItemView, CreateCodeItemViewResult> GetCreateCodeItemView(IVsUIShell uiShell, ICodeItemProvider codeItemProvider, bool usedVSFormatting)
 		{
-			var viewModel = new CreatePartialElementViewModel(usedVSFormatting);
-			var view = new CreatePartialElementView();
+			var viewModel = new CreateCodeItemViewModel(codeItemProvider, usedVSFormatting);
+			var view = new CreateCodeItemView();
 			view.DataContext = viewModel;
 
 			IntPtr hwnd;
@@ -201,7 +201,7 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			var windowInteropHelper = new WindowInteropHelper(view);
 			windowInteropHelper.Owner = hwnd;
 
-			return new CreatePartialElementViewAdapter(view);
+			return new CreateCodeItemViewAdapter(view);
 		}
 
         public IViewAdaper<DebugMethodView, DebugMethodViewResult> GetDebugMethodView(IVsUIShell uiShell, IProjectConfigurationManager projectConfigurationManager, IProjectConfiguraiton projectConfiguration, MethodInfo methodInformation, string methodCode, string projectConfigPath, string projectName, string projectFullName)

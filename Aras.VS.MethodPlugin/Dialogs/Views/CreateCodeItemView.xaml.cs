@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="CreatePartialElementView.xaml.cs" company="Aras Corporation">
+// <copyright file="CreateCodeItemView.xaml.cs" company="Aras Corporation">
 //     © 2017-2018 Aras Corporation. All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -10,16 +10,16 @@ using System.Windows;
 namespace Aras.VS.MethodPlugin.Dialogs.Views
 {
 	/// <summary>
-	/// Interaction logic for CreatePartialElementView.xaml
+	/// Interaction logic for CreateCodeItemView.xaml
 	/// </summary>
-	public partial class CreatePartialElementView : Window
+	public partial class CreateCodeItemView : Window
 	{
-		public CreatePartialElementView()
+		public CreateCodeItemView()
 		{
 			InitializeComponent();
 		}
 
-		private void CreatePartialElementView_SourceInitialized(object sender, EventArgs e)
+		private void CreateCodeItemView_SourceInitialized(object sender, EventArgs e)
 		{
 			this.FileNameTextBlock.Focus();
 			this.FileNameTextBlock.SelectAll();

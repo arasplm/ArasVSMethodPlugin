@@ -1,0 +1,64 @@
+﻿<Window x:Class="Aras.VS.MethodPlugin.Dialogs.Views.CreateCodeItemView"
+             x:Name="CreateCodeItemWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             Width="350"
+             SizeToContent="Height" ResizeMode="NoResize"
+             Title="Create code item"
+             Icon="/Aras.VS.MethodPlugin;component/Resources/aras.ico"
+             WindowStyle="None"
+             WindowStartupLocation="CenterScreen"
+             Style="{DynamicResource WindowVsTheme}"
+             SourceInitialized="CreateCodeItemView_SourceInitialized">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles/ButtonControl.xaml" />
+                <ResourceDictionary Source="Styles/LabelControl.xaml" />
+                <ResourceDictionary Source="Styles/GroupBoxControl.xaml" />
+                <ResourceDictionary Source="Styles/TextBoxControl.xaml" />
+                <ResourceDictionary Source="Styles/Window.xaml" />
+                <ResourceDictionary Source="Styles/CheckBox.xaml" />
+                <ResourceDictionary Source="Styles/ComboBoxControl.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition  Width="2.9*"/>
+        </Grid.ColumnDefinitions>
+
+        <Label x:Name="FileNameLabel" Grid.Row="0" Content="File Name: " VerticalContentAlignment="Center" Margin="5, 5, 0, 5"/>
+        <TextBox x:Name="FileNameTextBlock" Grid.Row="0" Grid.Column="1" Text="{Binding Path=FileName, UpdateSourceTrigger=PropertyChanged}" Height="24" TextWrapping="Wrap" VerticalContentAlignment="Center" Margin="5" />
+
+        <Label x:Name="CodeTypeLabel" Grid.Row="1" Content="Code Type: " VerticalContentAlignment="Center" Margin="5, 5, 0, 5"/>
+        <ComboBox x:Name="CodeTypeComboBox" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Path=CodeTypes}" SelectedItem="{Binding Path=SelectedCodeType}" VerticalContentAlignment="Center" Margin="5"/>
+
+        <Label x:Name="ElementTypeLabel" Grid.Row="2" Content="Element Type: " VerticalContentAlignment="Center" Margin="5, 5, 0, 5"/>
+        <ComboBox x:Name="ElementTypeComboBox" Grid.Column="1" Grid.Row="2" ItemsSource="{Binding Path=ElementTypes}" SelectedItem="{Binding Path=SelectedElementType}" VerticalContentAlignment="Center" Margin="5"/>
+
+        <CheckBox Content="Use Visual Studio formatting" FlowDirection="RightToLeft" Margin = "10"  VerticalAlignment="Center" HorizontalAlignment="Left" IsChecked ="{Binding IsUseVSFormattingCode}"  Grid.Row="3" Grid.ColumnSpan="2">
+            <CheckBox.Resources>
+                <Style TargetType="{x:Type Path}">
+                    <Setter Property="FlowDirection" Value="LeftToRight"/>
+                </Style>
+            </CheckBox.Resources>
+        </CheckBox>
+
+        <WrapPanel Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <Button x:Name="OkButton" Content="OK" Command="{Binding Path=OKCommand}" CommandParameter="{Binding ElementName=CreateCodeItemWindow}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70" Margin="5"/>
+            <Button x:Name="CancelButton" Content="Cancel" Command="{Binding Path=CancelCommand}" CommandParameter="{Binding ElementName=CreateCodeItemWindow}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70" Margin="5"/>
+        </WrapPanel>
+
+    </Grid>
+</Window>

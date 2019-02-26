@@ -138,7 +138,6 @@ namespace Aras.VS.MethodPlugin.Configurations.ProjectConfigurations
 					metohdInfoNode.AppendChild(manifestFileName);
 				}
 
-
 				XmlElement partialClasses = xmlDoc.CreateElement("partialClasses");
 				foreach (string path in methodInfo.PartialClasses)
 				{
@@ -148,7 +147,18 @@ namespace Aras.VS.MethodPlugin.Configurations.ProjectConfigurations
 					partialClasses.AppendChild(pathXmlElement);
 				}
 
+				XmlElement externalItems = xmlDoc.CreateElement("externalItems");
+				foreach (string path in methodInfo.ExternalItems)
+				{
+					XmlElement pathXmlElement = xmlDoc.CreateElement("path");
+					pathXmlElement.InnerText = path;
+
+					externalItems.AppendChild(pathXmlElement);
+				}
+
 				metohdInfoNode.AppendChild(partialClasses);
+				metohdInfoNode.AppendChild(externalItems);
+
 				methodInfoXmlNode.AppendChild(metohdInfoNode);
 			}
 
@@ -260,6 +270,12 @@ namespace Aras.VS.MethodPlugin.Configurations.ProjectConfigurations
 				foreach (XmlNode partialClassesXmlNode in partialClassesXmlNodes)
 				{
 					methodInfo.PartialClasses.Add(partialClassesXmlNode.InnerText);
+				}
+
+				var externalItemsXmlNodes = methodInfoNode.SelectNodes("externalItems/path");
+				foreach (XmlNode externalItemXmlNode in externalItemsXmlNodes)
+				{
+					methodInfo.ExternalItems.Add(externalItemXmlNode.InnerText);
 				}
 
 				projectConfiguration.MethodInfos.Add(methodInfo);
