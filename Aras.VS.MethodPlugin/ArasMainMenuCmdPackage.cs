@@ -102,7 +102,7 @@ namespace Aras.VS.MethodPlugin
 			Commands.SaveToPackageCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
 			Commands.UpdateMethodCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
 			Commands.ConnectionInfoCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager);
-			Commands.CreatePartialElementCmd.Initialize(projectManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
+			Commands.CreateCodeItemCmd.Initialize(projectManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
 			Commands.RefreshConfigCmd.Initialize(projectManager, dialogFactory, projectConfigurationManager);
 			Commands.DebugMethodCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
 

@@ -10,6 +10,8 @@ namespace Aras.VS.MethodPlugin.Code
 {
 	public interface ICodeProviderFactory
 	{
+		ICodeItemProvider GetCodeItemProvider(string projectLanguageCode);
+
 		ICodeProvider GetCodeProvider(string projectLanguageCode, IProjectConfiguraiton projectConfiguration);
 	}
 }

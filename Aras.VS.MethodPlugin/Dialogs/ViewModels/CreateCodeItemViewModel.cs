@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="CreatePartialElementViewModel.cs" company="Aras Corporation">
+// <copyright file="CreateCodeItemViewModel.cs" company="Aras Corporation">
 //     Copyright © 2018 Aras Corporation.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -12,20 +12,27 @@ using Aras.VS.MethodPlugin.Code;
 
 namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 {
-	public class CreatePartialElementViewModel : BaseViewModel
+	public class CreateCodeItemViewModel : BaseViewModel
 	{
+		private readonly ICodeItemProvider codeItemProvider;
+
 		private string fileName;
 		private bool isOkButtonEnabled;
 		private bool isUseVSFormattingCode;
 
+		private CodeType selectedCodeType;
 		private CodeElementType selectedElementType;
 
 		private ICommand okCommand;
 		private ICommand cancelCommand;
 		private ICommand closeCommand;
 
-		public CreatePartialElementViewModel(bool usedVSFormatting)
+		public CreateCodeItemViewModel(ICodeItemProvider codeItemProvider, bool usedVSFormatting)
 		{
+			if (codeItemProvider == null) throw new ArgumentNullException(nameof(codeItemProvider));
+
+			this.codeItemProvider = codeItemProvider;
+
 			this.okCommand = new RelayCommand<object>(OnOKCliked, IsEnabledOkButton);
 			this.cancelCommand = new RelayCommand<object>(OnCancelCliked);
 			this.closeCommand = new RelayCommand<object>(OnCloseCliked);
@@ -42,6 +49,23 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			{
 				this.fileName = value;
 				RaisePropertyChanged(nameof(FileName));
+			}
+		}
+
+		public ObservableCollection<CodeType> CodeTypes
+		{
+			get { return new ObservableCollection<CodeType>(Enum.GetValues(typeof(CodeType)).Cast<CodeType>()); }
+			set { }
+		}
+
+		public CodeType SelectedCodeType
+		{
+			get { return this.selectedCodeType; }
+			set
+			{
+				this.selectedCodeType = value;
+				RaisePropertyChanged(nameof(SelectedCodeType));
+				RaisePropertyChanged(nameof(ElementTypes));
 			}
 		}
 
@@ -63,7 +87,16 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		public ObservableCollection<CodeElementType> ElementTypes
 		{
-			get { return new ObservableCollection<CodeElementType>(Enum.GetValues(typeof(CodeElementType)).Cast<CodeElementType>()); }
+			get
+			{
+				ObservableCollection<CodeElementType> elementTypes = new ObservableCollection<CodeElementType>(this.codeItemProvider.GetSupportedCodeElementTypes(this.selectedCodeType));
+				if (!elementTypes.Any(x => x == selectedElementType))
+				{
+					SelectedElementType = elementTypes.First();
+				}
+
+				return elementTypes;
+			}
 			set { }
 		}
 

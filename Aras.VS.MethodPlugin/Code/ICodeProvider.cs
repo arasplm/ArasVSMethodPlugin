@@ -28,8 +28,9 @@ namespace Aras.VS.MethodPlugin.Code
 
 		GeneratedCodeInfo CreatePartialClasses(GeneratedCodeInfo methodInfo);
 
-		CodeInfo CreatePartialCodeInfo(MethodInfo methodInfo, string fileName, CodeElementType elementType, bool useCodeFormatting);
+		CodeInfo CreateCodeItemInfo(MethodInfo methodInfo, string fileName, CodeType codeType, CodeElementType codeElementType, bool isUseVSFormattingCode);
 
 		GeneratedCodeInfo CreateTestsNew(GeneratedCodeInfo generatedCodeInfo, TemplateInfo template, EventSpecificDataType eventData, string methodName, bool useAdvancedCode);
+		
 	}
 }

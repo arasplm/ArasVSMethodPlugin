@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="CreatePartialElementViewAdapter.cs" company="Aras Corporation">
+// <copyright file="CreateCodeItemViewAdapter.cs" company="Aras Corporation">
 //     Copyright © 2018 Aras Corporation.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -8,21 +8,22 @@ using Aras.VS.MethodPlugin.Dialogs.ViewModels;
 
 namespace Aras.VS.MethodPlugin.Dialogs.Views
 {
-	public class CreatePartialElementViewAdapter : ViewAdaper<CreatePartialElementView, CreatePartialElementViewResult>
+	public class CreateCodeItemViewAdapter : ViewAdaper<CreateCodeItemView, CreateCodeItemViewResult>
 	{
-		public CreatePartialElementViewAdapter(CreatePartialElementView view) : base(view)
+		public CreateCodeItemViewAdapter(CreateCodeItemView view) : base(view)
 		{
 		}
 
-		public override CreatePartialElementViewResult ShowDialog()
+		public override CreateCodeItemViewResult ShowDialog()
 		{
-			var viewModel = view.DataContext as CreatePartialElementViewModel;
+			var viewModel = view.DataContext as CreateCodeItemViewModel;
 
 			var result = view.ShowDialog();
-			return new CreatePartialElementViewResult()
+			return new CreateCodeItemViewResult()
 			{
 				DialogOperationResult = result,
 				FileName = viewModel.FileName,
+				SelectedCodeType = viewModel.SelectedCodeType,
 				SelectedElementType = viewModel.SelectedElementType,
 				IsUseVSFormattingCode = viewModel.IsUseVSFormattingCode
 			};

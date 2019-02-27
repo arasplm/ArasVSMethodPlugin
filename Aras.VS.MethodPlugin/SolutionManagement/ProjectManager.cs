@@ -338,6 +338,11 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 			{
 				AddItemTemplateToProjectNew(partialCodeInfo, false);
 			}
+
+			foreach (var externalItemsInfo in generatedCodeInfo.ExternalItemsInfoList)
+			{
+				AddItemTemplateToProjectNew(externalItemsInfo, false);
+			}
 		}
 
 		public string AddItemTemplateToProjectNew(CodeInfo codeInfo, bool openAfterCreation, int cursorIndex = -1)
@@ -471,6 +476,42 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 				methodInfo.PartialClasses.Remove(pcfd);
 			}
 
+			//remove external codes
+			var externalItemsForDelete = new List<string>();
+			foreach (var externalItemInfo in methodInfo.ExternalItems)
+			{
+				var folder = methodFolder.ProjectItems;
+				string pathToFolder = string.Empty;
+				var updatedPath = externalItemInfo.Replace("\"", "");
+				string[] externalFilePath = updatedPath.Split(new string[] { @"/" }, StringSplitOptions.RemoveEmptyEntries);
+
+				var externalFileName = !Path.HasExtension(externalFilePath.Last()) ? externalFilePath.Last() + ".cs" : externalFilePath.Last();
+				for (int i = 0; i < externalFilePath.Length - 1; i++)
+				{
+					string externalMethodNameWithoutExtension = Path.GetFileNameWithoutExtension(externalFilePath[i]);
+					if (folder.Exists(externalMethodNameWithoutExtension))
+					{
+						pathToFolder = folder.Item(externalMethodNameWithoutExtension).Properties.Item("FullPath").Value.ToString();
+						folder = folder.Item(externalMethodNameWithoutExtension).ProjectItems;
+					}
+				}
+
+				if (folder.Exists(externalFileName))
+				{
+					var methodItem = folder.Item(externalFileName);
+					var pathToItem = methodItem.Properties.Item("FullPath").Value.ToString();
+					methodItem.Remove();
+					File.Delete(pathToItem);
+				}
+
+				externalItemsForDelete.Add(externalItemInfo);
+			}
+
+			foreach (var pcfd in externalItemsForDelete)
+			{
+				methodInfo.ExternalItems.Remove(pcfd);
+			}
+
 			//remove folder if no files inside
 		}
 
@@ -483,6 +524,7 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 				var methodPaths = new List<string>();
 				methodPaths.Add(methodInfo.MethodName + "\\" + methodInfo.MethodName);
 				methodPaths.AddRange(methodInfo.PartialClasses);
+				methodPaths.AddRange(methodInfo.ExternalItems);
 				foreach (string methodPath in methodPaths)
 				{
 					ProjectItem fileProjectItem = LoadItemFolder(methodPath);

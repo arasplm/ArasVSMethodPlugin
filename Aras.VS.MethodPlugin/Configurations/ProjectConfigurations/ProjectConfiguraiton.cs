@@ -67,6 +67,17 @@ namespace Aras.VS.MethodPlugin.Configurations.ProjectConfigurations
 					updatedMethodInfo.PartialClasses.Add(partialClassPath);
 				}
 
+				updatedMethodInfo.ExternalItems.Clear();
+				foreach (string externalItemPath in methodInfo.ExternalItems)
+				{
+					if (!projectManager.IsFileExist(externalItemPath))
+					{
+						continue;
+					}
+
+					updatedMethodInfo.ExternalItems.Add(externalItemPath);
+				}
+
 				updatedMethodInfos.Add(updatedMethodInfo);
 			}
 

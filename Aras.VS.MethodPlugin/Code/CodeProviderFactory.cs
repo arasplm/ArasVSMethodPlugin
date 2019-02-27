@@ -25,13 +25,28 @@ namespace Aras.VS.MethodPlugin.Code
 			this.defaultCodeProvider = defaultCodeProvider;
 		}
 
+		public ICodeItemProvider GetCodeItemProvider(string projectLanguageCode)
+		{
+			ICodeItemProvider codeItemProvider = null;
+			if (projectLanguageCode == CodeModelLanguageConstants.vsCMLanguageCSharp)
+			{
+				codeItemProvider = new CSharpCodeItemProvider();
+			}
+			else
+			{
+				throw new NotSupportedException("Current project type is not supported");
+			}
+
+			return codeItemProvider;
+		}
+
 		public ICodeProvider GetCodeProvider(string projectLanguageCode, IProjectConfiguraiton projectConfiguration)
 		{
 			string projectLanguage = string.Empty;
 			ICodeProvider codeProvider = null;
 			if (projectLanguageCode == CodeModelLanguageConstants.vsCMLanguageCSharp)
 			{
-				codeProvider = new CSharpCodeProvider(projectManager, projectConfiguration, defaultCodeProvider, new CSharpCodeElementTypeProvider());
+				codeProvider = new CSharpCodeProvider(projectManager, projectConfiguration, defaultCodeProvider, new CSharpCodeItemProvider());
 			}
 			else if (projectLanguageCode == CodeModelLanguageConstants.vsCMLanguageVB)
 			{
