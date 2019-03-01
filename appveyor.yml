@@ -11,5 +11,11 @@ build_script:
   - nuget restore -Verbosity quiet
   - msbuild /p:configuration=Release /p:DeployExtension=false /p:ZipPackageCompressionLevel=normal /v:m
 
+test:
+# only assemblies to test
+  assemblies:
+    only:
+      - Aras.VS.MethodPlugin.Tests.dll
+
 after_test:
   - ps: Vsix-PushArtifacts | Vsix-PublishToGallery
