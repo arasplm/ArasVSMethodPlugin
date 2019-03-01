@@ -139,8 +139,27 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authentication\AuthenticationManagerTest.cs" />
+    <Compile Include="Code\CSharpCodeProviderTests.cs" />
+    <Compile Include="Commands\AuthenticationCommandBaseTest.cs" />
+    <Compile Include="Commands\CmdBaseTest.cs" />
+    <Compile Include="Commands\ConnectionInfoCmdTest.cs" />
+    <Compile Include="Commands\SaveToArasCmdTest.cs" />
+    <Compile Include="Commands\UpdateMethodCmdTest.cs" />
+    <Compile Include="Commands\SaveToPackageCmdTest.cs" />
+    <Compile Include="Commands\RefreshConfigCmdTest.cs" />
+    <Compile Include="Commands\OpenFromPackageCmdTest.cs" />
+    <Compile Include="Commands\OpenFromArasCmdTest.cs" />
+    <Compile Include="Commands\DebugMethodCmdTest.cs" />
+    <Compile Include="Commands\CreatePartialElementCmdTest.cs" />
+    <Compile Include="Commands\CreateMethodCmdTest.cs" />
+    <Compile Include="PackageManagement\PackageManagementTest.cs" />
+    <Compile Include="ProjectConfiguration\ProjectConfiguraitonTest.cs" />
+    <Compile Include="ProjectConfiguration\ProjectConfigurationManagerTest.cs" />
+    <Compile Include="ProjectTemplates\ProjectTemplatesTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Test.cs" />
+    <Compile Include="Stubs\AuthManagerStub.cs" />
+    <Compile Include="Stubs\MethodItemStub.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Key.snk" />
@@ -152,6 +171,77 @@
       <Project>{95381532-f7f9-4556-9178-eec0aefd2122}</Project>
       <Name>Aras.VS.MethodPlugin</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Code\TestData\CreateMainNew\MethodCode.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Code\TestData\CreateMainNew\DefaultTemplateCode.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Code\TestData\CreatePartialClasses\ExpectedMainPartFor2Partial.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Code\TestData\CreatePartialClasses\ExpectedMainPart.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Code\TestData\CreatePartialClasses\ExpectedSecondPartialClass.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Code\TestData\CreatePartialClasses\ExpectedFirstPartialClass.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Code\TestData\CreatePartialClasses\ExpectedPartialPart.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Code\TestData\CreatePartialClasses\MethodCodeInfo2Partial.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Code\TestData\CreatePartialClasses\MethodCodeInfo.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Code\TestData\CreatePartialCodeInfo\ExpectedEmptyCode.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Code\TestData\CreatePartialCodeInfo\MethodCode.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Code\TestData\CreateTestsNew\ExpectedTestCode.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ProjectConfiguration\TestData\EmptyProjectConfig.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ProjectConfiguration\TestData\ExpectedEmptyConfig.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ProjectConfiguration\TestData\ExpectedFilledConfig.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ProjectConfiguration\TestData\FilledProjectConfig.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\CSharpNone.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Code\TestData\LoadMethodCode\ExpectedSourceCode.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\method-config.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Code\TestData\LoadMethodCode\SourceCode.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Code\TestData\CreateWrapper\WrapperCodeInfo.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\TestMethod.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\projectConfig.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
