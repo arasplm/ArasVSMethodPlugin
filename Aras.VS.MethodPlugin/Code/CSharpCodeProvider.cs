@@ -49,6 +49,11 @@ namespace Aras.VS.MethodPlugin.Code
 
 		public string LoadMethodCode(string sourceCode, MethodInfo methodInformation, string serverMethodFolderPath)
 		{
+			if (string.IsNullOrEmpty(sourceCode))
+			{
+				throw new Exception(nameof(sourceCode));
+			}
+
 			var tree = CSharpSyntaxTree.ParseText(sourceCode);
 			SyntaxNode root = tree.GetRoot();
 
@@ -319,7 +324,7 @@ namespace Aras.VS.MethodPlugin.Code
 					resultGeneratedCode.MethodCodeInfo.Code = resultGeneratedCode.MethodCodeInfo.Code.Replace(shouldBeReplaced, stringForReplace);
 					if (!string.IsNullOrEmpty(stringForReplace))
 					{
-						string pattern = string.Concat(@"\s*}\s*", endMethodCodeRegion);
+						string pattern = string.Concat(@"\r\n( |\t)*}( |\t)*\r\n( |\t)*", endMethodCodeRegion);
 						string insertRegion = string.Concat(Environment.NewLine, endMethodCodeRegion);
 						string replacedCode = Regex.Replace(resultGeneratedCode.MethodCodeInfo.Code, pattern, insertRegion);
 						resultGeneratedCode.MethodCodeInfo.Code = resultGeneratedCode.IsUseVSFormatting ? FormattingCode(replacedCode) : replacedCode;
@@ -566,7 +571,7 @@ namespace Aras.VS.MethodPlugin.Code
 			var partialCodeResult = resultCodeBuilder.ToString();
 			if (!string.IsNullOrEmpty(partialCodeResult))
 			{
-				partialCodeResult = Regex.Replace(partialCodeResult, @"\s*}\s*$", string.Empty);
+				partialCodeResult = Regex.Replace(partialCodeResult, @"\r\n( |\t)*}(\r\n| |\t)*$", string.Empty);
 			}
 
 			return partialCodeResult;
@@ -574,8 +579,8 @@ namespace Aras.VS.MethodPlugin.Code
 
 		private string GetSourceCodeBetweenRegion(string codeWithRegion)
 		{
-			string startRegionPattern = @"#region MethodCode\r\n";
-			string endRegionPattern = string.Concat(@"\s*", endMethodCodeRegion);
+			string startRegionPattern = @"#region MethodCode( |\t)*\r\n";
+			string endRegionPattern = string.Concat(@"\r\n( |\t)*", endMethodCodeRegion);
 
 			var startMatch = Regex.Match(codeWithRegion, startRegionPattern);
 			var endMatch = Regex.Match(codeWithRegion, endRegionPattern);
