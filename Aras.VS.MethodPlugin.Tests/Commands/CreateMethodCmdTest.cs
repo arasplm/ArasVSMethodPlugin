@@ -92,7 +92,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			createMethodCmd.ExecuteCommandImpl(null, null, iVsUIShell);
 
 			// Assert
-			codeProvider.Received().GenerateCodeInfo(template, eventSpecificDataType, showDialogResult.MethodName, false, string.Empty, false);
+			codeProvider.Received().GenerateCodeInfo(template, eventSpecificDataType, showDialogResult.MethodName, false, null, false);
 		}
 
 
@@ -113,7 +113,8 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 					SelectedIdentityId = string.Empty,
 					SelectedIdentityKeyedName = string.Empty,
 					UseRecommendedDefaultCode = false,
-					IsUseVSFormattingCode = false
+					IsUseVSFormattingCode = false,
+					SelectedUserCodeTemplate = new XmlMethodInfo()
 				};
 			}
 		}

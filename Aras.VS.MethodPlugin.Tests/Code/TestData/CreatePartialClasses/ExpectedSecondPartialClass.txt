@@ -12,10 +12,12 @@ using System.Web;
 using System.Web.SessionState;
 using System.Xml;
 using Common;
+using Common.Attributes;
 namespace ArasPKGTestMethod 
 {public partial class ItemMethod 
 {
-[PartialPath("Second/SeconfTestPartial")]
+
+		[PartialPath("Second/SeconfTestPartial")]
 		public void SecondPartialMethod()
 		{
 			//this is Second Partial Method

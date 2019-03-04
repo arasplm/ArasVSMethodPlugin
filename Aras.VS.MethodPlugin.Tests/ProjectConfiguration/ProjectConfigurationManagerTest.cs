@@ -103,7 +103,7 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectConfiguration
 
 		[Test]
 		public void Save_SaveFilledConfiguration()
-		{
+		{ 
 			//Arrange
 			var currentPath = System.AppDomain.CurrentDomain.BaseDirectory;
 			var pathForConfig = Path.Combine(currentPath, "ProjectConfiguration\\TestData\\projectConfig.xml");

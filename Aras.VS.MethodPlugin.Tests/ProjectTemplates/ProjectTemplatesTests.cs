@@ -13,7 +13,8 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectTemplates
 		string pathToZipFolder;
 		readonly List<string> listOfCommonFiles = new List<string> {
 			"projectConfig.xml",
-			"PartialPathAttribute.cs",
+			"Attributes/PartialPathAttribute.cs",
+			"Attributes/ExternalPathAttribute.cs",
 			"MyTemplate.vstemplate",
 			"method-config.xml",
 			"GlobalSuppressions.cs",

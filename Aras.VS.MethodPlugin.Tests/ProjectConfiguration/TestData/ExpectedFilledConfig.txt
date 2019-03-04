@@ -17,6 +17,7 @@
 			<partialClasses>
 				<path>TestPartial\Partials\GetLicenseInfo</path>
 			</partialClasses>
+			<externalItems />
 		</methodInfo>
 	</methods>
 	<lastSavedSearch>
@@ -28,4 +29,5 @@
 		</searchItem>
 	</lastSavedSearch>
 	<useVSFormatting>True</useVSFormatting>
+	<OpenFromPackageLastSearchType></OpenFromPackageLastSearchType>
 </projectinfo>

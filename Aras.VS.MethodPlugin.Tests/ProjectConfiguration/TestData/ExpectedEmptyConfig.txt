@@ -5,4 +5,5 @@
 	<methods></methods>
 	<lastSavedSearch></lastSavedSearch>
 	<useVSFormatting>False</useVSFormatting>
+	<OpenFromPackageLastSearchType></OpenFromPackageLastSearchType>
 </projectinfo>
