@@ -141,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authentication\AuthenticationManagerTest.cs" />
+    <Compile Include="Code\CSharpCodeItemProviderTests.cs" />
     <Compile Include="Code\CSharpCodeProviderTests.cs" />
     <Compile Include="Commands\AuthenticationCommandBaseTest.cs" />
     <Compile Include="Commands\CmdBaseTest.cs" />
@@ -174,6 +175,39 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Code\TestData\CodeElementTypeTemplates\ExternalClass.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Code\TestData\CodeElementTypeTemplates\ExternalCustom.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Code\TestData\CodeElementTypeTemplates\ExternalEnum.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Code\TestData\CodeElementTypeTemplates\ExternalInterface.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Code\TestData\CodeElementTypeTemplates\ExternalStruct.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Code\TestData\CodeElementTypeTemplates\PartialClass.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Code\TestData\CodeElementTypeTemplates\PartialCustom.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Code\TestData\CodeElementTypeTemplates\PartialEnum.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Code\TestData\CodeElementTypeTemplates\PartialInterface.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Code\TestData\CodeElementTypeTemplates\PartialMethod.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Code\TestData\CodeElementTypeTemplates\PartialStruct.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Code\TestData\CreateCodeItemInfo\ExternalClassEmpty.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
