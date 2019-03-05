@@ -174,6 +174,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Code\TestData\CreateCodeItemInfo\ExternalClassEmpty.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Code\TestData\CreateMainNew\MethodCode.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -201,10 +204,10 @@
     <Content Include="Code\TestData\CreatePartialClasses\MethodCodeInfo.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Code\TestData\CreatePartialCodeInfo\ExpectedEmptyCode.txt">
+    <Content Include="Code\TestData\CreateCodeItemInfo\PartialClassEmpty.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Code\TestData\CreatePartialCodeInfo\MethodCode.txt">
+    <Content Include="Code\TestData\CreateCodeItemInfo\MethodCode.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Code\TestData\CreateTestsNew\ExpectedTestCode.txt">

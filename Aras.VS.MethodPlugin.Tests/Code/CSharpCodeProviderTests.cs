@@ -14,6 +14,10 @@ namespace Aras.VS.MethodPlugin.Tests.Code
 	[TestFixture]
 	public class CSharpCodeProviderTests
 	{
+		private const string partialClassTemplate = "{0}using Common;\r\nusing Common.Attributes;\r\n\r\nnamespace {3}\r\n{{\r\n    public partial class {1}\r\n    {{\r\n        [PartialPath(\"{2}\")]\r\n        internal class {4}\r\n        {{\r\n\r\n        }}\r\n    }}\r\n}}";
+		private const string externalClassTemplate = "{0}using Common;\r\nusing Common.Attributes;\r\n\r\nnamespace {3}\r\n{{\r\n    [ExternalPath(\"{2}\")]\r\n    internal class {4}\r\n    {{\r\n\r\n    }}\r\n}}";
+
+
 		CSharpCodeProvider codeProvider;
 		IProjectManager projectManager;
 		IProjectConfiguraiton projectConfiguration;
@@ -320,89 +324,69 @@ namespace Aras.VS.MethodPlugin.Tests.Code
 			Assert.AreEqual(expected.PartialCodeInfoList.Last().Path, "TestMethod\\Second\\SeconfTestPartial");
 		}
 
-		//[Test]
-		//public void CreatePartialCodeInfo_ShouldReturnEmptyCode()
-		//{
-		//	//Arrange
-		//	var currentPath = System.AppDomain.CurrentDomain.BaseDirectory;
-		//	projectManager.MethodConfigPath.Returns(Path.Combine(currentPath, "TestData\\method-config.xml"));
-		//	projectManager.ServerMethodFolderPath.Returns(Path.Combine(currentPath, "Code\\TestData\\"));
-		//	projectManager.MethodName.Returns(Path.Combine(currentPath, "TestMethod"));
-		//	projectManager.SelectedFolderPath.Returns(Path.Combine(currentPath, "Code\\TestData\\CreatePartialCodeInfo"));
-		//	projectManager.MethodName.Returns("CreatePartialCodeInfo");
-		//	projectManager.DefaultCodeTemplatesPath.Returns(Path.Combine(currentPath, "TestData"));
-		//	projectManager.MethodPath.Returns(Path.Combine(currentPath, "Code\\TestData\\CreatePartialCodeInfo\\MethodCode.txt"));
-		//	var fileName = "TestFile";
-		//	var methodInfo = new MethodInfo
-		//	{
-		//		MethodLanguage = @"C#",
-		//		TemplateName = "CSharp",
-		//		EventData = EventSpecificData.None,
-		//	};
+		[Test]
+		public void CreateCodeItemInfo_Partial_ShouldReturnExpectedCode()
+		{
+			// Arrange
+			codeItemProvider
+				.GetCodeElementTypeTemplate(CodeType.Partial, CodeElementType.Class)
+				.Returns(partialClassTemplate);
 
-		//	//Act
-		//	var expected = codeProvider.CreatePartialCodeInfo(methodInfo, fileName, false);
+			var currentPath = AppDomain.CurrentDomain.BaseDirectory;
+			projectManager.MethodConfigPath.Returns(Path.Combine(currentPath, "TestData\\method-config.xml"));
+			projectManager.ServerMethodFolderPath.Returns(Path.Combine(currentPath, "Code\\TestData\\"));
+			projectManager.MethodName.Returns(Path.Combine(currentPath, "TestMethod"));
+			projectManager.SelectedFolderPath.Returns(Path.Combine(currentPath, "Code\\TestData\\CreateCodeItemInfo"));
+			projectManager.MethodName.Returns("CreateCodeItemInfo");
+			projectManager.DefaultCodeTemplatesPath.Returns(Path.Combine(currentPath, "TestData"));
+			projectManager.MethodPath.Returns(Path.Combine(currentPath, "Code\\TestData\\CreateCodeItemInfo\\MethodCode.txt"));
+			var fileName = "TestFile";
+			var methodInfo = new MethodInfo
+			{
+				MethodLanguage = @"C#",
+				TemplateName = "CSharp",
+				EventData = EventSpecificData.None,
+			};
 
-		//	//Assert
-		//	Assert.AreEqual(expected.Path, @"CreatePartialCodeInfo\TestFile");
-		//	Assert.AreEqual(expected.Code, File.ReadAllText(Path.Combine(currentPath, "Code\\TestData\\CreatePartialCodeInfo\\ExpectedEmptyCode.txt")));
-		//}
+			// Act
+			var expected = codeProvider.CreateCodeItemInfo(methodInfo, fileName, CodeType.Partial, CodeElementType.Class, false);
 
-		//[Test]
-		//public void CreatePartialCodeInfo_ShouldAddNewUsing()
-		//{
-		//	//Arrange
-		//	var currentPath = System.AppDomain.CurrentDomain.BaseDirectory;
-		//	projectManager.MethodConfigPath.Returns(Path.Combine(currentPath, "TestData\\method-config.xml"));
-		//	projectManager.ServerMethodFolderPath.Returns(Path.Combine(currentPath, "Code\\TestData\\"));
-		//	projectManager.MethodName.Returns(Path.Combine(currentPath, "TestMethod"));
-		//	projectManager.SelectedFolderPath.Returns(Path.Combine(currentPath, "Code\\TestData\\CreatePartialCodeInfo"));
-		//	projectManager.MethodName.Returns("CreatePartialCodeInfo");
-		//	projectManager.DefaultCodeTemplatesPath.Returns(Path.Combine(currentPath, "TestData"));
-		//	projectManager.MethodPath.Returns(Path.Combine(currentPath, "Code\\TestData\\CreatePartialCodeInfo\\MethodCode.txt"));
-		//	var fileName = "TestFile";
-		//	var methodInfo = new MethodInfo
-		//	{
-		//		MethodLanguage = @"C#",
-		//		TemplateName = "CSharp",
-		//		EventData = EventSpecificData.None,
-		//	};
+			// Asseer
+			Assert.AreEqual(expected.Path, @"CreateCodeItemInfo\TestFile");
+			Assert.AreEqual(expected.Code, File.ReadAllText(Path.Combine(currentPath, "Code\\TestData\\CreateCodeItemInfo\\PartialClassEmpty.txt")));
+		}
 
-		//	//Act
-		//	var expected = codeProvider.CreatePartialCodeInfo(methodInfo, fileName, false);
+		[Test]
+		public void CreateCodeItemInfo_External_ShouldReturnExpectedCode()
+		{
+			// Arrange
+			codeItemProvider
+				.GetCodeElementTypeTemplate(CodeType.External, CodeElementType.Class)
+				.Returns(externalClassTemplate);
 
-		//	//Assert
-		//	Assert.AreEqual(expected.Path, @"CreatePartialCodeInfo\TestFile");
-		//	Assert.AreEqual(expected.Code, File.ReadAllText(Path.Combine(currentPath, "Code\\TestData\\CreatePartialCodeInfo\\ExpectedEmptyCode.txt")));
-		//}
+			var currentPath = AppDomain.CurrentDomain.BaseDirectory;
+			projectManager.MethodConfigPath.Returns(Path.Combine(currentPath, "TestData\\method-config.xml"));
+			projectManager.ServerMethodFolderPath.Returns(Path.Combine(currentPath, "Code\\TestData\\"));
+			projectManager.MethodName.Returns(Path.Combine(currentPath, "TestMethod"));
+			projectManager.SelectedFolderPath.Returns(Path.Combine(currentPath, "Code\\TestData\\CreateCodeItemInfo"));
+			projectManager.MethodName.Returns("CreateCodeItemInfo");
+			projectManager.DefaultCodeTemplatesPath.Returns(Path.Combine(currentPath, "TestData"));
+			projectManager.MethodPath.Returns(Path.Combine(currentPath, "Code\\TestData\\CreateCodeItemInfo\\MethodCode.txt"));
+			var fileName = "TestFile";
+			var methodInfo = new MethodInfo
+			{
+				MethodLanguage = @"C#",
+				TemplateName = "CSharp",
+				EventData = EventSpecificData.None,
+			};
 
-		//[Test]
-		//public void CreatePartialCodeInfo_ShouldReturnPathWithSlashes()
-		//{
-		//	//Arrange
-		//	var currentPath = System.AppDomain.CurrentDomain.BaseDirectory;
-		//	projectManager.MethodConfigPath.Returns(Path.Combine(currentPath, "TestData\\method-config.xml"));
-		//	projectManager.ServerMethodFolderPath.Returns(Path.Combine(currentPath, "Code\\TestData"));
-		//	projectManager.MethodName.Returns(Path.Combine(currentPath, "TestMethod"));
-		//	projectManager.SelectedFolderPath.Returns(Path.Combine(currentPath, "Code\\TestData\\CreatePartialCodeInfo"));
-		//	projectManager.MethodName.Returns("CreatePartialCodeInfo");
-		//	projectManager.DefaultCodeTemplatesPath.Returns(Path.Combine(currentPath, "TestData"));
-		//	projectManager.MethodPath.Returns(Path.Combine(currentPath, "Code\\TestData\\CreatePartialCodeInfo\\MethodCode.txt"));
-		//	var fileName = "TestFile";
-		//	var methodInfo = new MethodInfo
-		//	{
-		//		MethodLanguage = @"C#",
-		//		TemplateName = "CSharp",
-		//		EventData = EventSpecificData.None,
-		//	};
+			// Act
+			var expected = codeProvider.CreateCodeItemInfo(methodInfo, fileName, CodeType.External, CodeElementType.Class, false);
 
-		//	//Act
-		//	var expected = codeProvider.CreatePartialCodeInfo(methodInfo, fileName, false);
-
-		//	//Assert
-		//	Assert.AreEqual(expected.Path, @"\CreatePartialCodeInfo\TestFile");
-		//	Assert.AreEqual(expected.Code, File.ReadAllText(Path.Combine(currentPath, "Code\\TestData\\CreatePartialCodeInfo\\ExpectedEmptyCode.txt")));
-		//}
+			// Asseer
+			Assert.AreEqual(expected.Path, @"CreateCodeItemInfo\TestFile");
+			Assert.AreEqual(expected.Code, File.ReadAllText(Path.Combine(currentPath, "Code\\TestData\\CreateCodeItemInfo\\ExternalClassEmpty.txt")));
+		}
 
 		[Test]
 		public void CreateTestsNew_ShouldReturnCorrectTestCode()
