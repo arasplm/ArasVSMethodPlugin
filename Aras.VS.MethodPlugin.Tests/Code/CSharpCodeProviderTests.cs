@@ -106,7 +106,7 @@ namespace Aras.VS.MethodPlugin.Tests.Code
 			});
 
 			//Assert
-			Assert.Throws<Exception>(testDelegate);
+			Assert.Throws<ArgumentException>(testDelegate);
 		}
 
 		[Test]

@@ -51,7 +51,7 @@ namespace Aras.VS.MethodPlugin.Code
 		{
 			if (string.IsNullOrEmpty(sourceCode))
 			{
-				throw new Exception(nameof(sourceCode));
+				throw new ArgumentException(nameof(sourceCode));
 			}
 
 			var tree = CSharpSyntaxTree.ParseText(sourceCode);
@@ -65,89 +65,65 @@ namespace Aras.VS.MethodPlugin.Code
 				.Count();
 
 			MemberDeclarationSyntax[] externalsSyntaxNodes = LoadSyntaxNodesByAttribute("ExternalPath", methodInformation.ExternalItems, serverMethodFolderPath);
+			MemberDeclarationSyntax[] partialsSyntaxNodes = LoadSyntaxNodesByAttribute("PartialPath", methodInformation.PartialClasses, serverMethodFolderPath);
 
-			string userCode = string.Empty;
-			if (count == 1 && !externalsSyntaxNodes.Any())
+			if (partialsSyntaxNodes.Any())
 			{
-				userCode = GetSourceCodeBetweenRegion(sourceCode);
-				string partialCode = this.LoadPartialClassesCode(methodInformation.PartialClasses, serverMethodFolderPath);
-				if (!string.IsNullOrEmpty(partialCode))
+				var partialClassNode = root.DescendantNodes()
+					.OfType<NamespaceDeclarationSyntax>()
+					.First()
+					.ChildNodes()
+					.OfType<ClassDeclarationSyntax>()
+					.Where(x => x.Modifiers.Any(SyntaxKind.PartialKeyword))
+					.FirstOrDefault();
+
+				if (partialClassNode == null)
 				{
-					userCode += Environment.NewLine + "}" + Environment.NewLine + partialCode;
+					throw new Exception("No partial classes found.");
 				}
-			}
-			else
-			{
-				MemberDeclarationSyntax[] partialsSyntaxNodes = LoadSyntaxNodesByAttribute("PartialPath", methodInformation.PartialClasses, serverMethodFolderPath);
 
-				if (partialsSyntaxNodes.Any())
+				var partialClassNodeWithPartials = partialClassNode.AddMembers(partialsSyntaxNodes);
+				root = root.ReplaceNode(partialClassNode, partialClassNodeWithPartials);
+			}
+
+			if (externalsSyntaxNodes.Any())
+			{
+				if (count <= 1)
 				{
-					var partialClassNodes = root.DescendantNodes()
+					var namespaceNode = root.DescendantNodes()
+						.OfType<NamespaceDeclarationSyntax>()
+						.First();
+
+					if (!CodeIndexInMethodRegions(root, namespaceNode.Span.End))
+					{
+						throw new FormatException("Wrong format. Could not insert external items to the method code.");
+					}
+
+					var namespaceNodeWithPartials = namespaceNode.AddMembers(externalsSyntaxNodes);
+					root = root.ReplaceNode(namespaceNode, namespaceNodeWithPartials);
+				}
+				else
+				{
+					var classNode = root.DescendantNodes()
 						.OfType<NamespaceDeclarationSyntax>()
 						.First()
 						.ChildNodes()
 						.OfType<ClassDeclarationSyntax>()
-						.Where(x => x.Modifiers.Any(SyntaxKind.PartialKeyword));
+						.Last();
 
-					if (partialClassNodes.Count() == 0)
+					if (!CodeIndexInMethodRegions(root, classNode.Span.Start))
 					{
-						throw new Exception("No partial classes found.");
+						throw new FormatException("Wrong format. Could not insert external items to the method code.");
 					}
 
-					var partialClass = partialClassNodes.First();
-					var partialClassWithPartials = partialClassNodes.First().AddMembers(partialsSyntaxNodes);
-					root = root.ReplaceNode(partialClass, partialClassWithPartials);
+					root = root.InsertNodesBefore(classNode, externalsSyntaxNodes);
 				}
+			}
 
-				if (externalsSyntaxNodes.Any())
-				{
-					if (count == 0)
-					{
-						var namespaceNode = root.DescendantNodes()
-							.OfType<NamespaceDeclarationSyntax>()
-							.First();
-
-						namespaceNode.AddMembers(externalsSyntaxNodes);
-					}
-					else if (count == 1)
-					{
-						var classNode = root.DescendantNodes()
-							.OfType<NamespaceDeclarationSyntax>()
-							.First()
-							.ChildNodes()
-							.OfType<ClassDeclarationSyntax>()
-							.First();
-
-						if (CodeIndexInMethodRegions(root, classNode.Span.End))
-						{
-							root = root.InsertNodesAfter(classNode, externalsSyntaxNodes);
-						}
-						else
-						{
-							throw new FormatException("Wrong format. Could not insert external items to the method code.");
-						}
-					}
-					else
-					{
-						var classNode = root.DescendantNodes()
-							.OfType<NamespaceDeclarationSyntax>()
-							.First()
-							.ChildNodes()
-							.OfType<ClassDeclarationSyntax>()
-							.Last();
-
-						if (CodeIndexInMethodRegions(root, classNode.Span.Start))
-						{
-							root = root.InsertNodesBefore(classNode, externalsSyntaxNodes);
-						}
-						else
-						{
-							throw new FormatException("Wrong format. Could not insert external items to the method code.");
-						}
-					}
-				}
-
-				userCode = GetSourceCodeBetweenRegion(root.ToString());
+			string userCode = GetSourceCodeBetweenRegion(root.ToString());
+			if (!externalsSyntaxNodes.Any() && partialsSyntaxNodes.Any() && count == 1)
+			{
+				userCode = Regex.Replace(userCode, @"\r\n( |\t)*}(\r\n| |\t)*$", string.Empty);
 			}
 
 			return EscapeAttributes(userCode);
@@ -556,25 +532,6 @@ namespace Aras.VS.MethodPlugin.Code
 			}
 
 			return syntaxNodes.ToArray();
-		}
-
-		private string LoadPartialClassesCode(List<string> partialClasses, string serverMethodPath)
-		{
-			var resultCodeBuilder = new StringBuilder();
-
-			MemberDeclarationSyntax[] partialsSyntaxNodes = LoadSyntaxNodesByAttribute("PartialPath", partialClasses, serverMethodPath);
-			foreach (MemberDeclarationSyntax node in partialsSyntaxNodes)
-			{
-				resultCodeBuilder.Append(node.ToFullString());
-			}
-
-			var partialCodeResult = resultCodeBuilder.ToString();
-			if (!string.IsNullOrEmpty(partialCodeResult))
-			{
-				partialCodeResult = Regex.Replace(partialCodeResult, @"\r\n( |\t)*}(\r\n| |\t)*$", string.Empty);
-			}
-
-			return partialCodeResult;
 		}
 
 		private string GetSourceCodeBetweenRegion(string codeWithRegion)
