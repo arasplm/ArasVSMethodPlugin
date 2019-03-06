@@ -28,23 +28,26 @@ namespace Aras.VS.MethodPlugin.Code
 		private readonly IProjectConfiguraiton projectConfiguration;
 		private readonly DefaultCodeProvider defaultCodeProvider;
 		private readonly ICodeItemProvider codeItemProvider;
+		private readonly IIOWrapper iOWrapper;
 
 		public string Language
 		{
 			get { return "C#"; }
 		}
 
-		public CSharpCodeProvider(IProjectManager projectManager, IProjectConfiguraiton projectConfiguration, DefaultCodeProvider defaultCodeProvider, ICodeItemProvider codeItemProvider)
+		public CSharpCodeProvider(IProjectManager projectManager, IProjectConfiguraiton projectConfiguration, DefaultCodeProvider defaultCodeProvider, ICodeItemProvider codeItemProvider, IIOWrapper iOWrapper)
 		{
 			if (projectManager == null) throw new ArgumentNullException(nameof(projectManager));
 			if (projectConfiguration == null) throw new ArgumentNullException(nameof(projectConfiguration));
 			if (defaultCodeProvider == null) throw new ArgumentNullException(nameof(defaultCodeProvider));
 			if (codeItemProvider == null) throw new ArgumentNullException(nameof(codeItemProvider));
+			if (iOWrapper == null) throw new ArgumentNullException(nameof(iOWrapper));
 
 			this.projectManager = projectManager;
 			this.defaultCodeProvider = defaultCodeProvider;
 			this.projectConfiguration = projectConfiguration;
 			this.codeItemProvider = codeItemProvider;
+			this.iOWrapper = iOWrapper;
 		}
 
 		public string LoadMethodCode(string sourceCode, MethodInfo methodInformation, string serverMethodFolderPath)
@@ -499,14 +502,14 @@ namespace Aras.VS.MethodPlugin.Code
 			foreach (string classPath in clasesPaths)
 			{
 				var updatedPath = classPath.Replace("/", "\\");
-				if (!Path.HasExtension(updatedPath))
+				if (!this.iOWrapper.PathHasExtension(updatedPath))
 				{
 					updatedPath += ".cs";
 				}
 
-				string normalizedUpdatedPath = updatedPath.TrimStart(Path.DirectorySeparatorChar).TrimStart(Path.AltDirectorySeparatorChar);
-				var filePath = Path.Combine(serverMethodPath, normalizedUpdatedPath);
-				var source = File.ReadAllText(filePath, new UTF8Encoding(true));
+				string normalizedUpdatedPath = updatedPath.TrimStart(this.iOWrapper.PathDirectorySeparatorChar()).TrimStart(this.iOWrapper.PathAltDirectorySeparatorChar());
+				var filePath = this.iOWrapper.PathCombine(serverMethodPath, normalizedUpdatedPath);
+				var source = this.iOWrapper.FileReadAllText(filePath, new UTF8Encoding(true));
 				var tree = CSharpSyntaxTree.ParseText(source);
 				var root = tree.GetRoot();
 

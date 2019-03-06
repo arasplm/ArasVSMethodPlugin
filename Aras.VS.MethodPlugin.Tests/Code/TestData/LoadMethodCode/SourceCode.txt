@@ -20,10 +20,19 @@ namespace ArasPKGMSO_GetAllSettings
         {
 // start your code inside region MethodCode - DO NOT CHANGE CODE ABOVE
 #region MethodCode
-		
-		//test string comment
-        return;
-            
+
+            //0) check variable OC
+
+            var innovatorInst = this.getInnovator();
+
+            string ocVariable = GetOCVariable();
+
+            var resultItem = innovatorInst.newItem();
+            resultItem.setProperty("oc_variable", ocVariable);
+
+            return resultItem;
+    	
+}
 #endregion MethodCode
 // end your code inside region MethodCode - DO NOT CHANGE CODE BELOW
         }

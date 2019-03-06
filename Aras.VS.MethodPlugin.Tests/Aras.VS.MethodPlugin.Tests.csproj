@@ -247,6 +247,18 @@
     <Content Include="Code\TestData\CreateTestsNew\ExpectedTestCode.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Code\TestData\LoadMethodCode\ExpectedSourceCodeWithTwoPartials.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Code\TestData\LoadMethodCode\ExpectedSourceCodeWithSinglePartial.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Code\TestData\LoadMethodCode\PartialsItemTypeInfo.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Code\TestData\LoadMethodCode\PartialsGetLicenseInfo.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="ProjectConfiguration\TestData\EmptyProjectConfig.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

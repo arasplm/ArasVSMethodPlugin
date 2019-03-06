@@ -1,4 +1,13 @@
-﻿		
-		//test string comment
-        return;
-            
+﻿
+            //0) check variable OC
+
+            var innovatorInst = this.getInnovator();
+
+            string ocVariable = GetOCVariable();
+
+            var resultItem = innovatorInst.newItem();
+            resultItem.setProperty("oc_variable", ocVariable);
+
+            return resultItem;
+    	
+}

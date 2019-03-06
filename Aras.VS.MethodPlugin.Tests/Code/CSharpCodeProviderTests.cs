@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.SolutionManagement;
@@ -23,6 +25,7 @@ namespace Aras.VS.MethodPlugin.Tests.Code
 		IProjectConfiguraiton projectConfiguration;
 		DefaultCodeProvider defaultCodeProvider;
 		ICodeItemProvider codeItemProvider;
+		IIOWrapper iOWrapper;
 
 		[SetUp]
 		public void Init()
@@ -31,7 +34,8 @@ namespace Aras.VS.MethodPlugin.Tests.Code
 			projectConfiguration = new ProjectConfiguraiton();
 			defaultCodeProvider = new DefaultCodeProvider();
 			codeItemProvider = Substitute.For<ICodeItemProvider>();
-			codeProvider = new CSharpCodeProvider(projectManager, projectConfiguration, defaultCodeProvider, codeItemProvider);
+			iOWrapper = Substitute.For<IIOWrapper>();
+			codeProvider = new CSharpCodeProvider(projectManager, projectConfiguration, defaultCodeProvider, codeItemProvider, iOWrapper);
 		}
 
 		[Test]
@@ -40,7 +44,7 @@ namespace Aras.VS.MethodPlugin.Tests.Code
 			Assert.Throws<ArgumentNullException>(new TestDelegate(() =>
 			{
 				// Act
-				new CSharpCodeProvider(null, projectConfiguration, defaultCodeProvider, codeItemProvider);
+				new CSharpCodeProvider(null, projectConfiguration, defaultCodeProvider, codeItemProvider, iOWrapper);
 			}));
 		}
 
@@ -50,7 +54,7 @@ namespace Aras.VS.MethodPlugin.Tests.Code
 			Assert.Throws<ArgumentNullException>(new TestDelegate(() =>
 			{
 				// Act
-				new CSharpCodeProvider(projectManager, null, defaultCodeProvider, codeItemProvider);
+				new CSharpCodeProvider(projectManager, null, defaultCodeProvider, codeItemProvider, iOWrapper);
 			}));
 		}
 
@@ -60,7 +64,7 @@ namespace Aras.VS.MethodPlugin.Tests.Code
 			Assert.Throws<ArgumentNullException>(new TestDelegate(() =>
 			{
 				// Act
-				new CSharpCodeProvider(projectManager, projectConfiguration, null, codeItemProvider);
+				new CSharpCodeProvider(projectManager, projectConfiguration, null, codeItemProvider, iOWrapper);
 			}));
 		}
 
@@ -77,7 +81,6 @@ namespace Aras.VS.MethodPlugin.Tests.Code
 			Assert.AreEqual(expected, actual);
 		}
 
-
 		[Test]
 		public void LoadMethodCode_ShouldReturnCorrectCode()
 		{
@@ -90,7 +93,7 @@ namespace Aras.VS.MethodPlugin.Tests.Code
 			var actual = codeProvider.LoadMethodCode(sourceCode, Substitute.For<MethodInfo>(), projectManager.ServerMethodFolderPath);
 
 			//Assert
-			Assert.AreEqual(expected, actual);
+			Assert.AreEqual(actual, expected);
 		}
 
 		[Test]
@@ -107,6 +110,59 @@ namespace Aras.VS.MethodPlugin.Tests.Code
 
 			//Assert
 			Assert.Throws<ArgumentException>(testDelegate);
+		}
+
+
+		[Test]
+		public void LoadMethodCode_WithSinglePartial_ShouldReturnCorrectCode()
+		{
+			//Arrange
+			var sourceCode = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Code\\TestData\\LoadMethodCode\\SourceCode.txt"));
+			var partialCode = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Code\\TestData\\LoadMethodCode\\PartialsGetLicenseInfo.txt"));
+			var expected = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Code\\TestData\\LoadMethodCode\\ExpectedSourceCodeWithSinglePartial.txt"));
+
+			var methodInfo = Substitute.For<MethodInfo>();
+			methodInfo.PartialClasses.Add("Partials/GetLicenseInfo");
+
+			iOWrapper.PathCombine(Arg.Any<string>(), "Partials\\GetLicenseInfo.cs")
+				.Returns("C:/Partials/GetLicenseInfo.cs");
+			iOWrapper.FileReadAllText(Arg.Is("C:/Partials/GetLicenseInfo.cs"), Arg.Any<UTF8Encoding>())
+				.Returns(partialCode);
+
+			//Act
+			var actual = codeProvider.LoadMethodCode(sourceCode, methodInfo, projectManager.ServerMethodFolderPath);
+
+			//Assert
+			Assert.AreEqual(actual, expected);
+		}
+
+		[Test]
+		public void LoadMethodCode_WithPartials_ShouldReturnCorrectCode()
+		{
+			//Arrange
+			var sourceCode = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Code\\TestData\\LoadMethodCode\\SourceCode.txt"));
+			var getLicenseInfoCode = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Code\\TestData\\LoadMethodCode\\PartialsGetLicenseInfo.txt"));
+			var itemTypeInfoCode = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Code\\TestData\\LoadMethodCode\\PartialsItemTypeInfo.txt"));
+			var expected = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Code\\TestData\\LoadMethodCode\\ExpectedSourceCodeWithTwoPartials.txt"));
+
+			var methodInfo = Substitute.For<MethodInfo>();
+			methodInfo.PartialClasses.Add("Partials/GetLicenseInfo");
+			methodInfo.PartialClasses.Add("Partials/ItemTypeInfo");
+
+			iOWrapper.PathCombine(Arg.Any<string>(), "Partials\\GetLicenseInfo.cs")
+				.Returns("C:/Partials/GetLicenseInfo.cs");
+			iOWrapper.PathCombine(Arg.Any<string>(), "Partials\\ItemTypeInfo.cs")
+				.Returns("C:/Partials/ItemTypeInfo.cs");
+			iOWrapper.FileReadAllText(Arg.Is("C:/Partials/GetLicenseInfo.cs"), Arg.Any<UTF8Encoding>())
+				.Returns(getLicenseInfoCode);
+			iOWrapper.FileReadAllText(Arg.Is("C:/Partials/ItemTypeInfo.cs"), Arg.Any<UTF8Encoding>())
+				.Returns(itemTypeInfoCode);
+
+			//Act
+			var actual = codeProvider.LoadMethodCode(sourceCode, methodInfo, projectManager.ServerMethodFolderPath);
+
+			//Assert
+			Assert.AreEqual(actual, expected);
 		}
 
 		[Test]
