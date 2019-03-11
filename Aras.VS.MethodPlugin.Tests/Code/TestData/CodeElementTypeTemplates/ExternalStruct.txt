@@ -1,0 +1,11 @@
+﻿{0}using Common;
+using Common.Attributes;
+
+namespace {3}
+{{
+    [ExternalPath("{2}")]
+    internal struct {4}
+    {{
+
+    }}
+}}

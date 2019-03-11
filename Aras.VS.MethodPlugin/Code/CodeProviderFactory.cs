@@ -15,14 +15,17 @@ namespace Aras.VS.MethodPlugin.Code
 	{
 		private readonly IProjectManager projectManager;
 		private readonly DefaultCodeProvider defaultCodeProvider;
+		private readonly IIOWrapper iOWrapper;
 
-		public CodeProviderFactory(IProjectManager projectManager, DefaultCodeProvider defaultCodeProvider)
+		public CodeProviderFactory(IProjectManager projectManager, DefaultCodeProvider defaultCodeProvider, IIOWrapper iOWrapper)
 		{
 			if (projectManager == null) throw new ArgumentNullException(nameof(projectManager));
 			if (defaultCodeProvider == null) throw new ArgumentNullException(nameof(defaultCodeProvider));
+			if (iOWrapper == null) throw new ArgumentNullException(nameof(iOWrapper));
 
 			this.projectManager = projectManager;
 			this.defaultCodeProvider = defaultCodeProvider;
+			this.iOWrapper = iOWrapper;
 		}
 
 		public ICodeItemProvider GetCodeItemProvider(string projectLanguageCode)
@@ -46,7 +49,7 @@ namespace Aras.VS.MethodPlugin.Code
 			ICodeProvider codeProvider = null;
 			if (projectLanguageCode == CodeModelLanguageConstants.vsCMLanguageCSharp)
 			{
-				codeProvider = new CSharpCodeProvider(projectManager, projectConfiguration, defaultCodeProvider, new CSharpCodeItemProvider());
+				codeProvider = new CSharpCodeProvider(projectManager, projectConfiguration, defaultCodeProvider, new CSharpCodeItemProvider(), iOWrapper);
 			}
 			else if (projectLanguageCode == CodeModelLanguageConstants.vsCMLanguageVB)
 			{

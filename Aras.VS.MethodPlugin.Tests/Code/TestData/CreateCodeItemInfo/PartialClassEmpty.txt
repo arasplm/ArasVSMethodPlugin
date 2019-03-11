@@ -13,9 +13,16 @@ using System.Web.SessionState;
 using System.Xml;
 using System.Collections;
 using Common;
-namespace ArasPKGCreatePartialCodeInfo 
-{public partial class ItemMethod 
+using Common.Attributes;
+
+namespace ArasPKGCreateCodeItemInfo
 {
-//[PartialPath("TestFile")]
-}
+    public partial class ItemMethod
+    {
+        [PartialPath("TestFile")]
+        internal class TestFile
+        {
+
+        }
+    }
 }

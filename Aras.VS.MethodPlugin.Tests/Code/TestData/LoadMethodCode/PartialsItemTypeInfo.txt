@@ -1,0 +1,220 @@
+﻿using Aras.IOM;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Web;
+using System.Web.SessionState;
+using System.Xml;
+using Common;
+using Common.Attributes;
+namespace ArasPKGMSOGetAllSettings 
+{public partial class ItemMethod 
+{
+[PartialPath("Partials/ItemTypeInfo")]
+        private List<Item> GetItemsDefinition(IEnumerable<string> itemIds, Item userInfo)
+        {
+            var innovatorInst = this.getInnovator();
+            var resultList = new List<Item>();
+
+            foreach (var itemId in itemIds)
+            {
+
+                Item docType = innovatorInst.newItem("ItemType", "get");
+                docType.setID(itemId);
+                Item docProperty = innovatorInst.newItem("Property", "get");
+                docProperty.setAttribute("orderBy", "sort_order");
+                docType.addRelationship(docProperty);
+                Item canAdd = innovatorInst.newItem("Can Add", "get");
+                canAdd.setProperty("can_add", "1");
+                docType.addRelationship(canAdd);
+                Item discussionTemplate = innovatorInst.newItem("DiscussionTemplate", "get");
+                docType.addRelationship(discussionTemplate);
+                var resultItem = docType.apply();
+                string selector = "Relationships/Item[@type=\'Alias\']/related_id/Item[@type=\'Identity\']/id";
+                string identityId = userInfo.node.SelectSingleNode(selector).InnerText;
+                string aliasIdentityId = string.Empty;
+                if (!string.IsNullOrEmpty(identityId))
+                {
+                    aliasIdentityId = identityId;
+                }
+                else
+                {
+                    aliasIdentityId = userInfo.getID();
+                }
+                var savedSearches = GetSavedSearches(resultItem.getProperty("keyed_name"));
+                var itemGridLayout = GetItemGridLayout(itemId, aliasIdentityId);
+                var xclassTree = GetXClassificationTree(itemId);
+                if (!itemGridLayout.isError())
+                {
+                    resultItem.addRelationship(itemGridLayout);
+                }
+                if (!xclassTree.isError())
+                {
+                    int count = xclassTree.getItemCount();
+                    for (int i = 0; i < count; i++)
+                    {
+                        Item treeItem = xclassTree.getItemByIndex(i);
+                        resultItem.addRelationship(treeItem);
+                    }
+                }
+
+                foreach (var savedSearch in savedSearches)
+                {
+                    resultItem.addRelationship(savedSearch);
+                }
+
+                resultList.Add(resultItem);
+            }
+
+            return resultList;
+        }
+
+[PartialPath("Partials/ItemTypeInfo")]
+        private Item GetItemGridLayout(string itemTypeId, string userAliasIdentity)
+        {
+            var innovatorInst = this.getInnovator();
+            Item layout;
+            Item preference = innovatorInst.newItem("Preference", "get");
+            preference.setProperty("identity_id", userAliasIdentity);
+            preference = preference.apply();
+            if (!preference.isError())
+            {
+                string preferenceId = preference.getID();
+
+                Item item = innovatorInst.newItem("Core_ItemGridLayout", "get");
+                item.setProperty("item_type_id", itemTypeId);
+                item.setProperty("source_id", preferenceId);
+                layout = item.apply();
+            }
+            else
+            {
+                layout = innovatorInst.newItem();
+                layout.setProperty("item_type_id", itemTypeId);
+            }
+
+            return layout;
+        }
+
+[PartialPath("Partials/ItemTypeInfo")]
+        private Item GetXClassificationTree(string itemTypeId)
+        {
+            var innovatorInst = this.getInnovator();
+            var requestItem = innovatorInst.newItem("xClassificationTree", "get");
+            requestItem.setAttribute("select", "classification_hierarchy");
+
+            var xClassTreeItemType = innovatorInst.newItem("xClassificationTree_ItemType", "get");
+            xClassTreeItemType.setAttribute("select", "related_id");
+            xClassTreeItemType.setProperty("related_id", itemTypeId);
+            requestItem.addRelationship(xClassTreeItemType);
+
+            var xClassItem = innovatorInst.newItem("xClass", "get");
+            xClassItem.setAttribute("select", "ref_id,config_id");
+
+            var xClassXPropertyDefinition = innovatorInst.newItem("xClass_xPropertyDefinition", "get");
+            xClassXPropertyDefinition.setAttribute("select", "related_id");
+            xClassItem.addRelationship(xClassXPropertyDefinition);
+
+            requestItem.addRelationship(xClassItem);
+            try
+            {
+                requestItem = requestItem.apply();
+            }
+            catch (Exception ex)
+            {
+                requestItem = innovatorInst.newError(ex.Message);
+            }
+
+            return requestItem;
+        }
+
+[PartialPath("Partials/ItemTypeInfo")]
+        private List<Item> GetSavedSearches(string itemTypeName)
+        {
+            List<Item> resultSavedSearches = new List<Item>();
+            var innovatorInst = this.getInnovator();
+            var requestItem = innovatorInst.newItem();
+            requestItem.loadAML(string.Format(@"
+				<AML>
+					<Item type=""SavedSearch"" action=""get"">
+						<itname>{0}</itname>
+						<auto_saved>0</auto_saved>
+					</Item>
+				</AML>", itemTypeName));
+            var response = requestItem.apply();
+
+            for (int i = 0; i < response.getItemCount(); i++)
+            {
+                var savedSearch = response.getItemByIndex(i);
+                resultSavedSearches.Add(savedSearch);
+            }
+
+            return resultSavedSearches;
+        }
+
+[PartialPath("Partials/ItemTypeInfo")]
+        private List<Item> GetPropertiesItemTypeIdsFromItemType(List<Item> parentItemTypeDefinitions, Item userInfo)
+        {
+            var innovatorInst = this.getInnovator();
+            var resultList = new List<string>(parentItemTypeDefinitions.Select(it => it.getID()));
+            foreach (var item in parentItemTypeDefinitions)
+            {
+                var propertiesDefinitions = item.getItemsByXPath("//Item/Relationships/Item[@type='Property']");
+                for (int i = 0; i < propertiesDefinitions.getItemCount(); i++)
+                {
+                    var propertiesDefinition = propertiesDefinitions.getItemByIndex(i);
+                    var propDataType = propertiesDefinition.getProperty("data_type");
+                    if (propDataType == "item")
+                    {
+                        var listId = propertiesDefinition.getProperty("data_source");
+
+                        if (string.IsNullOrEmpty(listId) || resultList.Contains(listId))
+                        {
+                            continue;
+                        }
+
+                        resultList.Add(listId);
+                    }
+                }
+
+                var xClassificationTrees = item.getRelationships("xClassificationTree");
+                for (int i = 0; i < xClassificationTrees.getItemCount(); i++)
+                {
+                    var xClassificationTree = xClassificationTrees.getItemByIndex(i);
+                    var xClasses = xClassificationTree.getRelationships("xClass");
+                    for (int j = 0; j < xClasses.getItemCount(); j++)
+                    {
+                        var xClass = xClasses.getItemByIndex(j);
+                        var xPropertiesDefinitions = xClass.getRelationships("xClass_xPropertyDefinition");
+                        for (int k = 0; k < xPropertiesDefinitions.getItemCount(); k++)
+                        {
+                            var xPropertiesDefinition = xPropertiesDefinitions.getItemByIndex(k);
+                            var xPropertyItem = xPropertiesDefinition.getPropertyItem("related_id");
+                            var propDataType = xPropertyItem.getProperty("data_type");
+                            if (propDataType == "item")
+                            {
+                                var listId = xPropertyItem.getProperty("data_source");
+                                if (resultList.Contains(listId))
+                                {
+                                    continue;
+                                }
+
+                                resultList.Add(listId);
+                            }
+                        }
+                    }
+                }
+            }
+            resultList = resultList.Where(itd => !parentItemTypeDefinitions.Exists(it => it.getID() == itd)).ToList();
+            var itemTypeIdList = resultList.Distinct();
+
+            return GetItemsDefinition(itemTypeIdList, userInfo);
+        }
+
+}
+}

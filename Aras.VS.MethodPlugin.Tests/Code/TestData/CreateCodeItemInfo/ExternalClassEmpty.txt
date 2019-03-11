@@ -11,17 +11,15 @@ using System.Text;
 using System.Web;
 using System.Web.SessionState;
 using System.Xml;
+using System.Collections;
 using Common;
 using Common.Attributes;
-namespace ArasPKGTestMethod 
-{public partial class ItemMethod 
+
+namespace ArasPKGCreateCodeItemInfo
 {
+    [ExternalPath("TestFile")]
+    internal class TestFile
+    {
 
-		[PartialPath("FirstTestPartial")]
-		public void FirstPartialMethod()
-		{
-			//this is First Partial Method
-		}
-
-}
+    }
 }

@@ -1,0 +1,26 @@
+﻿
+            //0) check variable OC
+
+            var innovatorInst = this.getInnovator();
+
+            string ocVariable = GetOCVariable();
+
+            var resultItem = innovatorInst.newItem();
+            resultItem.setProperty("oc_variable", ocVariable);
+
+            return resultItem;
+    	
+}
+
+//[PartialPath("Partials/GetLicenseInfo")]
+        private string GetOCVariable()
+        {
+            var innovatorInst = this.getInnovator();
+            string clientVersionOnServer = "undefined";
+            Item variable = innovatorInst.getItemByKeyedName("Variable", "Office Connector");
+            if (variable != null)
+            {
+                clientVersionOnServer = variable.getProperty("value", clientVersionOnServer);
+            }
+
+            return clientVersionOnServer;

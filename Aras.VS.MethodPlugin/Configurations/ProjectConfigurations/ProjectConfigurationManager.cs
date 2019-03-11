@@ -55,7 +55,7 @@ namespace Aras.VS.MethodPlugin.Configurations.ProjectConfigurations
 			usedVSFormat.InnerText = configuration.UseVSFormatting.ToString();
 
 			var openFromPackageLastSearchType = xmlDoc.SelectSingleNode("projectinfo/OpenFromPackageLastSearchType");
-			openFromPackageLastSearchType.InnerText = configuration.LastSelectedSearchTypeInOpenFromPackage.ToString();
+			openFromPackageLastSearchType.InnerText = configuration.LastSelectedSearchTypeInOpenFromPackage;
 
 
 			var connectionInfoXmlNode = xmlDoc.SelectSingleNode("projectinfo/connections");

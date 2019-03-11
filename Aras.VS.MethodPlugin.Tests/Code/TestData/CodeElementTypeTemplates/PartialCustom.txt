@@ -1,0 +1,10 @@
+﻿{0}using Common;
+using Common.Attributes;
+
+namespace {3}
+{{
+    internal partial class {1}
+    {{
+        //[PartialPath("{2}")]
+    }}
+}}

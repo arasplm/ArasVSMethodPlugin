@@ -6,6 +6,7 @@
 
 using System;
 using System.IO;
+using System.Text;
 using System.Xml;
 
 namespace Aras.VS.MethodPlugin
@@ -16,7 +17,11 @@ namespace Aras.VS.MethodPlugin
 		bool DirectoryExists(string path);
 		DirectoryInfo DirectoryCreateDirectory(string path);
 		bool FileExists(string path);
+		string FileReadAllText(string path, UTF8Encoding encoding);
 		string PathCombine(string folder, string fileName);
+		bool PathHasExtension(string path);
+		char PathDirectorySeparatorChar();
+		char PathAltDirectorySeparatorChar();
 		XmlDocument XmlDocumentLoad(string path);
 		void XmlDocumentSave(XmlDocument xmlDocument, string fileName);
 	}

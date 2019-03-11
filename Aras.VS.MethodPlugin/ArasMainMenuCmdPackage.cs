@@ -91,9 +91,9 @@ namespace Aras.VS.MethodPlugin
 			this.projectConfigurationManager = new ProjectConfigurationManager();
 			this.projectManager = new ProjectManager(this, dialogFactory);
 			this.defaultCodeProvider = new DefaultCodeProvider();
-			this.codeProviderFactory = new CodeProviderFactory(projectManager, defaultCodeProvider);
 			this.iOWrapper = new IOWrapper();
-			this.globalConfiguration = new GlobalConfiguration(this.iOWrapper);
+			this.codeProviderFactory = new CodeProviderFactory(projectManager, defaultCodeProvider, iOWrapper);
+			this.globalConfiguration = new GlobalConfiguration(iOWrapper);
 
 			Commands.OpenFromArasCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
 			Commands.OpenFromPackageCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);

@@ -6,6 +6,7 @@
 
 using System;
 using System.IO;
+using System.Text;
 using System.Xml;
 
 namespace Aras.VS.MethodPlugin
@@ -32,9 +33,29 @@ namespace Aras.VS.MethodPlugin
 			return File.Exists(path);
 		}
 
+		public string FileReadAllText(string path, UTF8Encoding encoding)
+		{
+			return File.ReadAllText(path, encoding);
+		}
+
 		public string PathCombine(string folder, string fileName)
 		{
 			return Path.Combine(folder, fileName);
+		}
+
+		public bool PathHasExtension(string path)
+		{
+			return Path.HasExtension(path);
+		}
+
+		public char PathDirectorySeparatorChar()
+		{
+			return Path.DirectorySeparatorChar;
+		}
+
+		public char PathAltDirectorySeparatorChar()
+		{
+			return Path.AltDirectorySeparatorChar;
 		}
 
 		public XmlDocument XmlDocumentLoad(string path)
