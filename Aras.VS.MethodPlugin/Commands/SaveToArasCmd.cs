@@ -116,7 +116,7 @@ namespace Aras.VS.MethodPlugin.Commands
 				return;
 			}
 
-			var templateLoader = new TemplateLoader();
+			var templateLoader = new TemplateLoader(this.dialogFactory, uiShell);
 			templateLoader.Load(methodConfigPath);
 
 			dynamic currentMethodItem = saveViewResult.MethodItem;

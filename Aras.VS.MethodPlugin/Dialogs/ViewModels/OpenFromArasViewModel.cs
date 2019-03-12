@@ -350,7 +350,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 				this.Package = packageName;
 
-				this.SelectedTemplate = templateLoader.GetTemplateFromCodeString(methodCode, methodLanguage, "Open method from Aras Innovator", window as Window);
+				this.SelectedTemplate = templateLoader.GetTemplateFromCodeString(methodCode, methodLanguage, "Open method from Aras Innovator");
                                                                                                                                                                
                 if (projectConfiguration.LastSavedSearch.ContainsKey(result.ItemType))
 				{

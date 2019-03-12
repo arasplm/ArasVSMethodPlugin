@@ -265,7 +265,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				this.MethodConfigId = itemXmlNode.Attributes["id"].InnerText;
 				this.MethodId = itemXmlNode.Attributes["id"].InnerText;
 
-                this.SelectedTemplate = templateLoader.GetTemplateFromCodeString(methodCode, methodLanguage, "Open method from AML package", window as Window);
+                this.SelectedTemplate = templateLoader.GetTemplateFromCodeString(methodCode, methodLanguage, "Open method from AML package");
 
             }
 		}

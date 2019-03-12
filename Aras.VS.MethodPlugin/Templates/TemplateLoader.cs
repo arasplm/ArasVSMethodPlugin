@@ -6,6 +6,8 @@
 
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.Dialogs.Views;
+using Microsoft.VisualStudio.Shell.Interop;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -16,9 +18,20 @@ namespace Aras.VS.MethodPlugin.Templates
 {
 	public class TemplateLoader
 	{
-		private List<string> references = new List<string>();
+		private readonly IDialogFactory dialogFactory;
+		private readonly IVsUIShell vsUIShell;
+
 		private List<string> supportedTemplates = new List<string>();
 		List<TemplateInfo> templates = new List<TemplateInfo>();
+
+		public TemplateLoader(IDialogFactory dialogFactory, IVsUIShell vsUIShell)
+		{
+			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));
+			if (vsUIShell == null) throw new ArgumentNullException(nameof(vsUIShell));
+
+			this.dialogFactory = dialogFactory;
+			this.vsUIShell = vsUIShell;
+		}
 
 		public void Load(string templatesFileText)
 		{
@@ -67,37 +80,32 @@ namespace Aras.VS.MethodPlugin.Templates
 
 				templates.Add(template);
 			}
-			var referenceNodes = doc.SelectNodes("MethodConfig/ReferencedAssemblies/name");
-			foreach (XmlNode item in referenceNodes)
-			{
-				references.Add(item.InnerText);
-			}
 		}
 
-        public TemplateInfo GetTemplateFromCodeString(string methodCode, string methodLanguage, string operationName, Window ownerWindow)
-        {
-            TemplateInfo template = null;
-            string methodTemplatePattern = @"//MethodTemplateName\s*=\s*(?<templatename>[^\W]*:?[\w.]*\(?[\w.:]*\)?)\s*";
-            Match methodTemplateNameMatch = Regex.Match(methodCode, methodTemplatePattern);
+		public TemplateInfo GetTemplateFromCodeString(string methodCode, string methodLanguage, string operationName)
+		{
+			TemplateInfo template = null;
+			string methodTemplatePattern = @"//MethodTemplateName\s*=\s*(?<templatename>[^\W]*:?[\w.]*\(?[\w.:]*\)?)\s*";
+			Match methodTemplateNameMatch = Regex.Match(methodCode, methodTemplatePattern);
 
-            if (methodTemplateNameMatch.Success)
-            {
-                string templateName = methodTemplateNameMatch.Groups["templatename"].Value;
-                template = Templates.Where(t => t.TemplateLanguage == methodLanguage && t.TemplateName == templateName).FirstOrDefault();
+			if (methodTemplateNameMatch.Success)
+			{
+				string templateName = methodTemplateNameMatch.Groups["templatename"].Value;
+				template = Templates.Where(t => t.TemplateLanguage == methodLanguage && t.TemplateName == templateName).FirstOrDefault();
 
-                if (template == null)
-                {
-                    var messageWindow = new MessageBoxWindow();
-                    messageWindow.ShowDialog(ownerWindow as Window,
-                        $"The template {templateName} from selected method not found. Default template will be used.",
-                        operationName,
-                        MessageButtons.OK,
-                        MessageIcon.Information);
-                }
-            }
-            if (template == null)
-            {
-                template = Templates.Where(t => t.TemplateLanguage == methodLanguage && t.IsSupported).FirstOrDefault();
+				if (template == null)
+				{
+					var messageWindow = this.dialogFactory.GetMessageBoxWindow(this.vsUIShell);
+					messageWindow.ShowDialog($"The template {templateName} from selected method not found. Default template will be used.",
+						operationName,
+						MessageButtons.OK,
+						MessageIcon.Information);
+				}
+			}
+
+			if (template == null)
+			{
+				template = Templates.Where(t => t.TemplateLanguage == methodLanguage && t.IsSupported).FirstOrDefault();
 			}
 
 			return template;

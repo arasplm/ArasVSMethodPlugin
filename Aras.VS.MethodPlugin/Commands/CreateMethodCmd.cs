@@ -78,7 +78,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			var project = projectManager.SelectedProject;
 			var projectConfiguration = projectConfigurationManager.Load(projectManager.ProjectConfigPath);
 
-			var templateLoader = new Templates.TemplateLoader();
+			var templateLoader = new Templates.TemplateLoader(this.dialogFactory, uiShell);
 			templateLoader.Load(projectManager.MethodConfigPath);
 
 			PackageManager packageManager = new PackageManager(authManager);

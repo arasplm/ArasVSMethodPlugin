@@ -49,7 +49,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			projectManager.ProjectConfigPath.Returns(Path.Combine(currentPath, "TestData\\projectConfig.xml"));
 			projectManager.MethodConfigPath.Returns(Path.Combine(currentPath, "TestData\\method-config.xml"));
 			projectConfiguration = projectConfigurationManager.Load(projectManager.ProjectConfigPath);
-			templateLoader = new TemplateLoader();
+			templateLoader = new TemplateLoader(dialogFactory, iVsUIShell);
 			templateLoader.Load(projectManager.MethodConfigPath);
 			packageManager = new PackageManager(authManager);
 		}

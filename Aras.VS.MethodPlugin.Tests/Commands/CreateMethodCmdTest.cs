@@ -55,7 +55,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			projectManager.MethodConfigPath.Returns(Path.Combine(currentPath, "TestData\\method-config.xml"));
 			template = new TemplateInfo { TemplateName = string.Empty };
 			eventSpecificDataType = new EventSpecificDataType { EventSpecificData = EventSpecificData.None };
-			templateLoader = new TemplateLoader();
+			templateLoader = new TemplateLoader(dialogFactory, iVsUIShell);
 			packageManager = new PackageManager(authManager);
 			codeProvider = Substitute.For<ICodeProvider>();
 			projectConfiguration = projectConfigurationManager.Load(projectManager.ProjectConfigPath);
