@@ -43,6 +43,21 @@ namespace Aras.VS.MethodPlugin
 			return File.ReadAllText(path, encoding);
 		}
 
+		public void FileDelete(string path)
+		{
+			File.Delete(path);
+		}
+
+		public void WriteAllTextIntoFile(string path, string text, Encoding encoding)
+		{
+			File.WriteAllText(path, text, encoding);
+		}
+
+		public string ReadAllText(string path, Encoding encoding)
+		{
+			return File.ReadAllText(path, encoding);
+		}
+
 		public string PathCombine(string folder, string fileName)
 		{
 			return Path.Combine(folder, fileName);

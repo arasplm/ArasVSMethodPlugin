@@ -65,6 +65,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CreateVsixContainer>True</CreateVsixContainer>
+    <DeployExtension>True</DeployExtension>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -225,6 +226,7 @@
     <Compile Include="ItemSearch\ItemSearchColumnProvider.cs" />
     <Compile Include="ItemSearch\IUpdatedCell.cs" />
     <Compile Include="Dialogs\Views\IView.cs" />
+    <Compile Include="IVsPackageWrapper.cs" />
     <Compile Include="MessageMenager.cs" />
     <Compile Include="PackageManagement\PackageManager.cs" />
     <Compile Include="Code\PartialCodeInfo.cs" />
@@ -292,6 +294,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>VSPackage.resx</DependentUpon>
     </Compile>
+    <Compile Include="VsPackageWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\LICENSE">

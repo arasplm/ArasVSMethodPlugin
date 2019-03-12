@@ -59,6 +59,7 @@ namespace Aras.VS.MethodPlugin
 		private DefaultCodeProvider defaultCodeProvider;
 		private ICodeProviderFactory codeProviderFactory;
 		private IIOWrapper iOWrapper;
+		private IVsPackageWrapper vsPackageWrapper;
 		private IGlobalConfiguration globalConfiguration;
 
 		private ProjectItemsEvents projectItemsEvents;
@@ -89,8 +90,9 @@ namespace Aras.VS.MethodPlugin
 			this.arasDataProvider = new ArasDataProvider(authManager);
 			this.dialogFactory = new DialogFactory(authManager, arasDataProvider);
 			this.projectConfigurationManager = new ProjectConfigurationManager();
-			this.projectManager = new ProjectManager(this, dialogFactory);
 			this.iOWrapper = new IOWrapper();
+			this.vsPackageWrapper = new VsPackageWrapper();
+			this.projectManager = new ProjectManager(this, dialogFactory, iOWrapper, vsPackageWrapper);
 			this.defaultCodeProvider = new DefaultCodeProvider(iOWrapper);
 			this.codeProviderFactory = new CodeProviderFactory(projectManager, defaultCodeProvider, iOWrapper);
 			this.globalConfiguration = new GlobalConfiguration(iOWrapper);
