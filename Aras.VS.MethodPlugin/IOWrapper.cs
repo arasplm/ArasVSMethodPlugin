@@ -28,6 +28,11 @@ namespace Aras.VS.MethodPlugin
 			return Directory.CreateDirectory(path);
 		}
 
+		public string[] DirectoryGetFiles(string path)
+		{
+			return Directory.GetFiles(path);
+		}
+
 		public bool FileExists(string path)
 		{
 			return File.Exists(path);

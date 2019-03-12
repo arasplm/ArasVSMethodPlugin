@@ -90,8 +90,8 @@ namespace Aras.VS.MethodPlugin
 			this.dialogFactory = new DialogFactory(authManager, arasDataProvider);
 			this.projectConfigurationManager = new ProjectConfigurationManager();
 			this.projectManager = new ProjectManager(this, dialogFactory);
-			this.defaultCodeProvider = new DefaultCodeProvider();
 			this.iOWrapper = new IOWrapper();
+			this.defaultCodeProvider = new DefaultCodeProvider(iOWrapper);
 			this.codeProviderFactory = new CodeProviderFactory(projectManager, defaultCodeProvider, iOWrapper);
 			this.globalConfiguration = new GlobalConfiguration(iOWrapper);
 

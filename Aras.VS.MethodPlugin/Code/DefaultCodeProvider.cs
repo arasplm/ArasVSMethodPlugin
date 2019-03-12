@@ -15,21 +15,31 @@ namespace Aras.VS.MethodPlugin.Code
 {
 	public class DefaultCodeProvider
 	{
+		private readonly IIOWrapper iOWrapper;
+
+		public DefaultCodeProvider(IIOWrapper iOWrapper)
+		{
+			if (iOWrapper == null)
+				throw new ArgumentNullException(nameof(iOWrapper));
+
+			this.iOWrapper = iOWrapper;
+		}
+
 		public DefaultCodeTemplate GetDefaultCodeTemplate(string defaultTempalteFilePath, string templateName, string eventName)
 		{
-		    DefaultCodeTemplate defaultTemlate = null;
+			DefaultCodeTemplate defaultTemlate = null;
 
-			if (Directory.Exists(defaultTempalteFilePath))
+			if (this.iOWrapper.DirectoryExists(defaultTempalteFilePath))
 			{
-			    var mappedTemplateName = TemplateMapper.GetAliasTemplateName(templateName);
-			    var file = Directory.GetFiles(defaultTempalteFilePath)
-			        .FirstOrDefault(fl => fl.Contains(mappedTemplateName + eventName));
-			    if (file == null)
-			    {
-			        return null;
-			    }
+				var mappedTemplateName = TemplateMapper.GetAliasTemplateName(templateName);
+				var file = this.iOWrapper.DirectoryGetFiles(defaultTempalteFilePath)
+					.FirstOrDefault(fl => fl.Contains(mappedTemplateName + eventName));
+				if (file == null)
+				{
+					return null;
+				}
 
-			    XmlDocument doc = new XmlDocument();
+				XmlDocument doc = new XmlDocument();
 				doc.Load(file);
 				var node = doc.GetElementsByTagName("default_code_template")[0];
 
@@ -49,6 +59,7 @@ namespace Aras.VS.MethodPlugin.Code
 				defaultTemlate.AdvancedSourceCode = node.SelectSingleNode("advanced_code/source_code")?.InnerText;
 				defaultTemlate.AdvancedUnitTestsCode = node.SelectSingleNode("advanced_code/test_code")?.InnerText;
 			}
+
 			return defaultTemlate;
 		}
 	}
