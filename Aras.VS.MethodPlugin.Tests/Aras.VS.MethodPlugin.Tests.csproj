@@ -157,6 +157,7 @@
     <Compile Include="Commands\AuthenticationCommandBaseTest.cs" />
     <Compile Include="Commands\CmdBaseTest.cs" />
     <Compile Include="Commands\ConnectionInfoCmdTest.cs" />
+    <Compile Include="Commands\CreateCodeItemCmdTest.cs" />
     <Compile Include="Commands\SaveToArasCmdTest.cs" />
     <Compile Include="Commands\UpdateMethodCmdTest.cs" />
     <Compile Include="Commands\SaveToPackageCmdTest.cs" />
