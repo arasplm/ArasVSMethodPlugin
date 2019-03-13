@@ -167,6 +167,7 @@
     <Compile Include="Commands\DebugMethodCmdTest.cs" />
     <Compile Include="Commands\CreatePartialElementCmdTest.cs" />
     <Compile Include="Commands\CreateMethodCmdTest.cs" />
+    <Compile Include="Configurations\GlobalConfigurationTest.cs" />
     <Compile Include="PackageManagement\PackageManagementTest.cs" />
     <Compile Include="ProjectConfiguration\ProjectConfiguraitonTest.cs" />
     <Compile Include="ProjectConfiguration\ProjectConfigurationManagerTest.cs" />
@@ -274,6 +275,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Code\TestData\MethodAml\ReturnNullMethodAml.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Configurations\TestData\config.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ProjectConfiguration\TestData\EmptyProjectConfig.xml">

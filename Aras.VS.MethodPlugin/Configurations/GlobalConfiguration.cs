@@ -20,7 +20,7 @@ namespace Aras.VS.MethodPlugin.Configurations
 
 		private readonly IIOWrapper iIOWrapper;
 
-		private XmlDocument configXmlDocument = null;
+		protected XmlDocument configXmlDocument = null;
 		private XmlElement configurationXmlElement = null;
 		private XmlElement userCodeTemplatesXmlElement = null;
 
@@ -35,15 +35,13 @@ namespace Aras.VS.MethodPlugin.Configurations
 		{
 			get
 			{
+				string folderPath = this.iIOWrapper.PathCombine(this.iIOWrapper.EnvironmentGetFolderPath(Environment.SpecialFolder.MyDocuments), projectFolderName);
+				if (!this.iIOWrapper.DirectoryExists(folderPath))
 				{
-					string folderPath = this.iIOWrapper.PathCombine(this.iIOWrapper.EnvironmentGetFolderPath(Environment.SpecialFolder.MyDocuments), projectFolderName);
-					if (!this.iIOWrapper.DirectoryExists(folderPath))
-					{
-						this.iIOWrapper.DirectoryCreateDirectory(folderPath);
-					}
-
-					return this.iIOWrapper.PathCombine(folderPath, configFileName);
+					this.iIOWrapper.DirectoryCreateDirectory(folderPath);
 				}
+
+				return this.iIOWrapper.PathCombine(folderPath, configFileName);
 			}
 		}
 
