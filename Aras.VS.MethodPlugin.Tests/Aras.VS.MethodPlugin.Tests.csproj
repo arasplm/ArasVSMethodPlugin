@@ -143,6 +143,8 @@
     <Compile Include="Authentication\AuthenticationManagerTest.cs" />
     <Compile Include="Code\CSharpCodeItemProviderTests.cs" />
     <Compile Include="Code\CSharpCodeProviderTests.cs" />
+    <Compile Include="Code\DefaultCodeProviderTest.cs" />
+    <Compile Include="Code\XmlMethodLoaderTest.cs" />
     <Compile Include="Commands\AuthenticationCommandBaseTest.cs" />
     <Compile Include="Commands\CmdBaseTest.cs" />
     <Compile Include="Commands\ConnectionInfoCmdTest.cs" />
@@ -257,6 +259,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Code\TestData\LoadMethodCode\PartialsGetLicenseInfo.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Code\TestData\MethodAml\ReturnNullMethodAml.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ProjectConfiguration\TestData\EmptyProjectConfig.xml">

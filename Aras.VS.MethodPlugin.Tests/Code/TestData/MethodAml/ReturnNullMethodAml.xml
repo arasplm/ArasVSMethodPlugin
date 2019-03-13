@@ -1,0 +1,9 @@
+﻿<AML>
+ <Item type="Method" id="B4D99F186D9F3D6631927A3EB3440F99" action="add">
+  <execution_allowed_to keyed_name="World" type="Identity">A73B655731924CD0B027E4F4D5FCC0A9</execution_allowed_to>
+  <method_code><![CDATA[
+return null;]]></method_code>
+  <method_type>C#</method_type>
+  <name>ReturnNullMethodAml</name>
+ </Item>
+</AML>
