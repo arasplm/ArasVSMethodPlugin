@@ -1,0 +1,6 @@
+﻿<configuration>
+    <userCodeTemplates>
+        <userCodeTemplate>testUserCodeTemplatePath1</userCodeTemplate>
+        <userCodeTemplate>testUserCodeTemplatePath2</userCodeTemplate>
+    </userCodeTemplates>
+</configuration>

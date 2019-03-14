@@ -16,8 +16,12 @@ namespace Aras.VS.MethodPlugin
 		string EnvironmentGetFolderPath(Environment.SpecialFolder folder);
 		bool DirectoryExists(string path);
 		DirectoryInfo DirectoryCreateDirectory(string path);
+		string[] DirectoryGetFiles(string path);
 		bool FileExists(string path);
 		string FileReadAllText(string path, UTF8Encoding encoding);
+		void FileDelete(string path);
+		void WriteAllTextIntoFile(string path, string text, Encoding encoding);
+		string ReadAllText(string path, Encoding encoding);
 		string PathCombine(string folder, string fileName);
 		bool PathHasExtension(string path);
 		char PathDirectorySeparatorChar();

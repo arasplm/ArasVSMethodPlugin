@@ -76,7 +76,7 @@ namespace Aras.VS.MethodPlugin.Commands
 
 			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language, projectConfiguration);
 
-			var templateLoader = new TemplateLoader();
+			var templateLoader = new TemplateLoader(this.dialogFactory, uiShell);
 			templateLoader.Load(projectManager.MethodConfigPath);
 
 			var packageManager = new PackageManager(authManager);

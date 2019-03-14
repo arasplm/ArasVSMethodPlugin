@@ -28,12 +28,32 @@ namespace Aras.VS.MethodPlugin
 			return Directory.CreateDirectory(path);
 		}
 
+		public string[] DirectoryGetFiles(string path)
+		{
+			return Directory.GetFiles(path);
+		}
+
 		public bool FileExists(string path)
 		{
 			return File.Exists(path);
 		}
 
 		public string FileReadAllText(string path, UTF8Encoding encoding)
+		{
+			return File.ReadAllText(path, encoding);
+		}
+
+		public void FileDelete(string path)
+		{
+			File.Delete(path);
+		}
+
+		public void WriteAllTextIntoFile(string path, string text, Encoding encoding)
+		{
+			File.WriteAllText(path, text, encoding);
+		}
+
+		public string ReadAllText(string path, Encoding encoding)
 		{
 			return File.ReadAllText(path, encoding);
 		}

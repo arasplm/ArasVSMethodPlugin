@@ -282,7 +282,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 					methodType = "client";
 				}
                 
-				this.SelectedTemplate = templateLoader.GetTemplateFromCodeString(methodCode, methodLanguage, "Update method from Aras Innovator", view as Window);
+				this.SelectedTemplate = templateLoader.GetTemplateFromCodeString(methodCode, methodLanguage, "Update method from Aras Innovator");
 
                 var packageName = string.Empty;
 

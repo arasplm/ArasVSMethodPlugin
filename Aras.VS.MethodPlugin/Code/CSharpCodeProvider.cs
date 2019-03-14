@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
+using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using Aras.VS.MethodPlugin.Templates;
 using Microsoft.CodeAnalysis;
@@ -29,13 +30,14 @@ namespace Aras.VS.MethodPlugin.Code
 		private readonly DefaultCodeProvider defaultCodeProvider;
 		private readonly ICodeItemProvider codeItemProvider;
 		private readonly IIOWrapper iOWrapper;
+		private readonly IDialogFactory dialogFactory;
 
 		public string Language
 		{
 			get { return "C#"; }
 		}
 
-		public CSharpCodeProvider(IProjectManager projectManager, IProjectConfiguraiton projectConfiguration, DefaultCodeProvider defaultCodeProvider, ICodeItemProvider codeItemProvider, IIOWrapper iOWrapper)
+		public CSharpCodeProvider(IProjectManager projectManager, IProjectConfiguraiton projectConfiguration, DefaultCodeProvider defaultCodeProvider, ICodeItemProvider codeItemProvider, IIOWrapper iOWrapper, IDialogFactory dialogFactory)
 		{
 			if (projectManager == null) throw new ArgumentNullException(nameof(projectManager));
 			if (projectConfiguration == null) throw new ArgumentNullException(nameof(projectConfiguration));
@@ -48,6 +50,7 @@ namespace Aras.VS.MethodPlugin.Code
 			this.projectConfiguration = projectConfiguration;
 			this.codeItemProvider = codeItemProvider;
 			this.iOWrapper = iOWrapper;
+			this.dialogFactory = dialogFactory;
 		}
 
 		public string LoadMethodCode(string sourceCode, MethodInfo methodInformation, string serverMethodFolderPath)
@@ -408,7 +411,7 @@ namespace Aras.VS.MethodPlugin.Code
 			string codeItemAttributePath = codeItemPath.Substring(codeItemPath.IndexOf(methodName) + methodName.Length + 1);
 			codeItemAttributePath = codeItemAttributePath.Replace("\\", "/");
 
-			var templateLoader = new TemplateLoader();
+			var templateLoader = new TemplateLoader(this.dialogFactory, this.projectManager.UIShell);
 			templateLoader.Load(projectManager.MethodConfigPath);
 
 			TemplateInfo template = null;

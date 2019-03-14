@@ -90,7 +90,7 @@ namespace Aras.VS.MethodPlugin.Commands
 				throw new Exception();
 			}
 
-			var templateLoader = new TemplateLoader();
+			var templateLoader = new TemplateLoader(this.dialogFactory, uiShell);
 			templateLoader.Load(methodConfigPath);
 
 			var packageManager = new PackageManager(authManager);

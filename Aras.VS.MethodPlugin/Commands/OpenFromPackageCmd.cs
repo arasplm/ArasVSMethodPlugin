@@ -88,7 +88,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			var projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
 			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language, projectConfiguration);
 
-			var templateLoader = new TemplateLoader();
+			var templateLoader = new TemplateLoader(this.dialogFactory, uiShell);
 			templateLoader.Load(methodConfigPath);
 
 			var openView = dialogFactory.GetOpenFromPackageView(projectManager.UIShell, templateLoader, codeProvider.Language, projectConfiguration);

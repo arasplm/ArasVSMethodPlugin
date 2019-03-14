@@ -51,9 +51,9 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 
 		bool SolutionHasProject{ get; }
 
-        bool IsCommandForMethod(Guid commandId);
+		bool IsCommandForMethod(Guid commandId);
 
-        IEnumerable<string> GetSelectedFiles();
+		IEnumerable<string> GetSelectedFiles();
 
 		string AddItemTemplateToProjectNew(CodeInfo codeInfo, bool openAfterCreation, int cursorIndex = -1);
 
