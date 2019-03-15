@@ -107,6 +107,8 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 
 		public class SaveToArasViewAdapterTest : IViewAdaper<SaveMethodView, SaveMethodViewResult>
 		{
+			public System.Windows.Window Owner { get { return null; } set { } }
+
 			public SaveMethodViewResult ShowDialog()
 			{
 				return new SaveMethodViewResult

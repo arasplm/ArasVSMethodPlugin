@@ -93,6 +93,8 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 
 		public class SaveToPackageViewAdapterStub : IViewAdaper<SaveToPackageView, SaveToPackageViewResult>
 		{
+			public System.Windows.Window Owner { get { return null; } set { } }
+
 			public SaveToPackageViewResult ShowDialog()
 			{
 				return new SaveToPackageViewResult

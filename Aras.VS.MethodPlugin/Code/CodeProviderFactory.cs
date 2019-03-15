@@ -51,7 +51,7 @@ namespace Aras.VS.MethodPlugin.Code
 		{
 			string projectLanguage = string.Empty;
 			ICodeProvider codeProvider = null;
-			if (projectLanguageCode == CodeModelLanguageConstants.vsCMLanguageCSharp)
+			if (projectLanguageCode == CodeModelLanguageConstants.vsCMLanguageCSharp || projectLanguageCode == GlobalConsts.CSharp)
 			{
 				codeProvider = new CSharpCodeProvider(projectManager, projectConfiguration, defaultCodeProvider, new CSharpCodeItemProvider(), iOWrapper, this.dialogFactory);
 			}

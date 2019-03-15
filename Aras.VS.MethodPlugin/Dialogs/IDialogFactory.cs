@@ -5,16 +5,17 @@
 //------------------------------------------------------------------------------
 
 using Aras.VS.MethodPlugin.Code;
+using Aras.VS.MethodPlugin.Configurations;
+using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
+using Aras.VS.MethodPlugin.Dialogs.Directory.Data;
 using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.ItemSearch;
 using Aras.VS.MethodPlugin.PackageManagement;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using Aras.VS.MethodPlugin.Templates;
-using EnvDTE;
+using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio.Shell.Interop;
 using OfficeConnector.Dialogs;
-using Aras.VS.MethodPlugin.Configurations;
 
 namespace Aras.VS.MethodPlugin.Dialogs
 {
@@ -37,13 +38,13 @@ namespace Aras.VS.MethodPlugin.Dialogs
 		IViewAdaper<ConnectionInfoView, ViewResult> GetConnectionInfoView(IProjectManager projectManager, IProjectConfigurationManager configurationManager);
 
 		IViewAdaper<OpenFromArasView, OpenFromArasViewResult> GetOpenFromArasView(IVsUIShell uiShell, IProjectConfigurationManager configurationManager,
-		   IProjectConfiguraiton projectConfiguration,
-		   TemplateLoader templateLoader,
-		   PackageManager packageManager,
-		   string pathToProjectConfigFile,
-		   string projectName,
-		   string projectFullName,
-		   string projectLanguage);
+			IProjectConfiguraiton projectConfiguration,
+			TemplateLoader templateLoader,
+			PackageManager packageManager,
+			string pathToProjectConfigFile,
+			string projectName,
+			string projectFullName,
+			string projectLanguage);
 
 		IViewAdaper<OpenFromPackageView, OpenFromPackageViewResult> GetOpenFromPackageView(IVsUIShell uiShell, TemplateLoader templateLoader, string projectLanguage, IProjectConfiguraiton projectConfiguraiton);
 
@@ -86,6 +87,13 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			string projectConfigPath,
 			string projectName,
 			string projectFullName);
+
+		IViewAdaper<SelectPathDialog, SelectPathDialogResult> GetSelectPathDialog(DirectoryItemType searchToLevel,
+			string rootPath = "",
+			string startPath = "",
+			string fileExtantion = "");
+
+		IViewAdaper<MoveToView, MoveToViewResult> GetMoveToView(IVsUIShell uiShell, string methodPath, SyntaxNode node);
 
 		IMessageBoxWindow GetMessageBoxWindow(IVsUIShell uiShell);
 	}

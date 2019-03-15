@@ -2,6 +2,12 @@
 {
 	internal class GlobalConsts
 	{
+		#region Languages
+
+		public const string CSharp = "C#";
+
+		#endregion
+
 		#region Attributes
 
 		public const string PartialPath = "PartialPath";

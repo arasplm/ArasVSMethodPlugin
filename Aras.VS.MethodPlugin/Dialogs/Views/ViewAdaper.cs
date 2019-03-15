@@ -10,7 +10,7 @@ using System.Windows;
 namespace Aras.VS.MethodPlugin.Dialogs
 {
 	public abstract class ViewAdaper<TView, TResult> : IViewAdaper<TView, TResult>
-        where TResult : ViewResult, new()
+		where TResult : ViewResult, new()
 		where TView : Window
 	{
 		protected TView view;
@@ -21,12 +21,20 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			this.view = view;
 		}
 
+		public Window Owner
+		{
+			get { return view.Owner; }
+			set { view.Owner = value; }
+		}
+
 		public abstract TResult ShowDialog();
 	}
 
-    public interface IViewAdaper<TView, TResult>
-    {
-        TResult ShowDialog();
-    }
+	public interface IViewAdaper<TView, TResult>
+	{
+		Window Owner { get; set; }
+
+		TResult ShowDialog();
+	}
 }
 

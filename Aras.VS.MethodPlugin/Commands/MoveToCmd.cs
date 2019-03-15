@@ -69,7 +69,112 @@ namespace Aras.VS.MethodPlugin.Commands
 
 		public override void ExecuteCommandImpl(object sender, EventArgs args, IVsUIShell uiShell)
 		{
+			Document activeDocument = projectManager.ActiveDocument;
+			SyntaxNode activeSyntaxNode = projectManager.ActiveSyntaxNode;
+			string activeDocumentMethodName = projectManager.ActiveDocumentMethodName;
+			string activeDocumentMethodFullPath = projectManager.ActiveDocumentMethodFullPath;
+			string activeDocumentMethodFolderPath = projectManager.ActiveDocumentMethodFolderPath;
+			string serverMethodFolderPath = projectManager.ServerMethodFolderPath;
 
+			string projectConfigPath = projectManager.ProjectConfigPath;
+			IProjectConfiguraiton projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
+
+			if (string.Equals(activeDocument.FilePath, activeDocumentMethodFullPath, StringComparison.InvariantCultureIgnoreCase))
+			{
+				// main to external
+				var moveToViewAdapter = this.dialogFactory.GetMoveToView(projectManager.UIShell, activeDocumentMethodFolderPath, activeSyntaxNode);
+				var moveToViewResult = moveToViewAdapter.ShowDialog();
+				if (moveToViewResult.DialogOperationResult == false)
+				{
+					return;
+				}
+
+				ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(activeDocument.Project.Language, projectConfiguration);
+				CodeInfo activeDocumentCodeInfo = codeProvider.RemoveActiveNodeFromActiveDocument(activeDocument, activeSyntaxNode, serverMethodFolderPath);
+				CodeInfo itemCodeInfo = null;
+
+				if (moveToViewResult.SelectedCodeType == CodeType.Partial)
+				{
+					itemCodeInfo = codeProvider.InsertActiveNodeToPartial(moveToViewResult.SelectedFullPath, serverMethodFolderPath, activeDocumentMethodName, activeSyntaxNode);
+				}
+				else
+				{
+					itemCodeInfo = codeProvider.InsertActiveNodeToExternal(moveToViewResult.SelectedFullPath, serverMethodFolderPath, activeDocumentMethodName, activeSyntaxNode);
+				}
+
+				projectManager.AddItemTemplateToProjectNew(activeDocumentCodeInfo, false);
+				projectManager.AddItemTemplateToProjectNew(itemCodeInfo, false);
+
+				MethodInfo methodInformation = projectConfiguration.MethodInfos.FirstOrDefault(m => m.MethodName == activeDocumentMethodName);
+				if (moveToViewResult.SelectedCodeType == CodeType.Partial)
+				{
+					bool nodePathExists = methodInformation.PartialClasses.Exists(x => string.Equals(x, itemCodeInfo.Path, StringComparison.InvariantCultureIgnoreCase));
+					if (!nodePathExists)
+					{
+						methodInformation.PartialClasses.Add(itemCodeInfo.Path);
+					}
+				}
+				else
+				{
+					bool nodePathExists = methodInformation.ExternalItems.Exists(x => string.Equals(x, itemCodeInfo.Path, StringComparison.InvariantCultureIgnoreCase));
+					if (!nodePathExists)
+					{
+						methodInformation.ExternalItems.Add(itemCodeInfo.Path);
+					}
+				}
+
+				projectConfigurationManager.Save(projectConfigPath, projectConfiguration);
+			}
+			else
+			{
+				// external to main
+				var messageBoxWindow = dialogFactory.GetMessageBoxWindow(projectManager.UIShell);
+				var messageBoxWindowResult = messageBoxWindow.ShowDialog(
+					"Selected code will be moved to main method file. Click OK to continue.",
+					"Move to main method.",
+					MessageButtons.OKCancel,
+					MessageIcon.Question);
+
+				if (messageBoxWindowResult == MessageDialogResult.OK)
+				{
+					ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(activeDocument.Project.Language , projectConfiguration);
+					CodeInfo activeDocumentCodeInfo = codeProvider.RemoveActiveNodeFromActiveDocument(activeDocument, activeSyntaxNode, serverMethodFolderPath);
+					CodeInfo methodDocumentCodeInfo = codeProvider.InsertActiveNodeToMainMethod(activeDocumentMethodFullPath, serverMethodFolderPath, activeSyntaxNode, activeDocument.FilePath);
+					projectManager.AddItemTemplateToProjectNew(activeDocumentCodeInfo, false);
+					projectManager.AddItemTemplateToProjectNew(methodDocumentCodeInfo, false);
+				}
+			}
+		}
+
+		protected override void CheckCommandAccessibility(object sender, EventArgs e)
+		{
+			OleMenuCommand command = (OleMenuCommand)sender;
+			if (!projectManager.IsArasProject | string.IsNullOrEmpty(projectManager.ActiveDocumentMethodName))
+			{
+				command.Enabled = false;
+				return;
+			}
+
+			SyntaxNode activeSyntaxNode = projectManager.ActiveSyntaxNode;
+			//List<AttributeSyntax> attribute = activeSyntaxNode.DescendantNodes()
+			//	.OfType<AttributeSyntax>()
+			//	.Where(a => a.Name.ToString().StartsWith(GlobalConsts.PartialPath) || a.Name.ToString().StartsWith(GlobalConsts.ExternalPath))
+			//	.ToList();
+
+			//if (attribute.Count() == 0)
+			//{
+			//	command.Enabled = false;
+			//	return;
+			//}
+
+			if (activeSyntaxNode is TypeDeclarationSyntax typeDeclarationNode)
+			{
+				command.Enabled = !typeDeclarationNode.Modifiers.Any(SyntaxKind.PartialKeyword);
+			}
+			else
+			{
+				command.Enabled = activeSyntaxNode is MethodDeclarationSyntax || activeSyntaxNode is EnumDeclarationSyntax;
+			}
 		}
 	}
 }

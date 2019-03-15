@@ -91,6 +91,8 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 
 		public class OpenFromArasViewAdapterTest : IViewAdaper<OpenFromArasView, OpenFromArasViewResult>
 		{
+			public System.Windows.Window Owner { get { return null; } set { } }
+
 			public OpenFromArasViewResult ShowDialog()
 			{
 				return new OpenFromArasViewResult

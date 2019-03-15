@@ -118,6 +118,8 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 
 		public class DebugMethodViewAdapterTest : IViewAdaper<DebugMethodView, DebugMethodViewResult>
 		{
+			public System.Windows.Window Owner { get { return null; } set { } }
+
 			public DebugMethodViewResult ShowDialog()
 			{
 				return new DebugMethodViewResult

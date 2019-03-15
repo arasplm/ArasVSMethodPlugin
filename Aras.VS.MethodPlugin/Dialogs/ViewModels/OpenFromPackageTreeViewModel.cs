@@ -46,7 +46,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		public OpenFromPackageTreeViewModel(string lastSelectedManifestFilePath, string lastSelectedPackage, string lastSelectedMethod, string lastUsedSearchType)
 		{
-			SelectPathViewModel = new SelectPathViewModel(DirectoryItemType.File, lastSelectedManifestFilePath, importFileName);
+			SelectPathViewModel = new SelectPathViewModel(DirectoryItemType.File, startPath: lastSelectedManifestFilePath, fileExtantion: importFileName);
 			SelectPathViewModel.SelectionChanged += OnSelectDirectoryItem;
 			this.okCommand = new RelayCommand<object>(OkCommandClick);
 			this.closeCommand = new RelayCommand<object>(OnCloseCliked);

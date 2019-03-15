@@ -466,6 +466,272 @@ namespace Aras.VS.MethodPlugin.Code
 			return resultCodeInfo;
 		}
 
+		public CodeInfo RemoveActiveNodeFromActiveDocument(Document activeDocument, SyntaxNode activeSyntaxNode, string serverMethodFolderPath)
+		{
+			SyntaxNode root;
+			activeDocument.TryGetSyntaxRoot(out root);
+			SyntaxNode newRoot = root.RemoveNode(activeSyntaxNode, SyntaxRemoveOptions.KeepNoTrivia);
+
+			CodeInfo codeInfo = new CodeInfo()
+			{
+				Code = newRoot.ToFullString(),
+				Path = activeDocument.FilePath.Substring(serverMethodFolderPath.IndexOf(serverMethodFolderPath) + serverMethodFolderPath.Length)
+			};
+
+			return codeInfo;
+		}
+
+		public CodeInfo InsertActiveNodeToMainMethod(string mainMethodFullPath, string serverMethodFolderPath, SyntaxNode activeSyntaxNode, string activeDocumentPath)
+		{
+			string code = string.Empty;
+			string codeItemPath = mainMethodFullPath.Substring(serverMethodFolderPath.IndexOf(serverMethodFolderPath) + serverMethodFolderPath.Length);
+			if (Path.HasExtension(codeItemPath))
+			{
+				string extention = Path.GetExtension(codeItemPath);
+				codeItemPath = codeItemPath.Substring(0, codeItemPath.Length - extention.Length);
+			}
+
+			SyntaxTree tree = CSharpSyntaxTree.ParseText(File.ReadAllText(mainMethodFullPath));
+			SyntaxNode root = tree.GetRoot();
+
+			// remove attribute
+			List<AttributeListSyntax> attributeListSyntaxes = activeSyntaxNode.DescendantNodes()
+				.OfType<AttributeListSyntax>()
+				.Where(x => x.Attributes.Any(y => y.Name.ToString().StartsWith(GlobalConsts.PartialPath)|| y.Name.ToString().StartsWith(GlobalConsts.ExternalPath)))
+				.ToList();
+
+			SyntaxNode activeSyntaxNodeWithOutAttributes = activeSyntaxNode.RemoveNodes(attributeListSyntaxes, SyntaxRemoveOptions.KeepNoTrivia);
+			if (attributeListSyntaxes.Any(x => x.Attributes.Any(y => y.Name.ToString().StartsWith(GlobalConsts.PartialPath))))
+			{
+				var partialClassNode = root.DescendantNodes()
+						.OfType<NamespaceDeclarationSyntax>()
+						.First()
+						.ChildNodes()
+						.OfType<ClassDeclarationSyntax>()
+						.Where(x => x.Modifiers.Any(SyntaxKind.PartialKeyword))
+						.FirstOrDefault();
+				if (partialClassNode == null)
+				{
+					throw new Exception("No partial classes found.");
+				}
+
+				var partialClassNodeWithPartials = partialClassNode.AddMembers(new MemberDeclarationSyntax[] { (MemberDeclarationSyntax)activeSyntaxNodeWithOutAttributes });
+				root = root.ReplaceNode(partialClassNode, partialClassNodeWithPartials);
+
+				code = root.ToFullString();
+			}
+			else if (attributeListSyntaxes.Any(x => x.Attributes.Any(y => y.Name.ToString().StartsWith(GlobalConsts.ExternalPath))))
+			{
+				int count = root.DescendantNodes()
+					.OfType<NamespaceDeclarationSyntax>()
+					.First()
+					.ChildNodes()
+					.OfType<ClassDeclarationSyntax>()
+					.Count();
+
+				if (count <= 1)
+				{
+					var namespaceNode = root.DescendantNodes()
+						.OfType<NamespaceDeclarationSyntax>()
+						.First();
+
+					var namespaceNodeWithPartials = namespaceNode.AddMembers((MemberDeclarationSyntax)activeSyntaxNodeWithOutAttributes);
+					root = root.ReplaceNode(namespaceNode, namespaceNodeWithPartials);
+
+					code = root.ToFullString();
+				}
+				else
+				{
+					var classNode = root.DescendantNodes()
+						.OfType<NamespaceDeclarationSyntax>()
+						.First()
+						.ChildNodes()
+						.OfType<ClassDeclarationSyntax>()
+						.Last();
+
+					root = root.InsertNodesBefore(classNode, new MemberDeclarationSyntax[] { (MemberDeclarationSyntax)activeSyntaxNodeWithOutAttributes });
+
+					code = root.ToFullString();
+				}
+			}
+			else
+			{
+				throw new Exception("No attribute found.");
+			}
+
+			CodeInfo codeInfo = new CodeInfo()
+			{
+				Code = code,
+				Path = codeItemPath
+			};
+
+			return codeInfo;
+		}
+
+		public CodeInfo InsertActiveNodeToPartial(string partialfullPath, string serverMethodFolderPath, string methodName, SyntaxNode activeSyntaxNode)
+		{
+			string code = string.Empty;
+			string codeItemPath = partialfullPath.Substring(serverMethodFolderPath.IndexOf(serverMethodFolderPath) + serverMethodFolderPath.Length);
+			if (Path.HasExtension(codeItemPath))
+			{
+				string extention = Path.GetExtension(codeItemPath);
+				codeItemPath = codeItemPath.Substring(0, codeItemPath.Length - extention.Length);
+			}
+
+			string codeItemAttributePath = codeItemPath.Substring(codeItemPath.IndexOf(methodName) + methodName.Length + 1).Replace("\\", "/");
+
+			// remove attributes
+			List<AttributeListSyntax> attributeListSyntaxes = activeSyntaxNode.DescendantNodes()
+				.OfType<AttributeListSyntax>()
+				.Where(x => x.Attributes.Any(y => y.Name.ToString().StartsWith(GlobalConsts.PartialPath) || y.Name.ToString().StartsWith(GlobalConsts.ExternalPath)))
+				.ToList();
+
+			SyntaxNode syntaxNode = activeSyntaxNode.RemoveNodes(attributeListSyntaxes, SyntaxRemoveOptions.KeepNoTrivia);
+
+			// insert attribute
+			NameSyntax name = SyntaxFactory.ParseName(GlobalConsts.PartialPath);
+			AttributeArgumentListSyntax arguments = SyntaxFactory.ParseAttributeArgumentList($"(\"{codeItemAttributePath}\")");
+			AttributeSyntax attribute = SyntaxFactory.Attribute(name, arguments);
+			SeparatedSyntaxList<AttributeSyntax> attributeList = new SeparatedSyntaxList<AttributeSyntax>().Add(attribute);
+			AttributeListSyntax attributeListSyntax = SyntaxFactory.AttributeList(attributeList);
+
+			syntaxNode = InsertAttributeListSyntax(syntaxNode, attributeListSyntax);
+
+			if (File.Exists(partialfullPath))
+			{
+				SyntaxTree tree = CSharpSyntaxTree.ParseText(File.ReadAllText(partialfullPath));
+				SyntaxNode root = tree.GetRoot();
+
+				var partialClassNode = root.DescendantNodes()
+						.OfType<NamespaceDeclarationSyntax>()
+						.First()
+						.ChildNodes()
+						.OfType<ClassDeclarationSyntax>()
+						.Where(x => x.Modifiers.Any(SyntaxKind.PartialKeyword))
+						.FirstOrDefault();
+				if (partialClassNode == null)
+				{
+					throw new Exception("No partial classes found.");
+				}
+
+				var newPartialClassNode = partialClassNode.AddMembers((MemberDeclarationSyntax)syntaxNode);
+				root = root.ReplaceNode(partialClassNode, newPartialClassNode);
+
+				code = root.ToFullString();
+			}
+			else
+			{
+				var tree = CSharpSyntaxTree.ParseText(File.ReadAllText(projectManager.ActiveDocumentMethodFullPath));
+				var root = tree.GetRoot();
+
+				var partialClassNode = root.DescendantNodes()
+						.OfType<NamespaceDeclarationSyntax>()
+						.First()
+						.ChildNodes()
+						.OfType<ClassDeclarationSyntax>()
+						.Where(x => x.Modifiers.Any(SyntaxKind.PartialKeyword))
+						.FirstOrDefault();
+				if (partialClassNode == null)
+				{
+					throw new Exception("No partial classes found.");
+				}
+
+				var usings = string.Empty;
+				var mainUsingDirectiveSyntaxes = root.DescendantNodes().OfType<UsingDirectiveSyntax>();
+				usings = string.Join(Environment.NewLine, mainUsingDirectiveSyntaxes);
+				if (!string.IsNullOrEmpty(usings))
+				{
+					usings += Environment.NewLine;
+				}
+
+				var namespaceNode = root.DescendantNodes()
+					.OfType<NamespaceDeclarationSyntax>()
+					.First();
+
+				string template = "{0}using Common;\r\nusing Common.Attributes;\r\nnamespace {3} \r\n{{public partial class {1} \r\n{{\r\n{2}\r\n}}\r\n}}";
+				code = string.Format(template, usings, partialClassNode.Identifier.Text.ToString(), syntaxNode.ToFullString(), namespaceNode.Name.ToString());
+			}
+
+			CodeInfo codeInfo = new CodeInfo()
+			{
+				Code = code,
+				Path = codeItemPath
+			};
+
+			return codeInfo;
+		}
+
+		public CodeInfo InsertActiveNodeToExternal(string externalFullPath, string serverMethodFolderPath, string methodName, SyntaxNode activeSyntaxNode)
+		{
+			string code = string.Empty;
+			string codeItemPath = externalFullPath.Substring(serverMethodFolderPath.IndexOf(serverMethodFolderPath) + serverMethodFolderPath.Length);
+			if (Path.HasExtension(codeItemPath))
+			{
+				string extention = Path.GetExtension(codeItemPath);
+				codeItemPath = codeItemPath.Substring(0, codeItemPath.Length - extention.Length);
+			}
+
+			string codeItemAttributePath = codeItemPath.Substring(codeItemPath.IndexOf(methodName) + methodName.Length + 1).Replace("\\", "/");
+
+			// remove attributes
+			List<AttributeListSyntax> attributeListSyntaxes = activeSyntaxNode.DescendantNodes()
+				.OfType<AttributeListSyntax>()
+				.Where(x => x.Attributes.Any(y => y.Name.ToString().StartsWith(GlobalConsts.PartialPath) || y.Name.ToString().StartsWith(GlobalConsts.ExternalPath)))
+				.ToList();
+
+			SyntaxNode syntaxNode = activeSyntaxNode.RemoveNodes(attributeListSyntaxes, SyntaxRemoveOptions.KeepNoTrivia);
+
+			// insert attribute
+			NameSyntax name = SyntaxFactory.ParseName(GlobalConsts.ExternalPath);
+			AttributeArgumentListSyntax arguments = SyntaxFactory.ParseAttributeArgumentList($"(\"{codeItemAttributePath}\")");
+			AttributeSyntax attribute = SyntaxFactory.Attribute(name, arguments);
+			SeparatedSyntaxList<AttributeSyntax> attributeList = new SeparatedSyntaxList<AttributeSyntax>().Add(attribute);
+			AttributeListSyntax attributeListSyntax = SyntaxFactory.AttributeList(attributeList);
+
+			syntaxNode = InsertAttributeListSyntax(activeSyntaxNode, attributeListSyntax);
+
+			if (File.Exists(externalFullPath))
+			{
+				SyntaxTree tree = CSharpSyntaxTree.ParseText(File.ReadAllText(externalFullPath));
+				SyntaxNode root = tree.GetRoot();
+
+				var namespaceNode = root.DescendantNodes()
+					.OfType<NamespaceDeclarationSyntax>()
+					.First();
+
+				var namespaceWithExternalItem = namespaceNode.AddMembers((MemberDeclarationSyntax)syntaxNode);
+				root = root.ReplaceNode(namespaceNode, namespaceWithExternalItem);
+			}
+			else
+			{
+				var methodTree = CSharpSyntaxTree.ParseText(File.ReadAllText(projectManager.ActiveDocumentMethodFullPath));
+				var methodRoot = methodTree.GetRoot();
+
+				var usings = string.Empty;
+				var mainUsingDirectiveSyntaxes = methodRoot.DescendantNodes().OfType<UsingDirectiveSyntax>();
+				usings = string.Join(Environment.NewLine, mainUsingDirectiveSyntaxes);
+				if (!string.IsNullOrEmpty(usings))
+				{
+					usings += Environment.NewLine;
+				}
+
+				var namespaceNode = methodRoot.DescendantNodes()
+					.OfType<NamespaceDeclarationSyntax>()
+					.First();
+
+				string template = "{0}using Common;\r\nusing Common.Attributes;\r\nnamespace {2} \r\n{{\r\n{1}\r\n}}";
+				code = string.Format(template, usings, syntaxNode.ToFullString(), namespaceNode.Name.ToString());
+			}
+
+			CodeInfo codeInfo = new CodeInfo()
+			{
+				Code = code,
+				Path = codeItemPath
+			};
+
+			return codeInfo;
+		}
+
 		private DefaultCodeTemplate LoadDefaultCodeTemplate(TemplateInfo template, EventSpecificDataType eventData)
 		{
 			var defaultTemplate = defaultCodeProvider.GetDefaultCodeTemplate(projectManager.DefaultCodeTemplatesPath,
@@ -581,5 +847,39 @@ namespace Aras.VS.MethodPlugin.Code
 			int regionEndIndex = code.IndexOf(endMethodCodeRegion);
 			return regionStartEndex < index && index < regionEndIndex;
 		}
+
+		#region Roslyn methods
+
+		private SyntaxNode InsertAttributeListSyntax(SyntaxNode syntaxNode, AttributeListSyntax attributeListSyntax)
+		{
+			SyntaxNode newSyntaxNode = null;
+
+			attributeListSyntax = attributeListSyntax.WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed);
+
+			if (syntaxNode is InterfaceDeclarationSyntax interfaceDeclaratNode)
+			{
+				newSyntaxNode = interfaceDeclaratNode.AddAttributeLists(attributeListSyntax);
+			}
+			else if (syntaxNode is ClassDeclarationSyntax classDeclarationNode)
+			{
+				newSyntaxNode= classDeclarationNode.AddAttributeLists(attributeListSyntax);
+			}
+			else if (syntaxNode is StructDeclarationSyntax structDeclarationNode)
+			{
+				newSyntaxNode = structDeclarationNode.AddAttributeLists(attributeListSyntax);
+			}
+			else if (syntaxNode is MethodDeclarationSyntax methodDeclarationNode)
+			{
+				newSyntaxNode = methodDeclarationNode.AddAttributeLists(attributeListSyntax);
+			}
+			else if (syntaxNode is InterfaceDeclarationSyntax interfaceDeclarationNode)
+			{
+				newSyntaxNode = interfaceDeclarationNode.AddAttributeLists(attributeListSyntax);
+			}
+
+			return newSyntaxNode;
+		}
+
+		#endregion
 	}
 }

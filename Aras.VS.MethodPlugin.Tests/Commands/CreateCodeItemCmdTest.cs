@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.Commands;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
@@ -184,6 +185,8 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			this.dialogOperationResult = dialogOperationResult;
 			this.selectedCodeType = selectedCodeType;
 		}
+
+		public System.Windows.Window Owner { get { return null; } set { } }
 
 		public CreateCodeItemViewResult ShowDialog()
 		{

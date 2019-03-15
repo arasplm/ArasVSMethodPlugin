@@ -73,7 +73,7 @@ namespace Aras.VS.MethodPlugin.Commands
 		//TODO: remove uiShell from parameters
 		public abstract void ExecuteCommandImpl(object sender, EventArgs args, IVsUIShell uiShell);
 
-		protected void CheckCommandAccessibility(object sender, EventArgs e)
+		protected virtual void CheckCommandAccessibility(object sender, EventArgs e)
 		{
 			var command = (OleMenuCommand)sender;
 			if (this.projectManager.SolutionHasProject && this.projectManager.IsArasProject && this.projectManager.IsCommandForMethod(command.CommandID.Guid))

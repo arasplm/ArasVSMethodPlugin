@@ -9,18 +9,19 @@ using System.Windows.Interop;
 using Aras.VS.MethodPlugin.ArasInnovator;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Code;
+using Aras.VS.MethodPlugin.Configurations;
+using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
+using Aras.VS.MethodPlugin.Dialogs.Directory.Data;
 using Aras.VS.MethodPlugin.Dialogs.ViewModels;
 using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.ItemSearch;
 using Aras.VS.MethodPlugin.ItemSearch.Preferences;
 using Aras.VS.MethodPlugin.PackageManagement;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using Aras.VS.MethodPlugin.Templates;
-using EnvDTE;
+using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio.Shell.Interop;
 using OfficeConnector.Dialogs;
-using Aras.VS.MethodPlugin.Configurations;
 
 namespace Aras.VS.MethodPlugin.Dialogs
 {
@@ -87,7 +88,7 @@ namespace Aras.VS.MethodPlugin.Dialogs
 
 		public IViewAdaper<ConnectionInfoView, ViewResult> GetConnectionInfoView(IProjectManager projectManager, IProjectConfigurationManager configurationManager)
 		{
-            var projectConfiguration = configurationManager.Load(projectManager.ProjectConfigPath);
+			var projectConfiguration = configurationManager.Load(projectManager.ProjectConfigPath);
 
 			var viewModel = new ConnectionInfoViewModel(authManager, this, configurationManager, projectManager, projectConfiguration);
 			var view = new ConnectionInfoView();
@@ -136,7 +137,7 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			return new OpenFromPackageViewAdapter(view);
 		}
 
-        public IViewAdaper<SaveMethodView, SaveMethodViewResult> GetSaveToArasView(IVsUIShell uiShell, IProjectConfigurationManager projectConfigurationManager, IProjectConfiguraiton projectConfiguration, PackageManager packageManager, MethodInfo methodInformation, string methodCode, string projectConfigPath, string projectName, string projectFullName)
+		public IViewAdaper<SaveMethodView, SaveMethodViewResult> GetSaveToArasView(IVsUIShell uiShell, IProjectConfigurationManager projectConfigurationManager, IProjectConfiguraiton projectConfiguration, PackageManager packageManager, MethodInfo methodInformation, string methodCode, string projectConfigPath, string projectName, string projectFullName)
 		{
 			var view = new SaveMethodView();
 			var viewModel = new SaveMethodViewModel(
@@ -162,7 +163,7 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			return new SaveMethodViewAdapter(view);
 		}
 
-        public IViewAdaper<SaveToPackageView, SaveToPackageViewResult> GetSaveToPackageView(IVsUIShell uiShell, IProjectConfiguraiton projectConfiguration, TemplateLoader templateLoader, PackageManager packageManager, ICodeProvider codeProvider,IProjectManager projectManager, MethodInfo methodInformation, string pathToFileForSave)
+		public IViewAdaper<SaveToPackageView, SaveToPackageViewResult> GetSaveToPackageView(IVsUIShell uiShell, IProjectConfiguraiton projectConfiguration, TemplateLoader templateLoader, PackageManager packageManager, ICodeProvider codeProvider, IProjectManager projectManager, MethodInfo methodInformation, string pathToFileForSave)
 		{
 			var saveToLocalPackageView = new SaveToPackageView();
 			var viewModel = new SaveToPackageViewModel(authManager, this, projectConfiguration, templateLoader, packageManager, codeProvider, projectManager, arasDataProvider, methodInformation, pathToFileForSave);
@@ -176,7 +177,7 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			return new SaveToPackageViewAdapter(saveToLocalPackageView);
 		}
 
-        public IViewAdaper<UpdateFromArasView, UpdateFromArasViewResult> GetUpdateFromArasView(IVsUIShell uiShell, IProjectConfigurationManager projectConfigurationManager, IProjectConfiguraiton projectConfiguration, TemplateLoader templateLoader, PackageManager packageManager, MethodInfo methodInfo, string projectConfigPath, string projectName, string projectFullName)
+		public IViewAdaper<UpdateFromArasView, UpdateFromArasViewResult> GetUpdateFromArasView(IVsUIShell uiShell, IProjectConfigurationManager projectConfigurationManager, IProjectConfiguraiton projectConfiguration, TemplateLoader templateLoader, PackageManager packageManager, MethodInfo methodInfo, string projectConfigPath, string projectName, string projectFullName)
 		{
 			var viewModel = new UpdateFromArasViewModel(authManager, projectConfigurationManager, projectConfiguration, templateLoader, packageManager, methodInfo, projectConfigPath, projectName, projectFullName);
 			var view = new UpdateFromArasView();
@@ -204,7 +205,7 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			return new CreateCodeItemViewAdapter(view);
 		}
 
-        public IViewAdaper<DebugMethodView, DebugMethodViewResult> GetDebugMethodView(IVsUIShell uiShell, IProjectConfigurationManager projectConfigurationManager, IProjectConfiguraiton projectConfiguration, MethodInfo methodInformation, string methodCode, string projectConfigPath, string projectName, string projectFullName)
+		public IViewAdaper<DebugMethodView, DebugMethodViewResult> GetDebugMethodView(IVsUIShell uiShell, IProjectConfigurationManager projectConfigurationManager, IProjectConfiguraiton projectConfiguration, MethodInfo methodInformation, string methodCode, string projectConfigPath, string projectName, string projectFullName)
 		{
 			var viewModel = new DebugMethodViewModel(authManager, projectConfigurationManager, projectConfiguration, methodInformation, methodCode, projectConfigPath, projectName, projectFullName);
 			var view = new DebugMethodView();
@@ -216,6 +217,32 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			windowInteropHelper.Owner = hwnd;
 
 			return new DebugMethodViewAdapter(view);
+		}
+
+		public IViewAdaper<SelectPathDialog, SelectPathDialogResult> GetSelectPathDialog(DirectoryItemType searchToLevel,
+			string rootPath = "",
+			string startPath = "",
+			string fileExtantion = "")
+		{
+			SelectPathDialog dialog = new SelectPathDialog();
+			SelectPathViewModel viewModel = new SelectPathViewModel(searchToLevel, rootPath, startPath, fileExtantion);
+			dialog.DataContext = viewModel;
+
+			return new SelectPathDialogAdapter(dialog);
+		}
+
+		public IViewAdaper<MoveToView, MoveToViewResult> GetMoveToView(IVsUIShell uiShell, string methodFolderPath, SyntaxNode node)
+		{
+			var viewModel = new MoveToViewModel(this, methodFolderPath, node);
+			var view = new MoveToView();
+			view.DataContext = viewModel;
+
+			IntPtr hwnd;
+			uiShell.GetDialogOwnerHwnd(out hwnd);
+			var windowInteropHelper = new WindowInteropHelper(view);
+			windowInteropHelper.Owner = hwnd;
+
+			return new MoveToViewAdapter(view);
 		}
 
 		public IMessageBoxWindow GetMessageBoxWindow(IVsUIShell uiShell)

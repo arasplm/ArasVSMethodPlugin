@@ -122,6 +122,7 @@
     <Compile Include="Dialogs\Directory\DirectoryStructure.cs" />
     <Compile Include="Dialogs\ViewModels\CreateCodeItemViewModel.cs" />
     <Compile Include="Dialogs\ViewModels\DebugMethodViewModel.cs" />
+    <Compile Include="Dialogs\ViewModels\MoveToViewModel.cs" />
     <Compile Include="Dialogs\ViewResult.cs" />
     <Compile Include="Dialogs\Views\ConnectionInfoViewAdapter.cs" />
     <Compile Include="Dialogs\Views\CreateCodeItemView.xaml.cs">
@@ -137,14 +138,21 @@
     <Compile Include="Dialogs\Views\DebugMethodViewAdapter.cs" />
     <Compile Include="Dialogs\Views\DebugMethodViewResult.cs" />
     <Compile Include="Dialogs\Views\IMessageBoxWindow.cs" />
+    <Compile Include="Dialogs\Views\MoveToViewAdapter.cs" />
+    <Compile Include="Dialogs\Views\MoveToViewResult.cs" />
     <Compile Include="Dialogs\Views\OpenFromArasViewAdapter.cs" />
     <Compile Include="Dialogs\Views\OpenFromArasViewResult.cs" />
     <Compile Include="Dialogs\Views\OpenFromPackageViewAdapter.cs" />
     <Compile Include="Dialogs\Views\OpenFromPackageViewResult.cs" />
     <Compile Include="Dialogs\Views\SaveMethodViewAdapter.cs" />
     <Compile Include="Dialogs\Views\SaveMethodViewResult.cs" />
+    <Compile Include="Dialogs\Views\MoveToView.xaml.cs">
+      <DependentUpon>MoveToView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\Views\SaveToPackageViewAdapter.cs" />
     <Compile Include="Dialogs\Views\SaveToPackageViewResult.cs" />
+    <Compile Include="Dialogs\Views\SelectPathDialogAdapter.cs" />
+    <Compile Include="Dialogs\Views\SelectPathDialogResult.cs" />
     <Compile Include="Dialogs\Views\UpdateFromArasViewAdapter.cs" />
     <Compile Include="Dialogs\Views\UpdateFromArasViewResult.cs" />
     <Compile Include="Dialogs\Views\ViewAdaper.cs" />
@@ -622,6 +630,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Dialogs\Views\MoveToView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Dialogs\Views\Styles\CheckBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -727,7 +739,9 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ProjectTemplates\CSharp\Aras Innovator\Methods\" />
+  </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
       <Visible>False</Visible>
