@@ -20,5 +20,6 @@ namespace Aras.VS.MethodPlugin.Commands
 		public static Guid RefreshConfig = new Guid("DB77AE9E-9CB5-4C13-9EB3-ED388DC94B66");
 		public static Guid ConnectionInfo = new Guid("E15DDF0A-1B6E-46A8-8B78-AEC2A7BB4922");
 		public static Guid DebugMethod = new Guid("020DC4DF-2FC3-493E-97D3-4012DE93BCAB");
+		public static Guid MoveTo = new Guid("e9768243-2e32-45cc-9fc6-76d28ccb244a");
 	}
 }
