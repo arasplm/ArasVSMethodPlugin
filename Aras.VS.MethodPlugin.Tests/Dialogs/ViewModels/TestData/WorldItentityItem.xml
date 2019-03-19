@@ -1,0 +1,27 @@
+﻿<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+    <SOAP-ENV:Body>
+        <Result>
+            <Item type="Identity" typeId="E582AB17663F4EF28460015B2BE9E094" id="A73B655731924CD0B027E4F4D5FCC0A9">
+                <config_id keyed_name="World" type="Identity">A73B655731924CD0B027E4F4D5FCC0A9</config_id>
+                <created_by_id keyed_name="Super User" type="User">AD30A6D8D3B642F5A2AFED1A4B02BEFA</created_by_id>
+                <created_on>2002-04-24T09:46:11</created_on>
+                <current_state name="Released" keyed_name="Released" type="Life Cycle State">C363ABDADF8D485393BB89877DBDCFD0</current_state>
+                <description>All users are automatically members of the World.</description>
+                <generation>1</generation>
+                <id keyed_name="World" type="Identity">A73B655731924CD0B027E4F4D5FCC0A9</id>
+                <is_alias>0</is_alias>
+                <is_current>1</is_current>
+                <is_released>0</is_released>
+                <keyed_name>World</keyed_name>
+                <major_rev>A</major_rev>
+                <modified_by_id keyed_name="Super User" type="User">AD30A6D8D3B642F5A2AFED1A4B02BEFA</modified_by_id>
+                <modified_on>2003-05-31T17:45:42</modified_on>
+                <new_version>0</new_version>
+                <not_lockable>0</not_lockable>
+                <permission_id keyed_name="9A7C03AFA5E5453AAAC94FDB9006720B" type="Permission" origPermission="9A7C03AFA5E5453AAAC94FDB9006720B">9A7C03AFA5E5453AAAC94FDB9006720B</permission_id>
+                <state>Released</state>
+                <name>World</name>
+            </Item>
+        </Result>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

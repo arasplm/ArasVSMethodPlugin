@@ -1,0 +1,24 @@
+﻿<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+    <SOAP-ENV:Body>
+        <Result>
+            <Item type="Filter Value" typeId="BCC8053D365143A18B033850EFE56F3C" id="535126D8629D4F02AC7A68392E79C62C">
+                <filter>Client</filter>
+                <id keyed_name="JavaScript" type="Filter Value">535126D8629D4F02AC7A68392E79C62C</id>
+                <label xml:lang="en">JavaScript</label>
+                <value>JavaScript</value>
+            </Item>
+            <Item type="Filter Value" typeId="BCC8053D365143A18B033850EFE56F3C" id="D895F7C608CB481F8D5C3B4110A3EF00">
+                <filter>Server</filter>
+                <id keyed_name="C#" type="Filter Value">D895F7C608CB481F8D5C3B4110A3EF00</id>
+                <label xml:lang="en">CSharp</label>
+                <value>C#</value>
+            </Item>
+            <Item type="Filter Value" typeId="BCC8053D365143A18B033850EFE56F3C" id="FDBC525117364A2A82A1E56E977DDF46">
+                <filter>Server</filter>
+                <id keyed_name="VB" type="Filter Value">FDBC525117364A2A82A1E56E977DDF46</id>
+                <label xml:lang="en">VB</label>
+                <value>VB</value>
+            </Item>
+        </Result>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
