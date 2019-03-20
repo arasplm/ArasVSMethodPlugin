@@ -68,6 +68,14 @@
         </Strings>
       </Menu>
 
+      <Menu guid="ArasContextMenuGroupCmdSet" id="ArasContextMenu" priority="0x700" type="Context">
+        <Parent guid="ArasContextMenuGroupCmdSet" id="ArasContextMenuGroup" />
+        <Strings>
+          <ButtonText>Aras Innovator</ButtonText>
+          <CommandName>Aras Innovator</CommandName>
+        </Strings>
+      </Menu>
+
     </Menus>
     <Groups>
       <!--<Group guid="ArasMainMenuCmdPackageCmdSet" id="ArasMainMenuGroup" priority="0x0200">
@@ -149,6 +157,17 @@
       <Group guid="ArasItemDebugGroupCmdSet" id="ItemDebugGroup" priority="0x0204">
         <Parent guid="ArasItemGroupCmdSet" id="ArasItemMenu" />
       </Group>
+
+      <!--Aras context menu group-->
+      <Group guid="ArasContextMenuGroupCmdSet" id="ArasContextMenuGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN" />
+      </Group>
+
+      <!--Aras refactoring group-->
+      <Group guid="ArasRefactoringGroupCmdSet" id="ArasRefactoringGroup" priority="0x0600">
+        <Parent guid="ArasContextMenuGroupCmdSet" id="ArasContextMenu" />
+      </Group>
+
     </Groups>
 
     <!--Buttons section. -->
@@ -253,6 +272,15 @@
         </Strings>
       </Button>
 
+      <Button guid="ArasRefactoringGroupCmdSet" id="ArasMoveToCommandId" priority="0x0105" type="Button">
+        <Icon guid="guidOpenFromPackageImages" id="bmpPic1" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>Move to...</ButtonText>
+        </Strings>
+      </Button>
+
     </Buttons>
 
     <!--The bitmaps section is used to define the bitmaps that are used for the commands.-->
@@ -346,6 +374,12 @@
     <CommandPlacement guid="ArasDebugMethodCmdSet" id="ArasDebugMethodCommandId" priority="0x0104">
       <Parent guid="ArasItemDebugGroupCmdSet" id="ItemDebugGroup"/>
     </CommandPlacement>
+
+    <!-- Context menu-->
+    <CommandPlacement guid="ArasRefactoringGroupCmdSet" id="ArasMoveToCommandId" priority="0x0105">
+      <Parent guid="ArasRefactoringGroupCmdSet" id="ArasRefactoringGroup" />
+    </CommandPlacement>
+
   </CommandPlacements>
 
   <Symbols>
@@ -472,6 +506,27 @@
       <IDSymbol name="ArasItemDebugMethodCmdSet" value="0x0104" />
     </GuidSymbol>
 
+    <!-- Context menu-->
+    <GuidSymbol name="ArasRefactoringGroupCmdSet" value="{e9768243-2e32-45cc-9fc6-76d28ccb244a}">
+      <IDSymbol name="ArasMoveToCommandId" value="0x0105"/>
+    </GuidSymbol>
+
+    <GuidSymbol name="ArasContextMenuGroupCmdSet" value="{8b419546-58ff-4abb-b8c8-ded2279b62af}">
+      <IDSymbol name="ArasContextMenu" value="0x1021" />
+      <IDSymbol name="ArasContextMenuGroup" value="0x1020" />
+    </GuidSymbol>
+
+    <GuidSymbol name="ArasRefactoringMethodCmdSet" value="{b2801892-a205-4ad5-a988-d187404e1566}">
+      <IDSymbol name="ArasRefactoringGroup" value="0x0101" />
+      <IDSymbol name="ArasContextMenu" value="0x0103" />
+      <IDSymbol name="ArasRefactoringMethodCommandId" value="0x0105" />
+    </GuidSymbol>
+
+    <GuidSymbol name="ArasRefactoringGroupCmdSet" value="{e9768243-2e32-45cc-9fc6-76d28ccb244a}">
+      <IDSymbol name="ArasRefactoringGroup" value="0x0101" />
+      <IDSymbol name="ArasContextMenu" value="0x0103" />
+      <IDSymbol name="ArasRefactoringMethodCmdSet" value="0x0105" />
+    </GuidSymbol>
 
     <!--Bitmap-->
     <GuidSymbol name="guidArasImages" value="{de731ac7-5736-42d4-818d-21c0b7e438f0}">

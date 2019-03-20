@@ -88,6 +88,8 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 
 		public class UpdateFromArasViewAdapterTest : IViewAdaper<UpdateFromArasView, UpdateFromArasViewResult>
 		{
+			public System.Windows.Window Owner { get { return null; } set { } }
+
 			public UpdateFromArasViewResult ShowDialog()
 			{
 				return new UpdateFromArasViewResult

@@ -86,6 +86,8 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 
 		public class OpenFromPackageViewAdapterTest : IViewAdaper<OpenFromPackageView, OpenFromPackageViewResult>
 		{
+			public System.Windows.Window Owner { get { return null; } set { } }
+
 			public OpenFromPackageViewResult ShowDialog()
 			{
 				return new OpenFromPackageViewResult

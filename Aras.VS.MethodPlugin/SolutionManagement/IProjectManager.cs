@@ -29,6 +29,16 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 
 		string MethodName { get; }
 
+		Microsoft.CodeAnalysis.Document ActiveDocument { get; }
+
+		string ActiveDocumentMethodFullPath { get; }
+
+		string ActiveDocumentMethodName { get; }
+
+		string ActiveDocumentMethodFolderPath { get; }
+
+		Microsoft.CodeAnalysis.SyntaxNode ActiveSyntaxNode { get; }
+
 		string SelectedFilePath { get; }
 
 		string SelectedFileName { get; }

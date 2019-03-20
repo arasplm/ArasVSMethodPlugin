@@ -98,6 +98,8 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 
 		public class CreateMethodViewAdapterTest : IViewAdaper<CreateMethodView, CreateMethodViewResult>
 		{
+			public System.Windows.Window Owner { get { return null; } set { } }
+
 			public CreateMethodViewResult ShowDialog()
 			{
 				return new CreateMethodViewResult

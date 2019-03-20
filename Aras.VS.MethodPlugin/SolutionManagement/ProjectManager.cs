@@ -23,6 +23,11 @@ using Microsoft.VisualStudio.LanguageServices;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.IO;
+using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.VisualStudio.TextManager.Interop;
+using Microsoft.VisualStudio.Editor;
+using Microsoft.VisualStudio.Text;
+using Microsoft.CodeAnalysis.Text;
 
 namespace Aras.VS.MethodPlugin.SolutionManagement
 {
@@ -99,34 +104,8 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 		{
 			get
 			{
-				var mainFilePath = string.Empty;
 				string selectedFilePath = this.GetSelectedFiles().FirstOrDefault();
-
-				if (!string.IsNullOrEmpty(selectedFilePath))
-				{
-					var directoryInfo = new DirectoryInfo(selectedFilePath);
-					while (directoryInfo.Parent != null)
-					{
-						DirectoryInfo parrentDirectoryInfo = directoryInfo.Parent;
-						string rootFolderName = parrentDirectoryInfo.Name;
-						string methodFolderName = directoryInfo.Name;
-
-						if (rootFolderName == serverMethodsFolderName && !Path.HasExtension(methodFolderName))
-						{
-							mainFilePath = Path.Combine(directoryInfo.FullName, methodFolderName + ".cs");
-							break;
-						}
-
-						directoryInfo = parrentDirectoryInfo;
-					}
-				}
-
-				if (string.IsNullOrEmpty(mainFilePath))
-				{
-					return null;
-				}
-
-				return mainFilePath;
+				return GetMethodPath(selectedFilePath);
 			}
 		}
 
@@ -137,6 +116,61 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 				string methodPath = this.MethodPath;
 				string methodName = Path.GetFileNameWithoutExtension(methodPath);
 				return methodName;
+			}
+		}
+
+		public Microsoft.CodeAnalysis.Document ActiveDocument
+		{
+			get
+			{
+				IWpfTextView textView = GetTextView();
+				SnapshotPoint caretPosition = textView.Caret.Position.BufferPosition;
+				return caretPosition.Snapshot.GetOpenDocumentInCurrentContextWithChanges();
+			}
+		}
+
+		public Microsoft.CodeAnalysis.SyntaxNode ActiveSyntaxNode
+		{
+			get
+			{
+				IWpfTextView textView = GetTextView();
+				SnapshotPoint caretPosition = textView.Caret.Position.BufferPosition;
+				Microsoft.CodeAnalysis.Document document = caretPosition.Snapshot.GetOpenDocumentInCurrentContextWithChanges();
+
+				var activeSyntaxNode = document.GetSyntaxRootAsync().Result.FindToken(caretPosition).Parent;
+				if (activeSyntaxNode is BlockSyntax)
+				{
+					activeSyntaxNode = activeSyntaxNode.Parent;
+				}
+
+				return activeSyntaxNode;
+			}
+		}
+
+		public string ActiveDocumentMethodFullPath
+		{
+			get
+			{
+				var dte = (DTE2)serviceProvider.GetService(typeof(DTE));
+				string ActiveDocumentlFilePath = dte.ActiveDocument.FullName;
+				return GetMethodPath(ActiveDocumentlFilePath);
+			}
+		}
+
+		public string ActiveDocumentMethodName
+		{
+			get
+			{
+				string activeDocumentMethodPath = this.ActiveDocumentMethodFullPath;
+				return Path.GetFileNameWithoutExtension(activeDocumentMethodPath);
+			}
+		}
+
+		public string ActiveDocumentMethodFolderPath
+		{
+			get
+			{
+				return Path.GetDirectoryName(ActiveDocumentMethodFullPath);
 			}
 		}
 
@@ -681,6 +715,50 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 			stringBuilder.Append(Environment.NewLine);
 
 			this.iOWrapper.WriteAllTextIntoFile(GlobalSuppressionsPath, stringBuilder.ToString(), new UTF8Encoding(true));
+		}
+
+		private static string GetMethodPath(string selectedFilePath)
+		{
+			string mainFilePath = string.Empty;
+			if (!string.IsNullOrEmpty(selectedFilePath))
+			{
+				var directoryInfo = new DirectoryInfo(selectedFilePath);
+				while (directoryInfo.Parent != null)
+				{
+					DirectoryInfo parrentDirectoryInfo = directoryInfo.Parent;
+					string rootFolderName = parrentDirectoryInfo.Name;
+					string methodFolderName = directoryInfo.Name;
+
+					if (rootFolderName == serverMethodsFolderName && !Path.HasExtension(methodFolderName))
+					{
+						mainFilePath = Path.Combine(directoryInfo.FullName, methodFolderName + ".cs");
+						break;
+					}
+
+					directoryInfo = parrentDirectoryInfo;
+				}
+			}
+
+			if (string.IsNullOrEmpty(mainFilePath))
+			{
+				return null;
+			}
+
+			return mainFilePath;
+		}
+
+		private IWpfTextView GetTextView()
+		{
+			IVsTextManager textManager = (IVsTextManager)serviceProvider.GetService(typeof(SVsTextManager));
+			IVsTextView textView;
+			textManager.GetActiveView(1, null, out textView);
+			return GetEditorAdaptersFactoryService().GetWpfTextView(textView);
+		}
+
+		private IVsEditorAdaptersFactoryService GetEditorAdaptersFactoryService()
+		{
+			IComponentModel componentModel = (IComponentModel)serviceProvider.GetService(typeof(SComponentModel));
+			return componentModel.GetService<IVsEditorAdaptersFactoryService>();
 		}
 	}
 }

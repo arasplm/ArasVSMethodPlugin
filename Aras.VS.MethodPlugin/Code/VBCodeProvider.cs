@@ -7,6 +7,7 @@
 using System;
 using System.IO;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
+using Aras.VS.MethodPlugin.SolutionManagement;
 using Aras.VS.MethodPlugin.Templates;
 using EnvDTE;
 using EnvDTE80;
@@ -236,6 +237,26 @@ End Class
 		}
 
 		public CodeInfo CreateCodeItemInfo(MethodInfo methodInfo, string fileName, CodeType codeType, CodeElementType codeElementType, bool isUseVSFormattingCode)
+		{
+			throw new NotImplementedException();
+		}
+
+		public CodeInfo RemoveActiveNodeFromActiveDocument(Microsoft.CodeAnalysis.Document activeDocument, Microsoft.CodeAnalysis.SyntaxNode activeSyntaxNode, string serverMethodFolderPath)
+		{
+			throw new NotImplementedException();
+		}
+
+		public CodeInfo InsertActiveNodeToMainMethod(string mainMethodFullPath, string serverMethodFolderPath, Microsoft.CodeAnalysis.SyntaxNode activeSyntaxNode, string activeDocumentPath)
+		{
+			throw new NotImplementedException();
+		}
+
+		public CodeInfo InsertActiveNodeToPartial(string partialfullPath, string serverMethodFolderPath, string methodName, Microsoft.CodeAnalysis.SyntaxNode syntaxNode)
+		{
+			throw new NotImplementedException();
+		}
+
+		public CodeInfo InsertActiveNodeToExternal(string externalFullPath, string serverMethodFolderPath, string methodName, Microsoft.CodeAnalysis.SyntaxNode syntaxNode)
 		{
 			throw new NotImplementedException();
 		}
