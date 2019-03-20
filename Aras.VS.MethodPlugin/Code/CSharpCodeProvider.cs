@@ -63,7 +63,7 @@ namespace Aras.VS.MethodPlugin.Code
 			var tree = CSharpSyntaxTree.ParseText(sourceCode);
 			SyntaxNode root = tree.GetRoot();
 
-			int count = root.DescendantNodes()
+			int classesCount = root.DescendantNodes()
 				.OfType<NamespaceDeclarationSyntax>()
 				.First()
 				.ChildNodes()
@@ -73,63 +73,78 @@ namespace Aras.VS.MethodPlugin.Code
 			MemberDeclarationSyntax[] externalsSyntaxNodes = LoadSyntaxNodesByAttribute("ExternalPath", methodInformation.ExternalItems, serverMethodFolderPath);
 			MemberDeclarationSyntax[] partialsSyntaxNodes = LoadSyntaxNodesByAttribute("PartialPath", methodInformation.PartialClasses, serverMethodFolderPath);
 
-			if (partialsSyntaxNodes.Any())
+			string userCode = string.Empty;
+			if (!externalsSyntaxNodes.Any() && partialsSyntaxNodes.Any())
 			{
-				var partialClassNode = root.DescendantNodes()
-					.OfType<NamespaceDeclarationSyntax>()
-					.First()
-					.ChildNodes()
-					.OfType<ClassDeclarationSyntax>()
-					.Where(x => x.Modifiers.Any(SyntaxKind.PartialKeyword))
-					.FirstOrDefault();
-
-				if (partialClassNode == null)
+				StringBuilder partials = new StringBuilder();
+				foreach (var partialsSyntaxNode in partialsSyntaxNodes)
 				{
-					throw new Exception("No partial classes found.");
+					partials.Append(partialsSyntaxNode.ToFullString());
 				}
 
-				var partialClassNodeWithPartials = partialClassNode.AddMembers(partialsSyntaxNodes);
-				root = root.ReplaceNode(partialClassNode, partialClassNodeWithPartials);
+				userCode = GetSourceCodeBetweenRegion(sourceCode) + Environment.NewLine + "}" + Environment.NewLine + partials.ToString();
+
+				if (classesCount == 1)
+				{
+					userCode = Regex.Replace(userCode, @"\r\n( |\t)*}(\r\n| |\t)*$", string.Empty);
+				}
 			}
-
-			if (externalsSyntaxNodes.Any())
+			else
 			{
-				if (count <= 1)
+				if (partialsSyntaxNodes.Any())
 				{
-					var namespaceNode = root.DescendantNodes()
-						.OfType<NamespaceDeclarationSyntax>()
-						.First();
-
-					if (!CodeIndexInMethodRegions(root, namespaceNode.Span.End))
-					{
-						throw new FormatException("Wrong format. Could not insert external items to the method code.");
-					}
-
-					var namespaceNodeWithPartials = namespaceNode.AddMembers(externalsSyntaxNodes);
-					root = root.ReplaceNode(namespaceNode, namespaceNodeWithPartials);
-				}
-				else
-				{
-					var classNode = root.DescendantNodes()
+					var partialClassNode = root.DescendantNodes()
 						.OfType<NamespaceDeclarationSyntax>()
 						.First()
 						.ChildNodes()
 						.OfType<ClassDeclarationSyntax>()
-						.Last();
+						.Where(x => x.Modifiers.Any(SyntaxKind.PartialKeyword))
+						.FirstOrDefault();
 
-					if (!CodeIndexInMethodRegions(root, classNode.Span.Start))
+					if (partialClassNode == null)
 					{
-						throw new FormatException("Wrong format. Could not insert external items to the method code.");
+						throw new Exception("No partial classes found.");
 					}
 
-					root = root.InsertNodesBefore(classNode, externalsSyntaxNodes);
+					var partialClassNodeWithPartials = partialClassNode.AddMembers(partialsSyntaxNodes);
+					root = root.ReplaceNode(partialClassNode, partialClassNodeWithPartials);
 				}
-			}
 
-			string userCode = GetSourceCodeBetweenRegion(root.ToString());
-			if (!externalsSyntaxNodes.Any() && partialsSyntaxNodes.Any() && count == 1)
-			{
-				userCode = Regex.Replace(userCode, @"\r\n( |\t)*}(\r\n| |\t)*$", string.Empty);
+				if (externalsSyntaxNodes.Any())
+				{
+					if (classesCount <= 1)
+					{
+						var namespaceNode = root.DescendantNodes()
+							.OfType<NamespaceDeclarationSyntax>()
+							.First();
+
+						if (!CodeIndexInMethodRegions(root, namespaceNode.Span.End))
+						{
+							throw new FormatException("Wrong format. Could not insert external items to the method code.");
+						}
+
+						var namespaceNodeWithPartials = namespaceNode.AddMembers(externalsSyntaxNodes);
+						root = root.ReplaceNode(namespaceNode, namespaceNodeWithPartials);
+					}
+					else
+					{
+						var classNode = root.DescendantNodes()
+							.OfType<NamespaceDeclarationSyntax>()
+							.First()
+							.ChildNodes()
+							.OfType<ClassDeclarationSyntax>()
+							.Last();
+
+						if (!CodeIndexInMethodRegions(root, classNode.Span.Start))
+						{
+							throw new FormatException("Wrong format. Could not insert external items to the method code.");
+						}
+
+						root = root.InsertNodesBefore(classNode, externalsSyntaxNodes);
+					}
+				}
+
+				userCode = GetSourceCodeBetweenRegion(root.ToString());
 			}
 
 			return EscapeAttributes(userCode);
