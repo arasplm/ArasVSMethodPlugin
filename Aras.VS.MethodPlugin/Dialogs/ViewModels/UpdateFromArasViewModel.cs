@@ -23,6 +23,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private readonly IAuthenticationManager authManager;
 		private readonly IProjectConfigurationManager projectConfigurationManager;
 		private readonly IProjectConfiguraiton projectConfiguration;
+		private readonly IDialogFactory dialogFactory;
 		private readonly TemplateLoader templateLoader;
 		private readonly PackageManager packageManager;
 		private string projectConfigPath;
@@ -53,6 +54,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			IAuthenticationManager authManager,
 			IProjectConfigurationManager projectConfigurationManager,
 			IProjectConfiguraiton projectConfiguration,
+			IDialogFactory dialogFactory,
 			TemplateLoader templateLoader,
 			PackageManager packageManager,
 			MethodInfo methodInfo,
@@ -63,6 +65,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			if (authManager == null) throw new ArgumentNullException(nameof(authManager));
 			if (projectConfigurationManager == null) throw new ArgumentNullException(nameof(projectConfigurationManager));
 			if (projectConfiguration == null) throw new ArgumentNullException(nameof(projectConfiguration));
+			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));
 			if (templateLoader == null) throw new ArgumentNullException(nameof(templateLoader));
 			if (packageManager == null) throw new ArgumentNullException(nameof(packageManager));
 			if (methodInfo == null) throw new ArgumentNullException(nameof(methodInfo));
@@ -70,14 +73,15 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.authManager = authManager;
 			this.projectConfigurationManager = projectConfigurationManager;
 			this.projectConfiguration = projectConfiguration;
+			this.dialogFactory = dialogFactory;
 			this.templateLoader = templateLoader;
 			this.packageManager = packageManager;
 			this.projectConfigPath = projectConfigPath;
 			this.projectName = projectName;
 			this.projectFullName = projectFullName;
-            this.isUseVSFormattingCode = projectConfiguration.UseVSFormatting;
+			this.isUseVSFormattingCode = projectConfiguration.UseVSFormatting;
 
-            this.methodName = methodInfo.MethodName;
+			this.methodName = methodInfo.MethodName;
 			this.eventData = methodInfo.EventData;
 
 			this.editConnectionInfoCommand = new RelayCommand<object>(EditConnectionInfoCommandClick);
@@ -245,12 +249,11 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 			if (methodItem.isError())
 			{
-					var messageWindow = new MessageBoxWindow();
-					messageWindow.ShowDialog(view,
-						$"Method {methodName} is not found in the current connection.",
-						"Update method from Aras Innovator",
-						MessageButtons.OK,
-						MessageIcon.Information);
+				var messageWindow = this.dialogFactory.GetMessageBoxWindow();
+				messageWindow.ShowDialog($"Method {methodName} is not found in the current connection.",
+					"Update method from Aras Innovator",
+					MessageButtons.OK,
+					MessageIcon.Information);
 
 				methodConfigId = string.Empty;
 				methodId = string.Empty;
@@ -272,8 +275,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				executionIdentityKeyedName = methodItem.getPropertyAttribute("execution_allowed_to", "keyed_name", string.Empty);
 				executionIdentityId = methodItem.getProperty("execution_allowed_to", string.Empty);
 				methodComment = methodItem.getProperty("comments", string.Empty);
-                
-                if (methodLanguage == "C#" || methodLanguage == "VB")
+
+				if (methodLanguage == "C#" || methodLanguage == "VB")
 				{
 					methodType = "server";
 				}
@@ -281,10 +284,10 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				{
 					methodType = "client";
 				}
-                
+
 				this.SelectedTemplate = templateLoader.GetTemplateFromCodeString(methodCode, methodLanguage, "Update method from Aras Innovator");
 
-                var packageName = string.Empty;
+				var packageName = string.Empty;
 
 				try
 				{

@@ -7,18 +7,17 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using Aras.VS.MethodPlugin.ArasInnovator;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Code;
+using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs.Directory.Data;
 using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.ItemSearch;
 using Aras.VS.MethodPlugin.PackageManagement;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using Aras.VS.MethodPlugin.Templates;
 using OfficeConnector.Dialogs;
@@ -242,7 +241,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private void OnFolderBrowserClick(object window)
 		{
 			SelectPathDialog dialog = new SelectPathDialog();
-			SelectPathViewModel viewModel = new SelectPathViewModel(DirectoryItemType.Folder, PackagePath);
+			SelectPathViewModel viewModel = new SelectPathViewModel(this.dialogFactory, DirectoryItemType.Folder, PackagePath);
 			dialog.DataContext = viewModel;
 			dialog.Owner = window as Window;
 
@@ -259,8 +258,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			string methodPath = Path.Combine(this.PackagePath, $"{this.SelectedPackage}\\Import\\Method\\{this.MethodName}.xml");
 			if (File.Exists(methodPath))
 			{
-				var messageWindow = new MessageBoxWindow();
-				var dialogReuslt = messageWindow.ShowDialog(wnd,
+				var messageWindow = this.dialogFactory.GetMessageBoxWindow();
+				var dialogReuslt = messageWindow.ShowDialog(
 					$"The method {this.MethodName} already exsist in packages. Click OK to replace it.",
 					"Save package",
 					MessageButtons.OKCancel,

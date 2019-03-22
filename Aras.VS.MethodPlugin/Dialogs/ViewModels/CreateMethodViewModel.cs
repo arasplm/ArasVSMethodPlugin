@@ -246,9 +246,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				{
 					if (!selectedTemplate.IsSuccessfullySupported)
 					{
-						var messageWindow = new MessageBoxWindow();
-						var dialogReuslt = messageWindow.ShowDialog(null,
-							selectedTemplate.Message,
+						var messageWindow = this.dialogFactory.GetMessageBoxWindow();
+						var dialogReuslt = messageWindow.ShowDialog(selectedTemplate.Message,
 							"Create new method",
 							MessageButtons.OK,
 							MessageIcon.None);
@@ -351,7 +350,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		{
 			get
 			{
-				if(string.IsNullOrEmpty(methodName))
+				if (string.IsNullOrEmpty(methodName))
 				{
 					return string.Empty;
 				}
@@ -418,9 +417,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				string methodNameWithExtension = !Path.HasExtension(methodName) ? methodName + ".cs" : methodName;
 				if (folder.ProjectItems.Exists(methodNameWithExtension))
 				{
-					var messageWindow = new MessageBoxWindow();
-					var dialogReuslt = messageWindow.ShowDialog(wnd,
-						"Method already added to project. Do you want replace method?",
+					var messageWindow = this.dialogFactory.GetMessageBoxWindow();
+					var dialogReuslt = messageWindow.ShowDialog("Method already added to project. Do you want replace method?",
 						"Warning",
 						MessageButtons.YesNo,
 						MessageIcon.None);
@@ -510,9 +508,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			XmlMethodInfo xmlMethodInfo = new XmlMethodLoader().LoadMethod(openFileDialog.FileName);
 			if (xmlMethodInfo == null)
 			{
-				var messageWindow = new MessageBoxWindow();
-				var dialogReuslt = messageWindow.ShowDialog(null,
-					$"User code template invalid format.",
+				var messageWindow = this.dialogFactory.GetMessageBoxWindow(); ;
+				var dialogReuslt = messageWindow.ShowDialog($"User code template invalid format.",
 					"Warning",
 					MessageButtons.OK,
 					MessageIcon.Warning);
@@ -522,9 +519,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 			if (xmlMethodInfo.MethodType != codeProvider.Language)
 			{
-				var messageWindow = new MessageBoxWindow();
-				var dialogReuslt = messageWindow.ShowDialog(null,
-					$"User code tamplate must be {codeProvider.Language} method type.",
+				var messageWindow = this.dialogFactory.GetMessageBoxWindow();
+				var dialogReuslt = messageWindow.ShowDialog($"User code tamplate must be {codeProvider.Language} method type.",
 					"Warning",
 					MessageButtons.OK,
 					MessageIcon.Warning);

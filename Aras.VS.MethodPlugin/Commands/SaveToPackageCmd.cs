@@ -218,8 +218,7 @@ namespace Aras.VS.MethodPlugin.Commands
 
             // Show a message box to prove we were here
 			var messageWindow = dialogFactory.GetMessageBoxWindow();
-            messageWindow.ShowDialog(null,
-				message,
+			messageWindow.ShowDialog(message,
 				string.Empty,
 				MessageButtons.OK,
 				MessageIcon.Information);

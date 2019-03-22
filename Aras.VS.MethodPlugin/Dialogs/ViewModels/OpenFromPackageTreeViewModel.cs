@@ -26,6 +26,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private const string searchByContentKey = "MethodContent";
 		private const string searchByFileNameKey = "MethodName";
 
+		private readonly IDialogFactory dialogFactory;
+
 		private Dictionary<string, string> packages;
 		private List<ShortMethodInfoViewModel> methods;
 
@@ -44,9 +46,12 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private DispatcherTimer dispatcherTimer;
 		private Dictionary<string, SearchType> searchTypes;
 
-		public OpenFromPackageTreeViewModel(string lastSelectedManifestFilePath, string lastSelectedPackage, string lastSelectedMethod, string lastUsedSearchType)
+		public OpenFromPackageTreeViewModel(IDialogFactory dialogFactory, string lastSelectedManifestFilePath, string lastSelectedPackage, string lastSelectedMethod, string lastUsedSearchType)
 		{
-			SelectPathViewModel = new SelectPathViewModel(DirectoryItemType.File, startPath: lastSelectedManifestFilePath, fileExtantion: importFileName);
+			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));
+
+			this.dialogFactory = dialogFactory;
+			SelectPathViewModel = new SelectPathViewModel(dialogFactory, DirectoryItemType.File, lastSelectedManifestFilePath, importFileName);
 			SelectPathViewModel.SelectionChanged += OnSelectDirectoryItem;
 			this.okCommand = new RelayCommand<object>(OkCommandClick);
 			this.closeCommand = new RelayCommand<object>(OnCloseCliked);
@@ -210,9 +215,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 			if (SelectedMethod == null)
 			{
-				var messageWindow = new MessageBoxWindow();
-				messageWindow.ShowDialog(wnd,
-					"Method is not selected.",
+				var messageWindow = this.dialogFactory.GetMessageBoxWindow();
+				messageWindow.ShowDialog("Method is not selected.",
 					"Open method from AML package",
 					MessageButtons.OK,
 					MessageIcon.None);
@@ -239,9 +243,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			}
 			else
 			{
-				var messageWindow = new MessageBoxWindow();
-				messageWindow.ShowDialog(wnd,
-					"File or Folder were not found",
+				var messageWindow = this.dialogFactory.GetMessageBoxWindow();
+				messageWindow.ShowDialog("File or Folder were not found",
 					"Open method from AML package",
 					MessageButtons.OK,
 					MessageIcon.None);

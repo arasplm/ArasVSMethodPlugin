@@ -21,6 +21,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 {
 	public class OpenFromPackageViewModel : BaseViewModel
 	{
+		private readonly IDialogFactory dialogFactory;
 		private readonly TemplateLoader templateLoader;
 		private string projectLanguage;
 		private string selectedFolderPath;
@@ -46,10 +47,12 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private ICommand okCommand;
 		private ICommand closeCommand;
 
-		public OpenFromPackageViewModel(TemplateLoader templateLoader, string projectLanguage, IProjectConfiguraiton projectConfiguration)
+		public OpenFromPackageViewModel(IDialogFactory dialogFactory, TemplateLoader templateLoader, string projectLanguage, IProjectConfiguraiton projectConfiguration)
 		{
+			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));
 			if (templateLoader == null) throw new ArgumentNullException(nameof(templateLoader));
 
+			this.dialogFactory = dialogFactory;
 			this.templateLoader = templateLoader;
 			this.projectLanguage = projectLanguage;
 			this.selectedFolderPath = projectConfiguration.LastSelectedDir;
@@ -123,9 +126,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 				if (selectedTemplate != null && !selectedTemplate.IsSuccessfullySupported)
 				{
-					var messageWindow = new MessageBoxWindow();
-					var dialogReuslt = messageWindow.ShowDialog(null,
-						selectedTemplate.Message,
+					var messageWindow = this.dialogFactory.GetMessageBoxWindow();
+					var dialogReuslt = messageWindow.ShowDialog(selectedTemplate.Message,
 						"Open method from AML package",
 						MessageButtons.OK,
 						MessageIcon.None);
@@ -226,7 +228,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private void OnFolderBrowserCommandClicked(object window)
 		{
 			var actualFolderPath = GetActualFolderPath();
-			var viewModel = new OpenFromPackageTreeViewModel(actualFolderPath, this.Package, this.MethodName, this.SelectedSearchType);
+			var viewModel = new OpenFromPackageTreeViewModel(this.dialogFactory, actualFolderPath, this.Package, this.MethodName, this.SelectedSearchType);
 			var view = new OpenFromPackageTreeView();
 			view.DataContext = viewModel;
 			view.Owner = window as Window;
@@ -293,9 +295,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 			if (projectLanguage != methodLanguage)
 			{
-				var messageWindow = new MessageBoxWindow();
-				messageWindow.ShowDialog(window,
-					"Current project and method types are different.",
+				var messageWindow = this.dialogFactory.GetMessageBoxWindow();
+				messageWindow.ShowDialog("Current project and method types are different.",
 					"Open method from AML package",
 					MessageButtons.OK,
 					MessageIcon.None);

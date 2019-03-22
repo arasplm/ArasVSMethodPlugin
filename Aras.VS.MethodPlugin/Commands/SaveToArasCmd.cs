@@ -33,13 +33,13 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// </summary>
 		public const int ItemCommandId = 0x101;
 
-        /// <summary>
-        /// Command menu group (command set GUID).
-        /// </summary>
-        public static readonly Guid ItemCommandSet = CommandIds.SaveToAras;
+		/// <summary>
+		/// Command menu group (command set GUID).
+		/// </summary>
+		public static readonly Guid ItemCommandSet = CommandIds.SaveToAras;
 
 
-        private SaveToArasCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory)
+		private SaveToArasCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory)
 		{
 			if (projectManager.CommandService != null)
 			{
@@ -93,7 +93,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			var projectConfigPath = projectManager.ProjectConfigPath;
 			var methodConfigPath = projectManager.MethodConfigPath;
 
-            var projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
+			var projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
 
 			string selectedMethodPath = projectManager.MethodPath;
 			string sourceCode = File.ReadAllText(selectedMethodPath, new UTF8Encoding(true));
@@ -189,9 +189,8 @@ namespace Aras.VS.MethodPlugin.Commands
 			}
 
 			string message = string.Format("Method \"{0}\" saved", saveViewResult.MethodName);
-            var messageBoxWindow = dialogFactory.GetMessageBoxWindow();
-			messageBoxWindow.ShowDialog(null,
-				message,
+			var messageBoxWindow = dialogFactory.GetMessageBoxWindow();
+			messageBoxWindow.ShowDialog(message,
 				string.Empty,
 				MessageButtons.OK,
 				MessageIcon.Information);

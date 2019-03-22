@@ -92,9 +92,8 @@ namespace Aras.VS.MethodPlugin.Commands
 			bool isMethodExist = projectManager.IsMethodExist(openViewResult.MethodName);
 			if (projectManager.IsMethodExist(openViewResult.MethodName))
 			{
-				var messageWindow = new MessageBoxWindow();
-				var dialogReuslt = messageWindow.ShowDialog(null,
-					"Method already added to project. Do you want replace method?",
+				var messageWindow = this.dialogFactory.GetMessageBoxWindow();
+				var dialogReuslt = messageWindow.ShowDialog("Method already added to project. Do you want replace method?",
 					"Warning",
 					MessageButtons.YesNo,
 					MessageIcon.None);
