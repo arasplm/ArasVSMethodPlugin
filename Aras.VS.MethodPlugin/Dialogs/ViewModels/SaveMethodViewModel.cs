@@ -332,12 +332,10 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		private void EditConnectionInfoCommandClick(object window)
 		{
-			var loginView = new LoginView();
-			var loginViewModel = new LoginViewModel(authManager, projectConfiguration, projectName, projectFullName);
-			loginView.DataContext = loginViewModel;
-			loginView.Owner = window as Window;
+			var dialogAdapter = this.dialogFactory.GetLoginView(projectConfiguration, projectName, projectFullName);
+			var dialogResult = dialogAdapter.ShowDialog();
 
-			if (loginView.ShowDialog() == true)
+			if (dialogResult.DialogOperationResult == true)
 			{
 				projectConfigurationManager.Save(projectConfigPath, projectConfiguration);
 				ConnectionInformation = projectConfiguration.Connections.First(c => c.LastConnection);

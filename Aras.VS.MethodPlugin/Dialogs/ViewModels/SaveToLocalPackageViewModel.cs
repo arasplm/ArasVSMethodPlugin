@@ -33,6 +33,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private readonly PackageManager packageManager;
 		private readonly IProjectManager projectManager;
 		private readonly IArasDataProvider arasDataProvider;
+		private readonly IIOWrapper iOWrapper;
 
 		private MethodInfo methodInfo;
 		private MethodItemTypeInfo methodItemTypeInfo;
@@ -61,6 +62,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			ICodeProvider codeProvider,
 			IProjectManager projectManager,
 			IArasDataProvider arasDataProvider,
+			IIOWrapper iOWrapper,
 			MethodInfo methodInformation,
 			string pathToFileForSave)
 		{
@@ -72,6 +74,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			if (codeProvider == null) throw new ArgumentNullException(nameof(codeProvider));
 			if (projectManager == null) throw new ArgumentNullException(nameof(projectManager));
 			if (arasDataProvider == null) throw new ArgumentNullException(nameof(arasDataProvider));
+			if (iOWrapper == null) throw new ArgumentNullException(nameof(iOWrapper));
 			if (methodInformation == null) throw new ArgumentNullException(nameof(methodInformation));
 
 			this.authManager = authManager;
@@ -81,6 +84,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.packageManager = packageManager;
 			this.projectManager = projectManager;
 			this.arasDataProvider = arasDataProvider;
+			this.iOWrapper = iOWrapper;
 			this.MethodInformation = methodInformation;
 
 			this.folderBrowserCommand = new RelayCommand<object>(OnFolderBrowserClick);
@@ -240,14 +244,12 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		private void OnFolderBrowserClick(object window)
 		{
-			SelectPathDialog dialog = new SelectPathDialog();
-			SelectPathViewModel viewModel = new SelectPathViewModel(this.dialogFactory, DirectoryItemType.Folder, PackagePath);
-			dialog.DataContext = viewModel;
-			dialog.Owner = window as Window;
+			var adapter = this.dialogFactory.GetSelectPathDialog(DirectoryItemType.Folder, PackagePath);
+			var dialogResult = adapter.ShowDialog();
 
-			if (dialog.ShowDialog() == true)
+			if (dialogResult.DialogOperationResult == true)
 			{
-				this.PackagePath = viewModel.SelectedPath;
+				this.PackagePath = dialogResult.SelectedFullPath;
 			}
 		}
 

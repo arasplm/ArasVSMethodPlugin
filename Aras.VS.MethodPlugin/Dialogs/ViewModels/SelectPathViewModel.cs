@@ -20,6 +20,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 	public class SelectPathViewModel : BaseViewModel
 	{
 		private readonly IDialogFactory dialogFactory;
+		private readonly IIOWrapper iOWrapper;
 		private ObservableCollection<DirectoryItemViewModel> directoryItems;
 		private DirectoryItemViewModel selectDirectoryItem;
 		private DirectoryItemType searchToLevel;
@@ -34,11 +35,13 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private ICommand closeCommand;
 		private ICommand pathChangeCommand;
 
-		public SelectPathViewModel(IDialogFactory dialogFactory, DirectoryItemType searchToLevel, string rootPath = "", string startPath = "", string fileExtantion = "")
+		public SelectPathViewModel(IDialogFactory dialogFactory, DirectoryItemType searchToLevel, IIOWrapper iOWrapper, string rootPath = "", string startPath = "", string fileExtantion = "")
 		{
 			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));
+			if (iOWrapper == null) throw new ArgumentNullException(nameof(iOWrapper));
 
 			this.dialogFactory = dialogFactory;
+			this.iOWrapper = iOWrapper;
 			this.searchToLevel = searchToLevel;
 			this.selectedPath = startPath;
 			this.newFolderCommand = new RelayCommand<object>(OnNewFolderClick);
@@ -163,25 +166,22 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		private void OnNewFolderClick(object window)
 		{
-			var viewModel = new FolderNameViewModel(this.dialogFactory);
-			var view = new FolderNameDialog();
-			view.DataContext = viewModel;
-			view.Owner = window as Window;
-
-			if (view.ShowDialog() == true)
+			var folderNameDialogAdapter = this.dialogFactory.GetFolderNameDialog();
+			FolderNameDialogResult result = folderNameDialogAdapter.ShowDialog();
+			if (result.DialogOperationResult == true)
 			{
-				string folderName = viewModel.FolderName;
+				string folderName = result.FolderName;
 
 				string newFolderPath = Path.Combine(selectDirectoryItem.FullPath, folderName);
 				int index = 1;
 
-				while (System.IO.Directory.Exists(newFolderPath))
+				while (this.iOWrapper.DirectoryExists(newFolderPath))
 				{
 					newFolderPath = Path.Combine(selectDirectoryItem.FullPath, $"{folderName} {index}");
 					index++;
 				}
 
-				System.IO.Directory.CreateDirectory(newFolderPath);
+				this.iOWrapper.DirectoryCreateDirectory(newFolderPath);
 
 				if (selectDirectoryItem.IsExpanded)
 				{
@@ -210,14 +210,12 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		private void OnRenameFolderClick(object window)
 		{
-			var viewModel = new FolderNameViewModel(this.dialogFactory);
-			var view = new FolderNameDialog();
-			view.DataContext = viewModel;
-			view.Owner = window as Window;
+			var folderNameDialogAdapter = this.dialogFactory.GetFolderNameDialog();
+			FolderNameDialogResult result = folderNameDialogAdapter.ShowDialog();
 
-			if (view.ShowDialog() == true)
+			if (result.DialogOperationResult == true)
 			{
-				string newFolderName = viewModel.FolderName;
+				string newFolderName = result.FolderName;
 				string newFullPath = Path.Combine(Path.GetDirectoryName(selectDirectoryItem.FullPath), newFolderName);
 
 				if (string.Equals(selectDirectoryItem.FullPath, newFullPath))
@@ -227,7 +225,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 				try
 				{
-					System.IO.Directory.Move(selectDirectoryItem.FullPath, newFullPath);
+					this.iOWrapper.DirectoryMove(selectDirectoryItem.FullPath, newFullPath);
 					selectDirectoryItem.FullPath = newFullPath;
 				}
 				catch (Exception ex)
@@ -254,8 +252,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			{
 				try
 				{
-					System.IO.Directory.Delete(selectDirectoryItem.FullPath, true);
-
+					this.iOWrapper.DirectoryDelete(selectDirectoryItem.FullPath, true);
 					if (selectDirectoryItem.Parent != null)
 					{
 						selectDirectoryItem.Parent.Update();
@@ -274,8 +271,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		private void OnPathChange(object window)
 		{
-			var wnd = window as Window;
-			if (System.IO.File.Exists(selectedPath) || System.IO.Directory.Exists(selectedPath))
+			if (this.iOWrapper.FileExists(selectedPath) || this.iOWrapper.DirectoryExists(selectedPath))
 			{
 				Navigate(DirectoryItems, selectedPath.Split(Path.DirectorySeparatorChar).ToList());
 			}

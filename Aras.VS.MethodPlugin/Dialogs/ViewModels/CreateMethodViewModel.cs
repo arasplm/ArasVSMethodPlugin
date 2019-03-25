@@ -492,23 +492,18 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		private void BrowseCodeTemplateCommandClick()
 		{
-			OpenFileDialog openFileDialog = new OpenFileDialog()
-			{
-				Filter = "XML Files (*.xml)|*.xml",
-				FilterIndex = 0,
-				DefaultExt = "xml"
-			};
+			var openFileDialogAdapter = this.dialogFactory.GetOpenFileDialog("XML Files (*.xml)|*.xml", "xml");
 
-			DialogResult dialogResult = openFileDialog.ShowDialog();
-			if (dialogResult == DialogResult.Cancel)
+			OpenFileDialogResult dialogResult = openFileDialogAdapter.ShowDialog();
+			if (dialogResult.DialogResult == DialogResult.Cancel)
 			{
 				return;
 			}
 
-			XmlMethodInfo xmlMethodInfo = new XmlMethodLoader().LoadMethod(openFileDialog.FileName);
+			XmlMethodInfo xmlMethodInfo = new XmlMethodLoader().LoadMethod(dialogResult.FileName);
 			if (xmlMethodInfo == null)
 			{
-				var messageWindow = this.dialogFactory.GetMessageBoxWindow(); ;
+				var messageWindow = this.dialogFactory.GetMessageBoxWindow();
 				var dialogReuslt = messageWindow.ShowDialog($"User code template invalid format.",
 					"Warning",
 					MessageButtons.OK,

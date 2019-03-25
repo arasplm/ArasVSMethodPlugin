@@ -59,7 +59,7 @@
                     </Grid.ColumnDefinitions>
                     <Label Grid.Row="0" Grid.Column="0" Content="Manifest file path:" VerticalAlignment="Center" />
 					<TextBox IsReadOnly="True" Grid.Row="0" Grid.Column="1" Text="{Binding Path=SelectedManifestFilePath, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" VerticalContentAlignment="Center"/>
-                    <Button Content="  ...  " Grid.Column="2" Command="{Binding Path=FolderBrowserCommand}" CommandParameter="{Binding ElementName=OpenFromPackageViewWindow}" VerticalAlignment="Center" Margin="5, 0"/>
+                    <Button Content="  ...  " Grid.Column="2" Command="{Binding Path=FolderBrowserCommand}" VerticalAlignment="Center" Margin="5, 0"/>
                 </Grid>
             </GroupBox>
 

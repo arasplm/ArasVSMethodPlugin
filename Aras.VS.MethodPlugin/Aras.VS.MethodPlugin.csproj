@@ -137,11 +137,17 @@
     </Compile>
     <Compile Include="Dialogs\Views\DebugMethodViewAdapter.cs" />
     <Compile Include="Dialogs\Views\DebugMethodViewResult.cs" />
+    <Compile Include="Dialogs\Views\FolderNameDialogAdapter.cs" />
+    <Compile Include="Dialogs\Views\FolderNameDialogResult.cs" />
     <Compile Include="Dialogs\Views\IMessageBoxWindow.cs" />
     <Compile Include="Dialogs\Views\MoveToViewAdapter.cs" />
     <Compile Include="Dialogs\Views\MoveToViewResult.cs" />
+    <Compile Include="Dialogs\Views\OpenFileDialogAdapter.cs" />
+    <Compile Include="Dialogs\Views\OpenFileDialogResult.cs" />
     <Compile Include="Dialogs\Views\OpenFromArasViewAdapter.cs" />
     <Compile Include="Dialogs\Views\OpenFromArasViewResult.cs" />
+    <Compile Include="Dialogs\Views\OpenFromPackageTreeViewAdapter.cs" />
+    <Compile Include="Dialogs\Views\OpenFromPackageTreeViewResult.cs" />
     <Compile Include="Dialogs\Views\OpenFromPackageViewAdapter.cs" />
     <Compile Include="Dialogs\Views\OpenFromPackageViewResult.cs" />
     <Compile Include="Dialogs\Views\SaveMethodViewAdapter.cs" />
@@ -739,9 +745,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ProjectTemplates\CSharp\Aras Innovator\Methods\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
       <Visible>False</Visible>

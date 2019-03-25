@@ -16,6 +16,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio.Shell.Interop;
 using OfficeConnector.Dialogs;
 using Aras.VS.MethodPlugin.Configurations;
+using System.Windows.Forms;
 using Aras.VS.MethodPlugin.Dialogs.Directory.Data;
 
 namespace Aras.VS.MethodPlugin.Dialogs
@@ -27,6 +28,8 @@ namespace Aras.VS.MethodPlugin.Dialogs
 		ItemSearchPresenter GetItemSearchPresenter(ISearcher searcher);
 
 		IViewAdaper<LoginView, ViewResult> GetLoginView(IProjectManager projectManager, IProjectConfiguraiton projectConfiguration);
+
+		IViewAdaper<LoginView, ViewResult> GetLoginView(IProjectConfiguraiton projectConfiguration, string projectName, string projectFullName);
 
 		IViewAdaper<CreateMethodView, CreateMethodViewResult> GetCreateView(IProjectConfiguraiton projectConfiguration,
 			TemplateLoader templateLoader,
@@ -92,5 +95,11 @@ namespace Aras.VS.MethodPlugin.Dialogs
 		IViewAdaper<MoveToView, MoveToViewResult> GetMoveToView(string methodPath, SyntaxNode node);
 
 		IMessageBoxWindow GetMessageBoxWindow();
+
+		IViewAdaper<OpenFileDialog, OpenFileDialogResult> GetOpenFileDialog(string filter, string defaultExtention);
+
+		IViewAdaper<FolderNameDialog, FolderNameDialogResult> GetFolderNameDialog();
+
+		IViewAdaper<OpenFromPackageTreeView, OpenFromPackageTreeViewResult> GetOpenFromPackageTreeView(string actualFolderPath, string package, string methodName, string selectedSearchType);
 	}
 }

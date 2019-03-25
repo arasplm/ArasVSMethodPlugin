@@ -33,6 +33,21 @@ namespace Aras.VS.MethodPlugin
 			return Directory.GetFiles(path);
 		}
 
+		public string[] DirectoryGetFiles(string path, string searchPattern)
+		{
+			return Directory.GetFiles(path, searchPattern);
+		}
+
+		public void DirectoryMove(string sourceDirName, string destDirName)
+		{
+			Directory.Move(sourceDirName, destDirName);
+		}
+
+		public void DirectoryDelete(string path, bool recursive)
+		{
+			Directory.Delete(path, recursive);
+		}
+
 		public bool FileExists(string path)
 		{
 			return File.Exists(path);
