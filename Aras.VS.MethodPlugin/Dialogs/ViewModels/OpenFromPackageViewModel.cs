@@ -21,6 +21,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 {
 	public class OpenFromPackageViewModel : BaseViewModel
 	{
+		private readonly IDialogFactory dialogFactory;
 		private readonly TemplateLoader templateLoader;
 		private string projectLanguage;
 		private string selectedFolderPath;
@@ -46,10 +47,13 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private ICommand okCommand;
 		private ICommand closeCommand;
 
-		public OpenFromPackageViewModel(TemplateLoader templateLoader, string projectLanguage, IProjectConfiguraiton projectConfiguration)
+		public OpenFromPackageViewModel(IDialogFactory dialogFactory, TemplateLoader templateLoader, string projectLanguage, IProjectConfiguraiton projectConfiguration)
 		{
+			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));
 			if (templateLoader == null) throw new ArgumentNullException(nameof(templateLoader));
+			if (projectConfiguration == null) throw new ArgumentNullException(nameof(projectConfiguration));
 
+			this.dialogFactory = dialogFactory;
 			this.templateLoader = templateLoader;
 			this.projectLanguage = projectLanguage;
 			this.selectedFolderPath = projectConfiguration.LastSelectedDir;
@@ -57,7 +61,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.isUseVSFormattingCode = projectConfiguration.UseVSFormatting;
 			this.SelectedSearchType = projectConfiguration.LastSelectedSearchTypeInOpenFromPackage;
 
-			folderBrowserCommand = new RelayCommand<object>(OnFolderBrowserCommandClicked);
+			folderBrowserCommand = new RelayCommand(OnFolderBrowserCommandClicked);
 			okCommand = new RelayCommand<object>(OnOkClicked, IsOkButtonEnabled);
 			closeCommand = new RelayCommand<object>(OnCloseCliked);
 
@@ -123,9 +127,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 				if (selectedTemplate != null && !selectedTemplate.IsSuccessfullySupported)
 				{
-					var messageWindow = new MessageBoxWindow();
-					var dialogReuslt = messageWindow.ShowDialog(null,
-						selectedTemplate.Message,
+					var messageWindow = this.dialogFactory.GetMessageBoxWindow();
+					var dialogReuslt = messageWindow.ShowDialog(selectedTemplate.Message,
 						"Open method from AML package",
 						MessageButtons.OK,
 						MessageIcon.None);
@@ -223,22 +226,20 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		#endregion
 
-		private void OnFolderBrowserCommandClicked(object window)
+		private void OnFolderBrowserCommandClicked()
 		{
 			var actualFolderPath = GetActualFolderPath();
-			var viewModel = new OpenFromPackageTreeViewModel(actualFolderPath, this.Package, this.MethodName, this.SelectedSearchType);
-			var view = new OpenFromPackageTreeView();
-			view.DataContext = viewModel;
-			view.Owner = window as Window;
+			var viewAdapter = this.dialogFactory.GetOpenFromPackageTreeView(actualFolderPath, this.Package, this.MethodName, this.SelectedSearchType);
+			var dialogResult = viewAdapter.ShowDialog();
 
-			if (view.ShowDialog() == true)
+			if (dialogResult.DialogOperationResult == true)
 			{
-				this.Package = viewModel.SelectedPackageName.Split('\\')[0];
-				this.SelectedManifestFilePath = viewModel.SelectPathViewModel.SelectedPath;
-				this.SelectedSearchType = viewModel.SelectedSearchType;
+				this.Package = dialogResult.SelectedPackageName.Split('\\')[0];
+				this.SelectedManifestFilePath = dialogResult.SelectedPath;
+				this.SelectedSearchType = dialogResult.SelectedSearchType;
 
 				var xmlDocument = new XmlDocument();
-				xmlDocument.Load(viewModel.SelectedMethod.FullName);
+				xmlDocument.Load(dialogResult.SelectedMethodFullName);
 				XmlNode itemXmlNode = xmlDocument.SelectSingleNode("AML/Item");
 				XmlNode commentsXmlNode = itemXmlNode.SelectSingleNode("comments");
 				XmlNode methodCodeXmlNode = itemXmlNode.SelectSingleNode("method_code");
@@ -265,9 +266,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				this.MethodConfigId = itemXmlNode.Attributes["id"].InnerText;
 				this.MethodId = itemXmlNode.Attributes["id"].InnerText;
 
-                this.SelectedTemplate = templateLoader.GetTemplateFromCodeString(methodCode, methodLanguage, "Open method from AML package");
-
-            }
+				this.SelectedTemplate = templateLoader.GetTemplateFromCodeString(methodCode, methodLanguage, "Open method from AML package");
+			}
 		}
 
 		private string GetActualFolderPath()
@@ -293,9 +293,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 			if (projectLanguage != methodLanguage)
 			{
-				var messageWindow = new MessageBoxWindow();
-				messageWindow.ShowDialog(window,
-					"Current project and method types are different.",
+				var messageWindow = this.dialogFactory.GetMessageBoxWindow();
+				messageWindow.ShowDialog("Current project and method types are different.",
 					"Open method from AML package",
 					MessageButtons.OK,
 					MessageIcon.None);

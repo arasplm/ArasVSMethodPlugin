@@ -7,15 +7,14 @@ using System.Text;
 using System.Xml;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Code;
+using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.Dialogs.Views;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Aras.VS.MethodPlugin.Commands
 {
@@ -69,7 +68,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			Instance = new DebugMethodCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
 		}
 
-		public override void ExecuteCommandImpl(object sender, EventArgs args, IVsUIShell uiShell)
+		public override void ExecuteCommandImpl(object sender, EventArgs args)
 		{
 			var project = projectManager.SelectedProject;
 
@@ -112,7 +111,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language, projectConfiguration);
 			string methodCode = codeProvider.LoadMethodCode(sourceCode, methodInformation, projectManager.ServerMethodFolderPath);
 
-			var debugMethodView = dialogFactory.GetDebugMethodView(uiShell, projectConfigurationManager, projectConfiguration, methodInformation, methodCode, projectConfigPath, project.Name, project.FullName);
+			var debugMethodView = dialogFactory.GetDebugMethodView(projectConfigurationManager, projectConfiguration, methodInformation, methodCode, projectConfigPath, project.Name, project.FullName);
 			var debugMethodViewResult = debugMethodView.ShowDialog();
 			if (debugMethodViewResult?.DialogOperationResult != true)
 			{

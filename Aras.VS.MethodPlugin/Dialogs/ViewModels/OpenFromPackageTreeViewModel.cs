@@ -26,6 +26,9 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private const string searchByContentKey = "MethodContent";
 		private const string searchByFileNameKey = "MethodName";
 
+		private readonly IDialogFactory dialogFactory;
+		private readonly IIOWrapper iOWrapper;
+
 		private Dictionary<string, string> packages;
 		private List<ShortMethodInfoViewModel> methods;
 
@@ -44,9 +47,14 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private DispatcherTimer dispatcherTimer;
 		private Dictionary<string, SearchType> searchTypes;
 
-		public OpenFromPackageTreeViewModel(string lastSelectedManifestFilePath, string lastSelectedPackage, string lastSelectedMethod, string lastUsedSearchType)
+		public OpenFromPackageTreeViewModel(IDialogFactory dialogFactory, IIOWrapper iOWrapper, string lastSelectedManifestFilePath, string lastSelectedPackage, string lastSelectedMethod, string lastUsedSearchType)
 		{
-			SelectPathViewModel = new SelectPathViewModel(DirectoryItemType.File, startPath: lastSelectedManifestFilePath, fileExtantion: importFileName);
+			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));
+			if (iOWrapper == null) throw new ArgumentNullException(nameof(iOWrapper));
+
+			this.dialogFactory = dialogFactory;
+			this.iOWrapper = iOWrapper;
+			SelectPathViewModel = new SelectPathViewModel(dialogFactory, DirectoryItemType.File, iOWrapper, startPath:lastSelectedManifestFilePath, fileExtantion: importFileName);
 			SelectPathViewModel.SelectionChanged += OnSelectDirectoryItem;
 			this.okCommand = new RelayCommand<object>(OkCommandClick);
 			this.closeCommand = new RelayCommand<object>(OnCloseCliked);
@@ -210,9 +218,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 			if (SelectedMethod == null)
 			{
-				var messageWindow = new MessageBoxWindow();
-				messageWindow.ShowDialog(wnd,
-					"Method is not selected.",
+				var messageWindow = this.dialogFactory.GetMessageBoxWindow();
+				messageWindow.ShowDialog("Method is not selected.",
 					"Open method from AML package",
 					MessageButtons.OK,
 					MessageIcon.None);
@@ -231,17 +238,15 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		private void OnPathChange(object window)
 		{
-			var wnd = window as Window;
 			var path = SelectPathViewModel.SelectedPath;
-			if (System.IO.File.Exists(path) || System.IO.Directory.Exists(path))
+			if (this.iOWrapper.FileExists(path) || this.iOWrapper.DirectoryExists(path))
 			{
 				selectPathViewModel.Navigate(selectPathViewModel.DirectoryItems, path.Split(Path.DirectorySeparatorChar).ToList());
 			}
 			else
 			{
-				var messageWindow = new MessageBoxWindow();
-				messageWindow.ShowDialog(wnd,
-					"File or Folder were not found",
+				var messageWindow = this.dialogFactory.GetMessageBoxWindow();
+				messageWindow.ShowDialog("File or Folder were not found",
 					"Open method from AML package",
 					MessageButtons.OK,
 					MessageIcon.None);
@@ -254,9 +259,9 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			if (!string.IsNullOrEmpty(selectedPackageName))
 			{
 				string methodsPath = Path.Combine(rootFolderPath, Packages[selectedPackageName], "Method");
-				if (System.IO.Directory.Exists(methodsPath))
+				if (this.iOWrapper.DirectoryExists(methodsPath))
 				{
-					this.allPackageMethods = new DirectoryInfo(methodsPath).GetFiles(searchMethodFilePatern).Select(x => new ShortMethodInfoViewModel(x.FullName)).ToList();
+					this.allPackageMethods = this.iOWrapper.DirectoryGetFiles(methodsPath, searchMethodFilePatern).Select(x => new ShortMethodInfoViewModel(x)).ToList();
 				}
 			}
 		}

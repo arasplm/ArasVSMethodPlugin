@@ -140,7 +140,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private void OnFileFolderBrowserCommandClick(object window)
 		{
 			var selectPathDialog = dialogFactory.GetSelectPathDialog(DirectoryItemType.File, methodFolderPath);
-			selectPathDialog.Owner = window as Window;
 			var selectPathDialogResult = selectPathDialog.ShowDialog();
 			if (selectPathDialogResult.DialogOperationResult == true)
 			{

@@ -65,7 +65,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			Instance = new RefreshConfigCmd(projectManager, dialogFactory, projectConfigurationManager);
 		}
 
-		public override void ExecuteCommandImpl(object sender, EventArgs args, IVsUIShell uiShell)
+		public override void ExecuteCommandImpl(object sender, EventArgs args)
 		{
 
 		}

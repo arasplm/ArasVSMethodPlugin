@@ -1,0 +1,16 @@
+﻿<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+    <SOAP-ENV:Body>
+        <Result>
+            <Item type="Value" typeId="8651DCAB4D714EF6AA747BB8F50719BA" id="9C168AC668DD49E4BDCA32E7F5C92007">
+                <id keyed_name="Client" type="Value">9C168AC668DD49E4BDCA32E7F5C92007</id>
+                <label xml:lang="en">Client</label>
+                <value>client</value>
+            </Item>
+            <Item type="Value" typeId="8651DCAB4D714EF6AA747BB8F50719BA" id="40A3CEFC17464F74B12F77388FD59E65">
+                <id keyed_name="Server" type="Value">40A3CEFC17464F74B12F77388FD59E65</id>
+                <label xml:lang="en">Server</label>
+                <value>server</value>
+            </Item>
+        </Result>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

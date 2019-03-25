@@ -122,7 +122,7 @@ namespace Aras.VS.MethodPlugin.Tests.SolutionManagement
 			this.serviceProvider.GetService(typeof(SVsUIShell)).Returns(vsUIShell);
 
 			IMessageBoxWindow messageBoxWindow = Substitute.For<IMessageBoxWindow>();
-			this.dialogFactory.GetMessageBoxWindow(vsUIShell).Returns(messageBoxWindow);
+			this.dialogFactory.GetMessageBoxWindow().Returns(messageBoxWindow);
 			messageBoxWindow.ShowDialog("One or more method files is not saved. Do you want to save changes?",
 										"Aras VS method plugin",
 										MessageButtons.YesNoCancel,
@@ -157,7 +157,7 @@ namespace Aras.VS.MethodPlugin.Tests.SolutionManagement
 			this.serviceProvider.GetService(typeof(SVsUIShell)).Returns(vsUIShell);
 
 			IMessageBoxWindow messageBoxWindow = Substitute.For<IMessageBoxWindow>();
-			this.dialogFactory.GetMessageBoxWindow(vsUIShell).Returns(messageBoxWindow);
+			this.dialogFactory.GetMessageBoxWindow().Returns(messageBoxWindow);
 			messageBoxWindow.ShowDialog("One or more method files is not saved. Do you want to save changes?",
 										"Aras VS method plugin",
 										MessageButtons.YesNoCancel,
@@ -191,7 +191,7 @@ namespace Aras.VS.MethodPlugin.Tests.SolutionManagement
 			this.serviceProvider.GetService(typeof(SVsUIShell)).Returns(vsUIShell);
 
 			IMessageBoxWindow messageBoxWindow = Substitute.For<IMessageBoxWindow>();
-			this.dialogFactory.GetMessageBoxWindow(vsUIShell).Returns(messageBoxWindow);
+			this.dialogFactory.GetMessageBoxWindow().Returns(messageBoxWindow);
 			messageBoxWindow.ShowDialog("One or more method files is not saved. Do you want to save changes?",
 										"Aras VS method plugin",
 										MessageButtons.YesNoCancel,

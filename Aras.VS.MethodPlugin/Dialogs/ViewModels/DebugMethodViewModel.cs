@@ -19,6 +19,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 	{
 		private readonly IAuthenticationManager authManager;
 		private readonly IProjectConfigurationManager projectConfigurationManager;
+		private readonly IDialogFactory dialogFactory;
 
 		private IProjectConfiguraiton projectConfiguration;
 		private MethodItemTypeInfo methodItemTypeInfo;
@@ -46,6 +47,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			IProjectConfigurationManager projectConfigurationManager,
 			IProjectConfiguraiton projectConfiguration,
 			MethodInfo methodInformation,
+			IDialogFactory dialogFactory,
 			string methodCode,
 			string projectConfigPath,
 			string projectName,
@@ -55,10 +57,12 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			if (projectConfigurationManager == null) throw new ArgumentNullException(nameof(projectConfigurationManager));
 			if (projectConfiguration == null) throw new ArgumentNullException(nameof(projectConfiguration));
 			if (methodInformation == null) throw new ArgumentNullException(nameof(methodInformation));
+			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));
 
 			this.authManager = authManager;
 			this.projectConfigurationManager = projectConfigurationManager;
 			this.projectConfiguration = projectConfiguration;
+			this.dialogFactory = dialogFactory;
 
 			this.projectConfigPath = projectConfigPath;
 			this.projectName = projectName;
@@ -164,12 +168,9 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		private void EditConnectionInfoCommandClick(object window)
 		{
-			var loginView = new LoginView();
-			var loginViewModel = new LoginViewModel(authManager, projectConfiguration, projectName, projectFullName);
-			loginView.DataContext = loginViewModel;
-			loginView.Owner = window as Window;
-
-			if (loginView.ShowDialog() == true)
+			var loginAdapter = this.dialogFactory.GetLoginView(projectConfiguration, projectName, projectFullName);
+			var loginDialogResult = loginAdapter.ShowDialog();
+			if (loginDialogResult.DialogOperationResult == true)
 			{
 				projectConfigurationManager.Save(projectConfigPath, projectConfiguration);
 				ConnectionInformation = projectConfiguration.Connections.First(c => c.LastConnection);

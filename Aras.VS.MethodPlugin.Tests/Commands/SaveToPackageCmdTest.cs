@@ -49,7 +49,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			currentPath = AppDomain.CurrentDomain.BaseDirectory;
 			projectManager.ProjectConfigPath.Returns(Path.Combine(currentPath, "TestData\\projectConfig.xml"));
 			projectConfiguration = projectConfigurationManager.Load(projectManager.ProjectConfigPath);
-			templateLoader = new TemplateLoader(dialogFactory, iVsUIShell);
+			templateLoader = new TemplateLoader(dialogFactory);
 			projectManager.MethodConfigPath.Returns(Path.Combine(currentPath, "TestData\\method-config.xml"));
 			templateLoader.Load(projectManager.MethodConfigPath);
 			projectManager.MethodPath.Returns(Path.Combine(currentPath, "TestData\\TestMethod.txt"));
@@ -62,16 +62,16 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 		public void ExecuteCommandImpl_ShouldReceivedGetSaveToPackageView()
 		{
 			// Arrange
-			dialogFactory.GetSaveToPackageView(null, null, null, null, null, null, null, null).ReturnsForAnyArgs(new SaveToPackageViewAdapterStub());
+			dialogFactory.GetSaveToPackageView(null, null, null, null, null, null, null).ReturnsForAnyArgs(new SaveToPackageViewAdapterStub());
 			var messageBox = Substitute.For<IMessageBoxWindow>();
-			dialogFactory.GetMessageBoxWindow(null).ReturnsForAnyArgs(messageBox);
+			dialogFactory.GetMessageBoxWindow().ReturnsForAnyArgs(messageBox);
 			messageBox.ShowDialog(null, null, Arg.Any<MessageButtons>(), Arg.Any<MessageIcon>()).ReturnsForAnyArgs(MessageDialogResult.OK);
 
 			//Act
-			saveToPackageCmd.ExecuteCommandImpl(null, null, iVsUIShell);
+			saveToPackageCmd.ExecuteCommandImpl(null, null);
 
 			// Assert
-			dialogFactory.Received().GetSaveToPackageView(iVsUIShell, Arg.Any<ProjectConfiguraiton>(), Arg.Any<TemplateLoader>(), Arg.Any<PackageManager>(), codeProvider, projectManager, Arg.Any<MethodInfo>(), Arg.Any<string>());
+			dialogFactory.Received().GetSaveToPackageView(Arg.Any<ProjectConfiguraiton>(), Arg.Any<TemplateLoader>(), Arg.Any<PackageManager>(), codeProvider, projectManager, Arg.Any<MethodInfo>(), Arg.Any<string>());
 
 		}
 
@@ -79,13 +79,13 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 		public void ExecuteCommandImpl_ManifestFileShouldBeExist()
 		{
 			// Arrange
-			dialogFactory.GetSaveToPackageView(null, null, null, null, null, null, null, null).ReturnsForAnyArgs(new SaveToPackageViewAdapterStub());
+			dialogFactory.GetSaveToPackageView(null, null, null, null, null, null, null).ReturnsForAnyArgs(new SaveToPackageViewAdapterStub());
 			var messageBox = Substitute.For<IMessageBoxWindow>();
-			dialogFactory.GetMessageBoxWindow(null).ReturnsForAnyArgs(messageBox);
+			dialogFactory.GetMessageBoxWindow().ReturnsForAnyArgs(messageBox);
 			messageBox.ShowDialog(null, null, Arg.Any<MessageButtons>(), Arg.Any<MessageIcon>()).ReturnsForAnyArgs(MessageDialogResult.OK);
 
 			//Act
-			saveToPackageCmd.ExecuteCommandImpl(null, null, iVsUIShell);
+			saveToPackageCmd.ExecuteCommandImpl(null, null);
 
 			// Assert
 			Assert.IsTrue(File.Exists(Path.Combine(currentPath, "imports.mf")));
@@ -93,8 +93,6 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 
 		public class SaveToPackageViewAdapterStub : IViewAdaper<SaveToPackageView, SaveToPackageViewResult>
 		{
-			public System.Windows.Window Owner { get { return null; } set { } }
-
 			public SaveToPackageViewResult ShowDialog()
 			{
 				return new SaveToPackageViewResult

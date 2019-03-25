@@ -55,7 +55,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			projectManager.MethodConfigPath.Returns(Path.Combine(currentPath, "TestData\\method-config.xml"));
 			template = new TemplateInfo { TemplateName = string.Empty };
 			eventSpecificDataType = new EventSpecificDataType { EventSpecificData = EventSpecificData.None };
-			templateLoader = new TemplateLoader(dialogFactory, iVsUIShell);
+			templateLoader = new TemplateLoader(dialogFactory);
 			packageManager = new PackageManager(authManager);
 			codeProvider = Substitute.For<ICodeProvider>();
 			projectConfiguration = projectConfigurationManager.Load(projectManager.ProjectConfigPath);
@@ -70,13 +70,13 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			// Arrange
 
 			codeProvider.GenerateCodeInfo(null, Arg.Any<EventSpecificDataType>(), null, Arg.Any<bool>(), null, Arg.Any<bool>()).ReturnsForAnyArgs(Substitute.For<GeneratedCodeInfo>());
-			dialogFactory.GetCreateView(iVsUIShell, projectConfiguration, templateLoader, packageManager, projectManager, codeProvider, globalConfiguration).ReturnsForAnyArgs(Substitute.For<CreateMethodViewAdapterTest>());
+			dialogFactory.GetCreateView(projectConfiguration, templateLoader, packageManager, projectManager, codeProvider, globalConfiguration).ReturnsForAnyArgs(Substitute.For<CreateMethodViewAdapterTest>());
 
 			//Act
-			createMethodCmd.ExecuteCommandImpl(null, null, iVsUIShell);
+			createMethodCmd.ExecuteCommandImpl(null, null);
 
 			// Assert
-			dialogFactory.Received().GetCreateView(iVsUIShell, Arg.Any<ProjectConfiguraiton>(), Arg.Any<TemplateLoader>(), Arg.Any<PackageManager>(), projectManager, codeProvider, globalConfiguration);
+			dialogFactory.Received().GetCreateView(Arg.Any<ProjectConfiguraiton>(), Arg.Any<TemplateLoader>(), Arg.Any<PackageManager>(), projectManager, codeProvider, globalConfiguration);
 		}
 
 		[Test]
@@ -85,11 +85,11 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			// Arrange
 			var createMethodViewAdapterTest = Substitute.For<CreateMethodViewAdapterTest>();
 			codeProvider.GenerateCodeInfo(null, Arg.Any<EventSpecificDataType>(), null, Arg.Any<bool>(), null, Arg.Any<bool>()).ReturnsForAnyArgs(Substitute.For<GeneratedCodeInfo>());
-			dialogFactory.GetCreateView(iVsUIShell, projectConfiguration, templateLoader, packageManager, projectManager, codeProvider, globalConfiguration).ReturnsForAnyArgs(createMethodViewAdapterTest);
+			dialogFactory.GetCreateView(projectConfiguration, templateLoader, packageManager, projectManager, codeProvider, globalConfiguration).ReturnsForAnyArgs(createMethodViewAdapterTest);
 			var showDialogResult = createMethodViewAdapterTest.ShowDialog();
 
 			//Act
-			createMethodCmd.ExecuteCommandImpl(null, null, iVsUIShell);
+			createMethodCmd.ExecuteCommandImpl(null, null);
 
 			// Assert
 			codeProvider.Received().GenerateCodeInfo(template, eventSpecificDataType, showDialogResult.MethodName, false, null, false);
@@ -98,8 +98,6 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 
 		public class CreateMethodViewAdapterTest : IViewAdaper<CreateMethodView, CreateMethodViewResult>
 		{
-			public System.Windows.Window Owner { get { return null; } set { } }
-
 			public CreateMethodViewResult ShowDialog()
 			{
 				return new CreateMethodViewResult

@@ -17,6 +17,9 @@ namespace Aras.VS.MethodPlugin
 		bool DirectoryExists(string path);
 		DirectoryInfo DirectoryCreateDirectory(string path);
 		string[] DirectoryGetFiles(string path);
+		string[] DirectoryGetFiles(string path, string searchPattern);
+		void DirectoryMove(string pathFrom, string pathTo);
+		void DirectoryDelete(string path, bool recursive);
 		bool FileExists(string path);
 		string FileReadAllText(string path, UTF8Encoding encoding);
 		void FileDelete(string path);

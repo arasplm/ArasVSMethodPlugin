@@ -67,7 +67,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			Instance = new OpenFromArasCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
 		}
 
-		public override void ExecuteCommandImpl(object sender, EventArgs args, IVsUIShell uiShell)
+		public override void ExecuteCommandImpl(object sender, EventArgs args)
 		{
 			var project = projectManager.SelectedProject;
 			string projectConfigPath = projectManager.ProjectConfigPath;
@@ -76,11 +76,11 @@ namespace Aras.VS.MethodPlugin.Commands
 
 			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language, projectConfiguration);
 
-			var templateLoader = new TemplateLoader(this.dialogFactory, uiShell);
+			var templateLoader = new TemplateLoader(this.dialogFactory);
 			templateLoader.Load(projectManager.MethodConfigPath);
 
 			var packageManager = new PackageManager(authManager);
-			var openView = dialogFactory.GetOpenFromArasView(projectManager.UIShell, projectConfigurationManager, projectConfiguration, templateLoader, packageManager, projectConfigPath, project.Name, project.FullName, codeProvider.Language);
+			var openView = dialogFactory.GetOpenFromArasView(projectConfigurationManager, projectConfiguration, templateLoader, packageManager, projectConfigPath, project.Name, project.FullName, codeProvider.Language);
 
 			var openViewResult = openView.ShowDialog();
 			if (openViewResult?.DialogOperationResult != true)
@@ -92,9 +92,8 @@ namespace Aras.VS.MethodPlugin.Commands
 			bool isMethodExist = projectManager.IsMethodExist(openViewResult.MethodName);
 			if (projectManager.IsMethodExist(openViewResult.MethodName))
 			{
-				var messageWindow = new MessageBoxWindow();
-				var dialogReuslt = messageWindow.ShowDialog(null,
-					"Method already added to project. Do you want replace method?",
+				var messageWindow = this.dialogFactory.GetMessageBoxWindow();
+				var dialogReuslt = messageWindow.ShowDialog("Method already added to project. Do you want replace method?",
 					"Warning",
 					MessageButtons.YesNo,
 					MessageIcon.None);

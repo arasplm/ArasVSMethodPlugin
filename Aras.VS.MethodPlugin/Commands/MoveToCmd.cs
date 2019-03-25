@@ -67,7 +67,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			Instance = new MoveToCmd(projectManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
 		}
 
-		public override void ExecuteCommandImpl(object sender, EventArgs args, IVsUIShell uiShell)
+		public override void ExecuteCommandImpl(object sender, EventArgs args)
 		{
 			Document activeDocument = projectManager.ActiveDocument;
 			SyntaxNode activeSyntaxNode = projectManager.ActiveSyntaxNode;
@@ -82,7 +82,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			if (string.Equals(activeDocument.FilePath, activeDocumentMethodFullPath, StringComparison.InvariantCultureIgnoreCase))
 			{
 				// main to external
-				var moveToViewAdapter = this.dialogFactory.GetMoveToView(projectManager.UIShell, activeDocumentMethodFolderPath, activeSyntaxNode);
+				var moveToViewAdapter = this.dialogFactory.GetMoveToView(activeDocumentMethodFolderPath, activeSyntaxNode);
 				var moveToViewResult = moveToViewAdapter.ShowDialog();
 				if (moveToViewResult.DialogOperationResult == false)
 				{
@@ -128,7 +128,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			else
 			{
 				// external to main
-				var messageBoxWindow = dialogFactory.GetMessageBoxWindow(projectManager.UIShell);
+				var messageBoxWindow = dialogFactory.GetMessageBoxWindow();
 				var messageBoxWindowResult = messageBoxWindow.ShowDialog(
 					"Selected code will be moved to main method file. Click OK to continue.",
 					"Move to main method.",
@@ -156,16 +156,6 @@ namespace Aras.VS.MethodPlugin.Commands
 			}
 
 			SyntaxNode activeSyntaxNode = projectManager.ActiveSyntaxNode;
-			//List<AttributeSyntax> attribute = activeSyntaxNode.DescendantNodes()
-			//	.OfType<AttributeSyntax>()
-			//	.Where(a => a.Name.ToString().StartsWith(GlobalConsts.PartialPath) || a.Name.ToString().StartsWith(GlobalConsts.ExternalPath))
-			//	.ToList();
-
-			//if (attribute.Count() == 0)
-			//{
-			//	command.Enabled = false;
-			//	return;
-			//}
 
 			if (activeSyntaxNode is TypeDeclarationSyntax typeDeclarationNode)
 			{

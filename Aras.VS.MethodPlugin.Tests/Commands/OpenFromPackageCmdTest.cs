@@ -48,7 +48,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			var currentPath = AppDomain.CurrentDomain.BaseDirectory;
 			projectManager.ProjectConfigPath.Returns(Path.Combine(currentPath, "TestData\\projectConfig.xml"));
 			projectConfiguration = projectConfigurationManager.Load(projectManager.ProjectConfigPath);
-			templateLoader = new TemplateLoader(dialogFactory, iVsUIShell);
+			templateLoader = new TemplateLoader(dialogFactory);
 			projectManager.MethodConfigPath.Returns(Path.Combine(currentPath, "TestData\\method-config.xml"));
 			templateLoader.Load(projectManager.MethodConfigPath);
 		}
@@ -58,14 +58,14 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 		public void ExecuteCommandImpl_ShouldReceivedGetOpenFromPackageView()
 		{
 			// Arrange
-			dialogFactory.GetOpenFromPackageView(null, null, null, null).ReturnsForAnyArgs(Substitute.For<OpenFromPackageViewAdapterTest>());
+			dialogFactory.GetOpenFromPackageView(null, null, null).ReturnsForAnyArgs(Substitute.For<OpenFromPackageViewAdapterTest>());
 			codeProvider.GenerateCodeInfo(null, null, null, false, null, false).ReturnsForAnyArgs(Substitute.For<GeneratedCodeInfo>());
 
 			//Act
-			openFromPackageCmd.ExecuteCommandImpl(null, null, iVsUIShell);
+			openFromPackageCmd.ExecuteCommandImpl(null, null);
 
 			// Assert
-			dialogFactory.Received().GetOpenFromPackageView(Arg.Any<IVsUIShell>(), Arg.Any<TemplateLoader>(), codeProvider.Language, Arg.Any<ProjectConfiguraiton>());
+			dialogFactory.Received().GetOpenFromPackageView(Arg.Any<TemplateLoader>(), codeProvider.Language, Arg.Any<ProjectConfiguraiton>());
 		}
 
 		[Test]
@@ -73,12 +73,12 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 		{
 			// Arrange
 			var openFromPackageViewAdapterTest = Substitute.For<OpenFromPackageViewAdapterTest>();
-			dialogFactory.GetOpenFromPackageView(null, null, null, null).ReturnsForAnyArgs(openFromPackageViewAdapterTest);
+			dialogFactory.GetOpenFromPackageView(null, null, null).ReturnsForAnyArgs(openFromPackageViewAdapterTest);
 			codeProvider.GenerateCodeInfo(null, null, null, false, null, false).ReturnsForAnyArgs(Substitute.For<GeneratedCodeInfo>());
 			var showDialogResult = openFromPackageViewAdapterTest.ShowDialog();
 
 			//Act
-			openFromPackageCmd.ExecuteCommandImpl(null, null, iVsUIShell);
+			openFromPackageCmd.ExecuteCommandImpl(null, null);
 
 			// Assert
 			codeProvider.Received().GenerateCodeInfo(Arg.Any<TemplateInfo>(), Arg.Any<EventSpecificDataType>(), showDialogResult.MethodName, false, showDialogResult.MethodCode, showDialogResult.IsUseVSFormattingCode);
@@ -86,8 +86,6 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 
 		public class OpenFromPackageViewAdapterTest : IViewAdaper<OpenFromPackageView, OpenFromPackageViewResult>
 		{
-			public System.Windows.Window Owner { get { return null; } set { } }
-
 			public OpenFromPackageViewResult ShowDialog()
 			{
 				return new OpenFromPackageViewResult

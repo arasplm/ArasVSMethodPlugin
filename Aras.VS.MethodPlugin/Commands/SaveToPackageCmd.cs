@@ -76,7 +76,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			Instance = new SaveToPackageCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
 		}
 
-		public override void ExecuteCommandImpl(object sender, EventArgs args, IVsUIShell uiShell)
+		public override void ExecuteCommandImpl(object sender, EventArgs args)
 		{
 			var project = projectManager.SelectedProject;
 			string projectConfigPath = projectManager.ProjectConfigPath;
@@ -84,7 +84,7 @@ namespace Aras.VS.MethodPlugin.Commands
 
             var projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
 
-			var templateLoader = new TemplateLoader(this.dialogFactory, uiShell);
+			var templateLoader = new TemplateLoader(this.dialogFactory);
 			templateLoader.Load(methodConfigPath);
 
 			var packageManager = new PackageManager(authManager);
@@ -109,7 +109,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			}
 
 			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language, projectConfiguration);
-			var saveView = dialogFactory.GetSaveToPackageView(uiShell, projectConfiguration, templateLoader, packageManager, codeProvider, projectManager, methodInformation, selectedMethodPath);
+			var saveView = dialogFactory.GetSaveToPackageView(projectConfiguration, templateLoader, packageManager, codeProvider, projectManager, methodInformation, selectedMethodPath);
 			var saveViewResult = saveView.ShowDialog();
 			if (saveViewResult?.DialogOperationResult != true)
 			{
@@ -217,9 +217,8 @@ namespace Aras.VS.MethodPlugin.Commands
 			string message = string.Format("Method \"{0}\" saved to package \"{1}\"", saveViewResult.MethodName, saveViewResult.SelectedPackage);
 
             // Show a message box to prove we were here
-            var messageWindow = dialogFactory.GetMessageBoxWindow(uiShell);
-            messageWindow.ShowDialog(null,
-				message,
+			var messageWindow = dialogFactory.GetMessageBoxWindow();
+			messageWindow.ShowDialog(message,
 				string.Empty,
 				MessageButtons.OK,
 				MessageIcon.Information);

@@ -36,7 +36,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 
 			}
 
-			public override void ExecuteCommandImpl(object sender, EventArgs args, IVsUIShell uiShell)
+			public override void ExecuteCommandImpl(object sender, EventArgs args)
 			{
 
 			}

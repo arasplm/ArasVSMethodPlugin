@@ -19,18 +19,15 @@ namespace Aras.VS.MethodPlugin.Templates
 	public class TemplateLoader
 	{
 		private readonly IDialogFactory dialogFactory;
-		private readonly IVsUIShell vsUIShell;
 
 		private List<string> supportedTemplates = new List<string>();
 		List<TemplateInfo> templates = new List<TemplateInfo>();
 
-		public TemplateLoader(IDialogFactory dialogFactory, IVsUIShell vsUIShell)
+		public TemplateLoader(IDialogFactory dialogFactory)
 		{
 			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));
-			if (vsUIShell == null) throw new ArgumentNullException(nameof(vsUIShell));
 
 			this.dialogFactory = dialogFactory;
-			this.vsUIShell = vsUIShell;
 		}
 
 		public void Load(string templatesFileText)
@@ -95,7 +92,7 @@ namespace Aras.VS.MethodPlugin.Templates
 
 				if (template == null)
 				{
-					var messageWindow = this.dialogFactory.GetMessageBoxWindow(this.vsUIShell);
+					var messageWindow = this.dialogFactory.GetMessageBoxWindow();
 					messageWindow.ShowDialog($"The template {templateName} from selected method not found. Default template will be used.",
 						operationName,
 						MessageButtons.OK,

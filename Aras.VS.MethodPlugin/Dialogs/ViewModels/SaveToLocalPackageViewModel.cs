@@ -7,18 +7,17 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using Aras.VS.MethodPlugin.ArasInnovator;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Code;
+using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs.Directory.Data;
 using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.ItemSearch;
 using Aras.VS.MethodPlugin.PackageManagement;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using Aras.VS.MethodPlugin.Templates;
 using OfficeConnector.Dialogs;
@@ -34,6 +33,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private readonly PackageManager packageManager;
 		private readonly IProjectManager projectManager;
 		private readonly IArasDataProvider arasDataProvider;
+		private readonly IIOWrapper iOWrapper;
 
 		private MethodInfo methodInfo;
 		private MethodItemTypeInfo methodItemTypeInfo;
@@ -62,6 +62,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			ICodeProvider codeProvider,
 			IProjectManager projectManager,
 			IArasDataProvider arasDataProvider,
+			IIOWrapper iOWrapper,
 			MethodInfo methodInformation,
 			string pathToFileForSave)
 		{
@@ -73,6 +74,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			if (codeProvider == null) throw new ArgumentNullException(nameof(codeProvider));
 			if (projectManager == null) throw new ArgumentNullException(nameof(projectManager));
 			if (arasDataProvider == null) throw new ArgumentNullException(nameof(arasDataProvider));
+			if (iOWrapper == null) throw new ArgumentNullException(nameof(iOWrapper));
 			if (methodInformation == null) throw new ArgumentNullException(nameof(methodInformation));
 
 			this.authManager = authManager;
@@ -82,6 +84,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.packageManager = packageManager;
 			this.projectManager = projectManager;
 			this.arasDataProvider = arasDataProvider;
+			this.iOWrapper = iOWrapper;
 			this.MethodInformation = methodInformation;
 
 			this.folderBrowserCommand = new RelayCommand<object>(OnFolderBrowserClick);
@@ -241,14 +244,12 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		private void OnFolderBrowserClick(object window)
 		{
-			SelectPathDialog dialog = new SelectPathDialog();
-			SelectPathViewModel viewModel = new SelectPathViewModel(DirectoryItemType.Folder, PackagePath);
-			dialog.DataContext = viewModel;
-			dialog.Owner = window as Window;
+			var adapter = this.dialogFactory.GetSelectPathDialog(DirectoryItemType.Folder, PackagePath);
+			var dialogResult = adapter.ShowDialog();
 
-			if (dialog.ShowDialog() == true)
+			if (dialogResult.DialogOperationResult == true)
 			{
-				this.PackagePath = viewModel.SelectedPath;
+				this.PackagePath = dialogResult.SelectedFullPath;
 			}
 		}
 
@@ -259,8 +260,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			string methodPath = Path.Combine(this.PackagePath, $"{this.SelectedPackage}\\Import\\Method\\{this.MethodName}.xml");
 			if (File.Exists(methodPath))
 			{
-				var messageWindow = new MessageBoxWindow();
-				var dialogReuslt = messageWindow.ShowDialog(wnd,
+				var messageWindow = this.dialogFactory.GetMessageBoxWindow();
+				var dialogReuslt = messageWindow.ShowDialog(
 					$"The method {this.MethodName} already exsist in packages. Click OK to replace it.",
 					"Save package",
 					MessageButtons.OKCancel,

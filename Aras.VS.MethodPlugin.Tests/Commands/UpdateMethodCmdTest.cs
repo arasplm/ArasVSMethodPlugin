@@ -47,7 +47,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			var currentPath = AppDomain.CurrentDomain.BaseDirectory;
 			projectManager.ProjectConfigPath.Returns(Path.Combine(currentPath, "TestData\\projectConfig.xml"));
 			projectConfiguration = projectConfigurationManager.Load(projectManager.ProjectConfigPath);
-			templateLoader = new TemplateLoader(dialogFactory, iVsUIShell);
+			templateLoader = new TemplateLoader(dialogFactory);
 			projectManager.MethodConfigPath.Returns(Path.Combine(currentPath, "TestData\\method-config.xml"));
 			templateLoader.Load(projectManager.MethodConfigPath);
 			projectManager.MethodPath.Returns(Path.Combine(currentPath, "TestData\\TestMethod.txt"));
@@ -57,14 +57,14 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 		public void ExecuteCommandImpl_ShouldReceivedGetUpdateFromArasView()
 		{
 			// Arrange
-			dialogFactory.GetUpdateFromArasView(null, null, null, null, null, null, null, null, null).ReturnsForAnyArgs(new UpdateFromArasViewAdapterTest());
+			dialogFactory.GetUpdateFromArasView(null, null, null, null, null, null, null, null).ReturnsForAnyArgs(new UpdateFromArasViewAdapterTest());
 			codeProvider.GenerateCodeInfo(null, Arg.Any<EventSpecificDataType>(), null, Arg.Any<bool>(), null, Arg.Any<bool>()).ReturnsForAnyArgs(Substitute.For<GeneratedCodeInfo>());
 
 			//Act
-			updateMethodCmd.ExecuteCommandImpl(null, null, iVsUIShell);
+			updateMethodCmd.ExecuteCommandImpl(null, null);
 
 			// Assert
-			dialogFactory.Received().GetUpdateFromArasView(iVsUIShell, projectConfigurationManager, Arg.Any<ProjectConfiguraiton>(), Arg.Any<TemplateLoader>(), Arg.Any<PackageManager>(),
+			dialogFactory.Received().GetUpdateFromArasView(projectConfigurationManager, Arg.Any<ProjectConfiguraiton>(), Arg.Any<TemplateLoader>(), Arg.Any<PackageManager>(),
 				Arg.Any<MethodInfo>(), projectManager.ProjectConfigPath, string.Empty, string.Empty);
 		}
 
@@ -73,12 +73,12 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 		{
 			// Arrange
 			var updateFromArasViewAdapterTest = Substitute.For<UpdateFromArasViewAdapterTest>();
-			dialogFactory.GetUpdateFromArasView(null, null, null, null, null, null, null, null, null).ReturnsForAnyArgs(updateFromArasViewAdapterTest);
+			dialogFactory.GetUpdateFromArasView(null, null, null, null, null, null, null, null).ReturnsForAnyArgs(updateFromArasViewAdapterTest);
 			codeProvider.GenerateCodeInfo(null, Arg.Any<EventSpecificDataType>(), null, Arg.Any<bool>(), null, Arg.Any<bool>()).ReturnsForAnyArgs(Substitute.For<GeneratedCodeInfo>());
 			var showDialogResult = updateFromArasViewAdapterTest.ShowDialog();
 
 			//Act
-			updateMethodCmd.ExecuteCommandImpl(null, null, iVsUIShell);
+			updateMethodCmd.ExecuteCommandImpl(null, null);
 
 			// Assert
 			codeProvider.Received().GenerateCodeInfo(Arg.Any<TemplateInfo>(), Arg.Any<EventSpecificDataType>(), showDialogResult.MethodName, false, showDialogResult.MethodCode, false);
@@ -88,8 +88,6 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 
 		public class UpdateFromArasViewAdapterTest : IViewAdaper<UpdateFromArasView, UpdateFromArasViewResult>
 		{
-			public System.Windows.Window Owner { get { return null; } set { } }
-
 			public UpdateFromArasViewResult ShowDialog()
 			{
 				return new UpdateFromArasViewResult

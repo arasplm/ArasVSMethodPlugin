@@ -86,11 +86,11 @@ namespace Aras.VS.MethodPlugin
 			base.Initialize();
 			var dllPath = Assembly.GetExecutingAssembly().Location;
 			
+			this.iOWrapper = new IOWrapper();
 			this.authManager = new AuthenticationManager();
 			this.arasDataProvider = new ArasDataProvider(authManager);
-			this.dialogFactory = new DialogFactory(authManager, arasDataProvider);
+			this.dialogFactory = new DialogFactory(authManager, arasDataProvider, this, iOWrapper);
 			this.projectConfigurationManager = new ProjectConfigurationManager();
-			this.iOWrapper = new IOWrapper();
 			this.vsPackageWrapper = new VsPackageWrapper();
 			this.projectManager = new ProjectManager(this, dialogFactory, iOWrapper, vsPackageWrapper);
 			this.defaultCodeProvider = new DefaultCodeProvider(iOWrapper);

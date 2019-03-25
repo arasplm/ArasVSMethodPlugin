@@ -279,8 +279,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				this.currentMethodPackage = packageManager.GetPackageDefinitionByElementName(this.methodName);
 				if (!string.IsNullOrEmpty(currentMethodPackage) && !string.Equals(this.currentMethodPackage, this.selectedPackage))
 				{
-					var messageWindow = new MessageBoxWindow();
-					var dialogReuslt = messageWindow.ShowDialog(null,
+					var messageWindow = this.dialogFactory.GetMessageBoxWindow();
+					var dialogReuslt = messageWindow.ShowDialog(
 						$"The {this.methodName} method already attached to differernt package. Click OK to reasign package for this method.",
 						"Save method to Aras Innovator",
 						MessageButtons.OKCancel,
@@ -299,8 +299,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 				if (!methodItem.isError() && methodItem.getID() != innovatorMethodId)
 				{
-					var messageWindow = new MessageBoxWindow();
-					var dialogResult = messageWindow.ShowDialog(wnd,
+					var messageWindow = this.dialogFactory.GetMessageBoxWindow();
+					var dialogResult = messageWindow.ShowDialog(
 						"Latest version in Aras is differrent that you have. Click OK to rewrite Aras method code.",
 						"Save method to Aras Innovator",
 						MessageButtons.OKCancel,
@@ -317,9 +317,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			}
 			catch (Exception ex)
 			{
-				var messageWindow = new MessageBoxWindow();
-				messageWindow.ShowDialog(wnd,
-					ex.Message,
+				var messageWindow = this.dialogFactory.GetMessageBoxWindow();
+				messageWindow.ShowDialog(ex.Message,
 					"Aras VS method plugin",
 					MessageButtons.OK,
 					MessageIcon.Error);
@@ -333,12 +332,10 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		private void EditConnectionInfoCommandClick(object window)
 		{
-			var loginView = new LoginView();
-			var loginViewModel = new LoginViewModel(authManager, projectConfiguration, projectName, projectFullName);
-			loginView.DataContext = loginViewModel;
-			loginView.Owner = window as Window;
+			var dialogAdapter = this.dialogFactory.GetLoginView(projectConfiguration, projectName, projectFullName);
+			var dialogResult = dialogAdapter.ShowDialog();
 
-			if (loginView.ShowDialog() == true)
+			if (dialogResult.DialogOperationResult == true)
 			{
 				projectConfigurationManager.Save(projectConfigPath, projectConfiguration);
 				ConnectionInformation = projectConfiguration.Connections.First(c => c.LastConnection);

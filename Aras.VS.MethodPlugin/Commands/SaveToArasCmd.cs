@@ -33,13 +33,13 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// </summary>
 		public const int ItemCommandId = 0x101;
 
-        /// <summary>
-        /// Command menu group (command set GUID).
-        /// </summary>
-        public static readonly Guid ItemCommandSet = CommandIds.SaveToAras;
+		/// <summary>
+		/// Command menu group (command set GUID).
+		/// </summary>
+		public static readonly Guid ItemCommandSet = CommandIds.SaveToAras;
 
 
-        private SaveToArasCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory)
+		private SaveToArasCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory)
 		{
 			if (projectManager.CommandService != null)
 			{
@@ -86,14 +86,14 @@ namespace Aras.VS.MethodPlugin.Commands
 			return action;
 		}
 
-		public override void ExecuteCommandImpl(object sender, EventArgs args, IVsUIShell uiShell)
+		public override void ExecuteCommandImpl(object sender, EventArgs args)
 		{
 			var project = projectManager.SelectedProject;
 
 			var projectConfigPath = projectManager.ProjectConfigPath;
 			var methodConfigPath = projectManager.MethodConfigPath;
 
-            var projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
+			var projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
 
 			string selectedMethodPath = projectManager.MethodPath;
 			string sourceCode = File.ReadAllText(selectedMethodPath, new UTF8Encoding(true));
@@ -109,14 +109,14 @@ namespace Aras.VS.MethodPlugin.Commands
 			string methodCode = codeProvider.LoadMethodCode(sourceCode, methodInformation, projectManager.ServerMethodFolderPath);
 
 			var packageManager = new PackageManager(authManager);
-			var saveView = dialogFactory.GetSaveToArasView(uiShell, projectConfigurationManager, projectConfiguration, packageManager, methodInformation, methodCode, projectConfigPath, project.Name, project.FullName);
+			var saveView = dialogFactory.GetSaveToArasView(projectConfigurationManager, projectConfiguration, packageManager, methodInformation, methodCode, projectConfigPath, project.Name, project.FullName);
 			var saveViewResult = saveView.ShowDialog();
 			if (saveViewResult?.DialogOperationResult != true)
 			{
 				return;
 			}
 
-			var templateLoader = new TemplateLoader(this.dialogFactory, uiShell);
+			var templateLoader = new TemplateLoader(this.dialogFactory);
 			templateLoader.Load(methodConfigPath);
 
 			dynamic currentMethodItem = saveViewResult.MethodItem;
@@ -189,9 +189,8 @@ namespace Aras.VS.MethodPlugin.Commands
 			}
 
 			string message = string.Format("Method \"{0}\" saved", saveViewResult.MethodName);
-            var messageBoxWindow = dialogFactory.GetMessageBoxWindow(uiShell);
-			messageBoxWindow.ShowDialog(null,
-				message,
+			var messageBoxWindow = dialogFactory.GetMessageBoxWindow();
+			messageBoxWindow.ShowDialog(message,
 				string.Empty,
 				MessageButtons.OK,
 				MessageIcon.Information);

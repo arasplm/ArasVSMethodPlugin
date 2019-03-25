@@ -1,0 +1,24 @@
+﻿<Item type="Method" typeId="87879A09B8044DE380D59DF22DE1867F" id="1BF96D4255962F7EA5970426401A841E">
+    <config_id keyed_name="ReturnNullMethodName" type="Method">616634B3DC344D51964CD7AD988051D7</config_id>
+    <core>1</core>
+    <created_by_id keyed_name="Super User" type="User">AD30A6D8D3B642F5A2AFED1A4B02BEFA</created_by_id>
+    <created_on>2002-04-24T09:43:14</created_on>
+    <current_state name="Released" keyed_name="Released" type="Life Cycle State">F08211E432904F5DA4D191EF5ED6F3DF</current_state>
+    <execution_allowed_to keyed_name="World" type="Identity">A73B655731924CD0B027E4F4D5FCC0A9</execution_allowed_to>
+    <generation>2</generation>
+    <id keyed_name="ReturnNullMethodName" type="Method">1BF96D4255962F7EA5970426401A841E</id>
+    <is_current>1</is_current>
+    <is_released>0</is_released>
+    <keyed_name>ReturnNullMethodName</keyed_name>
+    <major_rev>A</major_rev>
+    <method_code>return null;</method_code>
+    <method_type>C#</method_type>
+    <modified_by_id keyed_name="Super User" type="User">AD30A6D8D3B642F5A2AFED1A4B02BEFA</modified_by_id>
+    <modified_on>2019-01-24T01:13:30</modified_on>
+    <new_version>0</new_version>
+    <not_lockable>0</not_lockable>
+    <permission_id keyed_name="E096F2F4CBB44ADDB8193CAB39D51866" type="Permission" origPermission="E096F2F4CBB44ADDB8193CAB39D51866">E096F2F4CBB44ADDB8193CAB39D51866</permission_id>
+    <state>Released</state>
+    <name>ReturnNullMethodName</name>
+    <itemtype>87879A09B8044DE380D59DF22DE1867F</itemtype>
+</Item>

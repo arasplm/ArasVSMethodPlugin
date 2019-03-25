@@ -155,9 +155,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 				if (selectedTemplate != null && !selectedTemplate.IsSuccessfullySupported)
 				{
-					var messageWindow = new MessageBoxWindow();
-					var dialogReuslt = messageWindow.ShowDialog(null,
-						selectedTemplate.Message,
+					var messageWindow = this.dialogFactory.GetMessageBoxWindow();
+					var dialogReuslt = messageWindow.ShowDialog(selectedTemplate.Message,
 						"Open method Aras Innovator",
 						MessageButtons.OK,
 						MessageIcon.None);

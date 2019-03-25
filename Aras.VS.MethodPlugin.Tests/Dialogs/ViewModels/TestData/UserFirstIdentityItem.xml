@@ -1,0 +1,24 @@
+﻿<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+    <SOAP-ENV:Body>
+        <Result>
+            <Item type="Identity" typeId="E582AB17663F4EF28460015B2BE9E094" id="DB9E6BF9FC5B45E8A3F6DADF67088D2B">
+                <config_id keyed_name="User First" type="Identity">DB9E6BF9FC5B45E8A3F6DADF67088D2B</config_id>
+                <created_by_id keyed_name="Innovator Admin" type="User">30B991F927274FA3829655F50C99472E</created_by_id>
+                <created_on>2018-12-07T09:37:59</created_on>
+                <generation>1</generation>
+                <id keyed_name="User First" type="Identity">DB9E6BF9FC5B45E8A3F6DADF67088D2B</id>
+                <is_alias>1</is_alias>
+                <is_current>1</is_current>
+                <is_released>0</is_released>
+                <keyed_name>User First</keyed_name>
+                <major_rev>A</major_rev>
+                <modified_by_id keyed_name="Innovator Admin" type="User">30B991F927274FA3829655F50C99472E</modified_by_id>
+                <modified_on>2018-12-07T09:37:59</modified_on>
+                <new_version>1</new_version>
+                <not_lockable>0</not_lockable>
+                <permission_id keyed_name="Identity" type="Permission" origPermission="761D6A3E3CA146138B47393D29FF6824">761D6A3E3CA146138B47393D29FF6824</permission_id>
+                <name>User First</name>
+            </Item>
+        </Result>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

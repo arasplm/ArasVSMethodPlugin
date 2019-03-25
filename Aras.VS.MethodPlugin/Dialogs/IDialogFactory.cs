@@ -5,17 +5,19 @@
 //------------------------------------------------------------------------------
 
 using Aras.VS.MethodPlugin.Code;
-using Aras.VS.MethodPlugin.Configurations;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
-using Aras.VS.MethodPlugin.Dialogs.Directory.Data;
 using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.ItemSearch;
 using Aras.VS.MethodPlugin.PackageManagement;
+using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using Aras.VS.MethodPlugin.Templates;
+using EnvDTE;
 using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio.Shell.Interop;
 using OfficeConnector.Dialogs;
+using Aras.VS.MethodPlugin.Configurations;
+using System.Windows.Forms;
+using Aras.VS.MethodPlugin.Dialogs.Directory.Data;
 
 namespace Aras.VS.MethodPlugin.Dialogs
 {
@@ -27,8 +29,9 @@ namespace Aras.VS.MethodPlugin.Dialogs
 
 		IViewAdaper<LoginView, ViewResult> GetLoginView(IProjectManager projectManager, IProjectConfiguraiton projectConfiguration);
 
-		IViewAdaper<CreateMethodView, CreateMethodViewResult> GetCreateView(IVsUIShell uiShell,
-			IProjectConfiguraiton projectConfiguration,
+		IViewAdaper<LoginView, ViewResult> GetLoginView(IProjectConfiguraiton projectConfiguration, string projectName, string projectFullName);
+
+		IViewAdaper<CreateMethodView, CreateMethodViewResult> GetCreateView(IProjectConfiguraiton projectConfiguration,
 			TemplateLoader templateLoader,
 			PackageManager packageManager,
 			IProjectManager projectManager,
@@ -37,19 +40,18 @@ namespace Aras.VS.MethodPlugin.Dialogs
 
 		IViewAdaper<ConnectionInfoView, ViewResult> GetConnectionInfoView(IProjectManager projectManager, IProjectConfigurationManager configurationManager);
 
-		IViewAdaper<OpenFromArasView, OpenFromArasViewResult> GetOpenFromArasView(IVsUIShell uiShell, IProjectConfigurationManager configurationManager,
-			IProjectConfiguraiton projectConfiguration,
-			TemplateLoader templateLoader,
-			PackageManager packageManager,
-			string pathToProjectConfigFile,
-			string projectName,
-			string projectFullName,
-			string projectLanguage);
+		IViewAdaper<OpenFromArasView, OpenFromArasViewResult> GetOpenFromArasView(IProjectConfigurationManager configurationManager,
+		   IProjectConfiguraiton projectConfiguration,
+		   TemplateLoader templateLoader,
+		   PackageManager packageManager,
+		   string pathToProjectConfigFile,
+		   string projectName,
+		   string projectFullName,
+		   string projectLanguage);
 
-		IViewAdaper<OpenFromPackageView, OpenFromPackageViewResult> GetOpenFromPackageView(IVsUIShell uiShell, TemplateLoader templateLoader, string projectLanguage, IProjectConfiguraiton projectConfiguraiton);
+		IViewAdaper<OpenFromPackageView, OpenFromPackageViewResult> GetOpenFromPackageView(TemplateLoader templateLoader, string projectLanguage, IProjectConfiguraiton projectConfiguraiton);
 
-		IViewAdaper<SaveMethodView, SaveMethodViewResult> GetSaveToArasView(IVsUIShell uiShell,
-			IProjectConfigurationManager projectConfigurationManager,
+		IViewAdaper<SaveMethodView, SaveMethodViewResult> GetSaveToArasView(IProjectConfigurationManager projectConfigurationManager,
 			IProjectConfiguraiton projectConfiguration,
 			PackageManager packageManager,
 			MethodInfo methodInformation,
@@ -58,8 +60,7 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			string projectName,
 			string projectFullName);
 
-		IViewAdaper<SaveToPackageView, SaveToPackageViewResult> GetSaveToPackageView(IVsUIShell uiShell,
-			IProjectConfiguraiton projectConfiguration,
+		IViewAdaper<SaveToPackageView, SaveToPackageViewResult> GetSaveToPackageView(IProjectConfiguraiton projectConfiguration,
 			TemplateLoader templateLoader,
 			PackageManager packageManager,
 			ICodeProvider codeProvider,
@@ -67,8 +68,7 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			MethodInfo methodInformation,
 			string pathToFileForSave);
 
-		IViewAdaper<UpdateFromArasView, UpdateFromArasViewResult> GetUpdateFromArasView(IVsUIShell uiShell,
-			IProjectConfigurationManager projectConfigurationManager,
+		IViewAdaper<UpdateFromArasView, UpdateFromArasViewResult> GetUpdateFromArasView(IProjectConfigurationManager projectConfigurationManager,
 			IProjectConfiguraiton projectConfiguration,
 			TemplateLoader templateLoader,
 			PackageManager packageManager,
@@ -77,10 +77,9 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			string projectName,
 			string projectFullName);
 
-		IViewAdaper<CreateCodeItemView, CreateCodeItemViewResult> GetCreateCodeItemView(IVsUIShell uiShell, ICodeItemProvider codeItemProvider, bool usedVSFormatting);
+		IViewAdaper<CreateCodeItemView, CreateCodeItemViewResult> GetCreateCodeItemView(ICodeItemProvider codeItemProvider, bool usedVSFormatting);
 
-		IViewAdaper<DebugMethodView, DebugMethodViewResult> GetDebugMethodView(IVsUIShell uiShell,
-			IProjectConfigurationManager projectConfigurationManager,
+		IViewAdaper<DebugMethodView, DebugMethodViewResult> GetDebugMethodView(IProjectConfigurationManager projectConfigurationManager,
 			IProjectConfiguraiton projectConfiguration,
 			MethodInfo methodInformation,
 			string methodCode,
@@ -93,8 +92,14 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			string startPath = "",
 			string fileExtantion = "");
 
-		IViewAdaper<MoveToView, MoveToViewResult> GetMoveToView(IVsUIShell uiShell, string methodPath, SyntaxNode node);
+		IViewAdaper<MoveToView, MoveToViewResult> GetMoveToView(string methodPath, SyntaxNode node);
 
-		IMessageBoxWindow GetMessageBoxWindow(IVsUIShell uiShell);
+		IMessageBoxWindow GetMessageBoxWindow();
+
+		IViewAdaper<OpenFileDialog, OpenFileDialogResult> GetOpenFileDialog(string filter, string defaultExtention);
+
+		IViewAdaper<FolderNameDialog, FolderNameDialogResult> GetFolderNameDialog();
+
+		IViewAdaper<OpenFromPackageTreeView, OpenFromPackageTreeViewResult> GetOpenFromPackageTreeView(string actualFolderPath, string package, string methodName, string selectedSearchType);
 	}
 }

@@ -19,6 +19,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 {
 	public class SelectPathViewModel : BaseViewModel
 	{
+		private readonly IDialogFactory dialogFactory;
+		private readonly IIOWrapper iOWrapper;
 		private ObservableCollection<DirectoryItemViewModel> directoryItems;
 		private DirectoryItemViewModel selectDirectoryItem;
 		private DirectoryItemType searchToLevel;
@@ -33,8 +35,13 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private ICommand closeCommand;
 		private ICommand pathChangeCommand;
 
-		public SelectPathViewModel(DirectoryItemType searchToLevel, string rootPath = "", string startPath = "", string fileExtantion = "")
+		public SelectPathViewModel(IDialogFactory dialogFactory, DirectoryItemType searchToLevel, IIOWrapper iOWrapper, string rootPath = "", string startPath = "", string fileExtantion = "")
 		{
+			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));
+			if (iOWrapper == null) throw new ArgumentNullException(nameof(iOWrapper));
+
+			this.dialogFactory = dialogFactory;
+			this.iOWrapper = iOWrapper;
 			this.searchToLevel = searchToLevel;
 			this.selectedPath = startPath;
 			this.newFolderCommand = new RelayCommand<object>(OnNewFolderClick);
@@ -118,7 +125,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		public ICommand PathChangeCommand { get { return pathChangeCommand; } }
 
-
 		private void OnCloseCliked(object window)
 		{
 			var wnd = window as Window;
@@ -127,7 +133,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		private void OkCommandClick(object window)
 		{
-			var wnd = window as Window;
+			Window wnd = window as Window;
 			if (System.IO.Directory.Exists(SelectedPath) || File.Exists(SelectedPath))
 			{
 				wnd.DialogResult = true;
@@ -135,9 +141,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			}
 			else
 			{
-				var messageWindow = new MessageBoxWindow();
-				messageWindow.ShowDialog(wnd,
-					"Selection wasn't found",
+				var messageWindow = this.dialogFactory.GetMessageBoxWindow();
+				messageWindow.ShowDialog("Selection wasn't found",
 					"Select path for saving",
 					MessageButtons.OK,
 					MessageIcon.None);
@@ -161,25 +166,22 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		private void OnNewFolderClick(object window)
 		{
-			var viewModel = new FolderNameViewModel();
-			var view = new FolderNameDialog();
-			view.DataContext = viewModel;
-			view.Owner = window as Window;
-
-			if (view.ShowDialog() == true)
+			var folderNameDialogAdapter = this.dialogFactory.GetFolderNameDialog();
+			FolderNameDialogResult result = folderNameDialogAdapter.ShowDialog();
+			if (result.DialogOperationResult == true)
 			{
-				string folderName = viewModel.FolderName;
+				string folderName = result.FolderName;
 
 				string newFolderPath = Path.Combine(selectDirectoryItem.FullPath, folderName);
 				int index = 1;
 
-				while (System.IO.Directory.Exists(newFolderPath))
+				while (this.iOWrapper.DirectoryExists(newFolderPath))
 				{
 					newFolderPath = Path.Combine(selectDirectoryItem.FullPath, $"{folderName} {index}");
 					index++;
 				}
 
-				System.IO.Directory.CreateDirectory(newFolderPath);
+				this.iOWrapper.DirectoryCreateDirectory(newFolderPath);
 
 				if (selectDirectoryItem.IsExpanded)
 				{
@@ -208,14 +210,12 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		private void OnRenameFolderClick(object window)
 		{
-			var viewModel = new FolderNameViewModel();
-			var view = new FolderNameDialog();
-			view.DataContext = viewModel;
-			view.Owner = window as Window;
+			var folderNameDialogAdapter = this.dialogFactory.GetFolderNameDialog();
+			FolderNameDialogResult result = folderNameDialogAdapter.ShowDialog();
 
-			if (view.ShowDialog() == true)
+			if (result.DialogOperationResult == true)
 			{
-				string newFolderName = viewModel.FolderName;
+				string newFolderName = result.FolderName;
 				string newFullPath = Path.Combine(Path.GetDirectoryName(selectDirectoryItem.FullPath), newFolderName);
 
 				if (string.Equals(selectDirectoryItem.FullPath, newFullPath))
@@ -225,14 +225,13 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 				try
 				{
-					System.IO.Directory.Move(selectDirectoryItem.FullPath, newFullPath);
+					this.iOWrapper.DirectoryMove(selectDirectoryItem.FullPath, newFullPath);
 					selectDirectoryItem.FullPath = newFullPath;
 				}
 				catch (Exception ex)
 				{
-					var messageWindow = new MessageBoxWindow();
-					messageWindow.ShowDialog(window as Window,
-						ex.Message,
+					var messageWindow = this.dialogFactory.GetMessageBoxWindow();
+					messageWindow.ShowDialog(ex.Message,
 						"Aras VS method plugin",
 						MessageButtons.OK,
 						MessageIcon.Error);
@@ -243,9 +242,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private void OnDeleteFolderClick(object window)
 		{
 			string message = $"Are you sure you want to delete the {selectDirectoryItem.Name} folder?";
-			var messageWindow = new MessageBoxWindow();
-			var dialogResult = messageWindow.ShowDialog(window as Window,
-				message,
+			var messageWindow = this.dialogFactory.GetMessageBoxWindow();
+			var dialogResult = messageWindow.ShowDialog(message,
 				"Aras VS method plugin",
 				MessageButtons.OKCancel,
 				MessageIcon.Warning);
@@ -254,8 +252,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			{
 				try
 				{
-					System.IO.Directory.Delete(selectDirectoryItem.FullPath, true);
-
+					this.iOWrapper.DirectoryDelete(selectDirectoryItem.FullPath, true);
 					if (selectDirectoryItem.Parent != null)
 					{
 						selectDirectoryItem.Parent.Update();
@@ -263,27 +260,25 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				}
 				catch (Exception ex)
 				{
-					var errorWindow = new MessageBoxWindow();
-					errorWindow.ShowDialog(window as Window,
-						ex.Message,
+					var errorWindow = this.dialogFactory.GetMessageBoxWindow();
+					errorWindow.ShowDialog(ex.Message,
 						"Aras VS method plugin",
 						MessageButtons.OK,
 						MessageIcon.Error);
 				}
 			}
 		}
+
 		private void OnPathChange(object window)
 		{
-			var wnd = window as Window;
-			if (System.IO.File.Exists(selectedPath) || System.IO.Directory.Exists(selectedPath))
+			if (this.iOWrapper.FileExists(selectedPath) || this.iOWrapper.DirectoryExists(selectedPath))
 			{
 				Navigate(DirectoryItems, selectedPath.Split(Path.DirectorySeparatorChar).ToList());
 			}
 			else
 			{
-				var messageWindow = new MessageBoxWindow();
-				messageWindow.ShowDialog(wnd,
-					"File or Folder were not found",
+				var messageWindow = this.dialogFactory.GetMessageBoxWindow();
+				messageWindow.ShowDialog("File or Folder were not found",
 					"Saving method to local package",
 					MessageButtons.OK,
 					MessageIcon.None);

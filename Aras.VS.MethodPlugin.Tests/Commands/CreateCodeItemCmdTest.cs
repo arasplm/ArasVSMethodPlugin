@@ -51,7 +51,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			Assert.Throws<Exception>(() =>
 			{
 				//Act
-				this.createCodeItemCmd.ExecuteCommandImpl(null, null, null);
+				this.createCodeItemCmd.ExecuteCommandImpl(null, null);
 			});
 		}
 
@@ -74,13 +74,13 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			this.projectConfigurationManager.Load(Arg.Any<string>()).Returns(projectConfiguraiton);
 
 			CreateCodeItemViewAdaper createCodeItemViewAdaper = new CreateCodeItemViewAdaper(partialfileName, MethodPlugin.Code.CodeType.Partial, true);
-			this.dialogFactory.GetCreateCodeItemView(Arg.Any<IVsUIShell>(), Arg.Any<ICodeItemProvider>(), Arg.Any<bool>()).Returns(createCodeItemViewAdaper);
+			this.dialogFactory.GetCreateCodeItemView(Arg.Any<ICodeItemProvider>(), Arg.Any<bool>()).Returns(createCodeItemViewAdaper);
 
 			//Assert
 			Assert.Throws<Exception>(() =>
 			{
 				//Act
-				this.createCodeItemCmd.ExecuteCommandImpl(null, null, null);
+				this.createCodeItemCmd.ExecuteCommandImpl(null, null);
 			}, "Code item already exists.");
 		}
 
@@ -108,7 +108,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			this.projectConfigurationManager.Load(Arg.Any<string>()).Returns(projectConfiguraiton);
 
 			CreateCodeItemViewAdaper createCodeItemViewAdaper = new CreateCodeItemViewAdaper(partialfileName, MethodPlugin.Code.CodeType.Partial, true);
-			this.dialogFactory.GetCreateCodeItemView(Arg.Any<IVsUIShell>(), Arg.Any<ICodeItemProvider>(), Arg.Any<bool>()).Returns(createCodeItemViewAdaper);
+			this.dialogFactory.GetCreateCodeItemView(Arg.Any<ICodeItemProvider>(), Arg.Any<bool>()).Returns(createCodeItemViewAdaper);
 
 			ICodeProvider codeProvider = Substitute.For<ICodeProvider>();
 			CodeInfo codeItemInfo = new CodeInfo()
@@ -121,7 +121,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			codeProvider.CreateCodeItemInfo(testMethodInfo, partialfileName, Arg.Any<MethodPlugin.Code.CodeType>(), Arg.Any<CodeElementType>(), Arg.Any<bool>()).Returns(codeItemInfo);
 
 			//Act
-			this.createCodeItemCmd.ExecuteCommandImpl(null, null, null);
+			this.createCodeItemCmd.ExecuteCommandImpl(null, null);
 
 			//Assert
 			Assert.IsTrue(testMethodInfo.PartialClasses.Contains(codeItemInfo.Path));
@@ -152,7 +152,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			this.projectConfigurationManager.Load(Arg.Any<string>()).Returns(projectConfiguraiton);
 
 			CreateCodeItemViewAdaper createCodeItemViewAdaper = new CreateCodeItemViewAdaper(externalfileName, MethodPlugin.Code.CodeType.External, true);
-			this.dialogFactory.GetCreateCodeItemView(Arg.Any<IVsUIShell>(), Arg.Any<ICodeItemProvider>(), Arg.Any<bool>()).Returns(createCodeItemViewAdaper);
+			this.dialogFactory.GetCreateCodeItemView(Arg.Any<ICodeItemProvider>(), Arg.Any<bool>()).Returns(createCodeItemViewAdaper);
 
 			ICodeProvider codeProvider = Substitute.For<ICodeProvider>();
 			CodeInfo codeItemInfo = new CodeInfo()
@@ -165,7 +165,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			codeProvider.CreateCodeItemInfo(testMethodInfo, externalfileName, Arg.Any<MethodPlugin.Code.CodeType>(), Arg.Any<CodeElementType>(), Arg.Any<bool>()).Returns(codeItemInfo);
 
 			//Act
-			this.createCodeItemCmd.ExecuteCommandImpl(null, null, null);
+			this.createCodeItemCmd.ExecuteCommandImpl(null, null);
 
 			//Assert
 			Assert.IsTrue(testMethodInfo.ExternalItems.Contains(codeItemInfo.Path));
@@ -185,8 +185,6 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			this.dialogOperationResult = dialogOperationResult;
 			this.selectedCodeType = selectedCodeType;
 		}
-
-		public System.Windows.Window Owner { get { return null; } set { } }
 
 		public CreateCodeItemViewResult ShowDialog()
 		{
