@@ -86,7 +86,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			return action;
 		}
 
-		public override void ExecuteCommandImpl(object sender, EventArgs args, IVsUIShell uiShell)
+		public override void ExecuteCommandImpl(object sender, EventArgs args)
 		{
 			var project = projectManager.SelectedProject;
 
@@ -109,14 +109,14 @@ namespace Aras.VS.MethodPlugin.Commands
 			string methodCode = codeProvider.LoadMethodCode(sourceCode, methodInformation, projectManager.ServerMethodFolderPath);
 
 			var packageManager = new PackageManager(authManager);
-			var saveView = dialogFactory.GetSaveToArasView(uiShell, projectConfigurationManager, projectConfiguration, packageManager, methodInformation, methodCode, projectConfigPath, project.Name, project.FullName);
+			var saveView = dialogFactory.GetSaveToArasView(projectConfigurationManager, projectConfiguration, packageManager, methodInformation, methodCode, projectConfigPath, project.Name, project.FullName);
 			var saveViewResult = saveView.ShowDialog();
 			if (saveViewResult?.DialogOperationResult != true)
 			{
 				return;
 			}
 
-			var templateLoader = new TemplateLoader(this.dialogFactory, uiShell);
+			var templateLoader = new TemplateLoader(this.dialogFactory);
 			templateLoader.Load(methodConfigPath);
 
 			dynamic currentMethodItem = saveViewResult.MethodItem;
@@ -189,7 +189,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			}
 
 			string message = string.Format("Method \"{0}\" saved", saveViewResult.MethodName);
-            var messageBoxWindow = dialogFactory.GetMessageBoxWindow(uiShell);
+            var messageBoxWindow = dialogFactory.GetMessageBoxWindow();
 			messageBoxWindow.ShowDialog(null,
 				message,
 				string.Empty,

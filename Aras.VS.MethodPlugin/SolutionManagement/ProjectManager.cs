@@ -577,7 +577,7 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 						}
 						else
 						{
-							var messageWindow = dialogFactory.GetMessageBoxWindow(UIShell);
+							var messageWindow = dialogFactory.GetMessageBoxWindow();
 							var messageDialogResult = messageWindow.ShowDialog(
 								"One or more method files is not saved. Do you want to save changes?",
 								"Aras VS method plugin",

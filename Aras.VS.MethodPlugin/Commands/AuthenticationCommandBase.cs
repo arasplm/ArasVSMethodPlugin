@@ -2,11 +2,9 @@
 using System.Linq;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Code;
-using Aras.VS.MethodPlugin.Dialogs;
-using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
+using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.SolutionManagement;
-using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Aras.VS.MethodPlugin.Commands
 {
@@ -31,9 +29,6 @@ namespace Aras.VS.MethodPlugin.Commands
 
 		public override void ExecuteCommand(object sender, EventArgs args)
 		{
-			IVsUIShell uiShell = projectManager.UIShell;
-			uiShell.EnableModeless(0);
-
 			try
 			{
 				string projectConfigPath = projectManager.ProjectConfigPath;
@@ -55,21 +50,16 @@ namespace Aras.VS.MethodPlugin.Commands
 				bool saved = projectManager.SaveDirtyFiles(projectConfiguration.MethodInfos);
 				if (saved)
 				{
-					ExecuteCommandImpl(sender, args, uiShell);
+					ExecuteCommandImpl(sender, args);
 				}
 			}
 			catch (Exception ex)
 			{
-				var messageWindow = dialogFactory.GetMessageBoxWindow(projectManager.UIShell);
-				messageWindow.ShowDialog(
-					ex.Message,
+				var messageWindow = dialogFactory.GetMessageBoxWindow();
+				messageWindow.ShowDialog(ex.Message,
 					"Aras VS method plugin",
 					MessageButtons.OK,
 					MessageIcon.Error);
-			}
-			finally
-			{
-				uiShell.EnableModeless(1);
 			}
 		}
 	}

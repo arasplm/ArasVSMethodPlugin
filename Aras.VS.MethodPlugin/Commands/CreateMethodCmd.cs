@@ -9,13 +9,12 @@ using System.ComponentModel.Design;
 using System.Linq;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Code;
+using Aras.VS.MethodPlugin.Configurations;
+using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.PackageManagement;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
-using Aras.VS.MethodPlugin.Configurations;
 
 namespace Aras.VS.MethodPlugin.Commands
 {
@@ -73,18 +72,18 @@ namespace Aras.VS.MethodPlugin.Commands
 			Instance = new CreateMethodCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, userConfiguration);
 		}
 
-		public override void ExecuteCommandImpl(object sender, EventArgs args, IVsUIShell uiShell)
+		public override void ExecuteCommandImpl(object sender, EventArgs args)
 		{
 			var project = projectManager.SelectedProject;
 			var projectConfiguration = projectConfigurationManager.Load(projectManager.ProjectConfigPath);
 
-			var templateLoader = new Templates.TemplateLoader(this.dialogFactory, uiShell);
+			var templateLoader = new Templates.TemplateLoader(this.dialogFactory);
 			templateLoader.Load(projectManager.MethodConfigPath);
 
 			PackageManager packageManager = new PackageManager(authManager);
 			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language, projectConfiguration);
 
-			var createView = dialogFactory.GetCreateView(uiShell, projectConfiguration, templateLoader, packageManager, projectManager, codeProvider, globalConfiguration);
+			var createView = dialogFactory.GetCreateView(projectConfiguration, templateLoader, packageManager, projectManager, codeProvider, globalConfiguration);
 			var createViewResult = createView.ShowDialog();
 			if (createViewResult?.DialogOperationResult != true)
 			{

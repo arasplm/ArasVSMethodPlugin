@@ -73,7 +73,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			Instance = new UpdateMethodCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
 		}
 
-		public override void ExecuteCommandImpl(object sender, EventArgs args, IVsUIShell uiShell)
+		public override void ExecuteCommandImpl(object sender, EventArgs args)
 		{
 			var project = projectManager.SelectedProject;
 
@@ -90,12 +90,12 @@ namespace Aras.VS.MethodPlugin.Commands
 				throw new Exception();
 			}
 
-			var templateLoader = new TemplateLoader(this.dialogFactory, uiShell);
+			var templateLoader = new TemplateLoader(this.dialogFactory);
 			templateLoader.Load(methodConfigPath);
 
 			var packageManager = new PackageManager(authManager);
 
-			var updateView = dialogFactory.GetUpdateFromArasView(uiShell, projectConfigurationManager, projectConfiguration, templateLoader, packageManager, methodInformation, projectConfigPath, project.Name, project.FullName);
+			var updateView = dialogFactory.GetUpdateFromArasView(projectConfigurationManager, projectConfiguration, templateLoader, packageManager, methodInformation, projectConfigPath, project.Name, project.FullName);
 			var updateViewResult = updateView.ShowDialog();
 			if (updateViewResult?.DialogOperationResult != true)
 			{

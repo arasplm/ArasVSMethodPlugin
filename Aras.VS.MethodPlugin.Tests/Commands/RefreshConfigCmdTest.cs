@@ -37,7 +37,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			// Arrange
 
 			//Act
-			var testDelegate = new TestDelegate(() => refreshConfigCmd.ExecuteCommandImpl(null, null, iVsUIShell));
+			var testDelegate = new TestDelegate(() => refreshConfigCmd.ExecuteCommandImpl(null, null));
 
 			//Assert
 			Assert.DoesNotThrow(testDelegate);

@@ -74,7 +74,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			Instance = new CreateCodeItemCmd(projectManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
 		}
 
-		public override void ExecuteCommandImpl(object sender, EventArgs args, IVsUIShell uiShell)
+		public override void ExecuteCommandImpl(object sender, EventArgs args)
 		{
 			var project = projectManager.SelectedProject;
 
@@ -90,7 +90,7 @@ namespace Aras.VS.MethodPlugin.Commands
 				throw new Exception($"Configurations for the {selectedMethodName} method not found.");
 			}
 
-			var view = dialogFactory.GetCreateCodeItemView(uiShell, this.codeProviderFactory.GetCodeItemProvider(project.CodeModel.Language), projectConfiguration.UseVSFormatting);
+			var view = dialogFactory.GetCreateCodeItemView(this.codeProviderFactory.GetCodeItemProvider(project.CodeModel.Language), projectConfiguration.UseVSFormatting);
 			var viewResult = view.ShowDialog();
 			if (viewResult?.DialogOperationResult != true)
 			{

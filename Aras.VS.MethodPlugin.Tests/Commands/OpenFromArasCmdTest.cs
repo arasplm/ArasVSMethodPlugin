@@ -49,7 +49,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			projectManager.ProjectConfigPath.Returns(Path.Combine(currentPath, "TestData\\projectConfig.xml"));
 			projectManager.MethodConfigPath.Returns(Path.Combine(currentPath, "TestData\\method-config.xml"));
 			projectConfiguration = projectConfigurationManager.Load(projectManager.ProjectConfigPath);
-			templateLoader = new TemplateLoader(dialogFactory, iVsUIShell);
+			templateLoader = new TemplateLoader(dialogFactory);
 			templateLoader.Load(projectManager.MethodConfigPath);
 			packageManager = new PackageManager(authManager);
 		}
@@ -59,15 +59,15 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 		{
 			// Arrange
 			var project = projectManager.SelectedProject;
-			dialogFactory.GetOpenFromArasView(projectManager.UIShell, projectConfigurationManager, projectConfiguration, templateLoader, packageManager, projectManager.ProjectConfigPath, project.Name, project.FullName, codeProvider.Language).
+			dialogFactory.GetOpenFromArasView(projectConfigurationManager, projectConfiguration, templateLoader, packageManager, projectManager.ProjectConfigPath, project.Name, project.FullName, codeProvider.Language).
 				ReturnsForAnyArgs(Substitute.For<OpenFromArasViewAdapterTest>());
 			codeProvider.GenerateCodeInfo(null, null, null, false, null, false).ReturnsForAnyArgs(Substitute.For<GeneratedCodeInfo>());
 
 			//Act
-			openFromArasCmd.ExecuteCommandImpl(null, null, iVsUIShell);
+			openFromArasCmd.ExecuteCommandImpl(null, null);
 
 			// Assert
-			dialogFactory.Received().GetOpenFromArasView(projectManager.UIShell, projectConfigurationManager, Arg.Any<ProjectConfiguraiton>(), Arg.Any<TemplateLoader>(), Arg.Any<PackageManager>(), projectManager.ProjectConfigPath, project.Name, project.FullName, codeProvider.Language);
+			dialogFactory.Received().GetOpenFromArasView(projectConfigurationManager, Arg.Any<ProjectConfiguraiton>(), Arg.Any<TemplateLoader>(), Arg.Any<PackageManager>(), projectManager.ProjectConfigPath, project.Name, project.FullName, codeProvider.Language);
 		}
 
 		[Test]
@@ -76,13 +76,13 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			// Arrange
 			var project = projectManager.SelectedProject;
 			var openFromPackageViewAdapterTest = Substitute.For<OpenFromArasViewAdapterTest>();
-			dialogFactory.GetOpenFromArasView(projectManager.UIShell, projectConfigurationManager, projectConfiguration, templateLoader, packageManager, projectManager.ProjectConfigPath, project.Name, project.FullName, codeProvider.Language).
+			dialogFactory.GetOpenFromArasView(projectConfigurationManager, projectConfiguration, templateLoader, packageManager, projectManager.ProjectConfigPath, project.Name, project.FullName, codeProvider.Language).
 				ReturnsForAnyArgs(openFromPackageViewAdapterTest);
 			codeProvider.GenerateCodeInfo(null, null, null, false, null, false).ReturnsForAnyArgs(Substitute.For<GeneratedCodeInfo>());
 			var showDialogResult = openFromPackageViewAdapterTest.ShowDialog();
 
 			//Act
-			openFromArasCmd.ExecuteCommandImpl(null, null, iVsUIShell);
+			openFromArasCmd.ExecuteCommandImpl(null, null);
 
 			// Assert
 			codeProvider.Received().GenerateCodeInfo(Arg.Any<TemplateInfo>(), Arg.Any<EventSpecificDataType>(), showDialogResult.MethodName, false, showDialogResult.MethodCode, false);
@@ -91,8 +91,6 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 
 		public class OpenFromArasViewAdapterTest : IViewAdaper<OpenFromArasView, OpenFromArasViewResult>
 		{
-			public System.Windows.Window Owner { get { return null; } set { } }
-
 			public OpenFromArasViewResult ShowDialog()
 			{
 				return new OpenFromArasViewResult

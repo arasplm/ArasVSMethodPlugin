@@ -21,19 +21,11 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			this.view = view;
 		}
 
-		public Window Owner
-		{
-			get { return view.Owner; }
-			set { view.Owner = value; }
-		}
-
 		public abstract TResult ShowDialog();
 	}
 
 	public interface IViewAdaper<TView, TResult>
 	{
-		Window Owner { get; set; }
-
 		TResult ShowDialog();
 	}
 }

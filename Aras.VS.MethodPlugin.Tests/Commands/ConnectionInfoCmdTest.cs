@@ -44,7 +44,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			dialogFactory.GetConnectionInfoView(projectManager, projectConfigurationManager).Returns(adapter);
 
 			//Act
-			сonnectionInfoCmd.ExecuteCommandImpl(null, null, iVsUIShell);
+			сonnectionInfoCmd.ExecuteCommandImpl(null, null);
 
 			// Assert
 			dialogFactory.Received().GetConnectionInfoView(projectManager, projectConfigurationManager);

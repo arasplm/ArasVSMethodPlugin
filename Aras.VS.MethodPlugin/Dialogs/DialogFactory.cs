@@ -9,19 +9,20 @@ using System.Windows.Interop;
 using Aras.VS.MethodPlugin.ArasInnovator;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Code;
-using Aras.VS.MethodPlugin.Configurations;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
-using Aras.VS.MethodPlugin.Dialogs.Directory.Data;
 using Aras.VS.MethodPlugin.Dialogs.ViewModels;
 using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.ItemSearch;
 using Aras.VS.MethodPlugin.ItemSearch.Preferences;
 using Aras.VS.MethodPlugin.PackageManagement;
+using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using Aras.VS.MethodPlugin.Templates;
-using Microsoft.CodeAnalysis;
+using EnvDTE;
 using Microsoft.VisualStudio.Shell.Interop;
 using OfficeConnector.Dialogs;
+using Aras.VS.MethodPlugin.Configurations;
+using Aras.VS.MethodPlugin.Dialogs.Directory.Data;
+using Microsoft.CodeAnalysis;
 
 namespace Aras.VS.MethodPlugin.Dialogs
 {
@@ -29,14 +30,17 @@ namespace Aras.VS.MethodPlugin.Dialogs
 	{
 		private IAuthenticationManager authManager;
 		private readonly IArasDataProvider arasDataProvider;
+		private readonly IServiceProvider serviceProvider;
 
-		public DialogFactory(IAuthenticationManager authManager, IArasDataProvider arasDataProvider)
+		public DialogFactory(IAuthenticationManager authManager, IArasDataProvider arasDataProvider, IServiceProvider serviceProvider)
 		{
 			if (authManager == null) throw new ArgumentNullException(nameof(authManager));
 			if (arasDataProvider == null) throw new ArgumentNullException(nameof(arasDataProvider));
+			if (serviceProvider == null) throw new ArgumentNullException(nameof(serviceProvider)); ;
 
 			this.arasDataProvider = arasDataProvider;
 			this.authManager = authManager;
+			this.serviceProvider = serviceProvider;
 		}
 
 		public ItemSearchPresenter GetItemSearchPresenter(string itemTypeName, string itemTypeSingularLabel)
@@ -64,25 +68,17 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			var viewModel = new LoginViewModel(authManager, projectConfiguration, projectManager.SelectedProject.Name, projectManager.SelectedProject.FullName);
 			view.DataContext = viewModel;
 
-			IntPtr hwnd;
-			projectManager.UIShell.GetDialogOwnerHwnd(out hwnd);
-			var windowInteropHelper = new WindowInteropHelper(view);
-			windowInteropHelper.Owner = hwnd;
-
+			AttachToParentWindow(view);
 			return new LoginViewAdapter(view);
 		}
 
-		public IViewAdaper<CreateMethodView, CreateMethodViewResult> GetCreateView(IVsUIShell uiShell, IProjectConfiguraiton projectConfiguration, TemplateLoader templateLoader, PackageManager packageManager, IProjectManager projectManager, ICodeProvider codeProvider, IGlobalConfiguration globalConfiguration)
+		public IViewAdaper<CreateMethodView, CreateMethodViewResult> GetCreateView(IProjectConfiguraiton projectConfiguration, TemplateLoader templateLoader, PackageManager packageManager, IProjectManager projectManager, ICodeProvider codeProvider, IGlobalConfiguration globalConfiguration)
 		{
 			CreateMethodView view = new CreateMethodView();
 			CreateMethodViewModel viewModel = new CreateMethodViewModel(authManager, this, projectConfiguration, templateLoader, packageManager, projectManager, arasDataProvider, codeProvider, globalConfiguration);
 			view.DataContext = viewModel;
 
-			IntPtr hwnd;
-			uiShell.GetDialogOwnerHwnd(out hwnd);
-			var windowInteropHelper = new WindowInteropHelper(view);
-			windowInteropHelper.Owner = hwnd;
-
+			AttachToParentWindow(view);
 			return new CreateMethodViewAdapter(view);
 		}
 
@@ -94,15 +90,11 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			var view = new ConnectionInfoView();
 			view.DataContext = viewModel;
 
-			IntPtr hwnd;
-			projectManager.UIShell.GetDialogOwnerHwnd(out hwnd);
-			var windowInteropHelper = new WindowInteropHelper(view);
-			windowInteropHelper.Owner = hwnd;
-
+			AttachToParentWindow(view);
 			return new ConnectionInfoViewAdapter(view);
 		}
 
-		public IViewAdaper<OpenFromArasView, OpenFromArasViewResult> GetOpenFromArasView(IVsUIShell uiShell, IProjectConfigurationManager configurationManager,
+		public IViewAdaper<OpenFromArasView, OpenFromArasViewResult> GetOpenFromArasView(IProjectConfigurationManager configurationManager,
 			IProjectConfiguraiton projectConfiguration,
 			TemplateLoader templateLoader,
 			PackageManager packageManager,
@@ -115,29 +107,21 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			var view = new OpenFromArasView();
 			view.DataContext = viewModel;
 
-			IntPtr hwnd;
-			uiShell.GetDialogOwnerHwnd(out hwnd);
-			var windowInteropHelper = new WindowInteropHelper(view);
-			windowInteropHelper.Owner = hwnd;
-
+			AttachToParentWindow(view);
 			return new OpenFromArasViewAdapter(view);
 		}
 
-		public IViewAdaper<OpenFromPackageView, OpenFromPackageViewResult> GetOpenFromPackageView(IVsUIShell uiShell, TemplateLoader templateLoader, string projectLanguage, IProjectConfiguraiton projectConfiguration)
+		public IViewAdaper<OpenFromPackageView, OpenFromPackageViewResult> GetOpenFromPackageView(TemplateLoader templateLoader, string projectLanguage, IProjectConfiguraiton projectConfiguration)
 		{
 			var viewModel = new OpenFromPackageViewModel(templateLoader, projectLanguage, projectConfiguration);
 			var view = new OpenFromPackageView();
 			view.DataContext = viewModel;
 
-			IntPtr hwnd;
-			uiShell.GetDialogOwnerHwnd(out hwnd);
-			var windowInteropHelper = new WindowInteropHelper(view);
-			windowInteropHelper.Owner = hwnd;
-
+			AttachToParentWindow(view);
 			return new OpenFromPackageViewAdapter(view);
 		}
 
-		public IViewAdaper<SaveMethodView, SaveMethodViewResult> GetSaveToArasView(IVsUIShell uiShell, IProjectConfigurationManager projectConfigurationManager, IProjectConfiguraiton projectConfiguration, PackageManager packageManager, MethodInfo methodInformation, string methodCode, string projectConfigPath, string projectName, string projectFullName)
+        public IViewAdaper<SaveMethodView, SaveMethodViewResult> GetSaveToArasView(IProjectConfigurationManager projectConfigurationManager, IProjectConfiguraiton projectConfiguration, PackageManager packageManager, MethodInfo methodInformation, string methodCode, string projectConfigPath, string projectName, string projectFullName)
 		{
 			var view = new SaveMethodView();
 			var viewModel = new SaveMethodViewModel(
@@ -155,67 +139,47 @@ namespace Aras.VS.MethodPlugin.Dialogs
 
 			view.DataContext = viewModel;
 
-			IntPtr hwnd;
-			uiShell.GetDialogOwnerHwnd(out hwnd);
-			var windowInteropHelper = new WindowInteropHelper(view);
-			windowInteropHelper.Owner = hwnd;
-
+			AttachToParentWindow(view);
 			return new SaveMethodViewAdapter(view);
 		}
 
-		public IViewAdaper<SaveToPackageView, SaveToPackageViewResult> GetSaveToPackageView(IVsUIShell uiShell, IProjectConfiguraiton projectConfiguration, TemplateLoader templateLoader, PackageManager packageManager, ICodeProvider codeProvider, IProjectManager projectManager, MethodInfo methodInformation, string pathToFileForSave)
+        public IViewAdaper<SaveToPackageView, SaveToPackageViewResult> GetSaveToPackageView(IProjectConfiguraiton projectConfiguration, TemplateLoader templateLoader, PackageManager packageManager, ICodeProvider codeProvider,IProjectManager projectManager, MethodInfo methodInformation, string pathToFileForSave)
 		{
 			var saveToLocalPackageView = new SaveToPackageView();
 			var viewModel = new SaveToPackageViewModel(authManager, this, projectConfiguration, templateLoader, packageManager, codeProvider, projectManager, arasDataProvider, methodInformation, pathToFileForSave);
 			saveToLocalPackageView.DataContext = viewModel;
 
-			IntPtr hwnd;
-			uiShell.GetDialogOwnerHwnd(out hwnd);
-			var windowInteropHelper = new WindowInteropHelper(saveToLocalPackageView);
-			windowInteropHelper.Owner = hwnd;
-
+			AttachToParentWindow(saveToLocalPackageView);
 			return new SaveToPackageViewAdapter(saveToLocalPackageView);
 		}
 
-		public IViewAdaper<UpdateFromArasView, UpdateFromArasViewResult> GetUpdateFromArasView(IVsUIShell uiShell, IProjectConfigurationManager projectConfigurationManager, IProjectConfiguraiton projectConfiguration, TemplateLoader templateLoader, PackageManager packageManager, MethodInfo methodInfo, string projectConfigPath, string projectName, string projectFullName)
+        public IViewAdaper<UpdateFromArasView, UpdateFromArasViewResult> GetUpdateFromArasView(IProjectConfigurationManager projectConfigurationManager, IProjectConfiguraiton projectConfiguration, TemplateLoader templateLoader, PackageManager packageManager, MethodInfo methodInfo, string projectConfigPath, string projectName, string projectFullName)
 		{
 			var viewModel = new UpdateFromArasViewModel(authManager, projectConfigurationManager, projectConfiguration, templateLoader, packageManager, methodInfo, projectConfigPath, projectName, projectFullName);
 			var view = new UpdateFromArasView();
 			view.DataContext = viewModel;
 
-			IntPtr hwnd;
-			uiShell.GetDialogOwnerHwnd(out hwnd);
-			var windowInteropHelper = new WindowInteropHelper(view);
-			windowInteropHelper.Owner = hwnd;
-
+			AttachToParentWindow(view);
 			return new UpdateFromArasViewAdapter(view);
 		}
 
-		public IViewAdaper<CreateCodeItemView, CreateCodeItemViewResult> GetCreateCodeItemView(IVsUIShell uiShell, ICodeItemProvider codeItemProvider, bool usedVSFormatting)
+		public IViewAdaper<CreateCodeItemView, CreateCodeItemViewResult> GetCreateCodeItemView(ICodeItemProvider codeItemProvider, bool usedVSFormatting)
 		{
 			var viewModel = new CreateCodeItemViewModel(codeItemProvider, usedVSFormatting);
 			var view = new CreateCodeItemView();
 			view.DataContext = viewModel;
 
-			IntPtr hwnd;
-			uiShell.GetDialogOwnerHwnd(out hwnd);
-			var windowInteropHelper = new WindowInteropHelper(view);
-			windowInteropHelper.Owner = hwnd;
-
+			AttachToParentWindow(view);
 			return new CreateCodeItemViewAdapter(view);
 		}
 
-		public IViewAdaper<DebugMethodView, DebugMethodViewResult> GetDebugMethodView(IVsUIShell uiShell, IProjectConfigurationManager projectConfigurationManager, IProjectConfiguraiton projectConfiguration, MethodInfo methodInformation, string methodCode, string projectConfigPath, string projectName, string projectFullName)
+        public IViewAdaper<DebugMethodView, DebugMethodViewResult> GetDebugMethodView(IProjectConfigurationManager projectConfigurationManager, IProjectConfiguraiton projectConfiguration, MethodInfo methodInformation, string methodCode, string projectConfigPath, string projectName, string projectFullName)
 		{
 			var viewModel = new DebugMethodViewModel(authManager, projectConfigurationManager, projectConfiguration, methodInformation, methodCode, projectConfigPath, projectName, projectFullName);
 			var view = new DebugMethodView();
 			view.DataContext = viewModel;
 
-			IntPtr hwnd;
-			uiShell.GetDialogOwnerHwnd(out hwnd);
-			var windowInteropHelper = new WindowInteropHelper(view);
-			windowInteropHelper.Owner = hwnd;
-
+			AttachToParentWindow(view);
 			return new DebugMethodViewAdapter(view);
 		}
 
@@ -231,30 +195,39 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			return new SelectPathDialogAdapter(dialog);
 		}
 
-		public IViewAdaper<MoveToView, MoveToViewResult> GetMoveToView(IVsUIShell uiShell, string methodFolderPath, SyntaxNode node)
+		public IViewAdaper<MoveToView, MoveToViewResult> GetMoveToView(string methodFolderPath, SyntaxNode node)
 		{
 			var viewModel = new MoveToViewModel(this, methodFolderPath, node);
 			var view = new MoveToView();
 			view.DataContext = viewModel;
 
-			IntPtr hwnd;
-			uiShell.GetDialogOwnerHwnd(out hwnd);
-			var windowInteropHelper = new WindowInteropHelper(view);
-			windowInteropHelper.Owner = hwnd;
-
+			AttachToParentWindow(view);
 			return new MoveToViewAdapter(view);
 		}
 
-		public IMessageBoxWindow GetMessageBoxWindow(IVsUIShell uiShell)
+		public IMessageBoxWindow GetMessageBoxWindow()
 		{
 			var view = new MessageBoxWindow();
 
+			AttachToParentWindow(view);
+			return view;
+		}
+
+		
+		private IVsUIShell UIShell
+		{
+			get
+			{
+				return (IVsUIShell)serviceProvider.GetService(typeof(SVsUIShell));
+			}
+		}
+		
+		private void AttachToParentWindow(System.Windows.Window view)
+		{
 			IntPtr hwnd;
-			uiShell.GetDialogOwnerHwnd(out hwnd);
+			this.UIShell.GetDialogOwnerHwnd(out hwnd);
 			var windowInteropHelper = new WindowInteropHelper(view);
 			windowInteropHelper.Owner = hwnd;
-
-			return view;
 		}
 	}
 }

@@ -79,13 +79,13 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 		public void ExecuteCommandImpl_ShouldReceivedGetDebugMethodView()
 		{
 			// Arrange
-			dialogFactory.GetDebugMethodView(null, null, null, null, null, null, null, null).ReturnsForAnyArgs(Substitute.For<DebugMethodViewAdapterTest>());
+			dialogFactory.GetDebugMethodView(null, null, null, null, null, null, null).ReturnsForAnyArgs(Substitute.For<DebugMethodViewAdapterTest>());
 
 			//Act
-			debugMethodCmd.ExecuteCommandImpl(null, null, iVsUIShell);
+			debugMethodCmd.ExecuteCommandImpl(null, null);
 
 			// Assert
-			dialogFactory.Received().GetDebugMethodView(iVsUIShell, projectConfigurationManager, Arg.Any<ProjectConfiguraiton>(), Arg.Any<MethodInfo>(), Arg.Any<string>(), projectManager.ProjectConfigPath, string.Empty, string.Empty);
+			dialogFactory.Received().GetDebugMethodView(projectConfigurationManager, Arg.Any<ProjectConfiguraiton>(), Arg.Any<MethodInfo>(), Arg.Any<string>(), projectManager.ProjectConfigPath, string.Empty, string.Empty);
 
 		}
 
@@ -93,10 +93,10 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 		public void ExecuteCommandImpl_ShouldReceivedLoadMethodCode()
 		{
 			// Arrange
-			dialogFactory.GetDebugMethodView(null, null, null, null, null, null, null, null).ReturnsForAnyArgs(Substitute.For<DebugMethodViewAdapterTest>());
+			dialogFactory.GetDebugMethodView(null, null, null, null, null, null, null).ReturnsForAnyArgs(Substitute.For<DebugMethodViewAdapterTest>());
 
 			//Act
-			debugMethodCmd.ExecuteCommandImpl(null, null, iVsUIShell);
+			debugMethodCmd.ExecuteCommandImpl(null, null);
 
 			// Assert
 			codeProvider.Received().LoadMethodCode(Arg.Any<string>(), Arg.Any<MethodInfo>(), string.Empty);
@@ -106,10 +106,10 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 		public void ExecuteCommandImpl_ShouldReceivedAttachToProcess()
 		{
 			// Arrange
-			dialogFactory.GetDebugMethodView(null, null, null, null, null, null, null, null).ReturnsForAnyArgs(Substitute.For<DebugMethodViewAdapterTest>());
+			dialogFactory.GetDebugMethodView(null, null, null, null, null, null, null).ReturnsForAnyArgs(Substitute.For<DebugMethodViewAdapterTest>());
 
 			//Act
-			debugMethodCmd.ExecuteCommandImpl(null, null, iVsUIShell);
+			debugMethodCmd.ExecuteCommandImpl(null, null);
 
 			// Assert
 			projectManager.Received().AttachToProcess(Arg.Any<System.Diagnostics.Process>());
@@ -118,8 +118,6 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 
 		public class DebugMethodViewAdapterTest : IViewAdaper<DebugMethodView, DebugMethodViewResult>
 		{
-			public System.Windows.Window Owner { get { return null; } set { } }
-
 			public DebugMethodViewResult ShowDialog()
 			{
 				return new DebugMethodViewResult

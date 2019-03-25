@@ -66,7 +66,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			Instance = new ConnectionInfoCmd(projectManager, authManager, dialogFactory, projectConfigurationManager);
 		}
 
-		public override void ExecuteCommandImpl(object sender, EventArgs args, IVsUIShell uiShell)
+		public override void ExecuteCommandImpl(object sender, EventArgs args)
 		{
 			var view = dialogFactory.GetConnectionInfoView(projectManager, projectConfigurationManager);
 			view.ShowDialog();

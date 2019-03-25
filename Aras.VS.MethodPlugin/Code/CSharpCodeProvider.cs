@@ -426,7 +426,7 @@ namespace Aras.VS.MethodPlugin.Code
 			string codeItemAttributePath = codeItemPath.Substring(codeItemPath.IndexOf(methodName) + methodName.Length + 1);
 			codeItemAttributePath = codeItemAttributePath.Replace("\\", "/");
 
-			var templateLoader = new TemplateLoader(this.dialogFactory, this.projectManager.UIShell);
+			var templateLoader = new TemplateLoader(this.dialogFactory);
 			templateLoader.Load(projectManager.MethodConfigPath);
 
 			TemplateInfo template = null;

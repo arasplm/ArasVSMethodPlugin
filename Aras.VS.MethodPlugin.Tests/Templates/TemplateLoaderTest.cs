@@ -21,7 +21,7 @@ namespace Aras.VS.MethodPlugin.Tests.Templates
 		{
 			this.dialogFactory = Substitute.For<IDialogFactory>();
 			this.iVsUIShell = Substitute.For<IVsUIShell>();
-			this.templateLoader = new TemplateLoader(dialogFactory, iVsUIShell);
+			this.templateLoader = new TemplateLoader(dialogFactory);
 		}
 
 		[Test]
@@ -73,7 +73,7 @@ namespace Aras.VS.MethodPlugin.Tests.Templates
 			string testCode = "//MethodTemplateName=templateName";
 
 			IMessageBoxWindow messageBoxWindow = Substitute.For<IMessageBoxWindow>();
-			this.dialogFactory.GetMessageBoxWindow(Arg.Any<IVsUIShell>()).Returns(messageBoxWindow);
+			this.dialogFactory.GetMessageBoxWindow().Returns(messageBoxWindow);
 
 			//Act
 			TemplateInfo actualTemplate = templateLoader.GetTemplateFromCodeString(testCode, "testLanguage", "operationName");
@@ -93,7 +93,7 @@ namespace Aras.VS.MethodPlugin.Tests.Templates
 			string testCode = "//MethodTemplateName=templateName";
 			IMessageBoxWindow messageBoxWindow = Substitute.For<IMessageBoxWindow>();
 
-			this.dialogFactory.GetMessageBoxWindow(Arg.Any<IVsUIShell>()).Returns(messageBoxWindow);
+			this.dialogFactory.GetMessageBoxWindow().Returns(messageBoxWindow);
 			TemplateInfo expectedtemplate = LoadExpectedtemplates()[2];
 
 			//Act

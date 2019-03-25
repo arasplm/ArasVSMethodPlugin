@@ -78,7 +78,7 @@ namespace Aras.VS.MethodPlugin.Commands
 		}
 
 
-		public override void ExecuteCommandImpl(object sender, EventArgs args, IVsUIShell uiShell)
+		public override void ExecuteCommandImpl(object sender, EventArgs args)
 		{
 			var project = projectManager.SelectedProject;
 
@@ -88,10 +88,10 @@ namespace Aras.VS.MethodPlugin.Commands
 			var projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
 			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language, projectConfiguration);
 
-			var templateLoader = new TemplateLoader(this.dialogFactory, uiShell);
+			var templateLoader = new TemplateLoader(this.dialogFactory);
 			templateLoader.Load(methodConfigPath);
 
-			var openView = dialogFactory.GetOpenFromPackageView(projectManager.UIShell, templateLoader, codeProvider.Language, projectConfiguration);
+			var openView = dialogFactory.GetOpenFromPackageView(templateLoader, codeProvider.Language, projectConfiguration);
 
 			var openViewResult = openView.ShowDialog();
 			if (openViewResult?.DialogOperationResult != true)
