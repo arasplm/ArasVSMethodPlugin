@@ -244,7 +244,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		private void OnFolderBrowserClick(object window)
 		{
-			var adapter = this.dialogFactory.GetSelectPathDialog(DirectoryItemType.Folder, PackagePath);
+			var adapter = this.dialogFactory.GetSelectPathDialog(DirectoryItemType.Folder, startPath: PackagePath);
 			var dialogResult = adapter.ShowDialog();
 
 			if (dialogResult.DialogOperationResult == true)
