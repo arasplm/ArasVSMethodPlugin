@@ -141,6 +141,8 @@ namespace Aras.VS.MethodPlugin.Commands
 				ManifestFileName = openViewResult.SelectedManifestFileName
 			};
 
+			projectManager.AddSuppression("assembly: System.Diagnostics.CodeAnalysis.SuppressMessage", "Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", "namespace", codeInfo.Namespace);
+
 			projectConfiguration.LastSelectedDir = openViewResult.SelectedFolderPath;
 			projectConfiguration.LastSelectedMfFile = openViewResult.SelectedManifestFullPath;
 			projectConfiguration.UseVSFormatting = openViewResult.IsUseVSFormattingCode;
