@@ -15,13 +15,15 @@ namespace Aras.VS.MethodPlugin.Tests.Templates
 		private TemplateLoader templateLoader;
 		private IDialogFactory dialogFactory;
 		private IVsUIShell iVsUIShell;
+		private IMessageManager messageManager;
 
 		[SetUp]
 		public void SetUp()
 		{
 			this.dialogFactory = Substitute.For<IDialogFactory>();
 			this.iVsUIShell = Substitute.For<IVsUIShell>();
-			this.templateLoader = new TemplateLoader(dialogFactory);
+			this.messageManager = Substitute.For<IMessageManager>();
+			this.templateLoader = new TemplateLoader(dialogFactory, messageManager);
 		}
 
 		[Test]

@@ -4,30 +4,27 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using Aras.VS.MethodPlugin.Dialogs;
-using Aras.VS.MethodPlugin.Dialogs.Views;
-using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Windows;
 using System.Xml;
+using Aras.VS.MethodPlugin.Dialogs;
 
 namespace Aras.VS.MethodPlugin.Templates
 {
 	public class TemplateLoader
 	{
 		private readonly IDialogFactory dialogFactory;
+		private readonly IMessageManager messageManager;
 
 		private List<string> supportedTemplates = new List<string>();
-		List<TemplateInfo> templates = new List<TemplateInfo>();
+		private List<TemplateInfo> templates = new List<TemplateInfo>();
 
-		public TemplateLoader(IDialogFactory dialogFactory)
+		public TemplateLoader(IDialogFactory dialogFactory, IMessageManager messageManager)
 		{
-			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));
-
-			this.dialogFactory = dialogFactory;
+			this.dialogFactory = dialogFactory ?? throw new ArgumentNullException(nameof(dialogFactory));
+			this.messageManager = messageManager ?? throw new ArgumentNullException(nameof(messageManager));
 		}
 
 		public void Load(string templatesFileText)
@@ -93,7 +90,7 @@ namespace Aras.VS.MethodPlugin.Templates
 				if (template == null)
 				{
 					var messageWindow = this.dialogFactory.GetMessageBoxWindow();
-					messageWindow.ShowDialog($"The template {templateName} from selected method not found. Default template will be used.",
+					messageWindow.ShowDialog(messageManager.GetMessage("TheTemplateFromSelectedMethodNotFoundDefaultTemplateWillBeUsed", templateName),
 						operationName,
 						MessageButtons.OK,
 						MessageIcon.Information);

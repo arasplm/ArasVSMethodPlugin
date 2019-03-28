@@ -12,15 +12,17 @@ namespace Aras.VS.MethodPlugin.ArasInnovator
 	public class ArasDataProvider : IArasDataProvider
 	{
 		private readonly IAuthenticationManager authenticationManager;
+		private readonly IMessageManager messageManager;
 
-		public ArasDataProvider(IAuthenticationManager authenticationManager)
+		public ArasDataProvider(IAuthenticationManager authenticationManager, IMessageManager messageManager)
 		{
 			if (authenticationManager == null)
 			{
 				throw new ArgumentNullException(nameof(authenticationManager));
 			}
 
-			this.authenticationManager = authenticationManager;
+			this.authenticationManager = authenticationManager ?? throw new ArgumentNullException(nameof(authenticationManager));
+			this.messageManager = messageManager ?? throw new ArgumentNullException(nameof(messageManager));
 		}
 
 		public MethodItemTypeInfo GetMethodItemTypeInfo()
@@ -35,7 +37,7 @@ namespace Aras.VS.MethodPlugin.ArasInnovator
 				throw new Exception(item.getErrorString());
 			}
 
-			return new MethodItemTypeInfo(item);
+			return new MethodItemTypeInfo(item, messageManager);
 		}
 	}
 }

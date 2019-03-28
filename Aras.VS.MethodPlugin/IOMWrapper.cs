@@ -10,16 +10,20 @@ using System.Reflection;
 
 namespace Aras.VS.MethodPlugin
 {
-	public class IOMWrapper : IIOMWrapper
+	internal class IOMWrapper : IIOMWrapper
 	{
+		private readonly IMessageManager messageManager;
+
 		private const string IOMnamespace = "Aras.IOM";
 		private const string localIOMPath = "ArasLibs\\IOM.dll";
 
 		private string projectFullName;
 		private Assembly IOMAssembly;
 
-		public IOMWrapper(string projectFullName)
+		public IOMWrapper(IMessageManager messageManager, string projectFullName)
 		{
+			this.messageManager = messageManager ?? throw new ArgumentNullException(nameof(messageManager));
+
 			this.projectFullName = projectFullName;
 
 			string projectPath = Path.GetDirectoryName(projectFullName);
@@ -27,7 +31,7 @@ namespace Aras.VS.MethodPlugin
 
 			if (!File.Exists(IOMPath))
 			{
-				throw new FileNotFoundException("IOM.dll in the current project is not found.");
+				throw new FileNotFoundException(this.messageManager.GetMessage("IOMDllInTheCurrentProjectIsNotFound"));
 			}
 
 			this.IOMAssembly = Assembly.LoadFrom(IOMPath);

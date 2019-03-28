@@ -17,7 +17,7 @@ using Aras.VS.MethodPlugin.Templates;
 
 namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 {
-	public class MethodInformationViewModel :BaseViewModel
+	public class MethodInformationViewModel : BaseViewModel
 	{
 		private readonly TemplateLoader templateLoader;
 		private readonly dynamic innovatorInstance;

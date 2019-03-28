@@ -12,15 +12,21 @@ namespace Aras.VS.MethodPlugin.ArasInnovator
 	public class MethodItemTypeInfo
 	{
 		private readonly dynamic methodItemTypeItem;
+		private readonly IMessageManager messageManager;
 
-		public MethodItemTypeInfo(dynamic methodItemTypeItem)
+		public MethodItemTypeInfo(dynamic methodItemTypeItem, IMessageManager messageManager)
 		{
 			if (methodItemTypeItem == null)
 			{
 				throw new ArgumentNullException(nameof(methodItemTypeItem));
 			}
+			if (messageManager == null)
+			{
+				throw new ArgumentNullException(nameof(messageManager));
+			}
 
 			this.methodItemTypeItem = methodItemTypeItem;
+			this.messageManager = messageManager;
 		}
 
 		public int NameStoredLength
@@ -30,7 +36,7 @@ namespace Aras.VS.MethodPlugin.ArasInnovator
 				XmlNode propertyItem = this.methodItemTypeItem.dom.SelectSingleNode("//Relationships//Item[@type='Property' and name='name']");
 				if (propertyItem == null)
 				{
-					throw new Exception("'name' property in the Method ItemType not found.");
+					throw new Exception(messageManager.GetMessage("PropertyInTheItemTypeNotFound", "name", "Method"));
 				}
 
 				// if stored_length is not set and number is more then 32 simbols sql exception will be throw
@@ -54,7 +60,7 @@ namespace Aras.VS.MethodPlugin.ArasInnovator
 				XmlNode propertyItem = this.methodItemTypeItem.dom.SelectSingleNode("//Relationships//Item[@type='Property' and name='comments']");
 				if (propertyItem == null)
 				{
-					throw new Exception("'comments' property in the Method ItemType not found.");
+					throw new Exception(messageManager.GetMessage("PropertyInTheItemTypeNotFound", "comments", "Method"));
 				}
 
 				// if stored_length is not set and number is more then 32 simbols sql exception will be throw

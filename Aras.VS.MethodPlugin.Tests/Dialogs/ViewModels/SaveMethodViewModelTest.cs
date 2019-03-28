@@ -31,6 +31,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 		private IDialogFactory dialogFactory;
 		private IProjectConfigurationManager projectConfigurationManager;
 		private IProjectConfiguraiton projectConfiguration;
+		private IMessageManager messageManager;
 		private PackageManager packageManager;
 		private IArasDataProvider arasDataProvider;
 		private MethodInfo methodInformation;
@@ -45,7 +46,8 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 			this.dialogFactory = Substitute.For<IDialogFactory>();
 			this.projectConfigurationManager = Substitute.For<IProjectConfigurationManager>();
 			this.projectConfiguration = Substitute.For<IProjectConfiguraiton>();
-			this.packageManager = new PackageManager(authManager);
+			this.messageManager = Substitute.For<IMessageManager>();
+			this.packageManager = new PackageManager(authManager, messageManager);
 			this.arasDataProvider = Substitute.For<IArasDataProvider>();
 			this.methodInformation = new MethodInfo();
 
@@ -54,7 +56,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 
 			Item methodItem = this.innovator.newItem();
 			methodItem.loadAML(methodItemTypeXmlDocument.OuterXml);
-			MethodItemTypeInfo methodItemTypeInfo = new MethodItemTypeInfo(methodItem);
+			MethodItemTypeInfo methodItemTypeInfo = new MethodItemTypeInfo(methodItem, messageManager);
 
 			arasDataProvider.GetMethodItemTypeInfo().Returns(methodItemTypeInfo);
 
@@ -78,6 +80,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 				this.packageManager,
 				this.arasDataProvider,
 				this.methodInformation,
+				this.messageManager,
 				"methodCode",
 				"projectConfPath",
 				"projectName",
@@ -98,6 +101,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 					this.packageManager, 
 					this.arasDataProvider, 
 					this.methodInformation,
+					this.messageManager,
 					"methodCode",
 					"projectConfPath",
 					"projectName",
@@ -119,6 +123,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 					this.packageManager,
 					this.arasDataProvider,
 					this.methodInformation,
+					this.messageManager,
 					"methodCode",
 					"projectConfPath",
 					"projectName",
@@ -140,6 +145,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 					this.packageManager,
 					this.arasDataProvider,
 					this.methodInformation,
+					this.messageManager,
 					"methodCode",
 					"projectConfPath",
 					"projectName",
@@ -161,6 +167,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 					this.packageManager,
 					this.arasDataProvider,
 					this.methodInformation,
+					this.messageManager,
 					"methodCode",
 					"projectConfPath",
 					"projectName",
@@ -183,6 +190,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 					null,
 					this.arasDataProvider,
 					this.methodInformation,
+					this.messageManager,
 					"methodCode",
 					"projectConfPath",
 					"projectName",
@@ -204,6 +212,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 					this.packageManager,
 					null,
 					this.methodInformation,
+					this.messageManager,
 					"methodCode",
 					"projectConfPath",
 					"projectName",
@@ -225,6 +234,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 					this.packageManager,
 					this.arasDataProvider,
 					null,
+					this.messageManager,
 					"methodCode",
 					"projectConfPath",
 					"projectName",

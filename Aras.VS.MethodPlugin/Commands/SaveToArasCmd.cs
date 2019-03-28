@@ -26,7 +26,7 @@ namespace Aras.VS.MethodPlugin.Commands
 	/// <summary>
 	/// Command handler
 	/// </summary>
-	internal sealed class SaveToArasCmd : AuthenticationCommandBase
+	public sealed class SaveToArasCmd : AuthenticationCommandBase
 	{
 		/// <summary>
 		/// Command ID.
@@ -39,7 +39,7 @@ namespace Aras.VS.MethodPlugin.Commands
 		public static readonly Guid ItemCommandSet = CommandIds.SaveToAras;
 
 
-		private SaveToArasCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory)
+		private SaveToArasCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IMessageManager messageManager) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory, messageManager)
 		{
 			if (projectManager.CommandService != null)
 			{
@@ -60,12 +60,12 @@ namespace Aras.VS.MethodPlugin.Commands
 			private set;
 		}
 
-		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory)
+		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IMessageManager messageManager)
 		{
-			Instance = new SaveToArasCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
+			Instance = new SaveToArasCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
 		}
 
-		public static string GetUpdateAction(int lockStatus)
+		public string GetUpdateAction(int lockStatus)
 		{
 			string action;
 
@@ -78,9 +78,9 @@ namespace Aras.VS.MethodPlugin.Commands
 					action = "update";
 					break;
 				case 2:
-					throw new Exception("Item has been locked by someone.");
+					throw new Exception(this.messageManager.GetMessage("ItemHasBeenLockedBySomeone"));
 				default:
-					throw new Exception("Get Lock Status Error");
+					throw new Exception(this.messageManager.GetMessage("GetLockStatusError"));
 			}
 
 			return action;
@@ -108,7 +108,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language, projectConfiguration);
 			string methodCode = codeProvider.LoadMethodCode(sourceCode, methodInformation, projectManager.ServerMethodFolderPath);
 
-			var packageManager = new PackageManager(authManager);
+			var packageManager = new PackageManager(authManager, this.messageManager);
 			var saveView = dialogFactory.GetSaveToArasView(projectConfigurationManager, projectConfiguration, packageManager, methodInformation, methodCode, projectConfigPath, project.Name, project.FullName);
 			var saveViewResult = saveView.ShowDialog();
 			if (saveViewResult?.DialogOperationResult != true)
@@ -116,7 +116,7 @@ namespace Aras.VS.MethodPlugin.Commands
 				return;
 			}
 
-			var templateLoader = new TemplateLoader(this.dialogFactory);
+			var templateLoader = new TemplateLoader(this.dialogFactory, this.messageManager);
 			templateLoader.Load(methodConfigPath);
 
 			dynamic currentMethodItem = saveViewResult.MethodItem;
@@ -188,9 +188,8 @@ namespace Aras.VS.MethodPlugin.Commands
 				projectConfigurationManager.Save(projectConfigPath, projectConfiguration);
 			}
 
-			string message = string.Format("Method \"{0}\" saved", saveViewResult.MethodName);
 			var messageBoxWindow = dialogFactory.GetMessageBoxWindow();
-			messageBoxWindow.ShowDialog(message,
+			messageBoxWindow.ShowDialog(this.messageManager.GetMessage("MethodSaved", saveViewResult.MethodName),
 				string.Empty,
 				MessageButtons.OK,
 				MessageIcon.Information);

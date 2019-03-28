@@ -26,24 +26,27 @@ using System.Windows.Forms;
 
 namespace Aras.VS.MethodPlugin.Dialogs
 {
-	internal class DialogFactory : IDialogFactory
+	public class DialogFactory : IDialogFactory
 	{
 		private IAuthenticationManager authManager;
 		private readonly IArasDataProvider arasDataProvider;
 		private readonly IServiceProvider serviceProvider;
 		private readonly IIOWrapper iOWrapper;
+		private readonly IMessageManager messageManager;
 
-		public DialogFactory(IAuthenticationManager authManager, IArasDataProvider arasDataProvider, IServiceProvider serviceProvider, IIOWrapper iOWrapper)
+		public DialogFactory(IAuthenticationManager authManager, IArasDataProvider arasDataProvider, IServiceProvider serviceProvider, IIOWrapper iOWrapper, IMessageManager messageManager)
 		{
 			if (authManager == null) throw new ArgumentNullException(nameof(authManager));
 			if (arasDataProvider == null) throw new ArgumentNullException(nameof(arasDataProvider));
 			if (serviceProvider == null) throw new ArgumentNullException(nameof(serviceProvider));
 			if (iOWrapper == null) throw new ArgumentNullException(nameof(iOWrapper));
+			if (messageManager == null) throw new ArgumentNullException(nameof(messageManager));
 
 			this.arasDataProvider = arasDataProvider;
 			this.authManager = authManager;
 			this.serviceProvider = serviceProvider;
 			this.iOWrapper = iOWrapper;
+			this.messageManager = messageManager;
 		}
 
 		public ItemSearchPresenter GetItemSearchPresenter(string itemTypeName, string itemTypeSingularLabel)
@@ -88,7 +91,7 @@ namespace Aras.VS.MethodPlugin.Dialogs
 		public IViewAdaper<CreateMethodView, CreateMethodViewResult> GetCreateView(IProjectConfiguraiton projectConfiguration, TemplateLoader templateLoader, PackageManager packageManager, IProjectManager projectManager, ICodeProvider codeProvider, IGlobalConfiguration globalConfiguration)
 		{
 			CreateMethodView view = new CreateMethodView();
-			CreateMethodViewModel viewModel = new CreateMethodViewModel(authManager, this, projectConfiguration, templateLoader, packageManager, projectManager, arasDataProvider, codeProvider, globalConfiguration);
+			CreateMethodViewModel viewModel = new CreateMethodViewModel(authManager, this, projectConfiguration, templateLoader, packageManager, projectManager, arasDataProvider, codeProvider, globalConfiguration, messageManager);
 			view.DataContext = viewModel;
 
 			AttachToParentWindow(view);
@@ -116,7 +119,7 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			string projectFullName,
 			string projectLanguage)
 		{
-			var viewModel = new OpenFromArasViewModel(authManager, this, configurationManager, projectConfiguration, templateLoader, packageManager, pathToProjectConfigFile, projectName, projectFullName, projectLanguage);
+			var viewModel = new OpenFromArasViewModel(authManager, this, configurationManager, projectConfiguration, templateLoader, packageManager, messageManager, pathToProjectConfigFile, projectName, projectFullName, projectLanguage);
 			var view = new OpenFromArasView();
 			view.DataContext = viewModel;
 
@@ -126,7 +129,7 @@ namespace Aras.VS.MethodPlugin.Dialogs
 
 		public IViewAdaper<OpenFromPackageView, OpenFromPackageViewResult> GetOpenFromPackageView(TemplateLoader templateLoader, string projectLanguage, IProjectConfiguraiton projectConfiguration)
 		{
-			var viewModel = new OpenFromPackageViewModel(this, templateLoader, projectLanguage, projectConfiguration);
+			var viewModel = new OpenFromPackageViewModel(this, templateLoader, messageManager, projectLanguage, projectConfiguration);
 			var view = new OpenFromPackageView();
 			view.DataContext = viewModel;
 
@@ -145,6 +148,7 @@ namespace Aras.VS.MethodPlugin.Dialogs
 				packageManager,
 				arasDataProvider,
 				methodInformation,
+				messageManager,
 				methodCode,
 				projectConfigPath,
 				projectName,
@@ -159,7 +163,7 @@ namespace Aras.VS.MethodPlugin.Dialogs
 		public IViewAdaper<SaveToPackageView, SaveToPackageViewResult> GetSaveToPackageView(IProjectConfiguraiton projectConfiguration, TemplateLoader templateLoader, PackageManager packageManager, ICodeProvider codeProvider, IProjectManager projectManager, MethodInfo methodInformation, string pathToFileForSave)
 		{
 			var saveToLocalPackageView = new SaveToPackageView();
-			var viewModel = new SaveToPackageViewModel(authManager, this, projectConfiguration, templateLoader, packageManager, codeProvider, projectManager, arasDataProvider, this.iOWrapper, methodInformation, pathToFileForSave);
+			var viewModel = new SaveToPackageViewModel(authManager, this, projectConfiguration, templateLoader, packageManager, codeProvider, projectManager, arasDataProvider, this.iOWrapper, messageManager, methodInformation, pathToFileForSave);
 			saveToLocalPackageView.DataContext = viewModel;
 
 			AttachToParentWindow(saveToLocalPackageView);
@@ -168,7 +172,7 @@ namespace Aras.VS.MethodPlugin.Dialogs
 
 		public IViewAdaper<UpdateFromArasView, UpdateFromArasViewResult> GetUpdateFromArasView(IProjectConfigurationManager projectConfigurationManager, IProjectConfiguraiton projectConfiguration, TemplateLoader templateLoader, PackageManager packageManager, MethodInfo methodInfo, string projectConfigPath, string projectName, string projectFullName)
 		{
-			var viewModel = new UpdateFromArasViewModel(authManager, projectConfigurationManager, projectConfiguration, this, templateLoader, packageManager, methodInfo, projectConfigPath, projectName, projectFullName);
+			var viewModel = new UpdateFromArasViewModel(authManager, projectConfigurationManager, projectConfiguration, this, templateLoader, packageManager, messageManager, methodInfo, projectConfigPath, projectName, projectFullName);
 			var view = new UpdateFromArasView();
 			view.DataContext = viewModel;
 
@@ -198,7 +202,7 @@ namespace Aras.VS.MethodPlugin.Dialogs
 
 		public IViewAdaper<OpenFromPackageTreeView, OpenFromPackageTreeViewResult> GetOpenFromPackageTreeView(string actualFolderPath, string package, string methodName, string selectedSearchType)
 		{
-			var viewModel = new OpenFromPackageTreeViewModel(this, this.iOWrapper, actualFolderPath, package, methodName, selectedSearchType);
+			var viewModel = new OpenFromPackageTreeViewModel(this, this.iOWrapper, this.messageManager, actualFolderPath, package, methodName, selectedSearchType);
 			var view = new OpenFromPackageTreeView();
 			view.DataContext = viewModel;
 
@@ -220,7 +224,7 @@ namespace Aras.VS.MethodPlugin.Dialogs
 		
 				public IViewAdaper<FolderNameDialog, FolderNameDialogResult> GetFolderNameDialog()
 		{
-			var viewModel = new FolderNameViewModel(this);
+			var viewModel = new FolderNameViewModel(this, messageManager);
 			var view = new FolderNameDialog();
 			view.DataContext = viewModel;
 
@@ -234,7 +238,7 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			string fileExtantion = "")
 		{
 			SelectPathDialog dialog = new SelectPathDialog();
-			SelectPathViewModel viewModel = new SelectPathViewModel(this, searchToLevel, this.iOWrapper, rootPath, startPath, fileExtantion);
+			SelectPathViewModel viewModel = new SelectPathViewModel(this, searchToLevel, this.iOWrapper, this.messageManager, rootPath, startPath, fileExtantion);
 			dialog.DataContext = viewModel;
 
 			return new SelectPathDialogAdapter(dialog);

@@ -31,9 +31,9 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private bool isLoginEnabled;
 		private bool isPasswordEnabled;
 
-        private string projectName;
+		private string projectName;
 		private string projectFullName;
-	    
+
 		public LoginViewModel(
 			IAuthenticationManager authManager,
 			IProjectConfiguraiton projectConfiguration,
@@ -66,7 +66,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 			this.loginClick = new RelayCommand<object>(OnLoginClicked, IsEnabledLoginCommand);
 			this.closeClick = new RelayCommand<object>(OnCloseCliked);
-        }
+		}
 
 		#region Properties
 
@@ -80,7 +80,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 				string[] dataBases = authManager.GetBases(selectedUrl, projectFullName);
 				Databases = new ObservableCollection<string>(dataBases);
-            }
+			}
 		}
 
 		public string SelectedDatabase
@@ -103,7 +103,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 					IsLoginEnabled = false;
 					IsPasswordEnabled = true;
 				}
-            }
+			}
 		}
 
 		public ObservableCollection<string> UrlSource { get; set; }
@@ -120,7 +120,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				}
 
 				RaisePropertyChanged(nameof(Databases));
-            }
+			}
 		}
 
 		public string Login
@@ -130,7 +130,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			{
 				login = value;
 				RaisePropertyChanged(nameof(Login));
-            }
+			}
 		}
 
 		public bool IsLoginEnabled
@@ -153,11 +153,11 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			}
 		}
 
-        #endregion
+		#endregion
 
-        #region Commands
+		#region Commands
 
-        public ICommand LoginClick
+		public ICommand LoginClick
 		{
 			get { return loginClick; }
 		}

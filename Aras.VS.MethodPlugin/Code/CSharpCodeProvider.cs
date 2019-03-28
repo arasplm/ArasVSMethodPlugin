@@ -20,7 +20,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Aras.VS.MethodPlugin.Code
 {
-	internal class CSharpCodeProvider : ICodeProvider
+	public class CSharpCodeProvider : ICodeProvider
 	{
 		private const string startMethodCodeRegion = "#region MethodCode";
 		private const string endMethodCodeRegion = "#endregion MethodCode";
@@ -31,19 +31,27 @@ namespace Aras.VS.MethodPlugin.Code
 		private readonly ICodeItemProvider codeItemProvider;
 		private readonly IIOWrapper iOWrapper;
 		private readonly IDialogFactory dialogFactory;
+		private readonly IMessageManager messageManager;
 
 		public string Language
 		{
 			get { return "C#"; }
 		}
 
-		public CSharpCodeProvider(IProjectManager projectManager, IProjectConfiguraiton projectConfiguration, DefaultCodeProvider defaultCodeProvider, ICodeItemProvider codeItemProvider, IIOWrapper iOWrapper, IDialogFactory dialogFactory)
+		public CSharpCodeProvider(IProjectManager projectManager,
+			IProjectConfiguraiton projectConfiguration,
+			DefaultCodeProvider defaultCodeProvider,
+			ICodeItemProvider codeItemProvider,
+			IIOWrapper iOWrapper,
+			IDialogFactory dialogFactory,
+			IMessageManager messageManager)
 		{
 			if (projectManager == null) throw new ArgumentNullException(nameof(projectManager));
 			if (projectConfiguration == null) throw new ArgumentNullException(nameof(projectConfiguration));
 			if (defaultCodeProvider == null) throw new ArgumentNullException(nameof(defaultCodeProvider));
 			if (codeItemProvider == null) throw new ArgumentNullException(nameof(codeItemProvider));
 			if (iOWrapper == null) throw new ArgumentNullException(nameof(iOWrapper));
+			if (messageManager == null) throw new ArgumentNullException(nameof(messageManager));
 
 			this.projectManager = projectManager;
 			this.defaultCodeProvider = defaultCodeProvider;
@@ -51,6 +59,7 @@ namespace Aras.VS.MethodPlugin.Code
 			this.codeItemProvider = codeItemProvider;
 			this.iOWrapper = iOWrapper;
 			this.dialogFactory = dialogFactory;
+			this.messageManager = messageManager;
 		}
 
 		public string LoadMethodCode(string sourceCode, MethodInfo methodInformation, string serverMethodFolderPath)
@@ -103,7 +112,7 @@ namespace Aras.VS.MethodPlugin.Code
 
 					if (partialClassNode == null)
 					{
-						throw new Exception("No partial classes found.");
+						throw new Exception(messageManager.GetMessage("NoPartialClassesFound"));
 					}
 
 					var partialClassNodeWithPartials = partialClassNode.AddMembers(partialsSyntaxNodes);
@@ -120,7 +129,7 @@ namespace Aras.VS.MethodPlugin.Code
 
 						if (!CodeIndexInMethodRegions(root, namespaceNode.Span.End))
 						{
-							throw new FormatException($"Could not insert external items to the 'MethodCode' region.{Environment.NewLine}Make sure your 'MethodCode' region has any class.");
+							throw new FormatException(messageManager.GetMessage("CouldNotInsertExternalItemsToTheMethodCodeRegion"));
 						}
 
 						var namespaceNodeWithPartials = namespaceNode.AddMembers(externalsSyntaxNodes);
@@ -137,7 +146,7 @@ namespace Aras.VS.MethodPlugin.Code
 
 						if (!CodeIndexInMethodRegions(root, classNode.Span.Start))
 						{
-							throw new FormatException($"Could not insert external items to the 'MethodCode' region.{Environment.NewLine}Make sure your 'MethodCode' region has any class.");
+							throw new FormatException(messageManager.GetMessage("CouldNotInsertExternalItemsToTheMethodCodeRegion"));
 						}
 
 						root = root.InsertNodesBefore(classNode, externalsSyntaxNodes);
@@ -165,7 +174,7 @@ namespace Aras.VS.MethodPlugin.Code
 		{
 			if (string.IsNullOrEmpty(methodName))
 			{
-				throw new ArgumentException("Method name can not be empty");
+				throw new ArgumentException(messageManager.GetMessage("MethodNameCaNotBeEmpty"));
 			}
 
 			DefaultCodeTemplate defaultTemplate = LoadDefaultCodeTemplate(template, eventData);
@@ -426,7 +435,7 @@ namespace Aras.VS.MethodPlugin.Code
 			string codeItemAttributePath = codeItemPath.Substring(codeItemPath.IndexOf(methodName) + methodName.Length + 1);
 			codeItemAttributePath = codeItemAttributePath.Replace("\\", "/");
 
-			var templateLoader = new TemplateLoader(this.dialogFactory);
+			var templateLoader = new TemplateLoader(this.dialogFactory, this.messageManager);
 			templateLoader.Load(projectManager.MethodConfigPath);
 
 			TemplateInfo template = null;
@@ -437,7 +446,7 @@ namespace Aras.VS.MethodPlugin.Code
 			}
 			if (template == null)
 			{
-				throw new Exception("Template not found.");
+				throw new Exception(messageManager.GetMessage("TemplateNotFound"));
 			}
 
 			EventSpecificDataType eventData = CommonData.EventSpecificDataTypeList.First(x => x.EventSpecificData == methodInformation.EventData);
@@ -527,7 +536,7 @@ namespace Aras.VS.MethodPlugin.Code
 						.FirstOrDefault();
 				if (partialClassNode == null)
 				{
-					throw new Exception("No partial classes found.");
+					throw new Exception(messageManager.GetMessage("NoPartialClassesFound"));
 				}
 
 				var partialClassNodeWithPartials = partialClassNode.AddMembers(new MemberDeclarationSyntax[] { (MemberDeclarationSyntax)activeSyntaxNodeWithOutAttributes });
@@ -571,7 +580,7 @@ namespace Aras.VS.MethodPlugin.Code
 			}
 			else
 			{
-				throw new Exception("No attribute found.");
+				throw new Exception(messageManager.GetMessage("NoAttributeFound"));
 			}
 
 			CodeInfo codeInfo = new CodeInfo()
@@ -626,7 +635,7 @@ namespace Aras.VS.MethodPlugin.Code
 						.FirstOrDefault();
 				if (partialClassNode == null)
 				{
-					throw new Exception("No partial classes found.");
+					throw new Exception(messageManager.GetMessage("NoPartialClassesFound"));
 				}
 
 				var newPartialClassNode = partialClassNode.AddMembers((MemberDeclarationSyntax)syntaxNode);
@@ -648,7 +657,7 @@ namespace Aras.VS.MethodPlugin.Code
 						.FirstOrDefault();
 				if (partialClassNode == null)
 				{
-					throw new Exception("No partial classes found.");
+					throw new Exception(messageManager.GetMessage("NoPartialClassesFound"));
 				}
 
 				var usings = string.Empty;
@@ -753,7 +762,7 @@ namespace Aras.VS.MethodPlugin.Code
 				template.TemplateName, eventData.EventSpecificData.ToString());
 			if (defaultTemplate == null)
 			{
-				throw new FileNotFoundException($"Default code template file with templateName=\"{template.TemplateName}\" eventData=\"{eventData.EventSpecificData}\" not found.");
+				throw new FileNotFoundException(messageManager.GetMessage("DefaultCodeTemplateFileWithTemplateNameEventDataNotFound", template.TemplateName, eventData.EventSpecificData.ToString()));
 			}
 
 			return defaultTemplate;

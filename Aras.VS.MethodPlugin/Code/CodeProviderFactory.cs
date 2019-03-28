@@ -18,18 +18,21 @@ namespace Aras.VS.MethodPlugin.Code
 		private readonly DefaultCodeProvider defaultCodeProvider;
 		private readonly IIOWrapper iOWrapper;
 		private readonly IDialogFactory dialogFactory;
+		private readonly IMessageManager messageManager;
 
-		public CodeProviderFactory(IProjectManager projectManager, DefaultCodeProvider defaultCodeProvider, IIOWrapper iOWrapper, IDialogFactory dialogFactory)
+		public CodeProviderFactory(IProjectManager projectManager, DefaultCodeProvider defaultCodeProvider, IIOWrapper iOWrapper, IDialogFactory dialogFactory, IMessageManager messageManager)
 		{
 			if (projectManager == null) throw new ArgumentNullException(nameof(projectManager));
 			if (defaultCodeProvider == null) throw new ArgumentNullException(nameof(defaultCodeProvider));
 			if (iOWrapper == null) throw new ArgumentNullException(nameof(iOWrapper));
 			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));
+			if (messageManager == null) throw new ArgumentNullException(nameof(messageManager));
 
 			this.projectManager = projectManager;
 			this.defaultCodeProvider = defaultCodeProvider;
 			this.iOWrapper = iOWrapper;
 			this.dialogFactory = dialogFactory;
+			this.messageManager = messageManager;
 		}
 
 		public ICodeItemProvider GetCodeItemProvider(string projectLanguageCode)
@@ -37,11 +40,11 @@ namespace Aras.VS.MethodPlugin.Code
 			ICodeItemProvider codeItemProvider = null;
 			if (projectLanguageCode == CodeModelLanguageConstants.vsCMLanguageCSharp)
 			{
-				codeItemProvider = new CSharpCodeItemProvider();
+				codeItemProvider = new CSharpCodeItemProvider(messageManager);
 			}
 			else
 			{
-				throw new NotSupportedException("Current project type is not supported");
+				throw new NotSupportedException(this.messageManager.GetMessage("CurrentProjectTypeIsNotSupported"));
 			}
 
 			return codeItemProvider;
@@ -53,7 +56,7 @@ namespace Aras.VS.MethodPlugin.Code
 			ICodeProvider codeProvider = null;
 			if (projectLanguageCode == CodeModelLanguageConstants.vsCMLanguageCSharp || projectLanguageCode == GlobalConsts.CSharp)
 			{
-				codeProvider = new CSharpCodeProvider(projectManager, projectConfiguration, defaultCodeProvider, new CSharpCodeItemProvider(), iOWrapper, this.dialogFactory);
+				codeProvider = new CSharpCodeProvider(projectManager, projectConfiguration, defaultCodeProvider, new CSharpCodeItemProvider(messageManager), iOWrapper, this.dialogFactory, this.messageManager);
 			}
 			else if (projectLanguageCode == CodeModelLanguageConstants.vsCMLanguageVB)
 			{
@@ -61,7 +64,7 @@ namespace Aras.VS.MethodPlugin.Code
 			}
 			else
 			{
-				throw new NotSupportedException("Current project type is not supported");
+				throw new NotSupportedException(this.messageManager.GetMessage("CurrentProjectTypeIsNotSupported"));
 			}
 
 			return codeProvider;

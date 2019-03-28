@@ -17,7 +17,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.Directory
 			return System.IO.Directory.GetLogicalDrives().Select(drive => new DirectoryItem { FullPath = drive, Type = DirectoryItemType.Drive }).ToList();
 		}
 
-		/// <summary>
 		public static List<DirectoryItem> GetDirectoryContents(string fullPath)
 		{
 			var items = new List<DirectoryItem>();

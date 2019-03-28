@@ -28,6 +28,7 @@ namespace Aras.VS.MethodPlugin.Tests.Code
 		ICodeItemProvider codeItemProvider;
 		IIOWrapper iOWrapper;
 		IDialogFactory dialogFactory;
+		IMessageManager messageManager;
 		
 		[SetUp]
 		public void Init()
@@ -38,7 +39,8 @@ namespace Aras.VS.MethodPlugin.Tests.Code
 			defaultCodeProvider = new DefaultCodeProvider(iOWrapper);
 			codeItemProvider = Substitute.For<ICodeItemProvider>();
 			dialogFactory = Substitute.For<IDialogFactory>();
-			codeProvider = new CSharpCodeProvider(projectManager, projectConfiguration, defaultCodeProvider, codeItemProvider, iOWrapper, dialogFactory);
+			messageManager = Substitute.For<IMessageManager>();
+			codeProvider = new CSharpCodeProvider(projectManager, projectConfiguration, defaultCodeProvider, codeItemProvider, iOWrapper, dialogFactory, messageManager);
 		}
 
 		[Test]
@@ -47,7 +49,7 @@ namespace Aras.VS.MethodPlugin.Tests.Code
 			Assert.Throws<ArgumentNullException>(new TestDelegate(() =>
 			{
 				// Act
-				new CSharpCodeProvider(null, projectConfiguration, defaultCodeProvider, codeItemProvider, iOWrapper, dialogFactory);
+				new CSharpCodeProvider(null, projectConfiguration, defaultCodeProvider, codeItemProvider, iOWrapper, dialogFactory, messageManager);
 			}));
 		}
 
@@ -57,7 +59,7 @@ namespace Aras.VS.MethodPlugin.Tests.Code
 			Assert.Throws<ArgumentNullException>(new TestDelegate(() =>
 			{
 				// Act
-				new CSharpCodeProvider(projectManager, null, defaultCodeProvider, codeItemProvider, iOWrapper, dialogFactory);
+				new CSharpCodeProvider(projectManager, null, defaultCodeProvider, codeItemProvider, iOWrapper, dialogFactory, messageManager);
 			}));
 		}
 
@@ -67,7 +69,7 @@ namespace Aras.VS.MethodPlugin.Tests.Code
 			Assert.Throws<ArgumentNullException>(new TestDelegate(() =>
 			{
 				// Act
-				new CSharpCodeProvider(projectManager, projectConfiguration, null, codeItemProvider, iOWrapper, dialogFactory);
+				new CSharpCodeProvider(projectManager, projectConfiguration, null, codeItemProvider, iOWrapper, dialogFactory, messageManager);
 			}));
 		}
 
@@ -179,7 +181,7 @@ namespace Aras.VS.MethodPlugin.Tests.Code
 			this.iOWrapper.DirectoryExists(testDataPath).Returns(true);
 			this.iOWrapper.DirectoryGetFiles(testDataPath).Returns(Directory.GetFiles(testDataPath));
 
-			var templateLoader = new TemplateLoader(dialogFactory);
+			var templateLoader = new TemplateLoader(dialogFactory, messageManager);
 			templateLoader.Load(Path.Combine(currentPath, "TestData\\method-config.xml"));
 			var template = templateLoader.Templates.FirstOrDefault(tmp => tmp.TemplateName == "CSharp");
 			var eventData = CommonData.EventSpecificDataTypeList.FirstOrDefault(ed => ed.EventSpecificData == EventSpecificData.None);
@@ -207,7 +209,7 @@ namespace Aras.VS.MethodPlugin.Tests.Code
 			//Arrange
 			var curentPath = System.AppDomain.CurrentDomain.BaseDirectory;
 			projectManager.DefaultCodeTemplatesPath.Returns(Path.Combine(curentPath, "TestData"));
-			var templateLoader = new TemplateLoader(dialogFactory);
+			var templateLoader = new TemplateLoader(dialogFactory, messageManager);
 			templateLoader.Load(Path.Combine(curentPath, "TestData\\method-config.xml"));
 			var template = templateLoader.Templates.FirstOrDefault(tmp => tmp.TemplateName == "CSharp");
 			var eventData = CommonData.EventSpecificDataTypeList.FirstOrDefault(ed => ed.EventSpecificData == EventSpecificData.None);
@@ -231,7 +233,7 @@ namespace Aras.VS.MethodPlugin.Tests.Code
 			//Arrange
 			var curentPath = System.AppDomain.CurrentDomain.BaseDirectory;
 			projectManager.DefaultCodeTemplatesPath.Returns(Path.Combine(curentPath, "TestData"));
-			var templateLoader = new TemplateLoader(dialogFactory);
+			var templateLoader = new TemplateLoader(dialogFactory, messageManager);
 			templateLoader.Load(Path.Combine(curentPath, "TestData\\method-config.xml"));
 			var template = templateLoader.Templates.FirstOrDefault(tmp => tmp.TemplateName == "CSharp");
 			var methodName = "TestMethod";
@@ -276,7 +278,7 @@ namespace Aras.VS.MethodPlugin.Tests.Code
 			this.iOWrapper.DirectoryExists(testDataPath).Returns(true);
 			this.iOWrapper.DirectoryGetFiles(testDataPath).Returns(Directory.GetFiles(testDataPath));
 
-			var templateLoader = new TemplateLoader(dialogFactory);
+			var templateLoader = new TemplateLoader(dialogFactory, messageManager);
 			templateLoader.Load(Path.Combine(currentPath, "TestData\\method-config.xml"));
 			var template = templateLoader.Templates.FirstOrDefault(tmp => tmp.TemplateName == "CSharp");
 
@@ -315,7 +317,7 @@ namespace Aras.VS.MethodPlugin.Tests.Code
 			this.iOWrapper.DirectoryExists(testDataPath).Returns(true);
 			this.iOWrapper.DirectoryGetFiles(testDataPath).Returns(Directory.GetFiles(testDataPath));
 
-			var templateLoader = new TemplateLoader(dialogFactory);
+			var templateLoader = new TemplateLoader(dialogFactory, messageManager);
 			templateLoader.Load(Path.Combine(currentPath, "TestData\\method-config.xml"));
 
 			var template = templateLoader.Templates.FirstOrDefault(tmp => tmp.TemplateName == "CSharp");
@@ -486,7 +488,7 @@ namespace Aras.VS.MethodPlugin.Tests.Code
 			this.iOWrapper.DirectoryExists(testDataPath).Returns(true);
 			this.iOWrapper.DirectoryGetFiles(testDataPath).Returns(Directory.GetFiles(testDataPath));
 
-			var templateLoader = new TemplateLoader(dialogFactory);
+			var templateLoader = new TemplateLoader(dialogFactory, messageManager);
 			templateLoader.Load(Path.Combine(currentPath, "TestData\\method-config.xml"));
 			var template = templateLoader.Templates.FirstOrDefault(tmp => tmp.TemplateName == "CSharp");
 			var methodName = "MethodTest";

@@ -29,6 +29,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private readonly IProjectConfigurationManager configurationManager;
 		private readonly TemplateLoader templateLoader;
 		private readonly PackageManager packageManager;
+		private readonly IMessageManager messageManager;
 		private string pathToProjectConfigFile;
 		private string projectName;
 		private string projectFullName;
@@ -63,6 +64,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			IProjectConfiguraiton projectConfiguration,
 			TemplateLoader templateLoader,
 			PackageManager packageManager,
+			IMessageManager messageManager,
 			string pathToProjectConfigFile,
 			string projectName,
 			string projectFullName,
@@ -74,6 +76,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			if (projectConfiguration == null) throw new ArgumentNullException(nameof(projectConfiguration));
 			if (templateLoader == null) throw new ArgumentNullException(nameof(templateLoader));
 			if (packageManager == null) throw new ArgumentNullException(nameof(packageManager));
+			if (messageManager == null) throw new ArgumentNullException(nameof(messageManager));
 
 			this.authenticationManager = authenticationManager;
 			this.dialogFactory = dialogFactory;
@@ -81,15 +84,15 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.projectConfiguration = projectConfiguration;
 			this.templateLoader = templateLoader;
 			this.packageManager = packageManager;
+			this.messageManager = messageManager;
 
 			this.pathToProjectConfigFile = pathToProjectConfigFile;
 			this.projectName = projectName;
 			this.projectFullName = projectFullName;
 			this.projectLanguage = projectLanguage;
-            this.isUseVSFormattingCode = projectConfiguration.UseVSFormatting;
+			this.isUseVSFormattingCode = projectConfiguration.UseVSFormatting;
 
-
-            this.editConnectionInfoCommand = new RelayCommand<object>(EditConnectionInfoCommandClicked);
+			this.editConnectionInfoCommand = new RelayCommand<object>(EditConnectionInfoCommandClicked);
 			this.searchMethodDialogCommand = new RelayCommand<object>(SearchMethodDialogCommandClicked);
 			this.okCommand = new RelayCommand<object>(OkCommandCliked, IsEnabledOkButton);
 			this.closeCommand = new RelayCommand<object>(OnCloseCliked);
@@ -157,7 +160,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				{
 					var messageWindow = this.dialogFactory.GetMessageBoxWindow();
 					var dialogReuslt = messageWindow.ShowDialog(selectedTemplate.Message,
-						"Open method Aras Innovator",
+						messageManager.GetMessage("OpenMethodArasInnovator"),
 						MessageButtons.OK,
 						MessageIcon.None);
 				}
@@ -237,9 +240,9 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		}
 
 		public bool IsUseVSFormattingCode
-		{ 
-			get{ return isUseVSFormattingCode; }
-			set{ isUseVSFormattingCode = value; }
+		{
+			get { return isUseVSFormattingCode; }
+			set { isUseVSFormattingCode = value; }
 		}
 
 		#endregion
@@ -327,10 +330,10 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				this.IdentityId = item.getProperty("execution_allowed_to", string.Empty);
 				this.MethodComment = item.getProperty("comments", string.Empty);
 
-                var methodCode = item.getProperty("method_code", string.Empty);
-                this.MethodCode = Regex.Replace(methodCode, @"//MethodTemplateName=[\S]+\r\n", "");
-             
-                if (methodLanguage == "C#" || methodLanguage == "VB")
+				var methodCode = item.getProperty("method_code", string.Empty);
+				this.MethodCode = Regex.Replace(methodCode, @"//MethodTemplateName=[\S]+\r\n", "");
+
+				if (methodLanguage == "C#" || methodLanguage == "VB")
 				{
 					this.MethodType = "server";
 				}
@@ -350,8 +353,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				this.Package = packageName;
 
 				this.SelectedTemplate = templateLoader.GetTemplateFromCodeString(methodCode, methodLanguage, "Open method from Aras Innovator");
-                                                                                                                                                               
-                if (projectConfiguration.LastSavedSearch.ContainsKey(result.ItemType))
+
+				if (projectConfiguration.LastSavedSearch.ContainsKey(result.ItemType))
 				{
 					projectConfiguration.LastSavedSearch[result.ItemType] = result.LastSavedSearch;
 				}

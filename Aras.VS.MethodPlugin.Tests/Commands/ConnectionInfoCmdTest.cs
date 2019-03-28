@@ -21,6 +21,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 		ProjectConfigurationManager projectConfigurationManager;
 		ConnectionInfoCmd сonnectionInfoCmd;
 		IVsUIShell iVsUIShell;
+		IMessageManager messageManager;
 
 		[SetUp]
 		public void Init()
@@ -29,7 +30,8 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			projectConfigurationManager = new ProjectConfigurationManager();
 			dialogFactory = Substitute.For<IDialogFactory>();
 			authManager = Substitute.For<IAuthenticationManager>();
-			ConnectionInfoCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager);
+			messageManager = Substitute.For<IMessageManager>();
+			ConnectionInfoCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, messageManager);
 			сonnectionInfoCmd = ConnectionInfoCmd.Instance;
 			iVsUIShell = Substitute.For<IVsUIShell>();
 		}

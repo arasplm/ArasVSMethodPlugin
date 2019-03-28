@@ -22,6 +22,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 	{
 		IAuthenticationManager authManager;
 		IProjectManager projectManager;
+		IMessageManager messageManager;
 		IDialogFactory dialogFactory;
 		ProjectConfigurationManager projectConfigurationManager;
 		DebugMethodCmd debugMethodCmd;
@@ -46,7 +47,8 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			projectConfiguration = projectConfigurationManager.Load(projectManager.ProjectConfigPath);
 			projectManager.MethodName.Returns("TestMethod");
 			projectManager.MethodPath.Returns(Path.Combine(currentPath, "TestData\\TestMethod.txt"));
-			DebugMethodCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
+			messageManager = Substitute.For<IMessageManager>();
+			DebugMethodCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
 			debugMethodCmd = DebugMethodCmd.Instance;
 
 			var project = Substitute.For<Project>();

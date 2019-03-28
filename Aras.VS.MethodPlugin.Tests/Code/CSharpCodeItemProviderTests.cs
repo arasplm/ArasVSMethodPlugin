@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Aras.VS.MethodPlugin.Code;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace Aras.VS.MethodPlugin.Tests.Code
@@ -9,12 +10,16 @@ namespace Aras.VS.MethodPlugin.Tests.Code
 	[TestFixture]
 	public class CSharpCodeItemProviderTests
 	{
+		private IMessageManager messageManager;
 		private CSharpCodeItemProvider provider;
 
 		[OneTimeSetUp]
 		public void OneTimeSetUp()
 		{
-			provider = new CSharpCodeItemProvider();
+			messageManager = Substitute.For<IMessageManager>();
+			messageManager.GetMessage("CurrentCodeElementTypeIsNotSupported").Returns("Current code element type is not supported");
+
+			provider = new CSharpCodeItemProvider(messageManager);
 		}
 
 		[Test]
@@ -57,9 +62,6 @@ namespace Aras.VS.MethodPlugin.Tests.Code
 		[TestCase(CodeType.External, CodeElementType.Method)]
 		public void GetCodeElementTypeTemplate_NotSupportedCodeElement_ShouldThrowsException(CodeType codeType, CodeElementType elementType)
 		{
-			// Arrange
-			string expectedErrorMessage = "Current code element type is not supported";
-
 			// Assert
 			Exception exception = Assert.Throws<NotSupportedException>(() =>
 				{
@@ -67,7 +69,7 @@ namespace Aras.VS.MethodPlugin.Tests.Code
 					provider.GetCodeElementTypeTemplate(codeType, elementType);
 				});
 
-			Assert.AreEqual(expectedErrorMessage, exception.Message);
+			Assert.AreEqual(this.messageManager.GetMessage("CurrentCodeElementTypeIsNotSupported"), exception.Message);
 		}
 
 		[TestCase(CodeType.Partial, CodeElementType.Interface, @"Code\TestData\CodeElementTypeTemplates\PartialInterface.txt")]

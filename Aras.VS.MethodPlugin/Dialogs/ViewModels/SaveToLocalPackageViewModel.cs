@@ -15,7 +15,6 @@ using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs.Directory.Data;
-using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.ItemSearch;
 using Aras.VS.MethodPlugin.PackageManagement;
 using Aras.VS.MethodPlugin.SolutionManagement;
@@ -34,6 +33,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private readonly IProjectManager projectManager;
 		private readonly IArasDataProvider arasDataProvider;
 		private readonly IIOWrapper iOWrapper;
+		private readonly IMessageManager messageManager;
 
 		private MethodInfo methodInfo;
 		private MethodItemTypeInfo methodItemTypeInfo;
@@ -63,6 +63,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			IProjectManager projectManager,
 			IArasDataProvider arasDataProvider,
 			IIOWrapper iOWrapper,
+			IMessageManager messageManager,
 			MethodInfo methodInformation,
 			string pathToFileForSave)
 		{
@@ -75,6 +76,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			if (projectManager == null) throw new ArgumentNullException(nameof(projectManager));
 			if (arasDataProvider == null) throw new ArgumentNullException(nameof(arasDataProvider));
 			if (iOWrapper == null) throw new ArgumentNullException(nameof(iOWrapper));
+			if (messageManager == null) throw new ArgumentNullException(nameof(messageManager));
 			if (methodInformation == null) throw new ArgumentNullException(nameof(methodInformation));
 
 			this.authManager = authManager;
@@ -85,6 +87,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.projectManager = projectManager;
 			this.arasDataProvider = arasDataProvider;
 			this.iOWrapper = iOWrapper;
+			this.messageManager = messageManager;
 			this.MethodInformation = methodInformation;
 
 			this.folderBrowserCommand = new RelayCommand<object>(OnFolderBrowserClick);
@@ -262,8 +265,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			{
 				var messageWindow = this.dialogFactory.GetMessageBoxWindow();
 				var dialogReuslt = messageWindow.ShowDialog(
-					$"The method {this.MethodName} already exsist in packages. Click OK to replace it.",
-					"Save package",
+					messageManager.GetMessage("TheMethodAlreadyExsistInPackagesClickOKToReplaceIt", this.MethodName),
+					messageManager.GetMessage("SavePackage"),
 					MessageButtons.OKCancel,
 					MessageIcon.None);
 

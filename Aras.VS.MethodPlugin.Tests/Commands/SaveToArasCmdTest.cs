@@ -28,6 +28,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 		SaveToArasCmd saveToArasCmd;
 		IVsUIShell iVsUIShell;
 		ICodeProviderFactory codeProviderFactory;
+		IMessageManager messageManager;
 		ICodeProvider codeProvider;
 		IProjectConfiguraiton projectConfiguration;
 		TemplateLoader templateLoader;
@@ -43,17 +44,18 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			codeProviderFactory = Substitute.For<ICodeProviderFactory>();
 			codeProvider = Substitute.For<ICodeProvider>();
 			codeProviderFactory.GetCodeProvider(null, null).ReturnsForAnyArgs(codeProvider);
-			SaveToArasCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
+			messageManager = Substitute.For<IMessageManager>();
+			SaveToArasCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
 			saveToArasCmd = SaveToArasCmd.Instance;
 			iVsUIShell = Substitute.For<IVsUIShell>();
 			var currentPath = AppDomain.CurrentDomain.BaseDirectory;
 			projectManager.ProjectConfigPath.Returns(Path.Combine(currentPath, "TestData\\projectConfig.xml"));
 			projectConfiguration = projectConfigurationManager.Load(projectManager.ProjectConfigPath);
-			templateLoader = new TemplateLoader(dialogFactory);
+			templateLoader = new TemplateLoader(dialogFactory, messageManager);
 			projectManager.MethodConfigPath.Returns(Path.Combine(currentPath, "TestData\\method-config.xml"));
 			templateLoader.Load(projectManager.MethodConfigPath);
 			projectManager.MethodPath.Returns(Path.Combine(currentPath, "TestData\\TestMethod.txt"));
-			packageManager = Substitute.For<PackageManager>(authManager);
+			packageManager = Substitute.For<PackageManager>(authManager, messageManager);
 		}
 
 		[Test]

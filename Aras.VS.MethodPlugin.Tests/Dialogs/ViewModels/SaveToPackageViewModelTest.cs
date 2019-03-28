@@ -33,6 +33,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 		private IDialogFactory dialogFactory;
 		private IProjectConfigurationManager projectConfigurationManager;
 		private IProjectConfiguraiton projectConfiguration;
+		private IMessageManager messageManager;
 		private PackageManager packageManager;
 		private TemplateLoader templateLoader;
 		private ICodeProvider codeProvider;
@@ -53,8 +54,9 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 			this.dialogFactory = Substitute.For<IDialogFactory>();
 			this.projectConfigurationManager = Substitute.For<IProjectConfigurationManager>();
 			this.projectConfiguration = Substitute.For<IProjectConfiguraiton>();
-			this.packageManager = new PackageManager(this.authManager);
-			this.templateLoader = new TemplateLoader(this.dialogFactory);
+			this.messageManager = Substitute.For<IMessageManager>();
+			this.packageManager = new PackageManager(this.authManager, this.messageManager);
+			this.templateLoader = new TemplateLoader(this.dialogFactory, this.messageManager);
 			this.codeProvider = Substitute.For<ICodeProvider>();
 			this.projectManager = Substitute.For<IProjectManager>();
 			this.arasDataProvider = Substitute.For<IArasDataProvider>();
@@ -68,7 +70,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 
 			Item methodItemType = innovatorIns.newItem();
 			methodItemType.loadAML(methodItemTypeDoc.OuterXml);
-			MethodItemTypeInfo methodItemTypeInfo = new MethodItemTypeInfo(methodItemType);
+			MethodItemTypeInfo methodItemTypeInfo = new MethodItemTypeInfo(methodItemType, messageManager);
 			this.arasDataProvider.GetMethodItemTypeInfo().Returns(methodItemTypeInfo);
 
 			string pathToFileForSave = Path.Combine(currentPath, @"Code\TestData\MethodAml\ReturnNullMethodAml.xml");
@@ -81,6 +83,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 				projectManager,
 				arasDataProvider,
 				iOWrapper,
+				messageManager,
 				methodInformation,
 				pathToFileForSave);
 		}
@@ -100,6 +103,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 				projectManager,
 				arasDataProvider,
 				iOWrapper,
+				messageManager,
 				methodInformation,
 				"testPathToFileForSave");
 			});
@@ -120,6 +124,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 				projectManager,
 				arasDataProvider,
 				iOWrapper,
+				messageManager,
 				methodInformation,
 				"testPathToFileForSave");
 			});
@@ -140,6 +145,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 				projectManager,
 				arasDataProvider,
 				iOWrapper,
+				messageManager,
 				methodInformation,
 				"testPathToFileForSave");
 			});
@@ -160,6 +166,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 				projectManager,
 				arasDataProvider,
 				iOWrapper,
+				messageManager,
 				methodInformation,
 				"testPathToFileForSave");
 			});
@@ -180,6 +187,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 				projectManager,
 				arasDataProvider,
 				iOWrapper,
+				messageManager,
 				methodInformation,
 				"testPathToFileForSave");
 			});
@@ -200,6 +208,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 				projectManager,
 				arasDataProvider,
 				iOWrapper,
+				messageManager,
 				methodInformation,
 				"testPathToFileForSave");
 			});
@@ -220,6 +229,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 				null,
 				arasDataProvider,
 				iOWrapper,
+				messageManager,
 				methodInformation,
 				"testPathToFileForSave");
 			});
@@ -240,6 +250,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 				projectManager,
 				null,
 				iOWrapper,
+				messageManager,
 				methodInformation,
 				"testPathToFileForSave");
 			});
@@ -260,6 +271,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 				projectManager,
 				arasDataProvider,
 				null,
+				messageManager,
 				methodInformation,
 				"testPathToFileForSave");
 			});
@@ -280,6 +292,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 				projectManager,
 				arasDataProvider,
 				iOWrapper,
+				messageManager,
 				null,
 				"testPathToFileForSave");
 			});

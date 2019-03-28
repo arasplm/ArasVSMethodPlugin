@@ -15,6 +15,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 	{
 		IProjectManager projectManager;
 		IDialogFactory dialogFactory;
+		IMessageManager messageManager;
 		ProjectConfigurationManager projectConfigurationManager;
 		RefreshConfigCmd refreshConfigCmd;
 		IVsUIShell iVsUIShell;
@@ -25,7 +26,8 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			projectManager = Substitute.For<IProjectManager>();
 			projectConfigurationManager = Substitute.For<ProjectConfigurationManager>();
 			dialogFactory = Substitute.For<IDialogFactory>();
-			RefreshConfigCmd.Initialize(projectManager, dialogFactory, projectConfigurationManager);
+			messageManager = Substitute.For<IMessageManager>();
+			RefreshConfigCmd.Initialize(projectManager, dialogFactory, projectConfigurationManager, messageManager);
 			refreshConfigCmd = RefreshConfigCmd.Instance;
 			iVsUIShell = Substitute.For<IVsUIShell>();
 		}

@@ -6,14 +6,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 using System.Xml;
 using Aras.VS.MethodPlugin.Code;
-using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Templates;
 
@@ -23,6 +20,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 	{
 		private readonly IDialogFactory dialogFactory;
 		private readonly TemplateLoader templateLoader;
+		private readonly IMessageManager messageManager;
+
 		private string projectLanguage;
 		private string selectedFolderPath;
 		private string lastSelectedMFFile;
@@ -47,15 +46,18 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private ICommand okCommand;
 		private ICommand closeCommand;
 
-		public OpenFromPackageViewModel(IDialogFactory dialogFactory, TemplateLoader templateLoader, string projectLanguage, IProjectConfiguraiton projectConfiguration)
+		public OpenFromPackageViewModel(IDialogFactory dialogFactory, TemplateLoader templateLoader, IMessageManager messageManager, string projectLanguage, IProjectConfiguraiton projectConfiguration)
 		{
 			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));
 			if (templateLoader == null) throw new ArgumentNullException(nameof(templateLoader));
+			if (messageManager == null) throw new ArgumentNullException(nameof(messageManager));
 			if (projectConfiguration == null) throw new ArgumentNullException(nameof(projectConfiguration));
 
 			this.dialogFactory = dialogFactory;
 			this.templateLoader = templateLoader;
+			this.messageManager = messageManager;
 			this.projectLanguage = projectLanguage;
+
 			this.selectedFolderPath = projectConfiguration.LastSelectedDir;
 			this.lastSelectedMFFile = projectConfiguration.LastSelectedMfFile;
 			this.isUseVSFormattingCode = projectConfiguration.UseVSFormatting;
@@ -129,7 +131,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				{
 					var messageWindow = this.dialogFactory.GetMessageBoxWindow();
 					var dialogReuslt = messageWindow.ShowDialog(selectedTemplate.Message,
-						"Open method from AML package",
+						messageManager.GetMessage("OpenMethodFromAMLPackage"),
 						MessageButtons.OK,
 						MessageIcon.None);
 				}
@@ -294,8 +296,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			if (projectLanguage != methodLanguage)
 			{
 				var messageWindow = this.dialogFactory.GetMessageBoxWindow();
-				messageWindow.ShowDialog("Current project and method types are different.",
-					"Open method from AML package",
+				messageWindow.ShowDialog(messageManager.GetMessage("CurrentProjectAndMethodTypesAreDifferent"),
+					messageManager.GetMessage("OpenMethodFromAMLPackage"),
 					MessageButtons.OK,
 					MessageIcon.None);
 

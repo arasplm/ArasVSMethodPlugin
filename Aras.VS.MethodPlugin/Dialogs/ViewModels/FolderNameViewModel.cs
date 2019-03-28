@@ -7,25 +7,26 @@
 using System;
 using System.Windows;
 using System.Windows.Input;
-using Aras.VS.MethodPlugin.Dialogs.Views;
 
 namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 {
 	public class FolderNameViewModel
 	{
 		private readonly IDialogFactory dialogFactory;
+		private readonly IMessageManager messageManager;
+
 		private string folderName;
 
 		private ICommand okCommand;
 		private ICommand closeCommand;
 
-		public FolderNameViewModel(IDialogFactory dialogFactory)
+		public FolderNameViewModel(IDialogFactory dialogFactory, IMessageManager messageManager)
 		{
-			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));
+			this.dialogFactory = dialogFactory ?? throw new ArgumentNullException(nameof(dialogFactory));
+			this.messageManager = messageManager ?? throw new ArgumentNullException(nameof(messageManager));
 
-			okCommand = new RelayCommand<object>(OnOkClick);
-			closeCommand = new RelayCommand<object>(OnCloseCliked);
-			this.dialogFactory = dialogFactory;
+			this.okCommand = new RelayCommand<object>(OnOkClick);
+			this.closeCommand = new RelayCommand<object>(OnCloseCliked);
 		}
 
 		public string FolderName
@@ -54,8 +55,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			if (string.IsNullOrEmpty(folderName))
 			{
 				var messageWindow = this.dialogFactory.GetMessageBoxWindow();
-				messageWindow.ShowDialog("Folder name is empty.",
-					"Aras VS method plugin",
+				messageWindow.ShowDialog(messageManager.GetMessage("FolderNameIsEmpty"),
+					messageManager.GetMessage("ArasVSMethodPlugin"),
 					MessageButtons.OK,
 					MessageIcon.None);
 			}

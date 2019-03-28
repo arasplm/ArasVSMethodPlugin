@@ -40,6 +40,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private readonly IArasDataProvider arasDataProvider;
 		private readonly ICodeProvider codeProvider;
 		private readonly IGlobalConfiguration globalConfiguration;
+		private readonly IMessageManager messageManager;
 
 		private MethodItemTypeInfo methodItemTypeInfo;
 
@@ -78,7 +79,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			IProjectManager projectManager,
 			IArasDataProvider arasDataProvider,
 			ICodeProvider codeProvider,
-			IGlobalConfiguration userConfiguration)
+			IGlobalConfiguration userConfiguration,
+			IMessageManager messageManager)
 		{
 			if (authenticationManager == null) throw new ArgumentNullException(nameof(authenticationManager));
 			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));
@@ -89,6 +91,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			if (arasDataProvider == null) throw new ArgumentNullException(nameof(arasDataProvider));
 			if (codeProvider == null) throw new ArgumentNullException(nameof(codeProvider));
 			if (userConfiguration == null) throw new ArgumentNullException(nameof(userConfiguration));
+			if (messageManager == null) throw new ArgumentNullException(nameof(messageManager));
 
 			this.authenticationManager = authenticationManager;
 			this.dialogFactory = dialogFactory;
@@ -99,6 +102,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.arasDataProvider = arasDataProvider;
 			this.codeProvider = codeProvider;
 			this.globalConfiguration = userConfiguration;
+			this.messageManager = messageManager;
 			this.isUseVSFormattingCode = projectConfiguration.UseVSFormatting;
 
 			this.UserCodeTemplates = LoadUserCodeTemplates();
@@ -248,7 +252,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 					{
 						var messageWindow = this.dialogFactory.GetMessageBoxWindow();
 						var dialogReuslt = messageWindow.ShowDialog(selectedTemplate.Message,
-							"Create new method",
+							messageManager.GetMessage("CreateNewMethod"),
 							MessageButtons.OK,
 							MessageIcon.None);
 					}
@@ -418,8 +422,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				if (folder.ProjectItems.Exists(methodNameWithExtension))
 				{
 					var messageWindow = this.dialogFactory.GetMessageBoxWindow();
-					var dialogReuslt = messageWindow.ShowDialog("Method already added to project. Do you want replace method?",
-						"Warning",
+					var dialogReuslt = messageWindow.ShowDialog(messageManager.GetMessage("MethodAlreadyAddedToProjectDoYouWantReplaceMethod"),
+						messageManager.GetMessage("Warning"),
 						MessageButtons.YesNo,
 						MessageIcon.None);
 
@@ -468,7 +472,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 			ItemSearchPresenter presenter = dialogFactory.GetItemSearchPresenter(itemTypeName, itemTypeSingularLabel);
 			var result = presenter.Run(searchArguments);
-			if (result.DialogResult == System.Windows.Forms.DialogResult.OK)
+			if (result.DialogResult == DialogResult.OK)
 			{
 				// TODO : should be replaced by better approach
 				dynamic item = authenticationManager.InnovatorInstance.newItem(itemTypeName, "get");
@@ -504,8 +508,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			if (xmlMethodInfo == null)
 			{
 				var messageWindow = this.dialogFactory.GetMessageBoxWindow();
-				var dialogReuslt = messageWindow.ShowDialog($"User code template invalid format.",
-					"Warning",
+				var dialogReuslt = messageWindow.ShowDialog(messageManager.GetMessage("UserCodeTemplateInvalidFormat"),
+					messageManager.GetMessage("Warning"),
 					MessageButtons.OK,
 					MessageIcon.Warning);
 
@@ -515,8 +519,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			if (xmlMethodInfo.MethodType != codeProvider.Language)
 			{
 				var messageWindow = this.dialogFactory.GetMessageBoxWindow();
-				var dialogReuslt = messageWindow.ShowDialog($"User code tamplate must be {codeProvider.Language} method type.",
-					"Warning",
+				var dialogReuslt = messageWindow.ShowDialog(messageManager.GetMessage("UserCodeTamplateMustBeMethodType", codeProvider.Language),
+					messageManager.GetMessage("Warning"),
 					MessageButtons.OK,
 					MessageIcon.Warning);
 
