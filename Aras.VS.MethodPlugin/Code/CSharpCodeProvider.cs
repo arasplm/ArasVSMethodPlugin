@@ -120,7 +120,7 @@ namespace Aras.VS.MethodPlugin.Code
 
 						if (!CodeIndexInMethodRegions(root, namespaceNode.Span.End))
 						{
-							throw new FormatException("Wrong format. Could not insert external items to the method code.");
+							throw new FormatException($"Could not insert external items to the 'MethodCode' region.{Environment.NewLine}Make sure your 'MethodCode' region has any class.");
 						}
 
 						var namespaceNodeWithPartials = namespaceNode.AddMembers(externalsSyntaxNodes);
@@ -137,7 +137,7 @@ namespace Aras.VS.MethodPlugin.Code
 
 						if (!CodeIndexInMethodRegions(root, classNode.Span.Start))
 						{
-							throw new FormatException("Wrong format. Could not insert external items to the method code.");
+							throw new FormatException($"Could not insert external items to the 'MethodCode' region.{Environment.NewLine}Make sure your 'MethodCode' region has any class.");
 						}
 
 						root = root.InsertNodesBefore(classNode, externalsSyntaxNodes);
