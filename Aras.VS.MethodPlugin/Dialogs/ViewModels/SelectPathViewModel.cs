@@ -21,6 +21,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 	{
 		private readonly IDialogFactory dialogFactory;
 		private readonly IIOWrapper iOWrapper;
+		private readonly IMessageManager messageManager;
+
 		private ObservableCollection<DirectoryItemViewModel> directoryItems;
 		private DirectoryItemViewModel selectDirectoryItem;
 		private DirectoryItemType searchToLevel;
@@ -35,13 +37,22 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private ICommand closeCommand;
 		private ICommand pathChangeCommand;
 
-		public SelectPathViewModel(IDialogFactory dialogFactory, DirectoryItemType searchToLevel, IIOWrapper iOWrapper, string rootPath = "", string startPath = "", string fileExtantion = "")
+		public SelectPathViewModel(IDialogFactory dialogFactory,
+			DirectoryItemType searchToLevel,
+			IIOWrapper iOWrapper,
+			IMessageManager messageManager,
+			string rootPath = "",
+			string startPath = "",
+			string fileExtantion = "")
 		{
 			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));
 			if (iOWrapper == null) throw new ArgumentNullException(nameof(iOWrapper));
+			if (messageManager == null) throw new ArgumentNullException(nameof(messageManager));
 
 			this.dialogFactory = dialogFactory;
 			this.iOWrapper = iOWrapper;
+			this.messageManager = messageManager;
+
 			this.searchToLevel = searchToLevel;
 			this.selectedPath = startPath;
 			this.newFolderCommand = new RelayCommand<object>(OnNewFolderClick);
@@ -142,8 +153,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			else
 			{
 				var messageWindow = this.dialogFactory.GetMessageBoxWindow();
-				messageWindow.ShowDialog("Selection wasn't found",
-					"Select path for saving",
+				messageWindow.ShowDialog(messageManager.GetMessage("SelectionWasNotFound"),
+					messageManager.GetMessage("SelectPathForSaving"),
 					MessageButtons.OK,
 					MessageIcon.None);
 			}
@@ -232,7 +243,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				{
 					var messageWindow = this.dialogFactory.GetMessageBoxWindow();
 					messageWindow.ShowDialog(ex.Message,
-						"Aras VS method plugin",
+						messageManager.GetMessage("ArasVSMethodPlugin"),
 						MessageButtons.OK,
 						MessageIcon.Error);
 				}
@@ -241,10 +252,9 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		private void OnDeleteFolderClick(object window)
 		{
-			string message = $"Are you sure you want to delete the {selectDirectoryItem.Name} folder?";
 			var messageWindow = this.dialogFactory.GetMessageBoxWindow();
-			var dialogResult = messageWindow.ShowDialog(message,
-				"Aras VS method plugin",
+			var dialogResult = messageWindow.ShowDialog(messageManager.GetMessage("AreYouSureYouWantToDeleteTheFolder", selectDirectoryItem.Name),
+				messageManager.GetMessage("ArasVSMethodPlugin"),
 				MessageButtons.OKCancel,
 				MessageIcon.Warning);
 
@@ -262,7 +272,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				{
 					var errorWindow = this.dialogFactory.GetMessageBoxWindow();
 					errorWindow.ShowDialog(ex.Message,
-						"Aras VS method plugin",
+						messageManager.GetMessage("ArasVSMethodPlugin"),
 						MessageButtons.OK,
 						MessageIcon.Error);
 				}
@@ -278,8 +288,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			else
 			{
 				var messageWindow = this.dialogFactory.GetMessageBoxWindow();
-				messageWindow.ShowDialog("File or Folder were not found",
-					"Saving method to local package",
+				messageWindow.ShowDialog(messageManager.GetMessage("FileOrFolderWereNotFound"),
+					messageManager.GetMessage("SavingMethodToLocalPackage"),
 					MessageButtons.OK,
 					MessageIcon.None);
 			}

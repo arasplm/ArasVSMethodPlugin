@@ -21,7 +21,7 @@ namespace Aras.VS.MethodPlugin.Commands
 	/// <summary>
 	/// Command handler
 	/// </summary>
-	internal sealed class CreateMethodCmd : AuthenticationCommandBase
+	public sealed class CreateMethodCmd : AuthenticationCommandBase
 	{
 		protected readonly IGlobalConfiguration globalConfiguration;
 
@@ -40,7 +40,7 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// Adds our command handlers for menu (commands must exist in the command table file)
 		/// </summary>
 		/// <param name="package">Owner package, not null.</param>
-		private CreateMethodCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IGlobalConfiguration userConfiguration) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory)
+		private CreateMethodCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IGlobalConfiguration userConfiguration, IMessageManager messageManager) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory, messageManager)
 		{
 			this.globalConfiguration = userConfiguration ?? throw new ArgumentNullException(nameof(userConfiguration));
 
@@ -67,9 +67,9 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// Initializes the singleton instance of the command.
 		/// </summary>
 		/// <param name="package">Owner package, not null.</param>
-		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IGlobalConfiguration userConfiguration)
+		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IGlobalConfiguration userConfiguration, IMessageManager messageManager)
 		{
-			Instance = new CreateMethodCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, userConfiguration);
+			Instance = new CreateMethodCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, userConfiguration, messageManager);
 		}
 
 		public override void ExecuteCommandImpl(object sender, EventArgs args)
@@ -77,10 +77,10 @@ namespace Aras.VS.MethodPlugin.Commands
 			var project = projectManager.SelectedProject;
 			var projectConfiguration = projectConfigurationManager.Load(projectManager.ProjectConfigPath);
 
-			var templateLoader = new Templates.TemplateLoader(this.dialogFactory);
+			var templateLoader = new Templates.TemplateLoader(this.dialogFactory, this.messageManager);
 			templateLoader.Load(projectManager.MethodConfigPath);
 
-			PackageManager packageManager = new PackageManager(authManager);
+			PackageManager packageManager = new PackageManager(authManager, this.messageManager);
 			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language, projectConfiguration);
 
 			var createView = dialogFactory.GetCreateView(projectConfiguration, templateLoader, packageManager, projectManager, codeProvider, globalConfiguration);

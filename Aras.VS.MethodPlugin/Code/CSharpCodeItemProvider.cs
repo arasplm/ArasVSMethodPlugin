@@ -11,6 +11,13 @@ namespace Aras.VS.MethodPlugin.Code
 {
 	public class CSharpCodeItemProvider : ICodeItemProvider
 	{
+		private readonly IMessageManager messageManager;
+
+		public CSharpCodeItemProvider(IMessageManager messageManager)
+		{
+			this.messageManager = messageManager ?? throw new ArgumentNullException(nameof(messageManager));
+		}
+
 		private Dictionary<CodeType, Dictionary<CodeElementType, string>> codeTemplates = new Dictionary<CodeType, Dictionary<CodeElementType, string>>
 		{
 			{
@@ -65,13 +72,13 @@ namespace Aras.VS.MethodPlugin.Code
 			Dictionary<CodeElementType, string> templates;
 			if (!codeTemplates.TryGetValue(codeType, out templates))
 			{
-				throw new NotSupportedException("Current code type is not supported");
+				throw new NotSupportedException(messageManager.GetMessage("CurrentCodeTypeIsNotSupported"));
 			}
 
 			string template;
 			if (!templates.TryGetValue(codeElementType, out template))
 			{
-				throw new NotSupportedException("Current code element type is not supported");
+				throw new NotSupportedException(messageManager.GetMessage("CurrentCodeElementTypeIsNotSupported"));
 			}
 
 			return template;

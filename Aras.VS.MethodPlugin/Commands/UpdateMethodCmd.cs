@@ -26,7 +26,7 @@ namespace Aras.VS.MethodPlugin.Commands
 	/// <summary>
 	/// Command handler
 	/// </summary>
-	internal sealed class UpdateMethodCmd : AuthenticationCommandBase
+	public sealed class UpdateMethodCmd : AuthenticationCommandBase
 	{
 		/// <summary>
 		/// Command ID.
@@ -43,7 +43,8 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// Adds our command handlers for menu (commands must exist in the command table file)
 		/// </summary>
 		/// <param name="package">Owner package, not null.</param>
-		private UpdateMethodCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory)
+		private UpdateMethodCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IMessageManager messageManager)
+			: base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory, messageManager)
 		{
 			if (projectManager.CommandService != null)
 			{
@@ -68,9 +69,9 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// Initializes the singleton instance of the command.
 		/// </summary>
 		/// <param name="package">Owner package, not null.</param>
-		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory)
+		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IMessageManager messageManager)
 		{
-			Instance = new UpdateMethodCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
+			Instance = new UpdateMethodCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
 		}
 
 		public override void ExecuteCommandImpl(object sender, EventArgs args)
@@ -90,10 +91,10 @@ namespace Aras.VS.MethodPlugin.Commands
 				throw new Exception();
 			}
 
-			var templateLoader = new TemplateLoader(this.dialogFactory);
+			var templateLoader = new TemplateLoader(this.dialogFactory, this.messageManager);
 			templateLoader.Load(methodConfigPath);
 
-			var packageManager = new PackageManager(authManager);
+			var packageManager = new PackageManager(authManager, this.messageManager);
 
 			var updateView = dialogFactory.GetUpdateFromArasView(projectConfigurationManager, projectConfiguration, templateLoader, packageManager, methodInformation, projectConfigPath, project.Name, project.FullName);
 			var updateViewResult = updateView.ShowDialog();

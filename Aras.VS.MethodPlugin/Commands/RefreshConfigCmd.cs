@@ -19,21 +19,21 @@ namespace Aras.VS.MethodPlugin.Commands
 	/// <summary>
 	/// Command handler
 	/// </summary>
-	internal sealed class RefreshConfigCmd : CmdBase
+	public sealed class RefreshConfigCmd : CmdBase
 	{
 		/// <summary>
 		/// Command ID.
 		/// </summary>
 		public const int CommandId = 0x0101;
 
-        /// <summary>
-        /// Command menu group (command set GUID).
-        /// </summary>
-        public static readonly Guid CommandSet = CommandIds.RefreshConfig;
+		/// <summary>
+		/// Command menu group (command set GUID).
+		/// </summary>
+		public static readonly Guid CommandSet = CommandIds.RefreshConfig;
 
 
-        private RefreshConfigCmd(IProjectManager projectManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager)
-			: base(projectManager, dialogFactory, projectConfigurationManager)
+		private RefreshConfigCmd(IProjectManager projectManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, IMessageManager messageManager)
+			: base(projectManager, dialogFactory, projectConfigurationManager, messageManager)
 		{
 			if (projectManager.CommandService != null)
 			{
@@ -60,9 +60,9 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// <param name="projectManager"></param>
 		/// <param name="dialogFactory"></param>
 		/// <param name="projectConfigurationManager"></param>
-		public static void Initialize(IProjectManager projectManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager)
+		public static void Initialize(IProjectManager projectManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, IMessageManager messageManager)
 		{
-			Instance = new RefreshConfigCmd(projectManager, dialogFactory, projectConfigurationManager);
+			Instance = new RefreshConfigCmd(projectManager, dialogFactory, projectConfigurationManager, messageManager);
 		}
 
 		public override void ExecuteCommandImpl(object sender, EventArgs args)

@@ -6,16 +6,14 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using Aras.VS.MethodPlugin.ArasInnovator;
 using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.Dialogs.Views;
+using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.ItemSearch;
 using Aras.VS.MethodPlugin.PackageManagement;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using OfficeConnector.Dialogs;
 
 namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
@@ -27,6 +25,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private readonly IProjectConfigurationManager projectConfigurationManager;
 		private readonly PackageManager packageManager;
 		private readonly IArasDataProvider arasDataProvider;
+		private readonly IMessageManager messageManager;
 
 		private IProjectConfiguraiton projectConfiguration;
 		private MethodItemTypeInfo methodItemTypeInfo;
@@ -65,6 +64,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			PackageManager packageManager,
 			IArasDataProvider arasDataProvider,
 			MethodInfo methodInformation,
+			IMessageManager messageManager,
 			string methodCode,
 			string projectConfigPath,
 			string projectName,
@@ -77,6 +77,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			if (packageManager == null) throw new ArgumentNullException(nameof(packageManager));
 			if (arasDataProvider == null) throw new ArgumentNullException(nameof(arasDataProvider));
 			if (methodInformation == null) throw new ArgumentNullException(nameof(methodInformation));
+			if (messageManager == null) throw new ArgumentNullException(nameof(messageManager));
 
 			this.authManager = authManager;
 			this.dialogFactory = dialogFactory;
@@ -84,6 +85,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.projectConfiguration = projectConfiguration;
 			this.packageManager = packageManager;
 			this.arasDataProvider = arasDataProvider;
+			this.messageManager = messageManager;
 
 			this.projectConfigPath = projectConfigPath;
 			this.projectName = projectName;
@@ -281,8 +283,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				{
 					var messageWindow = this.dialogFactory.GetMessageBoxWindow();
 					var dialogReuslt = messageWindow.ShowDialog(
-						$"The {this.methodName} method already attached to differernt package. Click OK to reasign package for this method.",
-						"Save method to Aras Innovator",
+						messageManager.GetMessage("TheMethodAlreadyAttachedToDiffererntPackageClickOKToReasignPackageForThisMethod", this.methodName),
+						messageManager.GetMessage("SaveMethodToArasInnovator"),
 						MessageButtons.OKCancel,
 						MessageIcon.None);
 
@@ -301,8 +303,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				{
 					var messageWindow = this.dialogFactory.GetMessageBoxWindow();
 					var dialogResult = messageWindow.ShowDialog(
-						"Latest version in Aras is differrent that you have. Click OK to rewrite Aras method code.",
-						"Save method to Aras Innovator",
+						messageManager.GetMessage("LatestVersionInArasIsDifferrentThatYouHaveClickOKToRewriteArasMethodCode"),
+						messageManager.GetMessage("SaveMethodToArasInnovator"),
 						MessageButtons.OKCancel,
 						MessageIcon.None);
 
@@ -319,7 +321,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			{
 				var messageWindow = this.dialogFactory.GetMessageBoxWindow();
 				messageWindow.ShowDialog(ex.Message,
-					"Aras VS method plugin",
+					messageManager.GetMessage("ArasVSMethodPlugin"),
 					MessageButtons.OK,
 					MessageIcon.Error);
 			}

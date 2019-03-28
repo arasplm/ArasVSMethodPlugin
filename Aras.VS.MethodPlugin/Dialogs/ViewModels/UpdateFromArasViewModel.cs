@@ -6,14 +6,13 @@
 
 using System;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Code;
+using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.PackageManagement;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Templates;
 
 namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
@@ -26,6 +25,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private readonly IDialogFactory dialogFactory;
 		private readonly TemplateLoader templateLoader;
 		private readonly PackageManager packageManager;
+		private readonly IMessageManager messageManager;
 		private string projectConfigPath;
 		private string projectName;
 		private string projectFullName;
@@ -57,6 +57,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			IDialogFactory dialogFactory,
 			TemplateLoader templateLoader,
 			PackageManager packageManager,
+			IMessageManager messageManager,
 			MethodInfo methodInfo,
 			string projectConfigPath,
 			string projectName,
@@ -68,6 +69,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));
 			if (templateLoader == null) throw new ArgumentNullException(nameof(templateLoader));
 			if (packageManager == null) throw new ArgumentNullException(nameof(packageManager));
+			if (messageManager == null) throw new ArgumentNullException(nameof(messageManager));
 			if (methodInfo == null) throw new ArgumentNullException(nameof(methodInfo));
 
 			this.authManager = authManager;
@@ -76,6 +78,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.dialogFactory = dialogFactory;
 			this.templateLoader = templateLoader;
 			this.packageManager = packageManager;
+			this.messageManager = messageManager;
 			this.projectConfigPath = projectConfigPath;
 			this.projectName = projectName;
 			this.projectFullName = projectFullName;
@@ -250,8 +253,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			if (methodItem.isError())
 			{
 				var messageWindow = this.dialogFactory.GetMessageBoxWindow();
-				messageWindow.ShowDialog($"Method {methodName} is not found in the current connection.",
-					"Update method from Aras Innovator",
+				messageWindow.ShowDialog(messageManager.GetMessage("MethodIsNotFoundInTheCurrentConnection", methodName),
+					messageManager.GetMessage("UpdateMethodFromArasInnovator"),
 					MessageButtons.OK,
 					MessageIcon.Information);
 

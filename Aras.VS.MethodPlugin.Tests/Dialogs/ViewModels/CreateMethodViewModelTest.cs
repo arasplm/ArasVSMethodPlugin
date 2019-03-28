@@ -33,6 +33,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 		private IDialogFactory dialogFactory;
 		private IProjectConfigurationManager projectConfigurationManager;
 		private IProjectConfiguraiton projectConfiguration;
+		private IMessageManager messageManager;
 		private PackageManager packageManager;
 		private IArasDataProvider arasDataProvider;
 		private MethodInfo methodInformation;
@@ -60,10 +61,11 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 			this.dialogFactory = Substitute.For<IDialogFactory>();
 			this.projectConfigurationManager = Substitute.For<IProjectConfigurationManager>();
 			this.projectConfiguration = Substitute.For<IProjectConfiguraiton>();
-			this.packageManager = new PackageManager(authManager);
+			this.messageManager = Substitute.For<IMessageManager>();
+			this.packageManager = new PackageManager(authManager, messageManager);
 			this.arasDataProvider = Substitute.For<IArasDataProvider>();
 			this.methodInformation = new MethodInfo();
-			this.templateLoader = new TemplateLoader(dialogFactory);
+			this.templateLoader = new TemplateLoader(dialogFactory, messageManager);
 			this.projectManager = Substitute.For<IProjectManager>();
 			this.codeProvider = Substitute.For<ICodeProvider>();
 			this.globalConfiguration = Substitute.For<IGlobalConfiguration>();
@@ -90,7 +92,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 			Item methodItemType = this.innovatorInstance.newItem();
 			methodItemType.loadAML(methodItemTypeAML.OuterXml);
 
-			this.arasDataProvider.GetMethodItemTypeInfo().Returns(new MethodItemTypeInfo(methodItemType));
+			this.arasDataProvider.GetMethodItemTypeInfo().Returns(new MethodItemTypeInfo(methodItemType, messageManager));
 
 			this.createMethodViewModel = new CreateMethodViewModel(authManager,
 					dialogFactory,
@@ -100,7 +102,8 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 					projectManager,
 					arasDataProvider,
 					codeProvider,
-					globalConfiguration);
+					globalConfiguration,
+					messageManager);
 
 		}
 
@@ -119,7 +122,8 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 								projectManager,
 								arasDataProvider,
 								codeProvider,
-								globalConfiguration);
+								globalConfiguration,
+								messageManager);
 			});
 
 		}
@@ -139,7 +143,8 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 								projectManager,
 								arasDataProvider,
 								codeProvider,
-								globalConfiguration);
+								globalConfiguration,
+								messageManager);
 			});
 
 		}
@@ -159,7 +164,8 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 								projectManager,
 								arasDataProvider,
 								codeProvider,
-								globalConfiguration);
+								globalConfiguration,
+								messageManager);
 			});
 
 		}
@@ -179,7 +185,8 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 								projectManager,
 								arasDataProvider,
 								codeProvider,
-								globalConfiguration);
+								globalConfiguration,
+								messageManager);
 			});
 
 		}
@@ -199,7 +206,8 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 								projectManager,
 								arasDataProvider,
 								codeProvider,
-								globalConfiguration);
+								globalConfiguration,
+								messageManager);
 			});
 
 		}
@@ -219,7 +227,8 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 								null,
 								arasDataProvider,
 								codeProvider,
-								globalConfiguration);
+								globalConfiguration,
+								messageManager);
 			});
 
 		}
@@ -239,7 +248,8 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 								projectManager,
 								null,
 								codeProvider,
-								globalConfiguration);
+								globalConfiguration,
+								messageManager);
 			});
 
 		}
@@ -259,7 +269,8 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 								projectManager,
 								arasDataProvider,
 								null,
-								globalConfiguration);
+								globalConfiguration,
+								messageManager);
 			});
 
 		}
@@ -279,7 +290,8 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 								projectManager,
 								arasDataProvider,
 								codeProvider,
-								null);
+								null,
+								messageManager);
 			});
 
 		}
@@ -362,8 +374,8 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 			this.createMethodViewModel.BrowseCodeTemplateCommand.Execute(null);
 
 			//Assert
-			messageBox.Received().ShowDialog($"User code template invalid format.",
-					"Warning",
+			messageBox.Received().ShowDialog(messageManager.GetMessage("UserCodeTemplateInvalidFormat"),
+					messageManager.GetMessage("Warning"),
 					MessageButtons.OK,
 					MessageIcon.Warning);
 		}
@@ -386,8 +398,8 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 			this.createMethodViewModel.BrowseCodeTemplateCommand.Execute(null);
 
 			//Assert
-			messageBox.Received().ShowDialog($"User code tamplate must be {this.codeProvider.Language} method type.",
-					"Warning",
+			messageBox.Received().ShowDialog(messageManager.GetMessage("UserCodeTamplateMustBeMethodType", this.codeProvider.Language),
+					messageManager.GetMessage("Warning"),
 					MessageButtons.OK,
 					MessageIcon.Warning);
 		}

@@ -29,6 +29,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 		CreateMethodCmd createMethodCmd;
 		IVsUIShell iVsUIShell;
 		ICodeProviderFactory codeProviderFactory;
+		IMessageManager messageManager;
 		IGlobalConfiguration globalConfiguration;
 		static TemplateInfo template;
 		static EventSpecificDataType eventSpecificDataType;
@@ -46,8 +47,9 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			dialogFactory = Substitute.For<IDialogFactory>();
 			authManager = new AuthManagerStub();
 			codeProviderFactory = Substitute.For<ICodeProviderFactory>();
-			globalConfiguration = Substitute.For<IGlobalConfiguration>(); ;
-			CreateMethodCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, globalConfiguration);
+			globalConfiguration = Substitute.For<IGlobalConfiguration>();
+			messageManager = Substitute.For<IMessageManager>();
+			CreateMethodCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, globalConfiguration, messageManager);
 			createMethodCmd = CreateMethodCmd.Instance;
 			iVsUIShell = Substitute.For<IVsUIShell>();
 			var currentPath = AppDomain.CurrentDomain.BaseDirectory;
@@ -55,8 +57,8 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			projectManager.MethodConfigPath.Returns(Path.Combine(currentPath, "TestData\\method-config.xml"));
 			template = new TemplateInfo { TemplateName = string.Empty };
 			eventSpecificDataType = new EventSpecificDataType { EventSpecificData = EventSpecificData.None };
-			templateLoader = new TemplateLoader(dialogFactory);
-			packageManager = new PackageManager(authManager);
+			templateLoader = new TemplateLoader(dialogFactory, messageManager);
+			packageManager = new PackageManager(authManager, messageManager);
 			codeProvider = Substitute.For<ICodeProvider>();
 			projectConfiguration = projectConfigurationManager.Load(projectManager.ProjectConfigPath);
 			templateLoader.Load(projectManager.MethodConfigPath);

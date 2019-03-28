@@ -27,6 +27,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 		UpdateMethodCmd updateMethodCmd;
 		IVsUIShell iVsUIShell;
 		ICodeProviderFactory codeProviderFactory;
+		IMessageManager messageManager;
 		TemplateLoader templateLoader;
 		IProjectConfiguraiton projectConfiguration;
 		ICodeProvider codeProvider;
@@ -41,13 +42,14 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			codeProviderFactory = Substitute.For<ICodeProviderFactory>();
 			codeProvider = Substitute.For<ICodeProvider>();
 			codeProviderFactory.GetCodeProvider(null, null).ReturnsForAnyArgs(codeProvider);
-			UpdateMethodCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
+			messageManager = Substitute.For<IMessageManager>();
+			UpdateMethodCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
 			updateMethodCmd = UpdateMethodCmd.Instance;
 			iVsUIShell = Substitute.For<IVsUIShell>();
 			var currentPath = AppDomain.CurrentDomain.BaseDirectory;
 			projectManager.ProjectConfigPath.Returns(Path.Combine(currentPath, "TestData\\projectConfig.xml"));
 			projectConfiguration = projectConfigurationManager.Load(projectManager.ProjectConfigPath);
-			templateLoader = new TemplateLoader(dialogFactory);
+			templateLoader = new TemplateLoader(dialogFactory, messageManager);
 			projectManager.MethodConfigPath.Returns(Path.Combine(currentPath, "TestData\\method-config.xml"));
 			templateLoader.Load(projectManager.MethodConfigPath);
 			projectManager.MethodPath.Returns(Path.Combine(currentPath, "TestData\\TestMethod.txt"));

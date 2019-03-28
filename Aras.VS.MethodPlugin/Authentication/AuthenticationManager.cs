@@ -12,48 +12,55 @@ using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 
 namespace Aras.VS.MethodPlugin.Authentication
 {
-    public class AuthenticationManager : IAuthenticationManager
-    {
-        private dynamic serverConnection;
-        private dynamic innovator;
-        private InnovatorUser innovatorUser;
-        private IIOMWrapper iOMWrapper;
+	public class AuthenticationManager : IAuthenticationManager
+	{
+		private readonly IMessageManager messageManager;
 
-        public dynamic InnovatorInstance
-        {
-            get
-            {
-                return innovator;
-            }
-        }
+		private dynamic serverConnection;
+		private dynamic innovator;
+		private InnovatorUser innovatorUser;
+		private IIOMWrapper iOMWrapper;
 
-        public dynamic ServerConnection
-        {
-            get
-            {
-                return serverConnection;
-            }
-        }
+		public AuthenticationManager(IMessageManager messageManager)
+		{
+			this.messageManager = messageManager ?? throw new ArgumentNullException(nameof(messageManager));
+		}
 
-        public InnovatorUser InnovatorUser
-        {
-            get
-            {
-                return innovatorUser;
-            }
-            private set
-            {
-                innovatorUser = value;
-            }
-        }
+		public dynamic InnovatorInstance
+		{
+			get
+			{
+				return innovator;
+			}
+		}
 
-        public IIOMWrapper IOMWrapperInstance
-        {
-            get
-            {
-                return iOMWrapper;
-            }
-        }
+		public dynamic ServerConnection
+		{
+			get
+			{
+				return serverConnection;
+			}
+		}
+
+		public InnovatorUser InnovatorUser
+		{
+			get
+			{
+				return innovatorUser;
+			}
+			private set
+			{
+				innovatorUser = value;
+			}
+		}
+
+		public IIOMWrapper IOMWrapperInstance
+		{
+			get
+			{
+				return iOMWrapper;
+			}
+		}
 
 		public string[] GetBases(string innovatorURL, string projectFullName)
 		{
@@ -186,7 +193,7 @@ namespace Aras.VS.MethodPlugin.Authentication
 				string message = loginItem.getErrorString();
 				if (message.Contains("Authentication failed for"))
 				{
-					message = string.Format(MessageManager.GetMessage("AuthenticationFailedFor"), login);
+					message = string.Format(this.messageManager.GetMessage("AuthenticationFailedFor"), login);
 				}
 
 				messageWindow.ShowDialog(window, message, string.Empty, Dialogs.MessageButtons.OK, Dialogs.MessageIcon.None);
@@ -223,7 +230,7 @@ namespace Aras.VS.MethodPlugin.Authentication
 		{
 			if (iOMWrapper == null || iOMWrapper.ProjectFullName != projectFullName)
 			{
-				iOMWrapper = new IOMWrapper(projectFullName);
+				iOMWrapper = new IOMWrapper(messageManager, projectFullName);
 			}
 		}
 	}

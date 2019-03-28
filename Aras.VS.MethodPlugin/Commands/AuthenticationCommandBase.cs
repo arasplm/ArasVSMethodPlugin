@@ -18,7 +18,8 @@ namespace Aras.VS.MethodPlugin.Commands
 			IDialogFactory dialogFactory,
 			IProjectManager projectManager,
 			IProjectConfigurationManager projectConfigurationManager,
-			ICodeProviderFactory codeProviderFactory) : base(projectManager, dialogFactory, projectConfigurationManager)
+			ICodeProviderFactory codeProviderFactory,
+			IMessageManager messageManager) : base(projectManager, dialogFactory, projectConfigurationManager, messageManager)
 		{
 			if (authManager == null) throw new ArgumentNullException(nameof(authManager));
 			if (codeProviderFactory == null) throw new ArgumentNullException(nameof(codeProviderFactory));
@@ -57,7 +58,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			{
 				var messageWindow = dialogFactory.GetMessageBoxWindow();
 				messageWindow.ShowDialog(ex.Message,
-					"Aras VS method plugin",
+					messageManager.GetMessage("ArasVSMethodPlugin"),
 					MessageButtons.OK,
 					MessageIcon.Error);
 			}

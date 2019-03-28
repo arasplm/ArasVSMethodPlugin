@@ -31,7 +31,7 @@ using Microsoft.CodeAnalysis.Text;
 
 namespace Aras.VS.MethodPlugin.SolutionManagement
 {
-	public class ProjectManager : IProjectManager
+	internal class ProjectManager : IProjectManager
 	{
 		private const string arasLibsFolderName = "DefaultCodeTemplates";
 		private const string defaultCodeTemplatesFolderName = "DefaultCodeTemplates";
@@ -46,18 +46,21 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 		private readonly IDialogFactory dialogFactory;
 		private readonly IIOWrapper iOWrapper;
 		private readonly IVsPackageWrapper vsPackageWrapper;
+		private readonly IMessageManager messageManager;
 
-		public ProjectManager(IServiceProvider serviceProvider, IDialogFactory dialogFactory, IIOWrapper iOWrapper, IVsPackageWrapper vsPackageWrapper)
+		public ProjectManager(IServiceProvider serviceProvider, IDialogFactory dialogFactory, IIOWrapper iOWrapper, IVsPackageWrapper vsPackageWrapper, IMessageManager messageManager)
 		{
 			if (serviceProvider == null) throw new ArgumentNullException(nameof(serviceProvider));
 			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));
 			if (iOWrapper == null) throw new ArgumentNullException(nameof(iOWrapper));
 			if (vsPackageWrapper == null) throw new ArgumentNullException(nameof(vsPackageWrapper));
+			if (messageManager == null) throw new ArgumentNullException(nameof(messageManager));
 
 			this.serviceProvider = serviceProvider;
 			this.dialogFactory = dialogFactory;
 			this.iOWrapper = iOWrapper;
 			this.vsPackageWrapper = vsPackageWrapper;
+			this.messageManager = messageManager;
 		}
 
 		public string ProjectConfigPath
@@ -342,7 +345,7 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 
 			if (solutionProjects.Length == 0)
 			{
-				throw new Exception("Project is not selected on Solution Explorer.");
+				throw new Exception(messageManager.GetMessage("ProjectIsNotSelectedOnSolutionExplorer"));
 			}
 
 			return solutionProjects.GetValue(0) as Project;
@@ -579,8 +582,8 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 						{
 							var messageWindow = dialogFactory.GetMessageBoxWindow();
 							var messageDialogResult = messageWindow.ShowDialog(
-								"One or more method files is not saved. Do you want to save changes?",
-								"Aras VS method plugin",
+								messageManager.GetMessage("OneOrMoreMethodFilesIsNotSavedDoYouWantToSaveChanges"),
+								messageManager.GetMessage("ArasVSMethodPlugin"),
 								MessageButtons.YesNoCancel,
 								MessageIcon.Question);
 

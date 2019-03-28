@@ -5,12 +5,10 @@
 //------------------------------------------------------------------------------
 
 using System;
-using Aras.VS.MethodPlugin.Dialogs;
-using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
+using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Aras.VS.MethodPlugin.Commands
 {
@@ -22,19 +20,23 @@ namespace Aras.VS.MethodPlugin.Commands
 		protected readonly IDialogFactory dialogFactory;
 		protected readonly IProjectManager projectManager;
 		protected readonly IProjectConfigurationManager projectConfigurationManager;
+		protected readonly IMessageManager messageManager;
 
 		public CmdBase(
 			IProjectManager projectManager,
 			IDialogFactory dialogFactory, 
-			IProjectConfigurationManager projectConfigurationManager)
+			IProjectConfigurationManager projectConfigurationManager,
+			IMessageManager messageManager)
 		{
 			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));
 			if (projectManager == null) throw new ArgumentNullException(nameof(projectManager));
 			if (projectConfigurationManager == null) throw new ArgumentNullException(nameof(projectConfigurationManager));
+			if (messageManager == null) throw new ArgumentNullException(nameof(messageManager));
 
 			this.dialogFactory = dialogFactory;
 			this.projectManager = projectManager;
 			this.projectConfigurationManager = projectConfigurationManager;
+			this.messageManager = messageManager;
 		}
 
 		public virtual void ExecuteCommand(object sender, EventArgs args)
@@ -57,7 +59,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			{
 				var messageWindow = dialogFactory.GetMessageBoxWindow();
 				messageWindow.ShowDialog(ex.Message,
-					"Aras VS method plugin",
+					messageManager.GetMessage("ArasVSMethodPlugin"),
 					MessageButtons.OK,
 					MessageIcon.Error);
 			}

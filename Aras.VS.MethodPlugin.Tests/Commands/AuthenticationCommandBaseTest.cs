@@ -22,16 +22,18 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 		IProjectManager projectManager;
 		IProjectConfigurationManager projectConfigurationManager;
 		ICodeProviderFactory codeProviderFactory;
+		IMessageManager messageManager;
 		private AuthenticationCommandBaseTest authenticationCommandBaseTest;
 
-		public class AuthenticationCommandBaseTest : AuthenticationCommandBase
+		internal class AuthenticationCommandBaseTest : AuthenticationCommandBase
 		{
 			public AuthenticationCommandBaseTest(IAuthenticationManager authManager,
 				IDialogFactory dialogFactory,
 				IProjectManager projectManager,
 				IProjectConfigurationManager projectConfigurationManager,
-				ICodeProviderFactory codeProviderFactory)
-			: base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory)
+				ICodeProviderFactory codeProviderFactory,
+				IMessageManager messageManager)
+					: base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory, messageManager)
 			{
 
 			}
@@ -50,7 +52,8 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			dialogFactory = Substitute.For<IDialogFactory>();
 			projectManager = Substitute.For<IProjectManager>();
 			codeProviderFactory = Substitute.For<ICodeProviderFactory>();
-			authenticationCommandBaseTest = new AuthenticationCommandBaseTest(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory);
+			messageManager = Substitute.For<IMessageManager>();
+			authenticationCommandBaseTest = new AuthenticationCommandBaseTest(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory, messageManager);
 			var projectConfiguraiton = Substitute.For<IProjectConfiguraiton>();
 			projectConfigurationManager.Load(projectManager.ProjectConfigPath).Returns(projectConfiguraiton);
 			projectConfiguraiton.Connections.Returns(Substitute.For<List<ConnectionInfo>>());
@@ -62,7 +65,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			Assert.Throws<ArgumentNullException>(new TestDelegate(() =>
 			{
 				// Act
-				new AuthenticationCommandBaseTest(null, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory);
+				new AuthenticationCommandBaseTest(null, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory, messageManager);
 			}));
 		}
 
@@ -72,7 +75,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			Assert.Throws<ArgumentNullException>(new TestDelegate(() =>
 			{
 				// Act
-				new AuthenticationCommandBaseTest(authManager, dialogFactory, projectManager, projectConfigurationManager, null);
+				new AuthenticationCommandBaseTest(authManager, dialogFactory, projectManager, projectConfigurationManager, null, messageManager);
 			}));
 		}
 

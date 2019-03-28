@@ -18,7 +18,7 @@ namespace Aras.VS.MethodPlugin.Commands
 	/// <summary>
 	/// Command handler
 	/// </summary>
-	internal sealed class ConnectionInfoCmd : CmdBase
+	public sealed class ConnectionInfoCmd : CmdBase
 	{
 		/// <summary>
 		/// Command ID.
@@ -32,8 +32,8 @@ namespace Aras.VS.MethodPlugin.Commands
 
 		private readonly IAuthenticationManager authManager;
 
-		private ConnectionInfoCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager)
-			: base(projectManager, dialogFactory, projectConfigurationManager)
+		private ConnectionInfoCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, IMessageManager messageManager)
+			: base(projectManager, dialogFactory, projectConfigurationManager, messageManager)
 		{
 			if (authManager == null) throw new ArgumentNullException(nameof(authManager));
 
@@ -61,9 +61,9 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// Initializes the singleton instance of the command.
 		/// </summary>
 		/// <param name="package">Owner package, not null.</param>
-		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager)
+		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, IMessageManager messageManager)
 		{
-			Instance = new ConnectionInfoCmd(projectManager, authManager, dialogFactory, projectConfigurationManager);
+			Instance = new ConnectionInfoCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, messageManager);
 		}
 
 		public override void ExecuteCommandImpl(object sender, EventArgs args)

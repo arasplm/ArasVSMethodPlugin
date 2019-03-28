@@ -61,6 +61,7 @@ namespace Aras.VS.MethodPlugin
 		private IIOWrapper iOWrapper;
 		private IVsPackageWrapper vsPackageWrapper;
 		private IGlobalConfiguration globalConfiguration;
+		private IMessageManager messageManager;
 
 		private ProjectItemsEvents projectItemsEvents;
 
@@ -85,29 +86,30 @@ namespace Aras.VS.MethodPlugin
 		{
 			base.Initialize();
 			var dllPath = Assembly.GetExecutingAssembly().Location;
-			
+
+			this.messageManager = new MessageManager();
 			this.iOWrapper = new IOWrapper();
-			this.authManager = new AuthenticationManager();
-			this.arasDataProvider = new ArasDataProvider(authManager);
-			this.dialogFactory = new DialogFactory(authManager, arasDataProvider, this, iOWrapper);
+			this.authManager = new AuthenticationManager(messageManager);
+			this.arasDataProvider = new ArasDataProvider(authManager, messageManager);
+			this.dialogFactory = new DialogFactory(authManager, arasDataProvider, this, iOWrapper, messageManager);
 			this.projectConfigurationManager = new ProjectConfigurationManager();
 			this.vsPackageWrapper = new VsPackageWrapper();
-			this.projectManager = new ProjectManager(this, dialogFactory, iOWrapper, vsPackageWrapper);
+			this.projectManager = new ProjectManager(this, dialogFactory, iOWrapper, vsPackageWrapper, messageManager);
 			this.defaultCodeProvider = new DefaultCodeProvider(iOWrapper);
-			this.codeProviderFactory = new CodeProviderFactory(projectManager, defaultCodeProvider, iOWrapper, dialogFactory);
+			this.codeProviderFactory = new CodeProviderFactory(projectManager, defaultCodeProvider, iOWrapper, dialogFactory, messageManager);
 			this.globalConfiguration = new GlobalConfiguration(iOWrapper);
 
-			Commands.OpenFromArasCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
-			Commands.OpenFromPackageCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
-			Commands.CreateMethodCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, globalConfiguration);
-			Commands.SaveToArasCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
-			Commands.SaveToPackageCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
-			Commands.UpdateMethodCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
-			Commands.ConnectionInfoCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager);
-			Commands.CreateCodeItemCmd.Initialize(projectManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
-			Commands.RefreshConfigCmd.Initialize(projectManager, dialogFactory, projectConfigurationManager);
-			Commands.DebugMethodCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
-			Commands.MoveToCmd.Initialize(projectManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
+			Commands.OpenFromArasCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
+			Commands.OpenFromPackageCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
+			Commands.CreateMethodCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, globalConfiguration, messageManager);
+			Commands.SaveToArasCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
+			Commands.SaveToPackageCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
+			Commands.UpdateMethodCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
+			Commands.ConnectionInfoCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, messageManager);
+			Commands.CreateCodeItemCmd.Initialize(projectManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
+			Commands.RefreshConfigCmd.Initialize(projectManager, dialogFactory, projectConfigurationManager, messageManager);
+			Commands.DebugMethodCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
+			Commands.MoveToCmd.Initialize(projectManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
 
 			var dte = (DTE)this.GetService(typeof(DTE));
 			this.projectItemsEvents = dte.Events.GetObject("CSharpProjectItemsEvents") as ProjectItemsEvents;

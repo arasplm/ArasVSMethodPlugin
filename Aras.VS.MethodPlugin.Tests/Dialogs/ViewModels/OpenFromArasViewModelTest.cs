@@ -33,6 +33,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 		private IDialogFactory dialogFactory;
 		private IProjectConfigurationManager projectConfigurationManager;
 		private IProjectConfiguraiton projectConfiguration;
+		private IMessageManager messageManager;
 		private PackageManager packageManager;
 		private TemplateLoader templateLoader;
 
@@ -53,8 +54,9 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 			this.dialogFactory = Substitute.For<IDialogFactory>();
 			this.projectConfigurationManager = Substitute.For<IProjectConfigurationManager>();
 			this.projectConfiguration = Substitute.For<IProjectConfiguraiton>();
-			this.templateLoader = new TemplateLoader(dialogFactory);
-			this.packageManager = new PackageManager(authManager);
+			this.messageManager = Substitute.For<IMessageManager>();
+			this.templateLoader = new TemplateLoader(dialogFactory, messageManager);
+			this.packageManager = new PackageManager(authManager, messageManager);
 
 			ConnectionInfo testConnectionInfo = new ConnectionInfo()
 			{
@@ -68,6 +70,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 				projectConfiguration,
 				templateLoader,
 				packageManager,
+				messageManager,
 				"tesPathToProjectConfigFile",
 				"testProjectName",
 				"testProjectFullName",
@@ -87,6 +90,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 					projectConfiguration,
 					templateLoader,
 					packageManager,
+					messageManager,
 					"tesPathToProjectConfigFile",
 					"testProjectName",
 					"testProjectFullName",
@@ -107,6 +111,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 					projectConfiguration,
 					templateLoader,
 					packageManager,
+					messageManager,
 					"tesPathToProjectConfigFile",
 					"testProjectName",
 					"testProjectFullName",
@@ -127,6 +132,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 					projectConfiguration,
 					templateLoader,
 					packageManager,
+					messageManager,
 					"tesPathToProjectConfigFile",
 					"testProjectName",
 					"testProjectFullName",
@@ -148,6 +154,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 					null,
 					templateLoader,
 					packageManager,
+					messageManager,
 					"tesPathToProjectConfigFile",
 					"testProjectName",
 					"testProjectFullName",
@@ -168,6 +175,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 					projectConfiguration,
 					null,
 					packageManager,
+					messageManager,
 					"tesPathToProjectConfigFile",
 					"testProjectName",
 					"testProjectFullName",
@@ -188,6 +196,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 					projectConfiguration,
 					templateLoader,
 					null,
+					messageManager,
 					"tesPathToProjectConfigFile",
 					"testProjectName",
 					"testProjectFullName",
@@ -212,7 +221,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 
 			//Assert
 			messageBox.Received().ShowDialog(testTemplateInfo.Message,
-				"Open method Aras Innovator",
+				messageManager.GetMessage("OpenMethodArasInnovator"),
 				MessageButtons.OK,
 				MessageIcon.None);
 		}
@@ -337,7 +346,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 
 			//Assert
 			messageBoxWindow.Received().ShowDialog("message",
-						"Open method Aras Innovator",
+						messageManager.GetMessage("OpenMethodArasInnovator"),
 						MessageButtons.OK,
 						MessageIcon.None);
 		}

@@ -2,6 +2,7 @@
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.PackageManagement;
 using Aras.VS.MethodPlugin.Tests.Stubs;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace Aras.VS.MethodPlugin.Tests.PackageManagement
@@ -10,13 +11,15 @@ namespace Aras.VS.MethodPlugin.Tests.PackageManagement
 	public class PackageManagementTest
 	{
 		private PackageManager packageManager;
+		private IMessageManager messageManager;
 		IAuthenticationManager authManager;
 
 		[SetUp]
 		public void Init()
 		{
 			authManager = new AuthManagerStub();
-			packageManager = new PackageManager(authManager);
+			messageManager = Substitute.For<IMessageManager>();
+			packageManager = new PackageManager(authManager, messageManager);
 		}
 
 		[Test]
@@ -25,7 +28,7 @@ namespace Aras.VS.MethodPlugin.Tests.PackageManagement
 			Assert.Throws<ArgumentNullException>(new TestDelegate(() =>
 			{
 				// Act
-				new PackageManager(null);
+				new PackageManager(null, messageManager);
 			}));
 		}
 

@@ -16,12 +16,13 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 		IProjectManager projectManager;
 		IDialogFactory dialogFactory;
 		IProjectConfigurationManager projectConfigurationManager;
+		IMessageManager messageManager;
 		CmdBaseTest cmdBaseTest;
 
-		public class CmdBaseTest : CmdBase
+		internal class CmdBaseTest : CmdBase
 		{
-			public CmdBaseTest(IProjectManager projectManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager)
-			: base(projectManager, dialogFactory, projectConfigurationManager)
+			public CmdBaseTest(IProjectManager projectManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, IMessageManager messageManager)
+				: base(projectManager, dialogFactory, projectConfigurationManager, messageManager)
 			{
 
 			}
@@ -37,7 +38,8 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			projectManager = Substitute.For<IProjectManager>();
 			projectConfigurationManager = Substitute.For<IProjectConfigurationManager>();
 			dialogFactory = Substitute.For<IDialogFactory>();
-			cmdBaseTest = new CmdBaseTest(projectManager, dialogFactory, projectConfigurationManager);
+			messageManager = Substitute.For<IMessageManager>();
+			cmdBaseTest = new CmdBaseTest(projectManager, dialogFactory, projectConfigurationManager, messageManager);
 			var projectConfiguraiton = Substitute.For<IProjectConfiguraiton>();
 			projectConfigurationManager.Load(projectManager.ProjectConfigPath).Returns(projectConfiguraiton);
 			projectConfiguraiton.Connections.Returns(Substitute.For<List<ConnectionInfo>>());
@@ -50,7 +52,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			Assert.Throws<ArgumentNullException>(new TestDelegate(() =>
 			{
 				// Act
-				new CmdBaseTest(null, dialogFactory, projectConfigurationManager);
+				new CmdBaseTest(null, dialogFactory, projectConfigurationManager, messageManager);
 			}));
 		}
 
@@ -61,7 +63,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			Assert.Throws<ArgumentNullException>(new TestDelegate(() =>
 			{
 				// Act
-				new CmdBaseTest(projectManager, dialogFactory, null);
+				new CmdBaseTest(projectManager, dialogFactory, null, messageManager);
 			}));
 		}
 
@@ -72,7 +74,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			Assert.Throws<ArgumentNullException>(new TestDelegate(() =>
 			{
 				// Act
-				new CmdBaseTest(projectManager, null, projectConfigurationManager);
+				new CmdBaseTest(projectManager, null, projectConfigurationManager, messageManager);
 			}));
 		}
 

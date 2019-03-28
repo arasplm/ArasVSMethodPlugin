@@ -21,7 +21,7 @@ namespace Aras.VS.MethodPlugin.Commands
 	/// <summary>
 	/// Command handler
 	/// </summary>
-	internal sealed class DebugMethodCmd : AuthenticationCommandBase
+	public sealed class DebugMethodCmd : AuthenticationCommandBase
 	{
 		/// <summary>
 		/// Command ID.
@@ -34,7 +34,7 @@ namespace Aras.VS.MethodPlugin.Commands
         public static readonly Guid CommandSet = CommandIds.DebugMethod;
 
 
-        private DebugMethodCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory)
+        private DebugMethodCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IMessageManager messageManager) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory, messageManager)
 		{
 			if (projectManager.CommandService != null)
 			{
@@ -63,9 +63,9 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// <param name="dialogFactory"></param>
 		/// <param name="projectConfigurationManager"></param>
 		/// <param name="codeProviderFactory"></param>
-		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory)
+		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IMessageManager messageManager)
 		{
-			Instance = new DebugMethodCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
+			Instance = new DebugMethodCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
 		}
 
 		public override void ExecuteCommandImpl(object sender, EventArgs args)
@@ -188,12 +188,12 @@ namespace Aras.VS.MethodPlugin.Commands
 			}
 		}
 
-		private static string GetFullClassName(NamespaceDeclarationSyntax node)
+		private string GetFullClassName(NamespaceDeclarationSyntax node)
 		{
 			var cls = node.DescendantNodes().OfType<ClassDeclarationSyntax>().FirstOrDefault();
             if (cls == null)
             {
-                throw new ArgumentException("Class not found in namespace");
+                throw new ArgumentException(this.messageManager.GetMessage("ClassNotFoundInNamespace"));
             }
 			string clsName = cls.Identifier.ValueText;
 			string namespaceName = string.Empty;
@@ -212,7 +212,7 @@ namespace Aras.VS.MethodPlugin.Commands
             var methodName = node.DescendantNodes().OfType<MethodDeclarationSyntax>().FirstOrDefault()?.Identifier.ValueText;
             if (string.IsNullOrEmpty(methodName))
             {
-                throw new ArgumentException("Method not found in class");
+                throw new ArgumentException(this.messageManager.GetMessage("MethodNotFoundInClass"));
             }
             return methodName;
         }

@@ -9,39 +9,36 @@ using System.ComponentModel.Design;
 using System.Linq;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Code;
-using Aras.VS.MethodPlugin.Dialogs;
-using Aras.VS.MethodPlugin.Dialogs.Views;
-using Aras.VS.MethodPlugin.PackageManagement;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
+using Aras.VS.MethodPlugin.Dialogs;
+using Aras.VS.MethodPlugin.PackageManagement;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using Aras.VS.MethodPlugin.Templates;
-using EnvDTE;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Aras.VS.MethodPlugin.Commands
 {
 	/// <summary>
 	/// Command handler
 	/// </summary>
-	internal sealed class OpenFromArasCmd : AuthenticationCommandBase
+	public sealed class OpenFromArasCmd : AuthenticationCommandBase
 	{
 		/// <summary>
 		/// Command ID.
 		/// </summary>
 		public const int CommandId = 0x101;
 
-        /// <summary>
-        /// Command menu group (command set GUID).
-        /// </summary>
-        public static readonly Guid CommandSet = CommandIds.OpenFromAras;
+		/// <summary>
+		/// Command menu group (command set GUID).
+		/// </summary>
+		public static readonly Guid CommandSet = CommandIds.OpenFromAras;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="OpenFromArasCmd"/> class.
-        /// Adds our command handlers for menu (commands must exist in the command table file)
-        /// </summary>
-        /// <param name="package">Owner package, not null.</param>
-        public OpenFromArasCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="OpenFromArasCmd"/> class.
+		/// Adds our command handlers for menu (commands must exist in the command table file)
+		/// </summary>
+		/// <param name="package">Owner package, not null.</param>
+		public OpenFromArasCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IMessageManager messageManager) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory, messageManager)
 		{
 			if (projectManager.CommandService != null)
 			{
@@ -62,9 +59,9 @@ namespace Aras.VS.MethodPlugin.Commands
 			private set;
 		}
 
-		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory)
+		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IMessageManager messageManager)
 		{
-			Instance = new OpenFromArasCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
+			Instance = new OpenFromArasCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
 		}
 
 		public override void ExecuteCommandImpl(object sender, EventArgs args)
@@ -76,10 +73,10 @@ namespace Aras.VS.MethodPlugin.Commands
 
 			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language, projectConfiguration);
 
-			var templateLoader = new TemplateLoader(this.dialogFactory);
+			var templateLoader = new TemplateLoader(this.dialogFactory, this.messageManager);
 			templateLoader.Load(projectManager.MethodConfigPath);
 
-			var packageManager = new PackageManager(authManager);
+			var packageManager = new PackageManager(authManager, this.messageManager);
 			var openView = dialogFactory.GetOpenFromArasView(projectConfigurationManager, projectConfiguration, templateLoader, packageManager, projectConfigPath, project.Name, project.FullName, codeProvider.Language);
 
 			var openViewResult = openView.ShowDialog();
@@ -93,8 +90,8 @@ namespace Aras.VS.MethodPlugin.Commands
 			if (projectManager.IsMethodExist(openViewResult.MethodName))
 			{
 				var messageWindow = this.dialogFactory.GetMessageBoxWindow();
-				var dialogReuslt = messageWindow.ShowDialog("Method already added to project. Do you want replace method?",
-					"Warning",
+				var dialogReuslt = messageWindow.ShowDialog(this.messageManager.GetMessage("MethodAlreadyAddedToProjectDoYouWantReplaceMethod"),
+					this.messageManager.GetMessage("Warning"),
 					MessageButtons.YesNo,
 					MessageIcon.None);
 

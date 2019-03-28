@@ -229,6 +229,7 @@
     <Compile Include="GlobalConsts.cs" />
     <Compile Include="IIOMWrapper.cs" />
     <Compile Include="IIOWrapper.cs" />
+    <Compile Include="IMessageManager.cs" />
     <Compile Include="IOMWrapper.cs" />
     <Compile Include="IOWrapper.cs" />
     <Compile Include="ItemSearch\DataGridViewCalendarCell.cs" />
@@ -242,7 +243,7 @@
     <Compile Include="ItemSearch\IUpdatedCell.cs" />
     <Compile Include="Dialogs\Views\IView.cs" />
     <Compile Include="IVsPackageWrapper.cs" />
-    <Compile Include="MessageMenager.cs" />
+    <Compile Include="MessageManager.cs" />
     <Compile Include="PackageManagement\PackageManager.cs" />
     <Compile Include="Code\PartialCodeInfo.cs" />
     <Compile Include="Configurations\ProjectConfigurations\IProjectConfiguraiton.cs" />
@@ -741,7 +742,9 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ProjectTemplates\CSharp\Aras Innovator\Methods\" />
+  </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
       <Visible>False</Visible>

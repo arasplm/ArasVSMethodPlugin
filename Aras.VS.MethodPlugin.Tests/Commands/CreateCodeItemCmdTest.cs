@@ -25,6 +25,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 		private IDialogFactory dialogFactory;
 		private IProjectConfigurationManager projectConfigurationManager;
 		private ICodeProviderFactory codeProviderFactory;
+		private IMessageManager messageManager;
 
 		[SetUp]
 		public void Setup()
@@ -33,8 +34,9 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			this.dialogFactory = Substitute.For<IDialogFactory>();
 			this.projectConfigurationManager = Substitute.For<IProjectConfigurationManager>();
 			this.codeProviderFactory = Substitute.For<ICodeProviderFactory>();
+			this.messageManager = Substitute.For<IMessageManager>();
 
-			CreateCodeItemCmd.Initialize(this.projectManager, this.dialogFactory, this.projectConfigurationManager, this.codeProviderFactory);
+			CreateCodeItemCmd.Initialize(this.projectManager, this.dialogFactory, this.projectConfigurationManager, this.codeProviderFactory, this.messageManager);
 			createCodeItemCmd = CreateCodeItemCmd.Instance;
 		}
 

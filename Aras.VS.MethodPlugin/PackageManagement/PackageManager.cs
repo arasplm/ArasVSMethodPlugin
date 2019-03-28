@@ -13,6 +13,8 @@ namespace Aras.VS.MethodPlugin.PackageManagement
 	public class PackageManager
 	{
 		private readonly IAuthenticationManager authenticationManager;
+		private readonly IMessageManager messageManager;
+
 		private dynamic innovatorInst { get { return authenticationManager.InnovatorInstance; } }
 
 		private const string allPackageDefinition = "<AML><Item action=\"get\" type=\"PackageDefinition\" select=\"name\"></Item></AML>";
@@ -23,10 +25,10 @@ namespace Aras.VS.MethodPlugin.PackageManagement
 		private const string deleteElementByIdTemplate = "<AML><Item action =\"delete\" type=\"PackageElement\" id=\"{0}\"></Item></AML>";
 		private const string addElementToPackageTemplate = "<AML><Item action=\"get\" type=\"PackageDefinition\"><Relationships><Item action = \"get\" type=\"PackageGroup\"><Relationships><Item action = \"add\" isNew=\"1\" type=\"PackageElement\" ><element_type>Method</element_type><element_id>{0}</element_id><name>{1}</name></Item></Relationships></Item></Relationships></Item></AML>";
 
-		public PackageManager(IAuthenticationManager authenticationManager)
+		public PackageManager(IAuthenticationManager authenticationManager, IMessageManager messageManager)
 		{
-			if (authenticationManager == null) throw new ArgumentNullException(nameof(authenticationManager));
-			this.authenticationManager = authenticationManager;
+			this.authenticationManager = authenticationManager ?? throw new ArgumentNullException(nameof(authenticationManager));
+			this.messageManager = messageManager ?? throw new ArgumentNullException(nameof(messageManager));
 		}
 
 		public List<string> GetPackageDefinitionList()
@@ -49,7 +51,7 @@ namespace Aras.VS.MethodPlugin.PackageManagement
 			var reusltItem = innovatorInst.applyAML(amlQuery);
 			if (reusltItem.getItemCount() > 1)
 			{
-				throw new Exception("more then one item found");
+				throw new Exception(messageManager.GetMessage("MoreThenOneItemFound"));
 			}
 			if (reusltItem.getItemCount() == 0)
 			{

@@ -23,6 +23,7 @@ namespace Aras.VS.MethodPlugin.Tests.SolutionManagement
 		private IDialogFactory dialogFactory;
 		private IIOWrapper iOWrapper;
 		private IVsPackageWrapper vsPackageWrapper;
+		private IMessageManager messageManager;
 
 		private ProjectItem mainMethodFileProjectItem;
 		private ProjectItem methodWrapperFileProjectItem;
@@ -36,7 +37,8 @@ namespace Aras.VS.MethodPlugin.Tests.SolutionManagement
 			this.dialogFactory = Substitute.For<IDialogFactory>();
 			this.iOWrapper = Substitute.For<IIOWrapper>();
 			this.vsPackageWrapper = Substitute.For<IVsPackageWrapper>();
-			this.projectManager = new ProjectManager(serviceProvider, dialogFactory, iOWrapper, vsPackageWrapper);
+			this.messageManager = Substitute.For<IMessageManager>();
+			this.projectManager = new ProjectManager(serviceProvider, dialogFactory, iOWrapper, vsPackageWrapper, messageManager);
 		}
 
 		[Test]
@@ -123,8 +125,8 @@ namespace Aras.VS.MethodPlugin.Tests.SolutionManagement
 
 			IMessageBoxWindow messageBoxWindow = Substitute.For<IMessageBoxWindow>();
 			this.dialogFactory.GetMessageBoxWindow().Returns(messageBoxWindow);
-			messageBoxWindow.ShowDialog("One or more method files is not saved. Do you want to save changes?",
-										"Aras VS method plugin",
+			messageBoxWindow.ShowDialog(messageManager.GetMessage("OneOrMoreMethodFilesIsNotSavedDoYouWantToSaveChanges"),
+										messageManager.GetMessage("ArasVSMethodPlugin"),
 										MessageButtons.YesNoCancel,
 										MessageIcon.Question).Returns(MessageDialogResult.Yes);
 
@@ -192,8 +194,8 @@ namespace Aras.VS.MethodPlugin.Tests.SolutionManagement
 
 			IMessageBoxWindow messageBoxWindow = Substitute.For<IMessageBoxWindow>();
 			this.dialogFactory.GetMessageBoxWindow().Returns(messageBoxWindow);
-			messageBoxWindow.ShowDialog("One or more method files is not saved. Do you want to save changes?",
-										"Aras VS method plugin",
+			messageBoxWindow.ShowDialog(messageManager.GetMessage("OneOrMoreMethodFilesIsNotSavedDoYouWantToSaveChanges"),
+										messageManager.GetMessage("ArasVSMethodPlugin"),
 										MessageButtons.YesNoCancel,
 										MessageIcon.Question).Returns(MessageDialogResult.No);
 

@@ -17,7 +17,7 @@ namespace Aras.VS.MethodPlugin.Commands
 	/// <summary>
 	/// Command handler
 	/// </summary>
-	internal sealed class MoveToCmd : CmdBase
+	public sealed class MoveToCmd : CmdBase
 	{
 		private readonly ICodeProviderFactory codeProviderFactory;
 
@@ -31,8 +31,8 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// </summary>
 		public static readonly Guid CommandSet = CommandIds.MoveTo;
 
-		private MoveToCmd(IProjectManager projectManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory)
-			: base(projectManager, dialogFactory, projectConfigurationManager)
+		private MoveToCmd(IProjectManager projectManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IMessageManager messageManager)
+			: base(projectManager, dialogFactory, projectConfigurationManager, messageManager)
 		{
 			this.codeProviderFactory = codeProviderFactory ?? throw new ArgumentNullException(nameof(codeProviderFactory));
 
@@ -62,9 +62,9 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// <param name="dialogFactory"></param>
 		/// <param name="projectConfigurationManager"></param>
 		/// <param name="codeProviderFactory"></param>
-		public static void Initialize(IProjectManager projectManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory)
+		public static void Initialize(IProjectManager projectManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IMessageManager messageManager)
 		{
-			Instance = new MoveToCmd(projectManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
+			Instance = new MoveToCmd(projectManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
 		}
 
 		public override void ExecuteCommandImpl(object sender, EventArgs args)
@@ -130,8 +130,8 @@ namespace Aras.VS.MethodPlugin.Commands
 				// external to main
 				var messageBoxWindow = dialogFactory.GetMessageBoxWindow();
 				var messageBoxWindowResult = messageBoxWindow.ShowDialog(
-					"Selected code will be moved to main method file. Click OK to continue.",
-					"Move to main method.",
+					this.messageManager.GetMessage("SelectedCodeWillBeMovedToMainMethodFileClickOKToContinue"),
+					this.messageManager.GetMessage("MoveToMainMethod"),
 					MessageButtons.OKCancel,
 					MessageIcon.Question);
 

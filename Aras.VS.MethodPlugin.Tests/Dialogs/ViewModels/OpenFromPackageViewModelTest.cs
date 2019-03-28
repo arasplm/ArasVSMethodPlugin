@@ -16,6 +16,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 	{
 		private OpenFromPackageViewModel openFromPackageViewModel;
 		private IDialogFactory dialogFactory;
+		private IMessageManager messageManager;
 		private IProjectConfiguraiton projectConfiguration;
 		private TemplateLoader templateLoader;
 
@@ -23,11 +24,12 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 		public void SetUp()
 		{
 			this.dialogFactory = Substitute.For<IDialogFactory>();
-			templateLoader = new TemplateLoader(this.dialogFactory);
+			this.messageManager = Substitute.For<IMessageManager>();
+			templateLoader = new TemplateLoader(this.dialogFactory, this.messageManager);
 
 			this.projectConfiguration = Substitute.For<IProjectConfiguraiton>();
 			this.projectConfiguration.LastSelectedSearchTypeInOpenFromPackage.Returns("MethodContent");
-			openFromPackageViewModel = new OpenFromPackageViewModel(this.dialogFactory, templateLoader, "C#", this.projectConfiguration);
+			openFromPackageViewModel = new OpenFromPackageViewModel(this.dialogFactory, templateLoader, this.messageManager, "C#", this.projectConfiguration);
 		}
 
 		[Test]
@@ -37,7 +39,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 			Assert.Throws<ArgumentNullException>(() =>
 			{
 				//Act
-				OpenFromPackageViewModel viewModel = new OpenFromPackageViewModel(null, this.templateLoader, "C#", this.projectConfiguration);
+				OpenFromPackageViewModel viewModel = new OpenFromPackageViewModel(null, this.templateLoader, this.messageManager, "C#", this.projectConfiguration);
 			});
 		}
 
@@ -49,7 +51,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 			Assert.Throws<ArgumentNullException>(() =>
 			{
 				//Act
-				OpenFromPackageViewModel viewModel = new OpenFromPackageViewModel(this.dialogFactory, null, "C#", this.projectConfiguration);
+				OpenFromPackageViewModel viewModel = new OpenFromPackageViewModel(this.dialogFactory, null, this.messageManager, "C#", this.projectConfiguration);
 			});
 		}
 
@@ -60,7 +62,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 			Assert.Throws<ArgumentNullException>(() =>
 			{
 				//Act
-				OpenFromPackageViewModel viewModel = new OpenFromPackageViewModel(this.dialogFactory, this.templateLoader, "C#", null);
+				OpenFromPackageViewModel viewModel = new OpenFromPackageViewModel(this.dialogFactory, this.templateLoader, this.messageManager, "C#", null);
 			});
 		}
 
@@ -128,7 +130,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 
 			//Assert
 			messageBoxWindow.Received().ShowDialog("Message",
-						"Open method from AML package",
+						messageManager.GetMessage("OpenMethodFromAMLPackage"),
 						MessageButtons.OK,
 						MessageIcon.None);
 		}

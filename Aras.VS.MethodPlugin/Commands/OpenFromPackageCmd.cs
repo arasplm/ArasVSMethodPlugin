@@ -23,7 +23,7 @@ namespace Aras.VS.MethodPlugin.Commands
 	/// <summary>
 	/// Command handler
 	/// </summary>
-	internal sealed class OpenFromPackageCmd : CmdBase
+	public sealed class OpenFromPackageCmd : CmdBase
 	{
 		/// <summary>
 		/// Command ID.
@@ -39,8 +39,8 @@ namespace Aras.VS.MethodPlugin.Commands
 		private readonly IAuthenticationManager authManager;
 		private readonly ICodeProviderFactory codeProviderFactory;
 
-		private OpenFromPackageCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory)
-			: base(projectManager, dialogFactory, projectConfigurationManager)
+		private OpenFromPackageCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IMessageManager messageManager)
+			: base(projectManager, dialogFactory, projectConfigurationManager, messageManager)
 		{
 			if (authManager == null) throw new ArgumentNullException(nameof(authManager));
 			if (projectConfigurationManager == null) throw new ArgumentNullException(nameof(projectConfigurationManager));
@@ -72,9 +72,9 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// Initializes the singleton instance of the command.
 		/// </summary>
 		/// <param name="package">Owner package, not null.</param>
-		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory)
+		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IMessageManager messageManager)
 		{
-			Instance = new OpenFromPackageCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory);
+			Instance = new OpenFromPackageCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
 		}
 
 
@@ -88,7 +88,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			var projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
 			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language, projectConfiguration);
 
-			var templateLoader = new TemplateLoader(this.dialogFactory);
+			var templateLoader = new TemplateLoader(this.dialogFactory, this.messageManager);
 			templateLoader.Load(methodConfigPath);
 
 			var openView = dialogFactory.GetOpenFromPackageView(templateLoader, codeProvider.Language, projectConfiguration);
@@ -104,8 +104,8 @@ namespace Aras.VS.MethodPlugin.Commands
 			if (projectManager.IsMethodExist(openViewResult.MethodName))
 			{
 				var messageWindow = this.dialogFactory.GetMessageBoxWindow();
-				var dialogReuslt = messageWindow.ShowDialog("Method already added to project. Do you want replace method?",
-					"Warning",
+				var dialogReuslt = messageWindow.ShowDialog(this.messageManager.GetMessage("MethodAlreadyAddedToProjectDoYouWantReplaceMethod"),
+					this.messageManager.GetMessage("Warning"),
 					MessageButtons.YesNo,
 					MessageIcon.None);
 
