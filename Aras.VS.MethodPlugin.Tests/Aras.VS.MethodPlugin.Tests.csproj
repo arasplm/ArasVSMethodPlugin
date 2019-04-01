@@ -158,6 +158,7 @@
   <ItemGroup>
     <Compile Include="Authentication\AuthenticationManagerProxy.cs" />
     <Compile Include="Authentication\AuthenticationManagerTest.cs" />
+    <Compile Include="Code\CodeProviderFactoryTests.cs" />
     <Compile Include="Code\CSharpCodeItemProviderTests.cs" />
     <Compile Include="Code\CSharpCodeProviderTests.cs" />
     <Compile Include="Code\DefaultCodeProviderTest.cs" />
