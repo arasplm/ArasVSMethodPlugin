@@ -199,6 +199,7 @@
     <Compile Include="Stubs\AuthManagerStub.cs" />
     <Compile Include="Stubs\MethodItemStub.cs" />
     <Compile Include="Templates\TemplateLoaderTest.cs" />
+    <Compile Include="Templates\TemplateMapperTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
