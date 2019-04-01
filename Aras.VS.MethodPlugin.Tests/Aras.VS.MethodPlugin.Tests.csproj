@@ -189,6 +189,7 @@
     <Compile Include="Dialogs\ViewModels\SaveToPackageViewModelTest.cs" />
     <Compile Include="Dialogs\ViewModels\ShortMethodInfoViewModelTest.cs" />
     <Compile Include="GlobalConstsTests.cs" />
+    <Compile Include="MessageManagerTests.cs" />
     <Compile Include="PackageManagement\PackageManagementTest.cs" />
     <Compile Include="ProjectConfiguration\ProjectConfiguraitonTest.cs" />
     <Compile Include="ProjectConfiguration\ProjectConfigurationManagerTest.cs" />
