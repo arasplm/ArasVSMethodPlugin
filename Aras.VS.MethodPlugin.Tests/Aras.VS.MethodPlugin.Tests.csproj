@@ -198,6 +198,7 @@
     <Compile Include="SolutionManagement\ProjectManagerTest.cs" />
     <Compile Include="Stubs\AuthManagerStub.cs" />
     <Compile Include="Stubs\MethodItemStub.cs" />
+    <Compile Include="Templates\TemplateInfoTests.cs" />
     <Compile Include="Templates\TemplateLoaderTest.cs" />
     <Compile Include="Templates\TemplateMapperTests.cs" />
   </ItemGroup>
