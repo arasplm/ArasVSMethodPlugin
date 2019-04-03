@@ -160,10 +160,10 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			return new SaveMethodViewAdapter(view);
 		}
 
-		public IViewAdaper<SaveToPackageView, SaveToPackageViewResult> GetSaveToPackageView(IProjectConfiguraiton projectConfiguration, TemplateLoader templateLoader, PackageManager packageManager, ICodeProvider codeProvider, IProjectManager projectManager, MethodInfo methodInformation, string pathToFileForSave)
+		public IViewAdaper<SaveToPackageView, SaveToPackageViewResult> GetSaveToPackageView(IProjectConfiguraiton projectConfiguration, TemplateLoader templateLoader, PackageManager packageManager, ICodeProvider codeProvider, IProjectManager projectManager, MethodInfo methodInformation, string sourceCode)
 		{
 			var saveToLocalPackageView = new SaveToPackageView();
-			var viewModel = new SaveToPackageViewModel(authManager, this, projectConfiguration, templateLoader, packageManager, codeProvider, projectManager, arasDataProvider, this.iOWrapper, messageManager, methodInformation, pathToFileForSave);
+			var viewModel = new SaveToPackageViewModel(authManager, this, projectConfiguration, templateLoader, packageManager, codeProvider, projectManager, arasDataProvider, this.iOWrapper, messageManager, methodInformation, sourceCode);
 			saveToLocalPackageView.DataContext = viewModel;
 
 			AttachToParentWindow(saveToLocalPackageView);

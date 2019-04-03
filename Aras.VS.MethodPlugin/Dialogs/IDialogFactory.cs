@@ -66,7 +66,7 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			ICodeProvider codeProvider,
 			IProjectManager projectManager,
 			MethodInfo methodInformation,
-			string pathToFileForSave);
+			string sourceCode);
 
 		IViewAdaper<UpdateFromArasView, UpdateFromArasViewResult> GetUpdateFromArasView(IProjectConfigurationManager projectConfigurationManager,
 			IProjectConfiguraiton projectConfiguration,

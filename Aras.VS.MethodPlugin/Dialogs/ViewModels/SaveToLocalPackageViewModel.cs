@@ -65,7 +65,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			IIOWrapper iOWrapper,
 			IMessageManager messageManager,
 			MethodInfo methodInformation,
-			string pathToFileForSave)
+			string sourceCode)
 		{
 			if (authManager == null) throw new ArgumentNullException(nameof(authManager));
 			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));
@@ -94,8 +94,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.okCommand = new RelayCommand<object>(OkCommandClick, IsEnabledOkButton);
 			this.closeCommand = new RelayCommand<object>(OnCloseCliked);
 			this.selectedIdentityCommand = new RelayCommand(SelectedIdentityCommandClick);
-
-			string sourceCode = File.ReadAllText(pathToFileForSave, new UTF8Encoding(true));
 
 			this.methodItemTypeInfo = arasDataProvider.GetMethodItemTypeInfo();
 			this.MethodNameMaxLength = methodItemTypeInfo.NameStoredLength;

@@ -106,6 +106,23 @@ namespace Aras.VS.MethodPlugin.Commands
 			}
 
 			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language, projectConfiguration);
+
+			CodeInfo codeItemInfo = codeProvider.UpdateSourceCodeToInsertExternalItems(sourceCode, methodInformation, projectManager.ServerMethodFolderPath);
+			if (codeItemInfo != null)
+			{
+				var dialogResult = dialogFactory.GetMessageBoxWindow().ShowDialog(messageManager.GetMessage("CouldNotInsertExternalItemsInsideOfMethodCodeSection"),
+					messageManager.GetMessage("ArasVSMethodPlugin"),
+					MessageButtons.OKCancel,
+					MessageIcon.Question);
+				if (dialogResult == MessageDialogResult.Cancel)
+				{
+					return;
+				}
+
+				projectManager.AddItemTemplateToProjectNew(codeItemInfo, true, 0);
+				sourceCode = codeItemInfo.Code;
+			}
+
 			string methodCode = codeProvider.LoadMethodCode(sourceCode, methodInformation, projectManager.ServerMethodFolderPath);
 
 			var packageManager = new PackageManager(authManager, this.messageManager);

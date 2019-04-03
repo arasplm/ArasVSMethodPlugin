@@ -127,11 +127,6 @@ namespace Aras.VS.MethodPlugin.Code
 							.OfType<NamespaceDeclarationSyntax>()
 							.First();
 
-						if (!CodeIndexInMethodRegions(root, namespaceNode.Span.End))
-						{
-							throw new FormatException(messageManager.GetMessage("CouldNotInsertExternalItemsToTheMethodCodeRegion"));
-						}
-
 						var namespaceNodeWithPartials = namespaceNode.AddMembers(externalsSyntaxNodes);
 						root = root.ReplaceNode(namespaceNode, namespaceNodeWithPartials);
 					}
@@ -143,11 +138,6 @@ namespace Aras.VS.MethodPlugin.Code
 							.ChildNodes()
 							.OfType<ClassDeclarationSyntax>()
 							.Last();
-
-						if (!CodeIndexInMethodRegions(root, classNode.Span.Start))
-						{
-							throw new FormatException(messageManager.GetMessage("CouldNotInsertExternalItemsToTheMethodCodeRegion"));
-						}
 
 						root = root.InsertNodesBefore(classNode, externalsSyntaxNodes);
 					}
@@ -751,6 +741,57 @@ namespace Aras.VS.MethodPlugin.Code
 			{
 				Code = code,
 				Path = codeItemPath
+			};
+
+			return codeInfo;
+		}
+
+		public CodeInfo UpdateSourceCodeToInsertExternalItems(string sourceCode, MethodInfo methodInformation, string serverMethodFolderPath)
+		{
+			if (methodInformation.ExternalItems.Count == 0)
+			{
+				return null;
+			}
+
+			var tree = CSharpSyntaxTree.ParseText(sourceCode);
+			SyntaxNode root = tree.GetRoot();
+			int classesCount = root.DescendantNodes()
+				.OfType<NamespaceDeclarationSyntax>()
+				.First()
+				.ChildNodes()
+				.OfType<ClassDeclarationSyntax>()
+				.Count();
+
+			if (classesCount <= 1)
+			{
+				var namespaceNode = root.DescendantNodes()
+					.OfType<NamespaceDeclarationSyntax>()
+					.First();
+
+				if (CodeIndexInMethodRegions(root, namespaceNode.Span.End))
+				{
+					return null;
+				}
+			}
+			else
+			{
+				var classNode = root.DescendantNodes()
+					.OfType<NamespaceDeclarationSyntax>()
+					.First()
+					.ChildNodes()
+					.OfType<ClassDeclarationSyntax>()
+					.Last();
+
+				if (CodeIndexInMethodRegions(root, classNode.Span.Start))
+				{
+					return null;
+				}
+			}
+
+			var codeInfo = new CodeInfo()
+			{
+				Path = iOWrapper.PathCombine(methodInformation.MethodName, methodInformation.MethodName),
+				Code = Regex.Replace(sourceCode, $"({Environment.NewLine})([' '|\t]*{GlobalConsts.EndregionMethodCode})", $"$1        }}{Environment.NewLine}    }}{Environment.NewLine}{Environment.NewLine}    [System.Diagnostics.CodeAnalysis.SuppressMessage(\"Microsoft.Performance\", \"CA1812: AvoidUninstantiatedInternalClasses\")]{Environment.NewLine}    internal class ArasPluginFin{Environment.NewLine}    {{{Environment.NewLine}        internal ArasPluginFin(){Environment.NewLine}        {{{Environment.NewLine}{GlobalConsts.EndregionMethodCode}")
 			};
 
 			return codeInfo;
