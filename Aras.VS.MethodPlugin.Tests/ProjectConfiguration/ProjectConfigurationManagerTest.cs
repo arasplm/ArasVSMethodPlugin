@@ -110,9 +110,9 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectConfiguration
 			File.Delete(pathForConfig);
 			var projectConfiguration = new ProjectConfiguraiton
 			{
-				LastSavedSearch = new Dictionary<string, List<ItemSearch.PropertyInfo>>
+				LastSavedSearch = new Dictionary<string, List<PropertyInfo>>
 				{
-					{ "Method", new List<ItemSearch.PropertyInfo>
+					{ "Method", new List<PropertyInfo>
 						{
 							new PropertyInfo()
 							{

@@ -158,6 +158,7 @@
   <ItemGroup>
     <Compile Include="Authentication\AuthenticationManagerProxy.cs" />
     <Compile Include="Authentication\AuthenticationManagerTest.cs" />
+    <Compile Include="Code\CodeProviderFactoryTests.cs" />
     <Compile Include="Code\CSharpCodeItemProviderTests.cs" />
     <Compile Include="Code\CSharpCodeProviderTests.cs" />
     <Compile Include="Code\DefaultCodeProviderTest.cs" />
@@ -188,6 +189,9 @@
     <Compile Include="Dialogs\ViewModels\SaveMethodViewModelTest.cs" />
     <Compile Include="Dialogs\ViewModels\SaveToPackageViewModelTest.cs" />
     <Compile Include="Dialogs\ViewModels\ShortMethodInfoViewModelTest.cs" />
+    <Compile Include="GlobalConstsTests.cs" />
+    <Compile Include="ItemSearch\Preferences\ItemGridLayoutTests.cs" />
+    <Compile Include="MessageManagerTests.cs" />
     <Compile Include="PackageManagement\PackageManagementTest.cs" />
     <Compile Include="ProjectConfiguration\ProjectConfiguraitonTest.cs" />
     <Compile Include="ProjectConfiguration\ProjectConfigurationManagerTest.cs" />
@@ -196,7 +200,9 @@
     <Compile Include="SolutionManagement\ProjectManagerTest.cs" />
     <Compile Include="Stubs\AuthManagerStub.cs" />
     <Compile Include="Stubs\MethodItemStub.cs" />
+    <Compile Include="Templates\TemplateInfoTests.cs" />
     <Compile Include="Templates\TemplateLoaderTest.cs" />
+    <Compile Include="Templates\TemplateMapperTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

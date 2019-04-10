@@ -84,7 +84,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 									(x[2] as XmlDocument).Load(Path.Combine(currentPath, @"Dialogs\ViewModels\TestData\MethodTypesListFilterValue.xml"));
 								});
 
-			this.projectConfiguration.LastSavedSearch.Returns(new Dictionary<string, List<ItemSearch.PropertyInfo>>());
+			this.projectConfiguration.LastSavedSearch.Returns(new Dictionary<string, List<PropertyInfo>>());
 
 			XmlDocument methodItemTypeAML = new XmlDocument();
 			methodItemTypeAML.Load(Path.Combine(currentPath, @"Dialogs\ViewModels\TestData\MethodItemType.xml"));
