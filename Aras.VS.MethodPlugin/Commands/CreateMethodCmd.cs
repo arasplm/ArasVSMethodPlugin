@@ -92,6 +92,7 @@ namespace Aras.VS.MethodPlugin.Commands
 
 			GeneratedCodeInfo codeInfo = codeProvider.GenerateCodeInfo(createViewResult.SelectedTemplate, createViewResult.SelectedEventSpecificData, createViewResult.MethodName, createViewResult.UseRecommendedDefaultCode, createViewResult.SelectedUserCodeTemplate.Code, createViewResult.IsUseVSFormattingCode);
 			projectManager.CreateMethodTree(codeInfo);
+			projectManager.AddSuppression("assembly: System.Diagnostics.CodeAnalysis.SuppressMessage", "Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", "namespace", codeInfo.Namespace);
 
 			string newInnovatorMethodId = authManager.InnovatorInstance.getNewID();
 			var methodInfo = new MethodInfo()
