@@ -20,7 +20,7 @@ namespace Aras.VS.MethodPlugin
 				{ "AuthenticationFailedFor", "Authentication failed for {0}." },
 				{ "CurrentProjectTypeIsNotSupported", "Current project type is not supported" },
 				{ "NoPartialClassesFound", "No partial classes found." },
-				{ "CouldNotInsertExternalItemsToTheMethodCodeRegion", $"Could not insert external items to the 'MethodCode' region.{Environment.NewLine}Make sure your 'MethodCode' region has any class." },
+				{ "CouldNotInsertExternalItemsInsideOfMethodCodeSection", $"Could not insert external items inside of 'MethodCode' section.{Environment.NewLine}Click OK to insert fake class inside of 'MethodCode' section." },
 				{ "MethodNameCaNotBeEmpty", "Method name can not be empty." },
 				{ "TemplateNotFound", "Template not found." },
 				{ "NoAttributeFound", "No attribute found." },

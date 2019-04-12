@@ -16,5 +16,12 @@
 		public const string ExternalPathAttribute = "ExternalPathAttribute";
 
 		#endregion
+
+		#region Regions
+
+		public const string RegionMethodCode = "#region MethodCode";
+		public const string EndregionMethodCode = "#endregion MethodCode";
+
+		#endregion
 	}
 }

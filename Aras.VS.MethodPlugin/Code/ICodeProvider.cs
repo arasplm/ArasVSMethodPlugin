@@ -43,5 +43,7 @@ namespace Aras.VS.MethodPlugin.Code
 		CodeInfo InsertActiveNodeToPartial(string partialfullPath, string serverMethodFolderPath, string methodName, SyntaxNode syntaxNode);
 
 		CodeInfo InsertActiveNodeToExternal(string externalFullPath, string serverMethodFolderPath, string methodName, SyntaxNode syntaxNode);
+
+		CodeInfo UpdateSourceCodeToInsertExternalItems(string sourceCode, MethodInfo methodInformation, string serverMethodFolderPath);
 	}
 }

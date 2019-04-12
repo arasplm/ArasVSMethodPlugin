@@ -7,7 +7,6 @@
 using System;
 using System.IO;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
-using Aras.VS.MethodPlugin.SolutionManagement;
 using Aras.VS.MethodPlugin.Templates;
 using EnvDTE;
 using EnvDTE80;
@@ -257,6 +256,11 @@ End Class
 		}
 
 		public CodeInfo InsertActiveNodeToExternal(string externalFullPath, string serverMethodFolderPath, string methodName, Microsoft.CodeAnalysis.SyntaxNode syntaxNode)
+		{
+			throw new NotImplementedException();
+		}
+
+		public CodeInfo UpdateSourceCodeToInsertExternalItems(string sourceCode, MethodInfo methodInformation, string serverMethodFolderPath)
 		{
 			throw new NotImplementedException();
 		}
