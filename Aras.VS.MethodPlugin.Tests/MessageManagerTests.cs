@@ -68,9 +68,9 @@ namespace Aras.VS.MethodPlugin.Tests
 		}
 
 		[Test]
-		public void CouldNotInsertExternalItemsToTheMethodCodeRegion_Key_ShouldReturnExpectedValue()
+		public void CouldNotInsertExternalItemsInsideOfMethodCodeSection_Key_ShouldReturnExpectedValue()
 		{
-			Assert.AreEqual($"Could not insert external items to the 'MethodCode' region.{Environment.NewLine}Make sure your 'MethodCode' region has any class.", messageManager.GetMessage("CouldNotInsertExternalItemsToTheMethodCodeRegion"));
+			Assert.AreEqual($"Could not insert external items inside of 'MethodCode' section.{Environment.NewLine}Click OK to insert fake class inside of 'MethodCode' section.", messageManager.GetMessage("CouldNotInsertExternalItemsInsideOfMethodCodeSection"));
 		}
 
 		[Test]
