@@ -9,6 +9,7 @@ using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Aras.VS.MethodPlugin.Commands
 {
@@ -41,6 +42,9 @@ namespace Aras.VS.MethodPlugin.Commands
 
 		public virtual void ExecuteCommand(object sender, EventArgs args)
 		{
+			IVsUIShell uiShell = projectManager.UIShell;
+			uiShell.EnableModeless(0);
+
 			try
 			{
 				string projectConfigPath = projectManager.ProjectConfigPath;
@@ -62,6 +66,10 @@ namespace Aras.VS.MethodPlugin.Commands
 					messageManager.GetMessage("ArasVSMethodPlugin"),
 					MessageButtons.OK,
 					MessageIcon.Error);
+			}
+			finally
+			{
+				uiShell.EnableModeless(1);
 			}
 		}
 		//TODO: remove uiShell from parameters
