@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using Aras.Method.Libs;
 using Aras.VS.MethodPlugin.Configurations;
 using NSubstitute;
 using NUnit.Framework;

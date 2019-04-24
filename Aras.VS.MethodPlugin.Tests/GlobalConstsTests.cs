@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Aras.Method.Libs;
+using NUnit.Framework;
 
 namespace Aras.VS.MethodPlugin.Tests
 {

@@ -1,4 +1,4 @@
-﻿using Aras.VS.MethodPlugin.Templates;
+﻿using Aras.Method.Libs.Templates;
 using NUnit.Framework;
 
 namespace Aras.VS.MethodPlugin.Tests.Templates

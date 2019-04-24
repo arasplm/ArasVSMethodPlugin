@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using Aras.IOM;
+using Aras.Method.Libs;
+using Aras.Method.Libs.Templates;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
@@ -14,7 +13,6 @@ using Aras.VS.MethodPlugin.Dialogs.ViewModels;
 using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.ItemSearch;
 using Aras.VS.MethodPlugin.PackageManagement;
-using Aras.VS.MethodPlugin.Templates;
 using Aras.VS.MethodPlugin.Tests.Authentication;
 using NSubstitute;
 using NUnit.Framework;
@@ -33,7 +31,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 		private IDialogFactory dialogFactory;
 		private IProjectConfigurationManager projectConfigurationManager;
 		private IProjectConfiguraiton projectConfiguration;
-		private IMessageManager messageManager;
+		private MessageManager messageManager;
 		private PackageManager packageManager;
 		private TemplateLoader templateLoader;
 
@@ -54,8 +52,8 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 			this.dialogFactory = Substitute.For<IDialogFactory>();
 			this.projectConfigurationManager = Substitute.For<IProjectConfigurationManager>();
 			this.projectConfiguration = Substitute.For<IProjectConfiguraiton>();
-			this.messageManager = Substitute.For<IMessageManager>();
-			this.templateLoader = new TemplateLoader(dialogFactory, messageManager);
+			this.messageManager = Substitute.For<MessageManager>();
+			this.templateLoader = new TemplateLoader();
 			this.packageManager = new PackageManager(authManager, messageManager);
 
 			ConnectionInfo testConnectionInfo = new ConnectionInfo()

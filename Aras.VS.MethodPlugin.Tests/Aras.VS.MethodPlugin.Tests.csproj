@@ -211,6 +211,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\Aras.Method.Libs\Aras.Method.Libs.csproj">
+      <Project>{8450A949-CB6B-4530-A968-AD9D9D1D63CF}</Project>
+      <Name>Aras.Method.Libs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Aras.VS.MethodPlugin\Aras.VS.MethodPlugin.csproj">
       <Project>{95381532-f7f9-4556-9178-eec0aefd2122}</Project>
       <Name>Aras.VS.MethodPlugin</Name>

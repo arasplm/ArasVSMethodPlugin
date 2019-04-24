@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using Aras.VS.MethodPlugin.Code;
+using Aras.Method.Libs.Code;
 using NUnit.Framework;
 
 namespace Aras.VS.MethodPlugin.Tests.Code

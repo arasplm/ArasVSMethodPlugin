@@ -1,5 +1,6 @@
 ﻿using System.IO;
-using Aras.VS.MethodPlugin.Code;
+using Aras.Method.Libs;
+using Aras.Method.Libs.Code;
 using NSubstitute;
 using NUnit.Framework;
 

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
+using Aras.Method.Libs.Code;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
@@ -41,7 +43,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 				MethodType = "server",
 				MethodName = testMethodItemXMLDoc.SelectSingleNode("//name").InnerText,
 				MethodLanguage = "C#",
-				EventData = MethodPlugin.Code.EventSpecificData.None
+				EventData = EventSpecificData.None
 			};
 		}
 
