@@ -1,4 +1,10 @@
-﻿using System;
+﻿//------------------------------------------------------------------------------
+// <copyright file="IVsPackageWrapper.cs" company="Aras Corporation">
+//     © 2017-2018 Aras Corporation. All rights reserved.
+// </copyright>
+//------------------------------------------------------------------------------
+
+using System;
 
 namespace Aras.VS.MethodPlugin
 {
