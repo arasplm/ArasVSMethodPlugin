@@ -10,10 +10,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using Aras.VS.MethodPlugin.Code;
+using Aras.Method.Libs.Code;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
+using Aras.Method.Libs.Templates;
 using Aras.VS.MethodPlugin.PackageManagement;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
-using Aras.VS.MethodPlugin.Templates;
 
 namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 {

@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using Aras.Method.Libs;
 using Aras.VS.MethodPlugin.Dialogs.Directory;
 using Aras.VS.MethodPlugin.Dialogs.Directory.Data;
 using Aras.VS.MethodPlugin.Dialogs.Views;
@@ -21,7 +22,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 	{
 		private readonly IDialogFactory dialogFactory;
 		private readonly IIOWrapper iOWrapper;
-		private readonly IMessageManager messageManager;
+		private readonly MessageManager messageManager;
 
 		private ObservableCollection<DirectoryItemViewModel> directoryItems;
 		private DirectoryItemViewModel selectDirectoryItem;
@@ -40,7 +41,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		public SelectPathViewModel(IDialogFactory dialogFactory,
 			DirectoryItemType searchToLevel,
 			IIOWrapper iOWrapper,
-			IMessageManager messageManager,
+			MessageManager messageManager,
 			string rootPath = "",
 			string startPath = "",
 			string fileExtantion = "")

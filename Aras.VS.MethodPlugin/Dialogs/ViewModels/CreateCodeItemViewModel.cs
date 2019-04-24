@@ -8,7 +8,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
-using Aras.VS.MethodPlugin.Code;
+using Aras.Method.Libs.Code;
 
 namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 {

@@ -13,6 +13,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using System.Xml;
+using Aras.Method.Libs;
 using Aras.VS.MethodPlugin.Dialogs.Directory.Data;
 
 namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
@@ -27,7 +28,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		private readonly IDialogFactory dialogFactory;
 		private readonly IIOWrapper iOWrapper;
-		private readonly IMessageManager messageManager;
+		private readonly MessageManager messageManager;
 
 		private Dictionary<string, string> packages;
 		private List<ShortMethodInfoViewModel> methods;
@@ -50,7 +51,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		public OpenFromPackageTreeViewModel(
 			IDialogFactory dialogFactory,
 			IIOWrapper iOWrapper,
-			IMessageManager messageManager,
+			MessageManager messageManager,
 			string lastSelectedManifestFilePath,
 			string lastSelectedPackage,
 			string lastSelectedMethod,

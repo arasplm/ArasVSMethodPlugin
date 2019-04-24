@@ -1,12 +1,20 @@
-﻿using System;
+﻿//------------------------------------------------------------------------------
+// <copyright file="DebugMethodCmd.cs" company="Aras Corporation">
+//     © 2017-2018 Aras Corporation. All rights reserved.
+// </copyright>
+//------------------------------------------------------------------------------
+
+using System;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
+using Aras.Method.Libs;
+using Aras.Method.Libs.Code;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.Dialogs.Views;
@@ -28,13 +36,13 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// </summary>
 		public const int CommandId = 0x0104;
 
-        /// <summary>
-        /// Command menu group (command set GUID).
-        /// </summary>
-        public static readonly Guid CommandSet = CommandIds.DebugMethod;
+		/// <summary>
+		/// Command menu group (command set GUID).
+		/// </summary>
+		public static readonly Guid CommandSet = CommandIds.DebugMethod;
 
 
-        private DebugMethodCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IMessageManager messageManager) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory, messageManager)
+		private DebugMethodCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, MessageManager messageManager) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory, messageManager)
 		{
 			if (projectManager.CommandService != null)
 			{
@@ -63,7 +71,7 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// <param name="dialogFactory"></param>
 		/// <param name="projectConfigurationManager"></param>
 		/// <param name="codeProviderFactory"></param>
-		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IMessageManager messageManager)
+		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, MessageManager messageManager)
 		{
 			Instance = new DebugMethodCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
 		}
@@ -96,8 +104,8 @@ namespace Aras.VS.MethodPlugin.Commands
 				.OfType<NamespaceDeclarationSyntax>()
 				.FirstOrDefault();
 			var className = GetFullClassName(member);
-            var methodName = GetMethodName(member);
-            
+			var methodName = GetMethodName(member);
+
 			//(me as IdentifierNameSyntax).Identifier.ValueText
 
 			//var selectedClassName =
@@ -108,7 +116,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			var directoryPath = Path.GetDirectoryName(currentDllPath);
 			var launcherPath = Path.Combine(directoryPath, "MethodLauncher", "MethodLauncher.exe");
 
-			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language, projectConfiguration);
+			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language);
 			string methodCode = codeProvider.LoadMethodCode(sourceCode, methodInformation, projectManager.ServerMethodFolderPath);
 
 			var debugMethodView = dialogFactory.GetDebugMethodView(projectConfigurationManager, projectConfiguration, methodInformation, methodCode, projectConfigPath, project.Name, project.FullName);
@@ -118,11 +126,11 @@ namespace Aras.VS.MethodPlugin.Commands
 				return;
 			}
 
-            string projectDirectoryPath = Path.GetDirectoryName(projectManager.SelectedProject.FileName);  
+			string projectDirectoryPath = Path.GetDirectoryName(projectManager.SelectedProject.FileName);
 			string launcherConfigPath = Path.Combine(projectDirectoryPath, "LauncherConfig.xml");
 
 			CreateLauncherConfigFile(dllFullPath, className, methodName, debugMethodViewResult, launcherConfigPath,
-                CommonData.EventSpecificDataTypeList.FirstOrDefault(ev => ev.EventSpecificData.ToString() == methodInformation.EventData.ToString()).EventDataClass, methodInformation.TemplateName);
+				CommonData.EventSpecificDataTypeList.FirstOrDefault(ev => ev.EventSpecificData.ToString() == methodInformation.EventData.ToString()).EventDataClass, methodInformation.TemplateName);
 
 			ProcessStartInfo startInfo = new ProcessStartInfo(launcherPath);
 			startInfo.WindowStyle = ProcessWindowStyle.Hidden;
@@ -133,7 +141,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			projectManager.AttachToProcess(process);
 		}
 
-        private void CreateLauncherConfigFile(string dllFullPath, string className, string methodName, DebugMethodViewResult debugMethodViewResult, string launcherConfigPath, string eventName, string templateName)
+		private void CreateLauncherConfigFile(string dllFullPath, string className, string methodName, DebugMethodViewResult debugMethodViewResult, string launcherConfigPath, string eventName, string templateName)
 		{
 			XmlDocument launcherConfig = new XmlDocument();
 
@@ -168,15 +176,15 @@ namespace Aras.VS.MethodPlugin.Commands
 			userNameXmlElement.InnerText = authManager.InnovatorUser.userName;
 			launcherConfigXmlElement.AppendChild(userNameXmlElement);
 
-            XmlElement eventClassXmlElement = launcherConfig.CreateElement("eventClass");
-            eventClassXmlElement.InnerText = eventName;
-            launcherConfigXmlElement.AppendChild(eventClassXmlElement);
+			XmlElement eventClassXmlElement = launcherConfig.CreateElement("eventClass");
+			eventClassXmlElement.InnerText = eventName;
+			launcherConfigXmlElement.AppendChild(eventClassXmlElement);
 
-            XmlElement templateNameXmlElement = launcherConfig.CreateElement("templateName");
-            templateNameXmlElement.InnerText = templateName;
-            launcherConfigXmlElement.AppendChild(templateNameXmlElement);
+			XmlElement templateNameXmlElement = launcherConfig.CreateElement("templateName");
+			templateNameXmlElement.InnerText = templateName;
+			launcherConfigXmlElement.AppendChild(templateNameXmlElement);
 
-            XmlWriterSettings settings = new XmlWriterSettings();
+			XmlWriterSettings settings = new XmlWriterSettings();
 			settings.Encoding = new UTF8Encoding(true);
 			settings.Indent = true;
 			settings.IndentChars = "\t";
@@ -191,10 +199,10 @@ namespace Aras.VS.MethodPlugin.Commands
 		private string GetFullClassName(NamespaceDeclarationSyntax node)
 		{
 			var cls = node.DescendantNodes().OfType<ClassDeclarationSyntax>().FirstOrDefault();
-            if (cls == null)
-            {
-                throw new ArgumentException(this.messageManager.GetMessage("ClassNotFoundInNamespace"));
-            }
+			if (cls == null)
+			{
+				throw new ArgumentException(this.messageManager.GetMessage("ClassNotFoundInNamespace"));
+			}
 			string clsName = cls.Identifier.ValueText;
 			string namespaceName = string.Empty;
 			if (node.Parent is NamespaceDeclarationSyntax)
@@ -202,19 +210,19 @@ namespace Aras.VS.MethodPlugin.Commands
 					GetFullClassName((NamespaceDeclarationSyntax)node.Parent),
 					((IdentifierNameSyntax)node.Name).Identifier.ToString());
 			else
-				namespaceName =((IdentifierNameSyntax)node.Name).Identifier.ToString();
+				namespaceName = ((IdentifierNameSyntax)node.Name).Identifier.ToString();
 
 			return string.Format("{0}.{1}", namespaceName, clsName);
 		}
 
-        private string GetMethodName(NamespaceDeclarationSyntax node)
-        {
-            var methodName = node.DescendantNodes().OfType<MethodDeclarationSyntax>().FirstOrDefault()?.Identifier.ValueText;
-            if (string.IsNullOrEmpty(methodName))
-            {
-                throw new ArgumentException(this.messageManager.GetMessage("MethodNotFoundInClass"));
-            }
-            return methodName;
-        }
-    }
+		private string GetMethodName(NamespaceDeclarationSyntax node)
+		{
+			var methodName = node.DescendantNodes().OfType<MethodDeclarationSyntax>().FirstOrDefault()?.Identifier.ValueText;
+			if (string.IsNullOrEmpty(methodName))
+			{
+				throw new ArgumentException(this.messageManager.GetMessage("MethodNotFoundInClass"));
+			}
+			return methodName;
+		}
+	}
 }

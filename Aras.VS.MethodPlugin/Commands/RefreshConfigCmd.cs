@@ -7,12 +7,11 @@
 
 using System;
 using System.ComponentModel.Design;
-using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.Dialogs;
+using Aras.Method.Libs;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
+using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Aras.VS.MethodPlugin.Commands
 {
@@ -32,7 +31,7 @@ namespace Aras.VS.MethodPlugin.Commands
 		public static readonly Guid CommandSet = CommandIds.RefreshConfig;
 
 
-		private RefreshConfigCmd(IProjectManager projectManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, IMessageManager messageManager)
+		private RefreshConfigCmd(IProjectManager projectManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, MessageManager messageManager)
 			: base(projectManager, dialogFactory, projectConfigurationManager, messageManager)
 		{
 			if (projectManager.CommandService != null)
@@ -60,7 +59,7 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// <param name="projectManager"></param>
 		/// <param name="dialogFactory"></param>
 		/// <param name="projectConfigurationManager"></param>
-		public static void Initialize(IProjectManager projectManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, IMessageManager messageManager)
+		public static void Initialize(IProjectManager projectManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, MessageManager messageManager)
 		{
 			Instance = new RefreshConfigCmd(projectManager, dialogFactory, projectConfigurationManager, messageManager);
 		}

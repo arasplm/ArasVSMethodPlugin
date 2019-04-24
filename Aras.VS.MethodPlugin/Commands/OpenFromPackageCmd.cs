@@ -7,16 +7,15 @@
 using System;
 using System.ComponentModel.Design;
 using System.Linq;
+using Aras.Method.Libs;
+using Aras.Method.Libs.Code;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
+using Aras.Method.Libs.Templates;
 using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.Code;
-using Aras.VS.MethodPlugin.Dialogs;
-using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
+using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.SolutionManagement;
-using Aras.VS.MethodPlugin.Templates;
-using EnvDTE;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Aras.VS.MethodPlugin.Commands
 {
@@ -39,7 +38,7 @@ namespace Aras.VS.MethodPlugin.Commands
 		private readonly IAuthenticationManager authManager;
 		private readonly ICodeProviderFactory codeProviderFactory;
 
-		private OpenFromPackageCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IMessageManager messageManager)
+		private OpenFromPackageCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, MessageManager messageManager)
 			: base(projectManager, dialogFactory, projectConfigurationManager, messageManager)
 		{
 			if (authManager == null) throw new ArgumentNullException(nameof(authManager));
@@ -72,7 +71,7 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// Initializes the singleton instance of the command.
 		/// </summary>
 		/// <param name="package">Owner package, not null.</param>
-		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IMessageManager messageManager)
+		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, MessageManager messageManager)
 		{
 			Instance = new OpenFromPackageCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
 		}
@@ -86,9 +85,9 @@ namespace Aras.VS.MethodPlugin.Commands
 			string methodConfigPath = projectManager.MethodConfigPath;
 
 			var projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
-			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language, projectConfiguration);
+			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language);
 
-			var templateLoader = new TemplateLoader(this.dialogFactory, this.messageManager);
+			var templateLoader = new TemplateLoader();
 			templateLoader.Load(methodConfigPath);
 
 			var openView = dialogFactory.GetOpenFromPackageView(templateLoader, codeProvider.Language, projectConfiguration);
@@ -120,7 +119,7 @@ namespace Aras.VS.MethodPlugin.Commands
 				}
 			}
 
-			GeneratedCodeInfo codeInfo = codeProvider.GenerateCodeInfo(openViewResult.SelectedTemplate, openViewResult.SelectedEventSpecificData, openViewResult.MethodName, false, openViewResult.MethodCode, openViewResult.IsUseVSFormattingCode);
+			GeneratedCodeInfo codeInfo = codeProvider.GenerateCodeInfo(openViewResult.SelectedTemplate, openViewResult.SelectedEventSpecificData, openViewResult.MethodName, false, openViewResult.MethodCode, openViewResult.IsUseVSFormattingCode, projectManager.DefaultCodeTemplatesPath);
 			projectManager.CreateMethodTree(codeInfo);
 
 			var methodInfo = new PackageMethodInfo()

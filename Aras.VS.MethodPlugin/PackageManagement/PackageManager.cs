@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using Aras.Method.Libs;
 using Aras.VS.MethodPlugin.Authentication;
 
 namespace Aras.VS.MethodPlugin.PackageManagement
@@ -13,7 +14,7 @@ namespace Aras.VS.MethodPlugin.PackageManagement
 	public class PackageManager
 	{
 		private readonly IAuthenticationManager authenticationManager;
-		private readonly IMessageManager messageManager;
+		private readonly MessageManager messageManager;
 
 		private dynamic innovatorInst { get { return authenticationManager.InnovatorInstance; } }
 
@@ -25,7 +26,7 @@ namespace Aras.VS.MethodPlugin.PackageManagement
 		private const string deleteElementByIdTemplate = "<AML><Item action =\"delete\" type=\"PackageElement\" id=\"{0}\"></Item></AML>";
 		private const string addElementToPackageTemplate = "<AML><Item action=\"get\" type=\"PackageDefinition\"><Relationships><Item action = \"get\" type=\"PackageGroup\"><Relationships><Item action = \"add\" isNew=\"1\" type=\"PackageElement\" ><element_type>Method</element_type><element_id>{0}</element_id><name>{1}</name></Item></Relationships></Item></Relationships></Item></AML>";
 
-		public PackageManager(IAuthenticationManager authenticationManager, IMessageManager messageManager)
+		public PackageManager(IAuthenticationManager authenticationManager, MessageManager messageManager)
 		{
 			this.authenticationManager = authenticationManager ?? throw new ArgumentNullException(nameof(authenticationManager));
 			this.messageManager = messageManager ?? throw new ArgumentNullException(nameof(messageManager));

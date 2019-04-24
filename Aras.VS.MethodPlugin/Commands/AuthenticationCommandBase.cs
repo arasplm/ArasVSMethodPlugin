@@ -1,7 +1,14 @@
-﻿using System;
+﻿//------------------------------------------------------------------------------
+// <copyright file="AuthenticationCommandBase.cs" company="Aras Corporation">
+//     © 2017-2018 Aras Corporation. All rights reserved.
+// </copyright>
+//------------------------------------------------------------------------------
+
+using System;
 using System.Linq;
+using Aras.Method.Libs;
+using Aras.Method.Libs.Code;
 using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.SolutionManagement;
@@ -19,7 +26,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			IProjectManager projectManager,
 			IProjectConfigurationManager projectConfigurationManager,
 			ICodeProviderFactory codeProviderFactory,
-			IMessageManager messageManager) : base(projectManager, dialogFactory, projectConfigurationManager, messageManager)
+			MessageManager messageManager) : base(projectManager, dialogFactory, projectConfigurationManager, messageManager)
 		{
 			if (authManager == null) throw new ArgumentNullException(nameof(authManager));
 			if (codeProviderFactory == null) throw new ArgumentNullException(nameof(codeProviderFactory));

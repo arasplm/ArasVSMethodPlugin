@@ -5,24 +5,26 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Windows.Forms;
 using System.Windows.Interop;
+using Aras.Method.Libs;
+using Aras.Method.Libs.Code;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
+using Aras.Method.Libs.Templates;
 using Aras.VS.MethodPlugin.ArasInnovator;
 using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.Code;
+using Aras.VS.MethodPlugin.Configurations;
+using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
+using Aras.VS.MethodPlugin.Dialogs.Directory.Data;
 using Aras.VS.MethodPlugin.Dialogs.ViewModels;
 using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.ItemSearch;
 using Aras.VS.MethodPlugin.ItemSearch.Preferences;
 using Aras.VS.MethodPlugin.PackageManagement;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.SolutionManagement;
-using Aras.VS.MethodPlugin.Templates;
+using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio.Shell.Interop;
 using OfficeConnector.Dialogs;
-using Aras.VS.MethodPlugin.Configurations;
-using Aras.VS.MethodPlugin.Dialogs.Directory.Data;
-using Microsoft.CodeAnalysis;
-using System.Windows.Forms;
 
 namespace Aras.VS.MethodPlugin.Dialogs
 {
@@ -32,9 +34,9 @@ namespace Aras.VS.MethodPlugin.Dialogs
 		private readonly IArasDataProvider arasDataProvider;
 		private readonly IServiceProvider serviceProvider;
 		private readonly IIOWrapper iOWrapper;
-		private readonly IMessageManager messageManager;
+		private readonly MessageManager messageManager;
 
-		public DialogFactory(IAuthenticationManager authManager, IArasDataProvider arasDataProvider, IServiceProvider serviceProvider, IIOWrapper iOWrapper, IMessageManager messageManager)
+		public DialogFactory(IAuthenticationManager authManager, IArasDataProvider arasDataProvider, IServiceProvider serviceProvider, IIOWrapper iOWrapper, MessageManager messageManager)
 		{
 			if (authManager == null) throw new ArgumentNullException(nameof(authManager));
 			if (arasDataProvider == null) throw new ArgumentNullException(nameof(arasDataProvider));

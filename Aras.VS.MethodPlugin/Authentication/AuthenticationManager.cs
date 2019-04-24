@@ -9,19 +9,20 @@ using System.Collections.Generic;
 using System.Windows;
 using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
+using Aras.Method.Libs;
 
 namespace Aras.VS.MethodPlugin.Authentication
 {
 	public class AuthenticationManager : IAuthenticationManager
 	{
-		private readonly IMessageManager messageManager;
+		private readonly MessageManager messageManager;
 
 		private dynamic serverConnection;
 		private dynamic innovator;
 		private InnovatorUser innovatorUser;
 		private IIOMWrapper iOMWrapper;
 
-		public AuthenticationManager(IMessageManager messageManager)
+		public AuthenticationManager(MessageManager messageManager)
 		{
 			this.messageManager = messageManager ?? throw new ArgumentNullException(nameof(messageManager));
 		}

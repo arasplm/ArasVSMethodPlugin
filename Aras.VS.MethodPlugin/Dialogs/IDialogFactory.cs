@@ -4,20 +4,19 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using Aras.VS.MethodPlugin.Code;
+using System.Windows.Forms;
+using Aras.Method.Libs.Code;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
+using Aras.Method.Libs.Templates;
+using Aras.VS.MethodPlugin.Configurations;
+using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
+using Aras.VS.MethodPlugin.Dialogs.Directory.Data;
 using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.ItemSearch;
 using Aras.VS.MethodPlugin.PackageManagement;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.SolutionManagement;
-using Aras.VS.MethodPlugin.Templates;
-using EnvDTE;
 using Microsoft.CodeAnalysis;
-using Microsoft.VisualStudio.Shell.Interop;
 using OfficeConnector.Dialogs;
-using Aras.VS.MethodPlugin.Configurations;
-using System.Windows.Forms;
-using Aras.VS.MethodPlugin.Dialogs.Directory.Data;
 
 namespace Aras.VS.MethodPlugin.Dialogs
 {

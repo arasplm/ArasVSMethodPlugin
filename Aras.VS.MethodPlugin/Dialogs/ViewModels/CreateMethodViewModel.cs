@@ -9,21 +9,22 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Windows.Forms;
 using System.Windows.Input;
+using Aras.Method.Libs;
+using Aras.Method.Libs.Code;
+using Aras.Method.Libs.Templates;
 using Aras.VS.MethodPlugin.ArasInnovator;
 using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.Code;
+using Aras.VS.MethodPlugin.Configurations;
+using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.Extensions;
 using Aras.VS.MethodPlugin.ItemSearch;
 using Aras.VS.MethodPlugin.PackageManagement;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.SolutionManagement;
-using Aras.VS.MethodPlugin.Templates;
 using EnvDTE;
 using OfficeConnector.Dialogs;
-using Aras.VS.MethodPlugin.Configurations;
-using System.Windows.Forms;
 
 namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 {
@@ -40,7 +41,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private readonly IArasDataProvider arasDataProvider;
 		private readonly ICodeProvider codeProvider;
 		private readonly IGlobalConfiguration globalConfiguration;
-		private readonly IMessageManager messageManager;
+		private readonly MessageManager messageManager;
 
 		private MethodItemTypeInfo methodItemTypeInfo;
 
@@ -80,7 +81,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			IArasDataProvider arasDataProvider,
 			ICodeProvider codeProvider,
 			IGlobalConfiguration userConfiguration,
-			IMessageManager messageManager)
+			MessageManager messageManager)
 		{
 			if (authenticationManager == null) throw new ArgumentNullException(nameof(authenticationManager));
 			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));
@@ -360,8 +361,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				}
 				else
 				{
-					GeneratedCodeInfo codeInfo = codeProvider.CreateWrapper(selectedTemplate, selectedEventSpecificData, methodName, isUseVSFormattingCode);
-					codeInfo = codeProvider.CreateMainNew(codeInfo, selectedTemplate, selectedEventSpecificData, methodName, false, selectedUserCodeTemplate.Value?.Code);
+					GeneratedCodeInfo codeInfo = codeProvider.CreateWrapper(selectedTemplate, selectedEventSpecificData, methodName, isUseVSFormattingCode, projectManager.DefaultCodeTemplatesPath);
+					codeInfo = codeProvider.CreateMainNew(codeInfo, selectedTemplate, selectedEventSpecificData, methodName, false, selectedUserCodeTemplate.Value?.Code, projectManager.DefaultCodeTemplatesPath);
 					return codeInfo.MethodCodeInfo.Code;
 				}
 			}

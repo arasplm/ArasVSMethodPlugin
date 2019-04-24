@@ -9,17 +9,16 @@ using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Aras.Method.Libs;
+using Aras.Method.Libs.Code;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
+using Aras.Method.Libs.Templates;
 using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.Code;
-using Aras.VS.MethodPlugin.Dialogs;
-using Aras.VS.MethodPlugin.Dialogs.Views;
-using Aras.VS.MethodPlugin.PackageManagement;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
+using Aras.VS.MethodPlugin.Dialogs;
+using Aras.VS.MethodPlugin.PackageManagement;
 using Aras.VS.MethodPlugin.SolutionManagement;
-using Aras.VS.MethodPlugin.Templates;
-using EnvDTE;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Aras.VS.MethodPlugin.Commands
 {
@@ -39,7 +38,7 @@ namespace Aras.VS.MethodPlugin.Commands
 		public static readonly Guid ItemCommandSet = CommandIds.SaveToAras;
 
 
-		private SaveToArasCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IMessageManager messageManager) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory, messageManager)
+		private SaveToArasCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, MessageManager messageManager) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory, messageManager)
 		{
 			if (projectManager.CommandService != null)
 			{
@@ -60,7 +59,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			private set;
 		}
 
-		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IMessageManager messageManager)
+		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, MessageManager messageManager)
 		{
 			Instance = new SaveToArasCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
 		}
@@ -105,7 +104,7 @@ namespace Aras.VS.MethodPlugin.Commands
 				throw new Exception();
 			}
 
-			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language, projectConfiguration);
+			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language);
 
 			CodeInfo codeItemInfo = codeProvider.UpdateSourceCodeToInsertExternalItems(sourceCode, methodInformation, projectManager.ServerMethodFolderPath);
 			if (codeItemInfo != null)
@@ -133,7 +132,7 @@ namespace Aras.VS.MethodPlugin.Commands
 				return;
 			}
 
-			var templateLoader = new TemplateLoader(this.dialogFactory, this.messageManager);
+			var templateLoader = new TemplateLoader();
 			templateLoader.Load(methodConfigPath);
 
 			dynamic currentMethodItem = saveViewResult.MethodItem;

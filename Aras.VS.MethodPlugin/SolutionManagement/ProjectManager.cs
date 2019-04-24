@@ -7,31 +7,32 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.IO;
 using System.Linq;
 using System.Text;
-using Aras.VS.MethodPlugin.Code;
+using Aras.Method.Libs;
+using Aras.Method.Libs.Code;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Commands;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.Extensions;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Text;
 using Microsoft.VisualStudio.ComponentModelHost;
+using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.LanguageServices;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using System.IO;
+using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
-using Microsoft.VisualStudio.Editor;
-using Microsoft.VisualStudio.Text;
-using Microsoft.CodeAnalysis.Text;
 
 namespace Aras.VS.MethodPlugin.SolutionManagement
 {
-	internal class ProjectManager : IProjectManager
+	public class ProjectManager : IProjectManager
 	{
 		private const string arasLibsFolderName = "DefaultCodeTemplates";
 		private const string defaultCodeTemplatesFolderName = "DefaultCodeTemplates";
@@ -46,9 +47,9 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 		private readonly IDialogFactory dialogFactory;
 		private readonly IIOWrapper iOWrapper;
 		private readonly IVsPackageWrapper vsPackageWrapper;
-		private readonly IMessageManager messageManager;
+		private readonly MessageManager messageManager;
 
-		public ProjectManager(IServiceProvider serviceProvider, IDialogFactory dialogFactory, IIOWrapper iOWrapper, IVsPackageWrapper vsPackageWrapper, IMessageManager messageManager)
+		public ProjectManager(IServiceProvider serviceProvider, IDialogFactory dialogFactory, IIOWrapper iOWrapper, IVsPackageWrapper vsPackageWrapper, MessageManager messageManager)
 		{
 			if (serviceProvider == null) throw new ArgumentNullException(nameof(serviceProvider));
 			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));

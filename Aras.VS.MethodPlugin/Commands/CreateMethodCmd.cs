@@ -7,6 +7,10 @@
 using System;
 using System.ComponentModel.Design;
 using System.Linq;
+using Aras.Method.Libs;
+using Aras.Method.Libs.Code;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
+using Aras.Method.Libs.Templates;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.Configurations;
@@ -40,7 +44,7 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// Adds our command handlers for menu (commands must exist in the command table file)
 		/// </summary>
 		/// <param name="package">Owner package, not null.</param>
-		private CreateMethodCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IGlobalConfiguration userConfiguration, IMessageManager messageManager) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory, messageManager)
+		private CreateMethodCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IGlobalConfiguration userConfiguration, MessageManager messageManager) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory, messageManager)
 		{
 			this.globalConfiguration = userConfiguration ?? throw new ArgumentNullException(nameof(userConfiguration));
 
@@ -67,7 +71,7 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// Initializes the singleton instance of the command.
 		/// </summary>
 		/// <param name="package">Owner package, not null.</param>
-		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IGlobalConfiguration userConfiguration, IMessageManager messageManager)
+		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IGlobalConfiguration userConfiguration, MessageManager messageManager)
 		{
 			Instance = new CreateMethodCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, userConfiguration, messageManager);
 		}
@@ -77,11 +81,11 @@ namespace Aras.VS.MethodPlugin.Commands
 			var project = projectManager.SelectedProject;
 			var projectConfiguration = projectConfigurationManager.Load(projectManager.ProjectConfigPath);
 
-			var templateLoader = new Templates.TemplateLoader(this.dialogFactory, this.messageManager);
+			var templateLoader = new TemplateLoader();
 			templateLoader.Load(projectManager.MethodConfigPath);
 
 			PackageManager packageManager = new PackageManager(authManager, this.messageManager);
-			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language, projectConfiguration);
+			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language);
 
 			var createView = dialogFactory.GetCreateView(projectConfiguration, templateLoader, packageManager, projectManager, codeProvider, globalConfiguration);
 			var createViewResult = createView.ShowDialog();
@@ -90,7 +94,7 @@ namespace Aras.VS.MethodPlugin.Commands
 				return;
 			}
 
-			GeneratedCodeInfo codeInfo = codeProvider.GenerateCodeInfo(createViewResult.SelectedTemplate, createViewResult.SelectedEventSpecificData, createViewResult.MethodName, createViewResult.UseRecommendedDefaultCode, createViewResult.SelectedUserCodeTemplate.Code, createViewResult.IsUseVSFormattingCode);
+			GeneratedCodeInfo codeInfo = codeProvider.GenerateCodeInfo(createViewResult.SelectedTemplate, createViewResult.SelectedEventSpecificData, createViewResult.MethodName, createViewResult.UseRecommendedDefaultCode, createViewResult.SelectedUserCodeTemplate.Code, createViewResult.IsUseVSFormattingCode, projectManager.DefaultCodeTemplatesPath);
 			projectManager.CreateMethodTree(codeInfo);
 			projectManager.AddSuppression("assembly: System.Diagnostics.CodeAnalysis.SuppressMessage", "Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", "namespace", codeInfo.Namespace);
 

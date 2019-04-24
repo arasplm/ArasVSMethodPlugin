@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System;
+using Aras.Method.Libs;
 using Aras.VS.MethodPlugin.Authentication;
 
 namespace Aras.VS.MethodPlugin.ArasInnovator
@@ -12,9 +13,9 @@ namespace Aras.VS.MethodPlugin.ArasInnovator
 	public class ArasDataProvider : IArasDataProvider
 	{
 		private readonly IAuthenticationManager authenticationManager;
-		private readonly IMessageManager messageManager;
+		private readonly MessageManager messageManager;
 
-		public ArasDataProvider(IAuthenticationManager authenticationManager, IMessageManager messageManager)
+		public ArasDataProvider(IAuthenticationManager authenticationManager, MessageManager messageManager)
 		{
 			if (authenticationManager == null)
 			{

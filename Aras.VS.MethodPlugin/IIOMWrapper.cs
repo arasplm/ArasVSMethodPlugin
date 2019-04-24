@@ -4,24 +4,21 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.IO;
-using System.Reflection;
 
 namespace Aras.VS.MethodPlugin
 {
 	public interface IIOMWrapper
 	{
-        string ProjectFullName { get; }
+		string ProjectFullName { get; }
 
-        dynamic Innovator_ScalcMD5(string password);
+		dynamic Innovator_ScalcMD5(string password);
 
-        dynamic IomFactory_CreateHttpServerConnection(string serverUrl, string databaseName, string login, string passwordHash);
+		dynamic IomFactory_CreateHttpServerConnection(string serverUrl, string databaseName, string login, string passwordHash);
 
-        dynamic Innovator_Ctor(dynamic serverConnection);
-		
+		dynamic Innovator_Ctor(dynamic serverConnection);
+
 		dynamic IomFactory_CreateHttpServerConnection(string innovatorURL);
-		
-        dynamic IomFactory_CreateWinAuthHttpServerConnection(string innovatorURL, string databaseName);
+
+		dynamic IomFactory_CreateWinAuthHttpServerConnection(string innovatorURL, string databaseName);
 	}
 }
