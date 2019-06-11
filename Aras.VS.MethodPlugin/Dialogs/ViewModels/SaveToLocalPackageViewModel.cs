@@ -7,18 +7,19 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Windows;
 using System.Windows.Input;
+using Aras.Method.Libs;
+using Aras.Method.Libs.Code;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
+using Aras.Method.Libs.Templates;
 using Aras.VS.MethodPlugin.ArasInnovator;
 using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs.Directory.Data;
 using Aras.VS.MethodPlugin.ItemSearch;
 using Aras.VS.MethodPlugin.PackageManagement;
 using Aras.VS.MethodPlugin.SolutionManagement;
-using Aras.VS.MethodPlugin.Templates;
 using OfficeConnector.Dialogs;
 
 namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
@@ -33,7 +34,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private readonly IProjectManager projectManager;
 		private readonly IArasDataProvider arasDataProvider;
 		private readonly IIOWrapper iOWrapper;
-		private readonly IMessageManager messageManager;
+		private readonly MessageManager messageManager;
 
 		private MethodInfo methodInfo;
 		private MethodItemTypeInfo methodItemTypeInfo;
@@ -63,7 +64,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			IProjectManager projectManager,
 			IArasDataProvider arasDataProvider,
 			IIOWrapper iOWrapper,
-			IMessageManager messageManager,
+			MessageManager messageManager,
 			MethodInfo methodInformation,
 			string sourceCode)
 		{

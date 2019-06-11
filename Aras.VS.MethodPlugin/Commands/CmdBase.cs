@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System;
+using Aras.Method.Libs;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.SolutionManagement;
@@ -21,13 +22,13 @@ namespace Aras.VS.MethodPlugin.Commands
 		protected readonly IDialogFactory dialogFactory;
 		protected readonly IProjectManager projectManager;
 		protected readonly IProjectConfigurationManager projectConfigurationManager;
-		protected readonly IMessageManager messageManager;
+		protected readonly MessageManager messageManager;
 
 		public CmdBase(
 			IProjectManager projectManager,
 			IDialogFactory dialogFactory, 
 			IProjectConfigurationManager projectConfigurationManager,
-			IMessageManager messageManager)
+			MessageManager messageManager)
 		{
 			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));
 			if (projectManager == null) throw new ArgumentNullException(nameof(projectManager));

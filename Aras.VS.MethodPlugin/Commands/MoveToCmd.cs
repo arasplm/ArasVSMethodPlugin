@@ -1,8 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿//------------------------------------------------------------------------------
+// <copyright file="MoveToCmd.cs" company="Aras Corporation">
+//     © 2017-2018 Aras Corporation. All rights reserved.
+// </copyright>
+//------------------------------------------------------------------------------
+
+using System;
 using System.ComponentModel.Design;
 using System.Linq;
-using Aras.VS.MethodPlugin.Code;
+using Aras.Method.Libs;
+using Aras.Method.Libs.Code;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.SolutionManagement;
@@ -10,7 +17,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Aras.VS.MethodPlugin.Commands
 {
@@ -31,7 +37,7 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// </summary>
 		public static readonly Guid CommandSet = CommandIds.MoveTo;
 
-		private MoveToCmd(IProjectManager projectManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IMessageManager messageManager)
+		private MoveToCmd(IProjectManager projectManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, MessageManager messageManager)
 			: base(projectManager, dialogFactory, projectConfigurationManager, messageManager)
 		{
 			this.codeProviderFactory = codeProviderFactory ?? throw new ArgumentNullException(nameof(codeProviderFactory));
@@ -62,7 +68,7 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// <param name="dialogFactory"></param>
 		/// <param name="projectConfigurationManager"></param>
 		/// <param name="codeProviderFactory"></param>
-		public static void Initialize(IProjectManager projectManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IMessageManager messageManager)
+		public static void Initialize(IProjectManager projectManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, MessageManager messageManager)
 		{
 			Instance = new MoveToCmd(projectManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
 		}
@@ -89,17 +95,17 @@ namespace Aras.VS.MethodPlugin.Commands
 					return;
 				}
 
-				ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(activeDocument.Project.Language, projectConfiguration);
+				ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(activeDocument.Project.Language);
 				CodeInfo activeDocumentCodeInfo = codeProvider.RemoveActiveNodeFromActiveDocument(activeDocument, activeSyntaxNode, serverMethodFolderPath);
 				CodeInfo itemCodeInfo = null;
 
 				if (moveToViewResult.SelectedCodeType == CodeType.Partial)
 				{
-					itemCodeInfo = codeProvider.InsertActiveNodeToPartial(moveToViewResult.SelectedFullPath, serverMethodFolderPath, activeDocumentMethodName, activeSyntaxNode);
+					itemCodeInfo = codeProvider.InsertActiveNodeToPartial(moveToViewResult.SelectedFullPath, serverMethodFolderPath, activeDocumentMethodName, activeSyntaxNode, projectManager.ActiveDocumentMethodFullPath);
 				}
 				else
 				{
-					itemCodeInfo = codeProvider.InsertActiveNodeToExternal(moveToViewResult.SelectedFullPath, serverMethodFolderPath, activeDocumentMethodName, activeSyntaxNode);
+					itemCodeInfo = codeProvider.InsertActiveNodeToExternal(moveToViewResult.SelectedFullPath, serverMethodFolderPath, activeDocumentMethodName, activeSyntaxNode, projectManager.ActiveDocumentMethodFullPath);
 				}
 
 				projectManager.AddItemTemplateToProjectNew(activeDocumentCodeInfo, false);
@@ -137,7 +143,7 @@ namespace Aras.VS.MethodPlugin.Commands
 
 				if (messageBoxWindowResult == MessageDialogResult.OK)
 				{
-					ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(activeDocument.Project.Language , projectConfiguration);
+					ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(activeDocument.Project.Language);
 					CodeInfo activeDocumentCodeInfo = codeProvider.RemoveActiveNodeFromActiveDocument(activeDocument, activeSyntaxNode, serverMethodFolderPath);
 					CodeInfo methodDocumentCodeInfo = codeProvider.InsertActiveNodeToMainMethod(activeDocumentMethodFullPath, serverMethodFolderPath, activeSyntaxNode, activeDocument.FilePath);
 					projectManager.AddItemTemplateToProjectNew(activeDocumentCodeInfo, false);

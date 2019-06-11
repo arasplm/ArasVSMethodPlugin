@@ -1,10 +1,11 @@
 ﻿using System;
 using System.IO;
+using Aras.Method.Libs;
+using Aras.Method.Libs.Templates;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.Dialogs.ViewModels;
 using Aras.VS.MethodPlugin.Dialogs.Views;
-using Aras.VS.MethodPlugin.Templates;
 using Aras.VS.MethodPlugin.Tests.Dialogs.SubAdapters;
 using NSubstitute;
 using NUnit.Framework;
@@ -16,7 +17,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 	{
 		private OpenFromPackageViewModel openFromPackageViewModel;
 		private IDialogFactory dialogFactory;
-		private IMessageManager messageManager;
+		private MessageManager messageManager;
 		private IProjectConfiguraiton projectConfiguration;
 		private TemplateLoader templateLoader;
 
@@ -24,8 +25,8 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 		public void SetUp()
 		{
 			this.dialogFactory = Substitute.For<IDialogFactory>();
-			this.messageManager = Substitute.For<IMessageManager>();
-			templateLoader = new TemplateLoader(this.dialogFactory, this.messageManager);
+			this.messageManager = Substitute.For<MessageManager>();
+			templateLoader = new TemplateLoader();
 
 			this.projectConfiguration = Substitute.For<IProjectConfiguraiton>();
 			this.projectConfiguration.LastSelectedSearchTypeInOpenFromPackage.Returns("MethodContent");

@@ -14,7 +14,7 @@ namespace Aras.VS.MethodPlugin.Authentication
 	{
 		dynamic ServerConnection { get; }
 
-        dynamic InnovatorInstance { get; }
+		dynamic InnovatorInstance { get; }
 
 		InnovatorUser InnovatorUser { get; }
 

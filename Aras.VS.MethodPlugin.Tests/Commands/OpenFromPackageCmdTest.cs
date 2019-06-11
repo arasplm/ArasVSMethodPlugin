@@ -1,15 +1,16 @@
 ﻿using System;
 using System.IO;
 using System.Threading;
+using Aras.Method.Libs;
+using Aras.Method.Libs.Code;
+using Aras.Method.Libs.Templates;
 using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.Commands;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.PackageManagement;
 using Aras.VS.MethodPlugin.SolutionManagement;
-using Aras.VS.MethodPlugin.Templates;
 using Microsoft.VisualStudio.Shell.Interop;
 using NSubstitute;
 using NUnit.Framework;
@@ -27,7 +28,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 		OpenFromPackageCmd openFromPackageCmd;
 		IVsUIShell iVsUIShell;
 		ICodeProviderFactory codeProviderFactory;
-		IMessageManager messageManager;
+		MessageManager messageManager;
 		ICodeProvider codeProvider;
 		TemplateLoader templateLoader;
 		PackageManager packageManager;
@@ -42,15 +43,15 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			authManager = Substitute.For<IAuthenticationManager>();
 			codeProviderFactory = Substitute.For<ICodeProviderFactory>();
 			codeProvider = Substitute.For<ICodeProvider>();
-			codeProviderFactory.GetCodeProvider(null, null).ReturnsForAnyArgs(codeProvider);
-			this.messageManager = Substitute.For<IMessageManager>();
+			codeProviderFactory.GetCodeProvider(null).ReturnsForAnyArgs(codeProvider);
+			this.messageManager = Substitute.For<MessageManager>();
 			OpenFromPackageCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
 			openFromPackageCmd = OpenFromPackageCmd.Instance;
 			iVsUIShell = Substitute.For<IVsUIShell>();
 			var currentPath = AppDomain.CurrentDomain.BaseDirectory;
 			projectManager.ProjectConfigPath.Returns(Path.Combine(currentPath, "TestData\\projectConfig.xml"));
 			projectConfiguration = projectConfigurationManager.Load(projectManager.ProjectConfigPath);
-			templateLoader = new TemplateLoader(dialogFactory, messageManager);
+			templateLoader = new TemplateLoader();
 			projectManager.MethodConfigPath.Returns(Path.Combine(currentPath, "TestData\\method-config.xml"));
 			templateLoader.Load(projectManager.MethodConfigPath);
 		}
@@ -61,7 +62,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 		{
 			// Arrange
 			dialogFactory.GetOpenFromPackageView(null, null, null).ReturnsForAnyArgs(Substitute.For<OpenFromPackageViewAdapterTest>());
-			codeProvider.GenerateCodeInfo(null, null, null, false, null, false).ReturnsForAnyArgs(Substitute.For<GeneratedCodeInfo>());
+			codeProvider.GenerateCodeInfo(null, null, null, false, null, false, null).ReturnsForAnyArgs(Substitute.For<GeneratedCodeInfo>());
 
 			//Act
 			openFromPackageCmd.ExecuteCommandImpl(null, null);
@@ -76,14 +77,14 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			// Arrange
 			var openFromPackageViewAdapterTest = Substitute.For<OpenFromPackageViewAdapterTest>();
 			dialogFactory.GetOpenFromPackageView(null, null, null).ReturnsForAnyArgs(openFromPackageViewAdapterTest);
-			codeProvider.GenerateCodeInfo(null, null, null, false, null, false).ReturnsForAnyArgs(Substitute.For<GeneratedCodeInfo>());
+			codeProvider.GenerateCodeInfo(null, null, null, false, null, false, null).ReturnsForAnyArgs(Substitute.For<GeneratedCodeInfo>());
 			var showDialogResult = openFromPackageViewAdapterTest.ShowDialog();
 
 			//Act
 			openFromPackageCmd.ExecuteCommandImpl(null, null);
 
 			// Assert
-			codeProvider.Received().GenerateCodeInfo(Arg.Any<TemplateInfo>(), Arg.Any<EventSpecificDataType>(), showDialogResult.MethodName, false, showDialogResult.MethodCode, showDialogResult.IsUseVSFormattingCode);
+			codeProvider.Received().GenerateCodeInfo(Arg.Any<TemplateInfo>(), Arg.Any<EventSpecificDataType>(), showDialogResult.MethodName, false, showDialogResult.MethodCode, showDialogResult.IsUseVSFormattingCode, projectManager.DefaultCodeTemplatesPath);
 		}
 
 		public class OpenFromPackageViewAdapterTest : IViewAdaper<OpenFromPackageView, OpenFromPackageViewResult>

@@ -6,15 +6,16 @@
 
 using System;
 using System.Xml;
+using Aras.Method.Libs;
 
 namespace Aras.VS.MethodPlugin.ArasInnovator
 {
 	public class MethodItemTypeInfo
 	{
 		private readonly dynamic methodItemTypeItem;
-		private readonly IMessageManager messageManager;
+		private readonly MessageManager messageManager;
 
-		public MethodItemTypeInfo(dynamic methodItemTypeItem, IMessageManager messageManager)
+		public MethodItemTypeInfo(dynamic methodItemTypeItem, MessageManager messageManager)
 		{
 			if (methodItemTypeItem == null)
 			{

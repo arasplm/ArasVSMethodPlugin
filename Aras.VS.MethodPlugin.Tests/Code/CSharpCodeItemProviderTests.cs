@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Aras.VS.MethodPlugin.Code;
+using Aras.Method.Libs;
+using Aras.Method.Libs.Code;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -10,13 +11,13 @@ namespace Aras.VS.MethodPlugin.Tests.Code
 	[TestFixture]
 	public class CSharpCodeItemProviderTests
 	{
-		private IMessageManager messageManager;
+		private MessageManager messageManager;
 		private CSharpCodeItemProvider provider;
 
 		[OneTimeSetUp]
 		public void OneTimeSetUp()
 		{
-			messageManager = Substitute.For<IMessageManager>();
+			messageManager = Substitute.For<MessageManager>();
 			messageManager.GetMessage("CurrentCodeElementTypeIsNotSupported").Returns("Current code element type is not supported");
 
 			provider = new CSharpCodeItemProvider(messageManager);

@@ -8,12 +8,14 @@ using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using Aras.Method.Libs;
+using Aras.Method.Libs.Code;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
+using Aras.Method.Libs.Templates;
 using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.PackageManagement;
-using Aras.VS.MethodPlugin.Templates;
 
 namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 {
@@ -25,7 +27,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private readonly IDialogFactory dialogFactory;
 		private readonly TemplateLoader templateLoader;
 		private readonly PackageManager packageManager;
-		private readonly IMessageManager messageManager;
+		private readonly MessageManager messageManager;
 		private string projectConfigPath;
 		private string projectName;
 		private string projectFullName;
@@ -57,7 +59,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			IDialogFactory dialogFactory,
 			TemplateLoader templateLoader,
 			PackageManager packageManager,
-			IMessageManager messageManager,
+			MessageManager messageManager,
 			MethodInfo methodInfo,
 			string projectConfigPath,
 			string projectName,
@@ -288,7 +290,28 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 					methodType = "client";
 				}
 
-				this.SelectedTemplate = templateLoader.GetTemplateFromCodeString(methodCode, methodLanguage, "Update method from Aras Innovator");
+				TemplateInfo template;
+				string templateName = templateLoader.GetMethodTemplateName(methodCode);
+				if (string.IsNullOrEmpty(templateName))
+				{
+					template = templateLoader.GetDefaultTemplate(methodLanguage);
+				}
+				else
+				{
+					template = templateLoader.GetTemplateFromCodeString(templateName, methodLanguage);
+					if (template == null)
+					{
+						var messageWindow = this.dialogFactory.GetMessageBoxWindow();
+						messageWindow.ShowDialog(messageManager.GetMessage("TheTemplateFromSelectedMethodNotFoundDefaultTemplateWillBeUsed", templateName),
+							"Update method from Aras Innovator",
+							MessageButtons.OK,
+							MessageIcon.Information);
+
+						template = templateLoader.GetDefaultTemplate(methodLanguage);
+					}
+				}
+
+				this.SelectedTemplate = template;
 
 				var packageName = string.Empty;
 

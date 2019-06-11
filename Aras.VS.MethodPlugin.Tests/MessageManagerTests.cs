@@ -1,17 +1,18 @@
 ﻿using System;
+using Aras.Method.Libs;
 using NUnit.Framework;
 
 namespace Aras.VS.MethodPlugin.Tests
 {
 	[TestFixture]
-	public class MessageManagerTests
+	public class VisualStudioMessageManagerTests
 	{
-		private IMessageManager messageManager;
+		private MessageManager messageManager;
 
 		[SetUp]
 		public void SetUp()
 		{
-			this.messageManager = new MessageManager();
+			this.messageManager = new VisualStudioMessageManager();
 		}
 
 		[TestCase("AuthenticationFailedFor", "Authentication failed for {0}.")]

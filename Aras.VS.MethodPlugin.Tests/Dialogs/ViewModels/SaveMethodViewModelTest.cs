@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using Aras.IOM;
+using Aras.Method.Libs;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.ArasInnovator;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
@@ -31,7 +33,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 		private IDialogFactory dialogFactory;
 		private IProjectConfigurationManager projectConfigurationManager;
 		private IProjectConfiguraiton projectConfiguration;
-		private IMessageManager messageManager;
+		private MessageManager messageManager;
 		private PackageManager packageManager;
 		private IArasDataProvider arasDataProvider;
 		private MethodInfo methodInformation;
@@ -46,7 +48,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 			this.dialogFactory = Substitute.For<IDialogFactory>();
 			this.projectConfigurationManager = Substitute.For<IProjectConfigurationManager>();
 			this.projectConfiguration = Substitute.For<IProjectConfiguraiton>();
-			this.messageManager = Substitute.For<IMessageManager>();
+			this.messageManager = Substitute.For<MessageManager>();
 			this.packageManager = new PackageManager(authManager, messageManager);
 			this.arasDataProvider = Substitute.For<IArasDataProvider>();
 			this.methodInformation = new MethodInfo();

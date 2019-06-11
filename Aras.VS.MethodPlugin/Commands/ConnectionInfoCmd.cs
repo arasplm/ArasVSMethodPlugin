@@ -6,12 +6,12 @@
 
 using System;
 using System.ComponentModel.Design;
+using Aras.Method.Libs;
 using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
+using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Aras.VS.MethodPlugin.Commands
 {
@@ -32,7 +32,7 @@ namespace Aras.VS.MethodPlugin.Commands
 
 		private readonly IAuthenticationManager authManager;
 
-		private ConnectionInfoCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, IMessageManager messageManager)
+		private ConnectionInfoCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, MessageManager messageManager)
 			: base(projectManager, dialogFactory, projectConfigurationManager, messageManager)
 		{
 			if (authManager == null) throw new ArgumentNullException(nameof(authManager));
@@ -61,7 +61,7 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// Initializes the singleton instance of the command.
 		/// </summary>
 		/// <param name="package">Owner package, not null.</param>
-		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, IMessageManager messageManager)
+		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, MessageManager messageManager)
 		{
 			Instance = new ConnectionInfoCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, messageManager);
 		}

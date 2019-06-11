@@ -10,9 +10,10 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Xml;
-using Aras.VS.MethodPlugin.Code;
+using Aras.Method.Libs;
+using Aras.Method.Libs.Code;
+using Aras.Method.Libs.Templates;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
-using Aras.VS.MethodPlugin.Templates;
 
 namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 {
@@ -20,7 +21,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 	{
 		private readonly IDialogFactory dialogFactory;
 		private readonly TemplateLoader templateLoader;
-		private readonly IMessageManager messageManager;
+		private readonly MessageManager messageManager;
 
 		private string projectLanguage;
 		private string selectedFolderPath;
@@ -46,7 +47,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private ICommand okCommand;
 		private ICommand closeCommand;
 
-		public OpenFromPackageViewModel(IDialogFactory dialogFactory, TemplateLoader templateLoader, IMessageManager messageManager, string projectLanguage, IProjectConfiguraiton projectConfiguration)
+		public OpenFromPackageViewModel(IDialogFactory dialogFactory, TemplateLoader templateLoader, MessageManager messageManager, string projectLanguage, IProjectConfiguraiton projectConfiguration)
 		{
 			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));
 			if (templateLoader == null) throw new ArgumentNullException(nameof(templateLoader));
@@ -268,7 +269,28 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				this.MethodConfigId = itemXmlNode.Attributes["id"].InnerText;
 				this.MethodId = itemXmlNode.Attributes["id"].InnerText;
 
-				this.SelectedTemplate = templateLoader.GetTemplateFromCodeString(methodCode, methodLanguage, "Open method from AML package");
+				TemplateInfo template;
+				string templateName = templateLoader.GetMethodTemplateName(methodCode);
+				if (string.IsNullOrEmpty(templateName))
+				{
+					template = templateLoader.GetDefaultTemplate(methodLanguage);
+				}
+				else
+				{
+					template = templateLoader.GetTemplateFromCodeString(templateName, methodLanguage);
+					if (template == null)
+					{
+						var messageWindow = this.dialogFactory.GetMessageBoxWindow();
+						messageWindow.ShowDialog(messageManager.GetMessage("TheTemplateFromSelectedMethodNotFoundDefaultTemplateWillBeUsed", templateName),
+							"Open method from AML package",
+							MessageButtons.OK,
+							MessageIcon.Information);
+
+						template = templateLoader.GetDefaultTemplate(methodLanguage);
+					}
+				}
+
+				this.SelectedTemplate = template;
 			}
 		}
 

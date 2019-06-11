@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Threading;
+using Aras.Method.Libs;
+using Aras.Method.Libs.Code;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.Commands;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
@@ -22,7 +24,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 	{
 		IAuthenticationManager authManager;
 		IProjectManager projectManager;
-		IMessageManager messageManager;
+		MessageManager messageManager;
 		IDialogFactory dialogFactory;
 		ProjectConfigurationManager projectConfigurationManager;
 		DebugMethodCmd debugMethodCmd;
@@ -40,14 +42,14 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			authManager = new AuthManagerStub();
 			codeProviderFactory = Substitute.For<ICodeProviderFactory>();
 			codeProvider = Substitute.For<ICodeProvider>();
-			codeProviderFactory.GetCodeProvider(null, null).ReturnsForAnyArgs(codeProvider);
+			codeProviderFactory.GetCodeProvider(null).ReturnsForAnyArgs(codeProvider);
 			iVsUIShell = Substitute.For<IVsUIShell>();
 			var currentPath = AppDomain.CurrentDomain.BaseDirectory;
 			projectManager.ProjectConfigPath.Returns(Path.Combine(currentPath, "TestData\\projectConfig.xml"));
 			projectConfiguration = projectConfigurationManager.Load(projectManager.ProjectConfigPath);
 			projectManager.MethodName.Returns("TestMethod");
 			projectManager.MethodPath.Returns(Path.Combine(currentPath, "TestData\\TestMethod.txt"));
-			messageManager = Substitute.For<IMessageManager>();
+			messageManager = Substitute.For<MessageManager>();
 			DebugMethodCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
 			debugMethodCmd = DebugMethodCmd.Instance;
 

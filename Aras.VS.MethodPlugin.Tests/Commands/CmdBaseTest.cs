@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Aras.Method.Libs;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Commands;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.SolutionManagement;
-using Microsoft.VisualStudio.Shell.Interop;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -16,12 +17,12 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 		IProjectManager projectManager;
 		IDialogFactory dialogFactory;
 		IProjectConfigurationManager projectConfigurationManager;
-		IMessageManager messageManager;
+		MessageManager messageManager;
 		CmdBaseTest cmdBaseTest;
 
 		internal class CmdBaseTest : CmdBase
 		{
-			public CmdBaseTest(IProjectManager projectManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, IMessageManager messageManager)
+			public CmdBaseTest(IProjectManager projectManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, MessageManager messageManager)
 				: base(projectManager, dialogFactory, projectConfigurationManager, messageManager)
 			{
 
@@ -38,7 +39,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			projectManager = Substitute.For<IProjectManager>();
 			projectConfigurationManager = Substitute.For<IProjectConfigurationManager>();
 			dialogFactory = Substitute.For<IDialogFactory>();
-			messageManager = Substitute.For<IMessageManager>();
+			messageManager = Substitute.For<MessageManager>();
 			cmdBaseTest = new CmdBaseTest(projectManager, dialogFactory, projectConfigurationManager, messageManager);
 			var projectConfiguraiton = Substitute.For<IProjectConfiguraiton>();
 			projectConfigurationManager.Load(projectManager.ProjectConfigPath).Returns(projectConfiguraiton);

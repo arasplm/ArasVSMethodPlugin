@@ -1,8 +1,6 @@
 ﻿using System;
-using Aras.VS.MethodPlugin.Code;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
-using Aras.VS.MethodPlugin.Dialogs;
-using Aras.VS.MethodPlugin.SolutionManagement;
+using Aras.Method.Libs;
+using Aras.Method.Libs.Code;
 using EnvDTE;
 using NSubstitute;
 using NUnit.Framework;
@@ -12,38 +10,22 @@ namespace Aras.VS.MethodPlugin.Tests.Code
 	[TestFixture]
 	public class CodeProviderFactoryTests
 	{
-		private IProjectManager projectManager;
 		private DefaultCodeProvider defaultCodeProvider;
+		private ICodeFormatter codeFormatter;
+		private MessageManager messageManager;
 		private IIOWrapper iOWrapper;
-		private IDialogFactory dialogFactory;
-		private IMessageManager messageManager;
-		private IProjectConfiguraiton projectConfiguration;
 		private CodeProviderFactory codeProviderFactory;
 
 		[OneTimeSetUp]
 		public void OneTimeSetUp()
 		{
-			projectManager = Substitute.For<IProjectManager>();
 			iOWrapper = Substitute.For<IIOWrapper>();
-			defaultCodeProvider = Substitute.For<DefaultCodeProvider>(iOWrapper);
-			dialogFactory = Substitute.For<IDialogFactory>();
-			messageManager = Substitute.For<IMessageManager>();
+			defaultCodeProvider = new DefaultCodeProvider(iOWrapper);
+			codeFormatter = Substitute.For<ICodeFormatter>();
+			messageManager = Substitute.For<MessageManager>();
 			messageManager.GetMessage("CurrentProjectTypeIsNotSupported").Returns("CurrentProjectTypeIsNotSupported");
-			projectConfiguration = Substitute.For<IProjectConfiguraiton>();
 
-			codeProviderFactory = new CodeProviderFactory(projectManager, defaultCodeProvider, iOWrapper, dialogFactory, messageManager);
-		}
-
-		[Test]
-		public void Ctor_ProjectManagerIsNull_ShouldThrowArgumentNullException()
-		{
-			// Assert
-			Assert.Throws<ArgumentNullException>(new TestDelegate(() =>
-			{
-				// Act
-				var codeProviderFactory =
-					new CodeProviderFactory(null, defaultCodeProvider, iOWrapper, dialogFactory, messageManager);
-			}), nameof(projectManager));
+			codeProviderFactory = new CodeProviderFactory(defaultCodeProvider, codeFormatter, messageManager, iOWrapper);
 		}
 
 		[Test]
@@ -54,32 +36,20 @@ namespace Aras.VS.MethodPlugin.Tests.Code
 			{
 				// Act
 				var codeProviderFactory =
-					new CodeProviderFactory(projectManager, null, iOWrapper, dialogFactory, messageManager);
+					new CodeProviderFactory(null, codeFormatter, messageManager, iOWrapper);
 			}), nameof(defaultCodeProvider));
 		}
 
 		[Test]
-		public void Ctor_IOWrapperIsNull_ShouldThrowArgumentNullException()
+		public void Ctor_CodeFormatterIsNull_ShouldThrowArgumentNullException()
 		{
 			// Assert
 			Assert.Throws<ArgumentNullException>(new TestDelegate(() =>
 			{
 				// Act
 				var codeProviderFactory =
-					new CodeProviderFactory(projectManager, defaultCodeProvider, null, dialogFactory, messageManager);
-			}), nameof(iOWrapper));
-		}
-
-		[Test]
-		public void Ctor_DialogFactoryIsNull_ShouldThrowArgumentNullException()
-		{
-			// Assert
-			Assert.Throws<ArgumentNullException>(new TestDelegate(() =>
-			{
-				// Act
-				var codeProviderFactory =
-					new CodeProviderFactory(projectManager, defaultCodeProvider, iOWrapper, null, messageManager);
-			}), nameof(dialogFactory));
+					new CodeProviderFactory(defaultCodeProvider, null, messageManager, iOWrapper);
+			}), nameof(messageManager));
 		}
 
 		[Test]
@@ -90,8 +60,20 @@ namespace Aras.VS.MethodPlugin.Tests.Code
 			{
 				// Act
 				var codeProviderFactory =
-					new CodeProviderFactory(projectManager, defaultCodeProvider, iOWrapper, dialogFactory, null);
+					new CodeProviderFactory(defaultCodeProvider, codeFormatter, null, iOWrapper);
 			}), nameof(messageManager));
+		}
+
+		[Test]
+		public void Ctor_IOWrapperIsNull_ShouldThrowArgumentNullException()
+		{
+			// Assert
+			Assert.Throws<ArgumentNullException>(new TestDelegate(() =>
+			{
+				// Act
+				var codeProviderFactory =
+					new CodeProviderFactory(defaultCodeProvider, codeFormatter, messageManager, null);
+			}), nameof(iOWrapper));
 		}
 
 		[Test]
@@ -126,7 +108,7 @@ namespace Aras.VS.MethodPlugin.Tests.Code
 		public void GetCodeProvider_ShouldReturnCSharpCodeProvider(string projectLanguageCode)
 		{
 			// Act
-			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(projectLanguageCode, projectConfiguration);
+			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(projectLanguageCode);
 
 			// Assert
 			Assert.IsInstanceOf(typeof(CSharpCodeProvider), codeProvider);
@@ -136,7 +118,7 @@ namespace Aras.VS.MethodPlugin.Tests.Code
 		public void GetCodeProvider_ShouldReturnVBCodeProvider(string projectLanguageCode)
 		{
 			// Act
-			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(projectLanguageCode, projectConfiguration);
+			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(projectLanguageCode);
 
 			// Assert
 			Assert.IsInstanceOf(typeof(VBCodeProvider), codeProvider);
@@ -152,7 +134,7 @@ namespace Aras.VS.MethodPlugin.Tests.Code
 			NotSupportedException exception = Assert.Throws<NotSupportedException>(new TestDelegate(() =>
 			{
 				// Act
-				ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(projectLanguageCode, projectConfiguration);
+				ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(projectLanguageCode);
 			}));
 
 			Assert.AreEqual(messageManager.GetMessage("CurrentProjectTypeIsNotSupported"), exception.Message);

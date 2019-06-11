@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms;
-using Aras.VS.MethodPlugin.Code;
+using Aras.Method.Libs.Code;
 using Aras.VS.MethodPlugin.ItemSearch;
 using OfficeConnector.Dialogs;
 using OfficeConnector.Properties;

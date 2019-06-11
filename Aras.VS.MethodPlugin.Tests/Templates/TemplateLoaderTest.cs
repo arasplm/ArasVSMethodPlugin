@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using Aras.Method.Libs;
+using Aras.Method.Libs.Templates;
 using Aras.VS.MethodPlugin.Dialogs;
-using Aras.VS.MethodPlugin.Dialogs.Views;
-using Aras.VS.MethodPlugin.Templates;
 using Microsoft.VisualStudio.Shell.Interop;
 using NSubstitute;
 using NUnit.Framework;
@@ -15,15 +16,13 @@ namespace Aras.VS.MethodPlugin.Tests.Templates
 		private TemplateLoader templateLoader;
 		private IDialogFactory dialogFactory;
 		private IVsUIShell iVsUIShell;
-		private IMessageManager messageManager;
 
 		[SetUp]
 		public void SetUp()
 		{
 			this.dialogFactory = Substitute.For<IDialogFactory>();
 			this.iVsUIShell = Substitute.For<IVsUIShell>();
-			this.messageManager = Substitute.For<IMessageManager>();
-			this.templateLoader = new TemplateLoader(dialogFactory, messageManager);
+			this.templateLoader = new TemplateLoader();
 		}
 
 		[Test]
@@ -47,25 +46,24 @@ namespace Aras.VS.MethodPlugin.Tests.Templates
 		}
 
 		[Test]
-		public void GetTemplateFromCodeString_ShouldReturnExpected()
+		public void GetDefaultTemplate_ShouldReturnExpected()
 		{
 			//Arange
 			var currentPath = System.AppDomain.CurrentDomain.BaseDirectory;
 			var methodConfigPath = Path.Combine(currentPath, @"Templates\TestData\method-config.xml");
 			templateLoader.Load(methodConfigPath);
-			string testCode = "testCode";
 
-			TemplateInfo expectedtemplate = LoadExpectedtemplates()[2];
+			TemplateInfo expectedtemplate = LoadExpectedtemplates().Where(t => t.TemplateLanguage == GlobalConsts.CSharp).FirstOrDefault();
 
 			//Act
-			TemplateInfo actualTemplate = templateLoader.GetTemplateFromCodeString(testCode, "C#", null);
+			TemplateInfo actualTemplate = templateLoader.GetDefaultTemplate(GlobalConsts.CSharp);
 
 			//Assert
 			Assert.IsTrue(IsSameTemplates(expectedtemplate, actualTemplate));
 		}
 
 		[Test]
-		public void GetTemplateFromCodeString_ShouldShowMessageAndReturnNull()
+		public void GetTemplateFromCodeString_ShouldReturnNull()
 		{
 			//Arange
 			var currentPath = System.AppDomain.CurrentDomain.BaseDirectory;
@@ -74,36 +72,11 @@ namespace Aras.VS.MethodPlugin.Tests.Templates
 
 			string testCode = "//MethodTemplateName=templateName";
 
-			IMessageBoxWindow messageBoxWindow = Substitute.For<IMessageBoxWindow>();
-			this.dialogFactory.GetMessageBoxWindow().Returns(messageBoxWindow);
-
 			//Act
-			TemplateInfo actualTemplate = templateLoader.GetTemplateFromCodeString(testCode, "testLanguage", "operationName");
+			TemplateInfo actualTemplate = templateLoader.GetTemplateFromCodeString(testCode, "testLanguage");
 
 			//Assert
-			messageBoxWindow.Received().ShowDialog(Arg.Any<string>(), "operationName", MessageButtons.OK, MessageIcon.Information);
 			Assert.IsNull(actualTemplate);
-		}
-
-		[Test]
-		public void GetTemplateFromCodeString_ShouldShowMessageAndReturnExpected()
-		{
-			//Arange
-			var currentPath = System.AppDomain.CurrentDomain.BaseDirectory;
-			var methodConfigPath = Path.Combine(currentPath, @"Templates\TestData\method-config.xml");
-			templateLoader.Load(methodConfigPath);
-			string testCode = "//MethodTemplateName=templateName";
-			IMessageBoxWindow messageBoxWindow = Substitute.For<IMessageBoxWindow>();
-
-			this.dialogFactory.GetMessageBoxWindow().Returns(messageBoxWindow);
-			TemplateInfo expectedtemplate = LoadExpectedtemplates()[2];
-
-			//Act
-			TemplateInfo actualTemplate = templateLoader.GetTemplateFromCodeString(testCode, "C#", "operationName");
-
-			//Assert
-			messageBoxWindow.Received().ShowDialog(Arg.Any<string>(), "operationName", MessageButtons.OK, MessageIcon.Information);
-			Assert.IsTrue(IsSameTemplates(expectedtemplate, actualTemplate));
 		}
 
 		private List<TemplateInfo> LoadExpectedtemplates()
@@ -135,7 +108,7 @@ namespace Aras.VS.MethodPlugin.Tests.Templates
 				IsSuccessfullySupported = true,
 				IsSupported = true,
 				TemplateCode = "using Aras.IOM;\r\nusing System;\r\nusing System.Collections;\r\nusing System.Collections.Generic;\r\nusing System.Data;\r\nusing System.Globalization;\r\nusing System.IO;\r\nusing System.Linq;\r\nusing System.Net;\r\nusing System.Text;\r\nusing System.Web;\r\nusing System.Web.SessionState;\r\nusing System.Xml;\r\n\r\nnamespace $(pkgname)\r\n{\r\n    public class ItemMethod : Item\r\n    {\r\n      public ItemMethod(IServerConnection arg) : base(arg)\r\n        {\r\n        }\r\n#if EventDataIsAvailable\r\n\t\tpublic Item methodCode()\r\n\t\t{\r\n\t\t\treturn methodCode( null );\r\n\t\t}\r\n\r\n\t\tpublic Item methodCode($(EventDataClass) eventData)\r\n#else\r\n\t\tpublic Item methodCode()\r\n#endif\r\n        {\r\n\t\tAras.Server.Core.CallContext CCO = ((Aras.Server.Core.IOMConnection) serverConnection).CCO;\r\n\t\tAras.Server.Core.IContextState RequestState = CCO.RequestState;\r\n\t\t   $(MethodCode)\r\n        }\r\n    }\r\n  \r\n    public class $(clsname): $(interfacename)\r\n    {\r\n        [System.Diagnostics.CodeAnalysis.SuppressMessage(\"Microsoft.Naming\", \"CA1725:ParameterNamesShouldMatchBaseDeclaration\", MessageId = \"0#\")]\r\n#if EventDataIsAvailable\r\n        public void $(fncname)(IServerConnection InnovatorServerASP, XmlDocument inDom, $(EventDataClass) eventData, XmlDocument outDom)\r\n#else\r\n        public void $(fncname)(IServerConnection InnovatorServerASP, XmlDocument inDom, XmlDocument outDom)\r\n#endif\r\n        {\r\n        ItemMethod inItem = null;\r\n        Item outItem = null;\r\n        inItem = new ItemMethod(InnovatorServerASP);\r\n        if (inDom != null)\r\n        {\r\n            inItem.dom = inDom;\r\n            XmlNodeList nodes = inDom.SelectNodes(\"//Item[not(ancestor::node()[local-name()='Item'])]\");\r\n            if (nodes.Count == 1)\r\n            {\r\n                inItem.node = (XmlElement)nodes[0];\r\n            }\r\n            else\r\n            {\r\n                inItem.node = null;\r\n                inItem.nodeList = nodes;\r\n            }\r\n        }\r\n\r\n#if EventDataIsAvailable\r\n      outItem = inItem.methodCode(eventData);\r\n#else\r\n      outItem = inItem.methodCode();\r\n#endif\r\n      if (outItem != null && outDom != null)\r\n      {\r\n          outDom.ReplaceChild(outDom.ImportNode(outItem.dom.DocumentElement, true), outDom.FirstChild);\r\n      }\r\n    }\r\n  }\r\n}\r\n",
-				TemplateLanguage = "C#"
+				TemplateLanguage = GlobalConsts.CSharp
 			};
 
 			templateInfos.Add(newTemplateInfo);

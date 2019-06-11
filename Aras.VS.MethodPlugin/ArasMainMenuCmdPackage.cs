@@ -8,16 +8,18 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Aras.Method.Libs;
+using Aras.Method.Libs.Code;
 using Aras.VS.MethodPlugin.ArasInnovator;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Code;
-using Aras.VS.MethodPlugin.Dialogs;
+using Aras.VS.MethodPlugin.Configurations;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
+using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using EnvDTE;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
-using Aras.VS.MethodPlugin.Configurations;
 
 namespace Aras.VS.MethodPlugin
 {
@@ -61,7 +63,7 @@ namespace Aras.VS.MethodPlugin
 		private IIOWrapper iOWrapper;
 		private IVsPackageWrapper vsPackageWrapper;
 		private IGlobalConfiguration globalConfiguration;
-		private IMessageManager messageManager;
+		private MessageManager messageManager;
 
 		private ProjectItemsEvents projectItemsEvents;
 
@@ -87,7 +89,7 @@ namespace Aras.VS.MethodPlugin
 			base.Initialize();
 			var dllPath = Assembly.GetExecutingAssembly().Location;
 
-			this.messageManager = new MessageManager();
+			this.messageManager = new VisualStudioMessageManager();
 			this.iOWrapper = new IOWrapper();
 			this.authManager = new AuthenticationManager(messageManager);
 			this.arasDataProvider = new ArasDataProvider(authManager, messageManager);
@@ -96,7 +98,8 @@ namespace Aras.VS.MethodPlugin
 			this.vsPackageWrapper = new VsPackageWrapper();
 			this.projectManager = new ProjectManager(this, dialogFactory, iOWrapper, vsPackageWrapper, messageManager);
 			this.defaultCodeProvider = new DefaultCodeProvider(iOWrapper);
-			this.codeProviderFactory = new CodeProviderFactory(projectManager, defaultCodeProvider, iOWrapper, dialogFactory, messageManager);
+			ICodeFormatter codeFormatter = new VisualStudioCodeFormatter(this.projectManager);
+			this.codeProviderFactory = new CodeProviderFactory(defaultCodeProvider, codeFormatter, messageManager, iOWrapper);
 			this.globalConfiguration = new GlobalConfiguration(iOWrapper);
 
 			Commands.OpenFromArasCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);

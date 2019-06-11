@@ -1,15 +1,17 @@
 ﻿using System;
 using System.IO;
 using System.Threading;
+using Aras.Method.Libs;
+using Aras.Method.Libs.Code;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
+using Aras.Method.Libs.Templates;
 using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.Commands;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.PackageManagement;
 using Aras.VS.MethodPlugin.SolutionManagement;
-using Aras.VS.MethodPlugin.Templates;
 using Microsoft.VisualStudio.Shell.Interop;
 using NSubstitute;
 using NUnit.Framework;
@@ -27,7 +29,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 		UpdateMethodCmd updateMethodCmd;
 		IVsUIShell iVsUIShell;
 		ICodeProviderFactory codeProviderFactory;
-		IMessageManager messageManager;
+		MessageManager messageManager;
 		TemplateLoader templateLoader;
 		IProjectConfiguraiton projectConfiguration;
 		ICodeProvider codeProvider;
@@ -41,15 +43,15 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			authManager = Substitute.For<IAuthenticationManager>();
 			codeProviderFactory = Substitute.For<ICodeProviderFactory>();
 			codeProvider = Substitute.For<ICodeProvider>();
-			codeProviderFactory.GetCodeProvider(null, null).ReturnsForAnyArgs(codeProvider);
-			messageManager = Substitute.For<IMessageManager>();
+			codeProviderFactory.GetCodeProvider(null).ReturnsForAnyArgs(codeProvider);
+			messageManager = Substitute.For<MessageManager>();
 			UpdateMethodCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
 			updateMethodCmd = UpdateMethodCmd.Instance;
 			iVsUIShell = Substitute.For<IVsUIShell>();
 			var currentPath = AppDomain.CurrentDomain.BaseDirectory;
 			projectManager.ProjectConfigPath.Returns(Path.Combine(currentPath, "TestData\\projectConfig.xml"));
 			projectConfiguration = projectConfigurationManager.Load(projectManager.ProjectConfigPath);
-			templateLoader = new TemplateLoader(dialogFactory, messageManager);
+			templateLoader = new TemplateLoader();
 			projectManager.MethodConfigPath.Returns(Path.Combine(currentPath, "TestData\\method-config.xml"));
 			templateLoader.Load(projectManager.MethodConfigPath);
 			projectManager.MethodPath.Returns(Path.Combine(currentPath, "TestData\\TestMethod.txt"));
@@ -60,7 +62,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 		{
 			// Arrange
 			dialogFactory.GetUpdateFromArasView(null, null, null, null, null, null, null, null).ReturnsForAnyArgs(new UpdateFromArasViewAdapterTest());
-			codeProvider.GenerateCodeInfo(null, Arg.Any<EventSpecificDataType>(), null, Arg.Any<bool>(), null, Arg.Any<bool>()).ReturnsForAnyArgs(Substitute.For<GeneratedCodeInfo>());
+			codeProvider.GenerateCodeInfo(null, Arg.Any<EventSpecificDataType>(), null, Arg.Any<bool>(), null, Arg.Any<bool>(), null).ReturnsForAnyArgs(Substitute.For<GeneratedCodeInfo>());
 
 			//Act
 			updateMethodCmd.ExecuteCommandImpl(null, null);
@@ -76,14 +78,14 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			// Arrange
 			var updateFromArasViewAdapterTest = Substitute.For<UpdateFromArasViewAdapterTest>();
 			dialogFactory.GetUpdateFromArasView(null, null, null, null, null, null, null, null).ReturnsForAnyArgs(updateFromArasViewAdapterTest);
-			codeProvider.GenerateCodeInfo(null, Arg.Any<EventSpecificDataType>(), null, Arg.Any<bool>(), null, Arg.Any<bool>()).ReturnsForAnyArgs(Substitute.For<GeneratedCodeInfo>());
+			codeProvider.GenerateCodeInfo(null, Arg.Any<EventSpecificDataType>(), null, Arg.Any<bool>(), null, Arg.Any<bool>(), null).ReturnsForAnyArgs(Substitute.For<GeneratedCodeInfo>());
 			var showDialogResult = updateFromArasViewAdapterTest.ShowDialog();
 
 			//Act
 			updateMethodCmd.ExecuteCommandImpl(null, null);
 
 			// Assert
-			codeProvider.Received().GenerateCodeInfo(Arg.Any<TemplateInfo>(), Arg.Any<EventSpecificDataType>(), showDialogResult.MethodName, false, showDialogResult.MethodCode, false);
+			codeProvider.Received().GenerateCodeInfo(Arg.Any<TemplateInfo>(), Arg.Any<EventSpecificDataType>(), showDialogResult.MethodName, false, showDialogResult.MethodCode, false, projectManager.DefaultCodeTemplatesPath);
 		}
 
 

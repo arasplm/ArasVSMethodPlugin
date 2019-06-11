@@ -5,6 +5,8 @@
 //------------------------------------------------------------------------------
 
 
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
+
 namespace Aras.VS.MethodPlugin.Configurations.ProjectConfigurations
 {
 	public class PackageMethodInfo : MethodInfo

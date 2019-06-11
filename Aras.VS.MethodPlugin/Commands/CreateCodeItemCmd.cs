@@ -8,12 +8,13 @@ using System;
 using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
-using Aras.VS.MethodPlugin.Code;
+using Aras.Method.Libs;
+using Aras.Method.Libs.Code;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Aras.VS.MethodPlugin.Commands
 {
@@ -39,7 +40,7 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// Adds our command handlers for menu (commands must exist in the command table file)
 		/// </summary>
 		/// <param name="package">Owner package, not null.</param>
-		private CreateCodeItemCmd(IProjectManager projectManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IMessageManager messageManager)
+		private CreateCodeItemCmd(IProjectManager projectManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, MessageManager messageManager)
 			: base(projectManager, dialogFactory, projectConfigurationManager, messageManager)
 		{
 			if (codeProviderFactory == null) throw new ArgumentNullException(nameof(codeProviderFactory));
@@ -69,7 +70,7 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// Initializes the singleton instance of the command.
 		/// </summary>
 		/// <param name="package">Owner package, not null.</param>
-		public static void Initialize(IProjectManager projectManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IMessageManager messageManager)
+		public static void Initialize(IProjectManager projectManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, MessageManager messageManager)
 		{
 			Instance = new CreateCodeItemCmd(projectManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
 		}
@@ -106,8 +107,18 @@ namespace Aras.VS.MethodPlugin.Commands
 				throw new Exception(this.messageManager.GetMessage("CodeItemAlreadyExists"));
 			}
 
-			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language, projectConfiguration);
-			CodeInfo codeItemInfo = codeProvider.CreateCodeItemInfo(methodInformation, viewResult.FileName, viewResult.SelectedCodeType, viewResult.SelectedElementType, viewResult.IsUseVSFormattingCode);
+			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language);
+			CodeInfo codeItemInfo = codeProvider.CreateCodeItemInfo(methodInformation,
+				viewResult.FileName,
+				viewResult.SelectedCodeType,
+				viewResult.SelectedElementType,
+				viewResult.IsUseVSFormattingCode,
+				projectManager.ServerMethodFolderPath,
+				projectManager.SelectedFolderPath,
+				projectManager.MethodName,
+				projectManager.MethodConfigPath,
+				projectManager.MethodPath,
+				projectManager.DefaultCodeTemplatesPath);
 
 			projectManager.AddItemTemplateToProjectNew(codeItemInfo, true, 0);
 

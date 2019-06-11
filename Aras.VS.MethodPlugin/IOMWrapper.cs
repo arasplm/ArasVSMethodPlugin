@@ -7,12 +7,13 @@
 using System;
 using System.IO;
 using System.Reflection;
+using Aras.Method.Libs;
 
 namespace Aras.VS.MethodPlugin
 {
 	internal class IOMWrapper : IIOMWrapper
 	{
-		private readonly IMessageManager messageManager;
+		private readonly MessageManager messageManager;
 
 		private const string IOMnamespace = "Aras.IOM";
 		private const string localIOMPath = "ArasLibs\\IOM.dll";
@@ -20,7 +21,7 @@ namespace Aras.VS.MethodPlugin
 		private string projectFullName;
 		private Assembly IOMAssembly;
 
-		public IOMWrapper(IMessageManager messageManager, string projectFullName)
+		public IOMWrapper(MessageManager messageManager, string projectFullName)
 		{
 			this.messageManager = messageManager ?? throw new ArgumentNullException(nameof(messageManager));
 

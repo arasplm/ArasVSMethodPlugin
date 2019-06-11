@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Xml;
+using Aras.Method.Libs;
 
 namespace Aras.VS.MethodPlugin.Configurations
 {

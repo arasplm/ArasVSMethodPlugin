@@ -1,4 +1,5 @@
 ﻿using System;
+using Aras.Method.Libs;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.PackageManagement;
 using Aras.VS.MethodPlugin.Tests.Stubs;
@@ -11,14 +12,14 @@ namespace Aras.VS.MethodPlugin.Tests.PackageManagement
 	public class PackageManagementTest
 	{
 		private PackageManager packageManager;
-		private IMessageManager messageManager;
-		IAuthenticationManager authManager;
+		private MessageManager messageManager;
+		private IAuthenticationManager authManager;
 
 		[SetUp]
 		public void Init()
 		{
 			authManager = new AuthManagerStub();
-			messageManager = Substitute.For<IMessageManager>();
+			messageManager = Substitute.For<MessageManager>();
 			packageManager = new PackageManager(authManager, messageManager);
 		}
 

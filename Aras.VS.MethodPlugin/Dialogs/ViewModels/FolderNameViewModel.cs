@@ -7,20 +7,21 @@
 using System;
 using System.Windows;
 using System.Windows.Input;
+using Aras.Method.Libs;
 
 namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 {
 	public class FolderNameViewModel
 	{
 		private readonly IDialogFactory dialogFactory;
-		private readonly IMessageManager messageManager;
+		private readonly MessageManager messageManager;
 
 		private string folderName;
 
 		private ICommand okCommand;
 		private ICommand closeCommand;
 
-		public FolderNameViewModel(IDialogFactory dialogFactory, IMessageManager messageManager)
+		public FolderNameViewModel(IDialogFactory dialogFactory, MessageManager messageManager)
 		{
 			this.dialogFactory = dialogFactory ?? throw new ArgumentNullException(nameof(dialogFactory));
 			this.messageManager = messageManager ?? throw new ArgumentNullException(nameof(messageManager));

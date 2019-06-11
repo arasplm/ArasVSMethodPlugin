@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using EnvDTE;
@@ -28,7 +29,7 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectConfiguration
 			{
 				new MethodInfo
 				{
-					EventData = MethodPlugin.Code.EventSpecificData.None,
+					EventData = Aras.Method.Libs.Code.EventSpecificData.None,
 					ExecutionAllowedToId = "A73B655731924CD0B027E4F4D5FCC0A9",
 					ExecutionAllowedToKeyedName = "World",
 					InnovatorMethodConfigId = "6D5D2A114135409D82561DC1C422C87F",
@@ -63,7 +64,7 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectConfiguration
 			{
 				new MethodInfo
 				{
-					EventData = MethodPlugin.Code.EventSpecificData.None,
+					EventData = Aras.Method.Libs.Code.EventSpecificData.None,
 					ExecutionAllowedToId = "A73B655731924CD0B027E4F4D5FCC0A9",
 					ExecutionAllowedToKeyedName = "World",
 					InnovatorMethodConfigId = "6D5D2A114135409D82561DC1C422C87F",
@@ -84,7 +85,7 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectConfiguration
 
 			//Assert
 			Assert.AreEqual(projectConfiguraiton.MethodInfos.Count, methodInfo.Count);
-			Assert.AreEqual(projectConfiguraiton.MethodInfos.First().EventData, methodInfo.First().EventData);
+			Assert.AreEqual(projectConfiguraiton.MethodInfos.First().EventData, methodInfo.First().EventData); 
 			Assert.AreEqual(projectConfiguraiton.MethodInfos.First().ExecutionAllowedToId, methodInfo.First().ExecutionAllowedToId);
 			Assert.AreEqual(projectConfiguraiton.MethodInfos.First().ExecutionAllowedToKeyedName, methodInfo.First().ExecutionAllowedToKeyedName);
 			Assert.AreEqual(projectConfiguraiton.MethodInfos.First().InnovatorMethodConfigId, methodInfo.First().InnovatorMethodConfigId);
@@ -110,7 +111,7 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectConfiguration
 			{
 				new MethodInfo
 				{
-					EventData = MethodPlugin.Code.EventSpecificData.None,
+					EventData = Aras.Method.Libs.Code.EventSpecificData.None,
 					ExecutionAllowedToId = "A73B655731924CD0B027E4F4D5FCC0A9",
 					ExecutionAllowedToKeyedName = "World",
 					InnovatorMethodConfigId = "6D5D2A114135409D82561DC1C422C87F",
@@ -146,7 +147,7 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectConfiguration
 			{
 				new MethodInfo
 				{
-					EventData = MethodPlugin.Code.EventSpecificData.None,
+					EventData = Aras.Method.Libs.Code.EventSpecificData.None,
 					ExecutionAllowedToId = "A73B655731924CD0B027E4F4D5FCC0A9",
 					ExecutionAllowedToKeyedName = "World",
 					InnovatorMethodConfigId = "6D5D2A114135409D82561DC1C422C87F",
@@ -197,7 +198,7 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectConfiguration
 			//Arrange 
 			var methodInfo = new MethodInfo
 			{
-				EventData = MethodPlugin.Code.EventSpecificData.None,
+				EventData = Aras.Method.Libs.Code.EventSpecificData.None,
 				ExecutionAllowedToId = "A73B655731924CD0B027E4F4D5FCC0A9",
 				ExecutionAllowedToKeyedName = "World",
 				InnovatorMethodConfigId = "6D5D2A114135409D82561DC1C422C87F",

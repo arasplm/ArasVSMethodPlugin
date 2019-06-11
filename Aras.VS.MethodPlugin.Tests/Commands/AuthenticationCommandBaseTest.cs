@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using Aras.Method.Libs;
+using Aras.Method.Libs.Code;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.Commands;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.SolutionManagement;
-using Microsoft.VisualStudio.Shell.Interop;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -22,7 +23,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 		IProjectManager projectManager;
 		IProjectConfigurationManager projectConfigurationManager;
 		ICodeProviderFactory codeProviderFactory;
-		IMessageManager messageManager;
+		MessageManager messageManager;
 		private AuthenticationCommandBaseTest authenticationCommandBaseTest;
 
 		internal class AuthenticationCommandBaseTest : AuthenticationCommandBase
@@ -32,7 +33,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 				IProjectManager projectManager,
 				IProjectConfigurationManager projectConfigurationManager,
 				ICodeProviderFactory codeProviderFactory,
-				IMessageManager messageManager)
+				MessageManager messageManager)
 					: base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory, messageManager)
 			{
 
@@ -52,7 +53,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			dialogFactory = Substitute.For<IDialogFactory>();
 			projectManager = Substitute.For<IProjectManager>();
 			codeProviderFactory = Substitute.For<ICodeProviderFactory>();
-			messageManager = Substitute.For<IMessageManager>();
+			messageManager = Substitute.For<MessageManager>();
 			authenticationCommandBaseTest = new AuthenticationCommandBaseTest(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory, messageManager);
 			var projectConfiguraiton = Substitute.For<IProjectConfiguraiton>();
 			projectConfigurationManager.Load(projectManager.ProjectConfigPath).Returns(projectConfiguraiton);

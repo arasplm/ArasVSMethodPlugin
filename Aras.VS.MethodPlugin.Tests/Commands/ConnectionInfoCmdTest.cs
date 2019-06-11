@@ -1,4 +1,5 @@
 ﻿using System.Threading;
+using Aras.Method.Libs;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Commands;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
@@ -21,7 +22,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 		ProjectConfigurationManager projectConfigurationManager;
 		ConnectionInfoCmd сonnectionInfoCmd;
 		IVsUIShell iVsUIShell;
-		IMessageManager messageManager;
+		MessageManager messageManager;
 
 		[SetUp]
 		public void Init()
@@ -30,7 +31,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			projectConfigurationManager = new ProjectConfigurationManager();
 			dialogFactory = Substitute.For<IDialogFactory>();
 			authManager = Substitute.For<IAuthenticationManager>();
-			messageManager = Substitute.For<IMessageManager>();
+			messageManager = Substitute.For<MessageManager>();
 			ConnectionInfoCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, messageManager);
 			сonnectionInfoCmd = ConnectionInfoCmd.Instance;
 			iVsUIShell = Substitute.For<IVsUIShell>();

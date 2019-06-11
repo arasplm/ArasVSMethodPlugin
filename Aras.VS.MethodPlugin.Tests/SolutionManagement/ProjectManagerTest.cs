@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Aras.VS.MethodPlugin.Code;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
+using Aras.Method.Libs;
+using Aras.Method.Libs.Code;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.SolutionManagement;
@@ -23,7 +24,7 @@ namespace Aras.VS.MethodPlugin.Tests.SolutionManagement
 		private IDialogFactory dialogFactory;
 		private IIOWrapper iOWrapper;
 		private IVsPackageWrapper vsPackageWrapper;
-		private IMessageManager messageManager;
+		private MessageManager messageManager;
 
 		private ProjectItem mainMethodFileProjectItem;
 		private ProjectItem methodWrapperFileProjectItem;
@@ -37,7 +38,7 @@ namespace Aras.VS.MethodPlugin.Tests.SolutionManagement
 			this.dialogFactory = Substitute.For<IDialogFactory>();
 			this.iOWrapper = Substitute.For<IIOWrapper>();
 			this.vsPackageWrapper = Substitute.For<IVsPackageWrapper>();
-			this.messageManager = Substitute.For<IMessageManager>();
+			this.messageManager = Substitute.For<MessageManager>();
 			this.projectManager = new ProjectManager(serviceProvider, dialogFactory, iOWrapper, vsPackageWrapper, messageManager);
 		}
 

@@ -4,8 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using Aras.VS.MethodPlugin.Code;
-using Aras.VS.MethodPlugin.Templates;
+using Aras.Method.Libs.Code;
+using Aras.Method.Libs.Templates;
 
 namespace Aras.VS.MethodPlugin.Dialogs.Views
 {

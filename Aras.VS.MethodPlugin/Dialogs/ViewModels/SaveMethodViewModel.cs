@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using Aras.Method.Libs;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.ArasInnovator;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
@@ -25,7 +27,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private readonly IProjectConfigurationManager projectConfigurationManager;
 		private readonly PackageManager packageManager;
 		private readonly IArasDataProvider arasDataProvider;
-		private readonly IMessageManager messageManager;
+		private readonly MessageManager messageManager;
 
 		private IProjectConfiguraiton projectConfiguration;
 		private MethodItemTypeInfo methodItemTypeInfo;
@@ -64,7 +66,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			PackageManager packageManager,
 			IArasDataProvider arasDataProvider,
 			MethodInfo methodInformation,
-			IMessageManager messageManager,
+			MessageManager messageManager,
 			string methodCode,
 			string projectConfigPath,
 			string projectName,

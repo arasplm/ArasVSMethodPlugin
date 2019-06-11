@@ -7,13 +7,15 @@
 using System;
 using System.ComponentModel.Design;
 using System.Linq;
+using Aras.Method.Libs;
+using Aras.Method.Libs.Code;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
+using Aras.Method.Libs.Templates;
 using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.PackageManagement;
 using Aras.VS.MethodPlugin.SolutionManagement;
-using Aras.VS.MethodPlugin.Templates;
 using Microsoft.VisualStudio.Shell;
 
 namespace Aras.VS.MethodPlugin.Commands
@@ -38,7 +40,7 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// Adds our command handlers for menu (commands must exist in the command table file)
 		/// </summary>
 		/// <param name="package">Owner package, not null.</param>
-		public OpenFromArasCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IMessageManager messageManager) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory, messageManager)
+		public OpenFromArasCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, MessageManager messageManager) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory, messageManager)
 		{
 			if (projectManager.CommandService != null)
 			{
@@ -59,7 +61,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			private set;
 		}
 
-		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, IMessageManager messageManager)
+		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, MessageManager messageManager)
 		{
 			Instance = new OpenFromArasCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
 		}
@@ -71,9 +73,9 @@ namespace Aras.VS.MethodPlugin.Commands
 
 			var projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
 
-			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language, projectConfiguration);
+			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language);
 
-			var templateLoader = new TemplateLoader(this.dialogFactory, this.messageManager);
+			var templateLoader = new TemplateLoader();
 			templateLoader.Load(projectManager.MethodConfigPath);
 
 			var packageManager = new PackageManager(authManager, this.messageManager);
@@ -106,7 +108,7 @@ namespace Aras.VS.MethodPlugin.Commands
 				}
 			}
 
-			GeneratedCodeInfo codeInfo = codeProvider.GenerateCodeInfo(openViewResult.SelectedTemplate, openViewResult.SelectedEventSpecificData, openViewResult.MethodName, false, openViewResult.MethodCode, openViewResult.IsUseVSFormattingCode);
+			GeneratedCodeInfo codeInfo = codeProvider.GenerateCodeInfo(openViewResult.SelectedTemplate, openViewResult.SelectedEventSpecificData, openViewResult.MethodName, false, openViewResult.MethodCode, openViewResult.IsUseVSFormattingCode, projectManager.DefaultCodeTemplatesPath);
 			projectManager.CreateMethodTree(codeInfo);
 
 			var methodInfo = new MethodInfo()
