@@ -21,7 +21,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private readonly IProjectConfigurationManager configurationManager;
 		private readonly IProjectManager projectManager;
 
-		private IProjectConfiguraiton projectConfiguration;
 		private ConnectionInfo connectionInfo;
 
 		private ICommand closeCommand;
@@ -48,7 +47,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.editConnectionInfoCommand = new RelayCommand<object>(OnEditConnectionInfoCommandCliked);
 			this.logOutCommand = new RelayCommand<object>(OnLogOutCommandCliked, LogOutButtonIsEnabled);
 
-			ConnectionInformation = authenticationManager.InnovatorInstance == null ? null : projectConfiguration.Connections.First(c => c.LastConnection);
+			ConnectionInformation = authenticationManager.InnovatorInstance == null ? null : configurationManager.CurrentProjectConfiguraiton.Connections.First(c => c.LastConnection);
 		}
 
 		#region Properties
@@ -82,12 +81,12 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		private void OnEditConnectionInfoCommandCliked(object view)
 		{
-			var loginView = dialogFactory.GetLoginView(projectManager, projectConfiguration);
+			var loginView = dialogFactory.GetLoginView(projectManager, configurationManager.CurrentProjectConfiguraiton);
 
 			if (loginView.ShowDialog()?.DialogOperationResult == true)
 			{
 				configurationManager.Save(projectManager.ProjectConfigPath);
-				ConnectionInformation = projectConfiguration.Connections.First(c => c.LastConnection);
+				ConnectionInformation = configurationManager.CurrentProjectConfiguraiton.Connections.First(c => c.LastConnection);
 			}
 		}
 
