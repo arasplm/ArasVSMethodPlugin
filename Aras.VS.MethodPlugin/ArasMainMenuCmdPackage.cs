@@ -6,7 +6,6 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using Aras.Method.Libs;
 using Aras.Method.Libs.Code;
@@ -40,13 +39,14 @@ namespace Aras.VS.MethodPlugin
 	/// To get loaded into VS, the package must be referred by &lt;Asset Type="Microsoft.VisualStudio.VsPackage" ...&gt; in .vsixmanifest file.
 	/// </para>
 	/// </remarks>
-	[PackageRegistration(UseManagedResourcesOnly = true)]
+	[PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
 	[InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Info on this package for Help/About
 	[ProvideMenuResource("Menus.ctmenu", 1)]
 	[Guid(ArasMainMenuCmdPackage.PackageGuidString)]
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
-	[ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string)]
-	public sealed class ArasMainMenuCmdPackage : Package
+	[ProvideAutoLoad(VSConstants.UICONTEXT.NoSolution_string, PackageAutoLoadFlags.BackgroundLoad)]
+	[ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string, PackageAutoLoadFlags.BackgroundLoad)]
+	public sealed class ArasMainMenuCmdPackage : AsyncPackage
 	{
 		/// <summary>
 		/// ArasMainMenuCommandPackagePackage GUID string.
@@ -83,20 +83,25 @@ namespace Aras.VS.MethodPlugin
 		/// Initialization of the package; this method is called right after the package is sited, so this is the place
 		/// where you can put all the initialization code that rely on services provided by VisualStudio.
 		/// </summary>
-		protected override void Initialize()
+		protected override async System.Threading.Tasks.Task InitializeAsync(System.Threading.CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
 		{
-			base.Initialize();
-			var dllPath = Assembly.GetExecutingAssembly().Location;
+			await base.InitializeAsync(cancellationToken, progress);
+
+			// When initialized asynchronously, we *may* be on a background thread at this point.
+			// Do any initialization that requires the UI thread after switching to the UI thread.
+			// Otherwise, remove the switch to the UI thread if you don't need it.
+			await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
+
+			IVisualStudioServiceProvider serviceProvider = new VisualStudioServiceProvider(this);
 
 			this.messageManager = new VisualStudioMessageManager();
 			this.iOWrapper = new IOWrapper();
 			this.projectConfigurationManager = new ProjectConfigurationManager();
-			
 			this.vsPackageWrapper = new VsPackageWrapper();
-			this.projectManager = new ProjectManager(this, iOWrapper, vsPackageWrapper, messageManager, projectConfigurationManager);
+			this.projectManager = new ProjectManager(serviceProvider, iOWrapper, vsPackageWrapper, messageManager, projectConfigurationManager);
 			this.authManager = new AuthenticationManager(messageManager, projectManager);
 			this.arasDataProvider = new ArasDataProvider(authManager, messageManager);
-			this.dialogFactory = new DialogFactory(authManager, arasDataProvider, this, iOWrapper, messageManager);
+			this.dialogFactory = new DialogFactory(authManager, arasDataProvider, serviceProvider, iOWrapper, messageManager);
 			ICodeFormatter codeFormatter = new VisualStudioCodeFormatter(this.projectManager);
 			this.codeProviderFactory = new CodeProviderFactory(codeFormatter, messageManager, iOWrapper);
 			this.globalConfiguration = new GlobalConfiguration(iOWrapper);
@@ -113,7 +118,7 @@ namespace Aras.VS.MethodPlugin
 			Commands.DebugMethodCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
 			Commands.MoveToCmd.Initialize(projectManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
 
-			var dte = (DTE)this.GetService(typeof(DTE));
+			var dte = (DTE)serviceProvider.GetService(typeof(DTE));
 			this.projectItemsEvents = dte.Events.GetObject("CSharpProjectItemsEvents") as ProjectItemsEvents;
 			if (this.projectItemsEvents != null)
 			{

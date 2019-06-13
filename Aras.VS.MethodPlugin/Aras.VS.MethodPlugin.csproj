@@ -222,6 +222,7 @@
     <Compile Include="ItemSearch\ItemSearchColumnProvider.cs" />
     <Compile Include="ItemSearch\IUpdatedCell.cs" />
     <Compile Include="Dialogs\Views\IView.cs" />
+    <Compile Include="IVisualStudioServiceProvider.cs" />
     <Compile Include="IVsPackageWrapper.cs" />
     <Compile Include="PackageManagement\PackageManager.cs" />
     <Compile Include="Dialogs\ViewModels\ShortMethodInfoViewModel.cs" />
@@ -272,6 +273,7 @@
     <Compile Include="Utilities\Utils.cs" />
     <Compile Include="Utilities\XmlNodeExt.cs" />
     <Compile Include="VisualStudioMessageManager.cs" />
+    <Compile Include="VisualStudioServiceProvider.cs" />
     <Compile Include="VSPackage.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

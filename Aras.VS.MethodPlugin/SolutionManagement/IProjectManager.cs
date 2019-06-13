@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using Aras.Method.Libs.Aras.Package;
 using Aras.Method.Libs.Code;
 using Aras.Method.Libs.Configurations.ProjectConfigurations;
@@ -59,7 +60,7 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 
 		ProjectItems ServerMethodFolderItems { get; }
 
-		OleMenuCommandService CommandService { get; }
+		IMenuCommandService CommandService { get; }
 
 		VisualStudioWorkspace VisualStudioWorkspace { get; }
 

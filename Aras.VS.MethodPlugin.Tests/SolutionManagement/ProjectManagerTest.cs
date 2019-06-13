@@ -21,7 +21,7 @@ namespace Aras.VS.MethodPlugin.Tests.SolutionManagement
 	{
 		private IDialogFactory dialogFactory;
 		private ProjectManager projectManager;
-		private IServiceProvider serviceProvider;
+		private IVisualStudioServiceProvider serviceProvider;
 		private IIOWrapper iOWrapper;
 		private IVsPackageWrapper vsPackageWrapper;
 		private MessageManager messageManager;
@@ -38,7 +38,7 @@ namespace Aras.VS.MethodPlugin.Tests.SolutionManagement
 		public void Setup()
 		{
 			this.dialogFactory = Substitute.For<IDialogFactory>();
-			this.serviceProvider = Substitute.For<IServiceProvider>();
+			this.serviceProvider = Substitute.For<IVisualStudioServiceProvider>();
 			this.iOWrapper = Substitute.For<IIOWrapper>();
 			this.iOWrapper.PathIsPathRooted(methodsFolderPath).Returns(true);
 			this.vsPackageWrapper = Substitute.For<IVsPackageWrapper>();

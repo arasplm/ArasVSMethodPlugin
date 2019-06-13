@@ -35,7 +35,7 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 {
 	public class ProjectManager : IProjectManager
 	{
-		private readonly IServiceProvider serviceProvider;
+		private readonly IVisualStudioServiceProvider serviceProvider;
 		private readonly IIOWrapper iOWrapper;
 		private readonly IVsPackageWrapper vsPackageWrapper;
 		private readonly MessageManager messageManager;
@@ -43,7 +43,7 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 
 		private VisualStudioWorkspace visualStudioWorkspace;
 
-		public ProjectManager(IServiceProvider serviceProvider,
+		public ProjectManager(IVisualStudioServiceProvider serviceProvider,
 			IIOWrapper iOWrapper,
 			IVsPackageWrapper vsPackageWrapper,
 			MessageManager messageManager,
@@ -268,11 +268,11 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 			}
 		}
 
-		public OleMenuCommandService CommandService
+		public IMenuCommandService CommandService
 		{
 			get
 			{
-				return serviceProvider.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
+				return serviceProvider.GetService(typeof(IMenuCommandService)) as IMenuCommandService;
 			}
 		}
 

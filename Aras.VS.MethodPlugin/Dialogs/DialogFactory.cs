@@ -31,11 +31,15 @@ namespace Aras.VS.MethodPlugin.Dialogs
 	{
 		private IAuthenticationManager authManager;
 		private readonly IArasDataProvider arasDataProvider;
-		private readonly IServiceProvider serviceProvider;
+		private readonly IVisualStudioServiceProvider serviceProvider;
 		private readonly IIOWrapper iOWrapper;
 		private readonly MessageManager messageManager;
 
-		public DialogFactory(IAuthenticationManager authManager, IArasDataProvider arasDataProvider, IServiceProvider serviceProvider, IIOWrapper iOWrapper, MessageManager messageManager)
+		public DialogFactory(IAuthenticationManager authManager,
+			IArasDataProvider arasDataProvider,
+			IVisualStudioServiceProvider serviceProvider,
+			IIOWrapper iOWrapper,
+			MessageManager messageManager)
 		{
 			if (authManager == null) throw new ArgumentNullException(nameof(authManager));
 			if (arasDataProvider == null) throw new ArgumentNullException(nameof(arasDataProvider));
