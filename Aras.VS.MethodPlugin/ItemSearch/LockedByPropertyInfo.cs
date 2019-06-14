@@ -6,7 +6,7 @@
 
 namespace Aras.VS.MethodPlugin.ItemSearch
 {
-	public class LockedByPropertyInfo : PropertyInfo
+	public class LockedByPropertyInfo : ItemSearchPropertyInfo
 	{
 		public bool IsLocked { get; set; }
 

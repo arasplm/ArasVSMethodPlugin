@@ -98,7 +98,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 		public event Action ClearSearch;
 		public event Action<List<string>> SelectedItemChanged;
 
-		public void SetSearchColumns(List<PropertyInfo> searchColumnList)
+		public void SetSearchColumns(List<ItemSearchPropertyInfo> searchColumnList)
 		{
 			partsGrid.Rows.Clear();
 			partsGrid.Columns.Clear();

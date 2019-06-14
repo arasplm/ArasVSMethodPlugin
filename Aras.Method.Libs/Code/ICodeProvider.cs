@@ -14,41 +14,29 @@ namespace Aras.Method.Libs.Code
 	{
 		string Language { get; }
 
-		string LoadMethodCode(string sourceCode, MethodInfo methodInformation, string serverMethodFolderPath);
+		string LoadMethodCode(string methodFolderPath, string sourceCode);
 
-		GeneratedCodeInfo GenerateCodeInfo(TemplateInfo template, EventSpecificDataType eventData, string methodName, bool useAdvancedCode, string codeToInsert, bool useCodeFormatting, string defaultCodeTemplatesPath);
+		GeneratedCodeInfo GenerateCodeInfo(TemplateInfo template, EventSpecificDataType eventData, string methodName, string methodCode, bool useCodeFormatting);
 
-		GeneratedCodeInfo CreateWrapper(TemplateInfo template, EventSpecificDataType eventData, string methodName, bool useCodeFormatting, string defaultCodeTemplatesPath);
-
-		GeneratedCodeInfo CreateMainNew(GeneratedCodeInfo generatedCodeInfo,
-			TemplateInfo template,
-			EventSpecificDataType eventData,
-			string methodName,
-			bool useAdvancedCode,
-			string codeToInsert,
-			string defaultCodeTemplatesPath);
-
-		GeneratedCodeInfo CreatePartialClasses(GeneratedCodeInfo methodInfo);
-
-		CodeInfo CreateCodeItemInfo(MethodInfo methodInformation,
+		CodeInfo CreatePartialCodeItemInfo(MethodInfo methodInformation,
 			string fileName,
-			CodeType codeType,
 			CodeElementType codeElementType,
 			bool useVSFormatting,
 			string serverMethodFolderPath,
 			string selectedFolderPath,
 			string methodName,
-			string MethodConfigPath,
-			string MethodPath,
-			string defaultCodeTemplatesPath);
+			TemplateLoader templateLoader,
+			string MethodPath);
 
-		GeneratedCodeInfo CreateTestsNew(
-			GeneratedCodeInfo generatedCodeInfo,
-			TemplateInfo template, EventSpecificDataType
-			eventData,
+		CodeInfo CreateExternalCodeItemInfo(MethodInfo methodInformation,
+			string fileName,
+			CodeElementType codeElementType,
+			bool useVSFormatting,
+			string serverMethodFolderPath,
+			string selectedFolderPath,
 			string methodName,
-			bool useAdvancedCode,
-			string defaultCodeTemplatesPath);
+			TemplateLoader templateLoader,
+			string MethodPath);
 
 		CodeInfo RemoveActiveNodeFromActiveDocument(Document activeDocument, SyntaxNode activeSyntaxNode, string serverMethodFolderPath);
 
@@ -58,6 +46,6 @@ namespace Aras.Method.Libs.Code
 
 		CodeInfo InsertActiveNodeToExternal(string externalFullPath, string serverMethodFolderPath, string methodName, SyntaxNode activeSyntaxNode, string activeDocumentMethodFullPath);
 
-		CodeInfo UpdateSourceCodeToInsertExternalItems(string sourceCode, MethodInfo methodInformation, string serverMethodFolderPath);
+		CodeInfo UpdateSourceCodeToInsertExternalItems(string methodFolderPath, string sourceCode, MethodInfo methodInformation);
 	}
 }

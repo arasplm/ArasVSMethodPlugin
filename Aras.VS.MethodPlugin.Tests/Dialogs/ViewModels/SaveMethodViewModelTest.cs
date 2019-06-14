@@ -4,10 +4,10 @@ using System.IO;
 using System.Xml;
 using Aras.IOM;
 using Aras.Method.Libs;
+using Aras.Method.Libs.Aras.Package;
 using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.ArasInnovator;
 using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.Dialogs.ViewModels;
 using Aras.VS.MethodPlugin.ItemSearch;
@@ -32,7 +32,6 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 		private IAuthenticationManager authManager;
 		private IDialogFactory dialogFactory;
 		private IProjectConfigurationManager projectConfigurationManager;
-		private IProjectConfiguraiton projectConfiguration;
 		private MessageManager messageManager;
 		private PackageManager packageManager;
 		private IArasDataProvider arasDataProvider;
@@ -46,12 +45,16 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 
 			this.authManager = new AuthenticationManagerProxy(this.serverConnection, innovator, new InnovatorUser(), Substitute.For<IIOMWrapper>());
 			this.dialogFactory = Substitute.For<IDialogFactory>();
+			IProjectConfiguraiton projectConfiguration = Substitute.For<IProjectConfiguraiton>();
 			this.projectConfigurationManager = Substitute.For<IProjectConfigurationManager>();
-			this.projectConfiguration = Substitute.For<IProjectConfiguraiton>();
+			projectConfigurationManager.CurrentProjectConfiguraiton.Returns(projectConfiguration);
 			this.messageManager = Substitute.For<MessageManager>();
 			this.packageManager = new PackageManager(authManager, messageManager);
 			this.arasDataProvider = Substitute.For<IArasDataProvider>();
-			this.methodInformation = new MethodInfo();
+			this.methodInformation = new MethodInfo()
+			{
+				Package = new PackageInfo(string.Empty)
+			};
 
 			XmlDocument methodItemTypeXmlDocument = new XmlDocument();
 			methodItemTypeXmlDocument.Load(Path.Combine(currentPath, @"Dialogs\ViewModels\TestData\MethodItemType.xml"));
@@ -73,12 +76,11 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 				}
 			};
 
-			this.projectConfiguration.Connections.Returns(connectionInfos);
+			projectConfiguration.Connections.Returns(connectionInfos);
 
 			saveMethodViewModel = new SaveMethodViewModel(this.authManager,
 				this.dialogFactory,
 				this.projectConfigurationManager,
-				this.projectConfiguration,
 				this.packageManager,
 				this.arasDataProvider,
 				this.methodInformation,
@@ -99,7 +101,6 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 				SaveMethodViewModel viewModel = new SaveMethodViewModel(null,
 					this.dialogFactory,
 					this.projectConfigurationManager,
-					this.projectConfiguration, 
 					this.packageManager, 
 					this.arasDataProvider, 
 					this.methodInformation,
@@ -121,7 +122,6 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 				SaveMethodViewModel viewModel = new SaveMethodViewModel(this.authManager,
 					null,
 					this.projectConfigurationManager,
-					this.projectConfiguration,
 					this.packageManager,
 					this.arasDataProvider,
 					this.methodInformation,
@@ -143,7 +143,6 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 				SaveMethodViewModel viewModel = new SaveMethodViewModel(this.authManager,
 					this.dialogFactory,
 					null,
-					this.projectConfiguration,
 					this.packageManager,
 					this.arasDataProvider,
 					this.methodInformation,
@@ -154,29 +153,6 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 					"projectFullName");
 			});
 		}
-
-		[Test]
-		public void Ctor_ShouldProjectConfiguraitonThrowArgumentNullException()
-		{
-			//Assert
-			Assert.Throws<ArgumentNullException>(() =>
-			{
-				//Act
-				SaveMethodViewModel viewModel = new SaveMethodViewModel(this.authManager,
-					this.dialogFactory,
-					this.projectConfigurationManager,
-					null,
-					this.packageManager,
-					this.arasDataProvider,
-					this.methodInformation,
-					this.messageManager,
-					"methodCode",
-					"projectConfPath",
-					"projectName",
-					"projectFullName");
-			});
-		}
-
 
 		[Test]
 		public void Ctor_ShouldPackageManagerThrowArgumentNullException()
@@ -188,7 +164,6 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 				SaveMethodViewModel viewModel = new SaveMethodViewModel(this.authManager,
 					this.dialogFactory,
 					this.projectConfigurationManager,
-					this.projectConfiguration,
 					null,
 					this.arasDataProvider,
 					this.methodInformation,
@@ -210,7 +185,6 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 				SaveMethodViewModel viewModel = new SaveMethodViewModel(this.authManager,
 					this.dialogFactory,
 					this.projectConfigurationManager,
-					this.projectConfiguration,
 					this.packageManager,
 					null,
 					this.methodInformation,
@@ -232,7 +206,6 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 				SaveMethodViewModel viewModel = new SaveMethodViewModel(this.authManager,
 					this.dialogFactory,
 					this.projectConfigurationManager,
-					this.projectConfiguration,
 					this.packageManager,
 					this.arasDataProvider,
 					null,
@@ -248,7 +221,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 		public void SelectedIdentityCommand()
 		{
 			//Arange
-			projectConfiguration.LastSavedSearch.Returns(new Dictionary<string, List<PropertyInfo>>());
+			projectConfigurationManager.CurrentProjectConfiguraiton.LastSavedSearch.Returns(new Dictionary<string, List<PropertyInfo>>());
 
 			List<PropertyInfo> lastSavedSearch = new List<PropertyInfo>();
 			IItemSearchView view = Substitute.For<IItemSearchView>();
@@ -278,7 +251,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 			//Assert
 			Assert.AreEqual("A73B655731924CD0B027E4F4D5FCC0A9", saveMethodViewModel.SelectedIdentityId);
 			Assert.AreEqual("World", saveMethodViewModel.SelectedIdentityKeyedName);
-			Assert.AreEqual(lastSavedSearch, this.projectConfiguration.LastSavedSearch["Identity"]);
+			Assert.AreEqual(lastSavedSearch, projectConfigurationManager.CurrentProjectConfiguraiton.LastSavedSearch["Identity"]);
 		}
 
 		[Test]

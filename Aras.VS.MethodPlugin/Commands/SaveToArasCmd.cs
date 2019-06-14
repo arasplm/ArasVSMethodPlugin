@@ -14,7 +14,6 @@ using Aras.Method.Libs.Code;
 using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.Method.Libs.Templates;
 using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.PackageManagement;
 using Aras.VS.MethodPlugin.SolutionManagement;
@@ -89,24 +88,23 @@ namespace Aras.VS.MethodPlugin.Commands
 		{
 			var project = projectManager.SelectedProject;
 
-			var projectConfigPath = projectManager.ProjectConfigPath;
-			var methodConfigPath = projectManager.MethodConfigPath;
-
-			var projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
-
 			string selectedMethodPath = projectManager.MethodPath;
 			string sourceCode = File.ReadAllText(selectedMethodPath, new UTF8Encoding(true));
 			string selectedMethodName = Path.GetFileNameWithoutExtension(selectedMethodPath);
 
-			MethodInfo methodInformation = projectConfiguration.MethodInfos.FirstOrDefault(m => m.MethodName == selectedMethodName);
+			string projectConfigPath = projectManager.ProjectConfigPath;
+
+			MethodInfo methodInformation = projectConfigurationManager.CurrentProjectConfiguraiton.MethodInfos.FirstOrDefault(m => m.MethodName == selectedMethodName);
 			if (methodInformation == null)
 			{
 				throw new Exception();
 			}
 
-			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language);
+			string methodWorkingFolder = Path.Combine(projectManager.ServerMethodFolderPath, methodInformation.Package.MethodFolderPath, methodInformation.MethodName);
 
-			CodeInfo codeItemInfo = codeProvider.UpdateSourceCodeToInsertExternalItems(sourceCode, methodInformation, projectManager.ServerMethodFolderPath);
+			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(projectManager.Language);
+
+			CodeInfo codeItemInfo = codeProvider.UpdateSourceCodeToInsertExternalItems(methodWorkingFolder, sourceCode, methodInformation);
 			if (codeItemInfo != null)
 			{
 				var dialogResult = dialogFactory.GetMessageBoxWindow().ShowDialog(messageManager.GetMessage("CouldNotInsertExternalItemsInsideOfMethodCodeSection"),
@@ -118,22 +116,22 @@ namespace Aras.VS.MethodPlugin.Commands
 					return;
 				}
 
-				projectManager.AddItemTemplateToProjectNew(codeItemInfo, true, 0);
+				projectManager.AddItemTemplateToProjectNew(codeItemInfo, methodInformation.Package.MethodFolderPath, true, 0);
 				sourceCode = codeItemInfo.Code;
 			}
 
-			string methodCode = codeProvider.LoadMethodCode(sourceCode, methodInformation, projectManager.ServerMethodFolderPath);
+			string methodCode = codeProvider.LoadMethodCode(methodWorkingFolder, sourceCode);
 
 			var packageManager = new PackageManager(authManager, this.messageManager);
-			var saveView = dialogFactory.GetSaveToArasView(projectConfigurationManager, projectConfiguration, packageManager, methodInformation, methodCode, projectConfigPath, project.Name, project.FullName);
+			var saveView = dialogFactory.GetSaveToArasView(projectConfigurationManager, packageManager, methodInformation, methodCode, projectConfigPath, project.Name, project.FullName);
 			var saveViewResult = saveView.ShowDialog();
 			if (saveViewResult?.DialogOperationResult != true)
 			{
 				return;
 			}
 
-			var templateLoader = new TemplateLoader();
-			templateLoader.Load(methodConfigPath);
+			TemplateLoader templateLoader = new TemplateLoader();
+			templateLoader.Load(projectManager.MethodConfigPath);
 
 			dynamic currentMethodItem = saveViewResult.MethodItem;
 
@@ -181,27 +179,28 @@ namespace Aras.VS.MethodPlugin.Commands
 			var newId = currentMethodItem.getID();
 			if (string.IsNullOrEmpty(saveViewResult.CurrentMethodPackage))
 			{
-				packageManager.AddPackageElementToPackageDefinition(newId, saveViewResult.MethodName, saveViewResult.SelectedPackage);
+				packageManager.AddPackageElementToPackageDefinition(newId, saveViewResult.MethodName, saveViewResult.SelectedPackageInfo.Name);
 			}
 			else
 			{
-				if (!string.Equals(saveViewResult.CurrentMethodPackage, saveViewResult.SelectedPackage))
+				if (!string.Equals(saveViewResult.CurrentMethodPackage, saveViewResult.SelectedPackageInfo))
 				{
 					packageManager.DeletePackageElementByNameFromPackageDefinition(saveViewResult.MethodName);
-					packageManager.AddPackageElementToPackageDefinition(newId, saveViewResult.MethodName, saveViewResult.SelectedPackage);
+					packageManager.AddPackageElementToPackageDefinition(newId, saveViewResult.MethodName, saveViewResult.SelectedPackageInfo.Name);
 				}
 			}
 
-			if (methodInformation.MethodName == saveViewResult.MethodName)
+			if (methodInformation.MethodName == saveViewResult.MethodName &&
+				methodInformation.Package.Name == saveViewResult.SelectedPackageInfo.Name)
 			{
 				methodInformation.InnovatorMethodConfigId = currentMethodItem.getProperty("config_id");
 				methodInformation.InnovatorMethodId = newId;
-				methodInformation.PackageName = saveViewResult.SelectedPackage;
+				methodInformation.Package = saveViewResult.SelectedPackageInfo;
 				methodInformation.ExecutionAllowedToKeyedName = saveViewResult.SelectedIdentityKeyedName;
 				methodInformation.ExecutionAllowedToId = saveViewResult.SelectedIdentityId;
 				methodInformation.MethodComment = saveViewResult.MethodComment;
 
-				projectConfigurationManager.Save(projectConfigPath, projectConfiguration);
+				projectConfigurationManager.Save(projectConfigPath);
 			}
 
 			var messageBoxWindow = dialogFactory.GetMessageBoxWindow();

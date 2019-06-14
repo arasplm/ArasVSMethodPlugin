@@ -12,7 +12,7 @@ namespace Aras.VS.MethodPlugin.ItemSearch
 	{
 		public SavedSearch()
 		{
-			SavedSearchProperties = new List<PropertyInfo>();
+			SavedSearchProperties = new List<ItemSearchPropertyInfo>();
 		}
 
 		public string SearchId { get; set; }
@@ -21,7 +21,7 @@ namespace Aras.VS.MethodPlugin.ItemSearch
 
 		public string ItemName { get; set; }
 
-		public List<PropertyInfo> SavedSearchProperties { get; set; }
+		public List<ItemSearchPropertyInfo> SavedSearchProperties { get; set; }
 
 		public int Page { get; set; }
 

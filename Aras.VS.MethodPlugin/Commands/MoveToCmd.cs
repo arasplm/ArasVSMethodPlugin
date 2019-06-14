@@ -10,7 +10,6 @@ using System.Linq;
 using Aras.Method.Libs;
 using Aras.Method.Libs.Code;
 using Aras.Method.Libs.Configurations.ProjectConfigurations;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using Microsoft.CodeAnalysis;
@@ -82,8 +81,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			string activeDocumentMethodFolderPath = projectManager.ActiveDocumentMethodFolderPath;
 			string serverMethodFolderPath = projectManager.ServerMethodFolderPath;
 
-			string projectConfigPath = projectManager.ProjectConfigPath;
-			IProjectConfiguraiton projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
+			MethodInfo methodInformation = projectConfigurationManager.CurrentProjectConfiguraiton.MethodInfos.FirstOrDefault(m => m.MethodName == activeDocumentMethodName);
 
 			if (string.Equals(activeDocument.FilePath, activeDocumentMethodFullPath, StringComparison.InvariantCultureIgnoreCase))
 			{
@@ -108,28 +106,10 @@ namespace Aras.VS.MethodPlugin.Commands
 					itemCodeInfo = codeProvider.InsertActiveNodeToExternal(moveToViewResult.SelectedFullPath, serverMethodFolderPath, activeDocumentMethodName, activeSyntaxNode, projectManager.ActiveDocumentMethodFullPath);
 				}
 
-				projectManager.AddItemTemplateToProjectNew(activeDocumentCodeInfo, false);
-				projectManager.AddItemTemplateToProjectNew(itemCodeInfo, false);
+				projectManager.AddItemTemplateToProjectNew(activeDocumentCodeInfo, methodInformation.Package.MethodFolderPath, false);
+				projectManager.AddItemTemplateToProjectNew(itemCodeInfo, methodInformation.Package.MethodFolderPath, false);
 
-				MethodInfo methodInformation = projectConfiguration.MethodInfos.FirstOrDefault(m => m.MethodName == activeDocumentMethodName);
-				if (moveToViewResult.SelectedCodeType == CodeType.Partial)
-				{
-					bool nodePathExists = methodInformation.PartialClasses.Exists(x => string.Equals(x, itemCodeInfo.Path, StringComparison.InvariantCultureIgnoreCase));
-					if (!nodePathExists)
-					{
-						methodInformation.PartialClasses.Add(itemCodeInfo.Path);
-					}
-				}
-				else
-				{
-					bool nodePathExists = methodInformation.ExternalItems.Exists(x => string.Equals(x, itemCodeInfo.Path, StringComparison.InvariantCultureIgnoreCase));
-					if (!nodePathExists)
-					{
-						methodInformation.ExternalItems.Add(itemCodeInfo.Path);
-					}
-				}
-
-				projectConfigurationManager.Save(projectConfigPath, projectConfiguration);
+				projectConfigurationManager.Save(projectManager.ProjectConfigPath);
 			}
 			else
 			{
@@ -146,8 +126,8 @@ namespace Aras.VS.MethodPlugin.Commands
 					ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(activeDocument.Project.Language);
 					CodeInfo activeDocumentCodeInfo = codeProvider.RemoveActiveNodeFromActiveDocument(activeDocument, activeSyntaxNode, serverMethodFolderPath);
 					CodeInfo methodDocumentCodeInfo = codeProvider.InsertActiveNodeToMainMethod(activeDocumentMethodFullPath, serverMethodFolderPath, activeSyntaxNode, activeDocument.FilePath);
-					projectManager.AddItemTemplateToProjectNew(activeDocumentCodeInfo, false);
-					projectManager.AddItemTemplateToProjectNew(methodDocumentCodeInfo, false);
+					projectManager.AddItemTemplateToProjectNew(activeDocumentCodeInfo, methodInformation.Package.MethodFolderPath, false);
+					projectManager.AddItemTemplateToProjectNew(methodDocumentCodeInfo, methodInformation.Package.MethodFolderPath, false);
 				}
 			}
 		}

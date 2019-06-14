@@ -15,7 +15,6 @@ using Aras.Method.Libs.Code;
 using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.Method.Libs.Templates;
 using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.PackageManagement;
 using Aras.VS.MethodPlugin.SolutionManagement;
@@ -76,20 +75,14 @@ namespace Aras.VS.MethodPlugin.Commands
 
 		public override void ExecuteCommandImpl(object sender, EventArgs args)
 		{
-			var project = projectManager.SelectedProject;
-			string projectConfigPath = projectManager.ProjectConfigPath;
-			string methodConfigPath = projectManager.MethodConfigPath;
-
-			var projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
-
-			var templateLoader = new TemplateLoader();
-			templateLoader.Load(methodConfigPath);
+			TemplateLoader templateLoader = new TemplateLoader();
+			templateLoader.Load(projectManager.MethodConfigPath);
 
 			var packageManager = new PackageManager(authManager, this.messageManager);
 
 			string selectedMethodPath = projectManager.MethodPath;
 			string selectedMethodName = Path.GetFileNameWithoutExtension(selectedMethodPath);
-			MethodInfo methodInformation = projectConfiguration.MethodInfos.FirstOrDefault(m => m.MethodName == selectedMethodName);
+			MethodInfo methodInformation = projectConfigurationManager.CurrentProjectConfiguraiton.MethodInfos.FirstOrDefault(m => m.MethodName == selectedMethodName);
 			if (methodInformation == null)
 			{
 				throw new Exception();
@@ -106,10 +99,12 @@ namespace Aras.VS.MethodPlugin.Commands
 				manifastFileName = "imports.mf";
 			}
 
-			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language);
+			string methodWorkingFolder = Path.Combine(projectManager.ServerMethodFolderPath, methodInformation.Package.MethodFolderPath, methodInformation.MethodName);
+
+			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(projectManager.Language);
 
 			string sourceCode = File.ReadAllText(selectedMethodPath, new UTF8Encoding(true));
-			CodeInfo codeItemInfo = codeProvider.UpdateSourceCodeToInsertExternalItems(sourceCode, methodInformation, projectManager.ServerMethodFolderPath);
+			CodeInfo codeItemInfo = codeProvider.UpdateSourceCodeToInsertExternalItems(methodWorkingFolder, sourceCode, methodInformation);
 			if (codeItemInfo != null)
 			{
 				var dialogResult = dialogFactory.GetMessageBoxWindow().ShowDialog(messageManager.GetMessage("CouldNotInsertExternalItemsInsideOfMethodCodeSection"),
@@ -121,11 +116,11 @@ namespace Aras.VS.MethodPlugin.Commands
 					return;
 				}
 
-				projectManager.AddItemTemplateToProjectNew(codeItemInfo, true, 0);
+				projectManager.AddItemTemplateToProjectNew(codeItemInfo, methodInformation.Package.MethodFolderPath, true, 0);
 				sourceCode = codeItemInfo.Code;
 			}
 
-			var saveView = dialogFactory.GetSaveToPackageView(projectConfiguration, templateLoader, packageManager, codeProvider, projectManager, methodInformation, sourceCode);
+			var saveView = dialogFactory.GetSaveToPackageView(projectConfigurationManager.CurrentProjectConfiguraiton, templateLoader, packageManager, codeProvider, projectManager, methodInformation, sourceCode);
 			var saveViewResult = saveView.ShowDialog();
 			if (saveViewResult?.DialogOperationResult != true)
 			{
@@ -144,10 +139,9 @@ namespace Aras.VS.MethodPlugin.Commands
 
 				if (packageXmlNode == null)
 				{
-					pathPackageToSaveMethod = $"{saveViewResult.SelectedPackage}\\Import";
 					XmlElement packageXmlElement = xmlDocument.CreateElement("package");
-					packageXmlElement.SetAttribute("name", saveViewResult.SelectedPackage);
-					packageXmlElement.SetAttribute("path", pathPackageToSaveMethod);
+					packageXmlElement.SetAttribute("name", saveViewResult.SelectedPackage.Name);
+					packageXmlElement.SetAttribute("path", saveViewResult.SelectedPackage.Path);
 					importsXmlNode.AppendChild(packageXmlElement);
 
 					XmlWriterSettings settings = new XmlWriterSettings();
@@ -168,12 +162,11 @@ namespace Aras.VS.MethodPlugin.Commands
 			}
 			else
 			{
-				pathPackageToSaveMethod = $"{saveViewResult.SelectedPackage}\\Import";
 				var xmlDocument = new XmlDocument();
 				XmlElement importsXmlNode = xmlDocument.CreateElement("imports");
 				XmlElement packageXmlElement = xmlDocument.CreateElement("package");
-				packageXmlElement.SetAttribute("name", saveViewResult.SelectedPackage);
-				packageXmlElement.SetAttribute("path", pathPackageToSaveMethod);
+				packageXmlElement.SetAttribute("name", saveViewResult.SelectedPackage.Name);
+				packageXmlElement.SetAttribute("path", saveViewResult.SelectedPackage.Path);
 				importsXmlNode.AppendChild(packageXmlElement);
 				xmlDocument.AppendChild(importsXmlNode);
 
@@ -188,7 +181,7 @@ namespace Aras.VS.MethodPlugin.Commands
 				}
 			}
 
-			string methodPath = Path.Combine(rootPath, $"{pathPackageToSaveMethod}\\Method\\");
+			string methodPath = Path.Combine(rootPath, saveViewResult.SelectedPackage.MethodFolderPath);
 			Directory.CreateDirectory(methodPath);
 
 			string methodId = null;
@@ -219,20 +212,21 @@ namespace Aras.VS.MethodPlugin.Commands
 			resultXmlDoc.LoadXml(methodTemplate);
 			SaveToFile(methodFilePath, resultXmlDoc);
 
-			if (methodInformation.MethodName == saveViewResult.MethodName)
+			if (methodInformation.MethodName == saveViewResult.MethodName &&
+				methodInformation.Package.Name == saveViewResult.SelectedPackage.Name)
 			{
-				methodInformation.PackageName = saveViewResult.SelectedPackage;
+				methodInformation.Package = saveViewResult.SelectedPackage;
 				methodInformation.ExecutionAllowedToKeyedName = saveViewResult.SelectedIdentityKeyedName;
 				methodInformation.ExecutionAllowedToId = saveViewResult.SelectedIdentityId;
 				methodInformation.MethodComment = saveViewResult.MethodComment;
 			}
 
-			projectConfiguration.LastSelectedDir = rootPath;
-			projectConfigurationManager.Save(projectConfigPath, projectConfiguration);
+			projectConfigurationManager.CurrentProjectConfiguraiton.LastSelectedDir = rootPath;
+			projectConfigurationManager.Save(projectManager.ProjectConfigPath);
 
 			// Show a message box to prove we were here
 			var messageWindow = dialogFactory.GetMessageBoxWindow();
-			messageWindow.ShowDialog(this.messageManager.GetMessage("MethodSavedToPackage", saveViewResult.MethodName, saveViewResult.SelectedPackage),
+			messageWindow.ShowDialog(this.messageManager.GetMessage("MethodSavedToPackage", saveViewResult.MethodName, saveViewResult.SelectedPackage.Name),
 				string.Empty,
 				MessageButtons.OK,
 				MessageIcon.Information);

@@ -11,7 +11,6 @@ using Aras.Method.Libs.Templates;
 using Aras.VS.MethodPlugin.ArasInnovator;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Configurations;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.Dialogs.ViewModels;
 using Aras.VS.MethodPlugin.Dialogs.Views;
@@ -387,7 +386,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 		{
 			//Arange
 			string currentFilePath = AppDomain.CurrentDomain.BaseDirectory;
-			string amlMethodFilePath = Path.Combine(currentFilePath, @"Code\TestData\MethodAml\ReturnNullMethodAml.xml");
+			string amlMethodFilePath = Path.Combine(currentFilePath, @"Dialogs\ViewModels\TestData\MethodAml\ReturnNullMethodAml.xml");
 			this.codeProvider.Language.Returns("VB");
 
 			OpenFileDialogTestAdapter openFileDialog = new OpenFileDialogTestAdapter(DialogResult.OK, amlMethodFilePath);
@@ -411,7 +410,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 		{
 			//Arange
 			string currentFilePath = AppDomain.CurrentDomain.BaseDirectory;
-			string amlMethodFilePath = Path.Combine(currentFilePath, @"Code\TestData\MethodAml\ReturnNullMethodAml.xml");
+			string amlMethodFilePath = Path.Combine(currentFilePath, @"Dialogs\ViewModels\TestData\MethodAml\ReturnNullMethodAml.xml");
 			this.codeProvider.Language.Returns("C#");
 
 			OpenFileDialogTestAdapter openFileDialog = new OpenFileDialogTestAdapter(DialogResult.OK, amlMethodFilePath);
@@ -433,7 +432,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 		{
 			//Arange
 			string currentFilePath = AppDomain.CurrentDomain.BaseDirectory;
-			string amlMethodFilePath = Path.Combine(currentFilePath, @"Code\TestData\MethodAml\ReturnNullMethodAml.xml");
+			string amlMethodFilePath = Path.Combine(currentFilePath, @"Dialogs\ViewModels\TestData\MethodAml\ReturnNullMethodAml.xml");
 			string key = "ReturnNullMethodAml";
 			XmlMethodInfo methodInfo = new XmlMethodInfo()
 			{

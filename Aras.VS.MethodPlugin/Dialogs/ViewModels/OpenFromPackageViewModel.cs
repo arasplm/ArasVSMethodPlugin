@@ -11,9 +11,10 @@ using System.Windows;
 using System.Windows.Input;
 using System.Xml;
 using Aras.Method.Libs;
+using Aras.Method.Libs.Aras.Package;
 using Aras.Method.Libs.Code;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.Method.Libs.Templates;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 
 namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 {
@@ -177,6 +178,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			}
 		}
 
+		public PackageInfo SelectedPackageInfo { get { return new PackageInfo(package); } }
+
 		public string MethodName
 		{
 			get { return methodName; }
@@ -237,7 +240,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 			if (dialogResult.DialogOperationResult == true)
 			{
-				this.Package = dialogResult.SelectedPackageName.Split('\\')[0];
+				this.Package = dialogResult.SelectedPackage.Name.Split('\\')[0];
 				this.SelectedManifestFilePath = dialogResult.SelectedPath;
 				this.SelectedSearchType = dialogResult.SelectedSearchType;
 

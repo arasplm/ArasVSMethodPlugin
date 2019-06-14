@@ -8,7 +8,7 @@
 using System;
 using System.ComponentModel.Design;
 using Aras.Method.Libs;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using Microsoft.VisualStudio.Shell;

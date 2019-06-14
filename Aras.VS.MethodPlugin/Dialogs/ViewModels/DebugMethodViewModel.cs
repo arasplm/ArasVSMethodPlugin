@@ -11,7 +11,6 @@ using System.Windows.Input;
 using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.ArasInnovator;
 using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 
 namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 {
@@ -21,7 +20,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private readonly IProjectConfigurationManager projectConfigurationManager;
 		private readonly IDialogFactory dialogFactory;
 
-		private IProjectConfiguraiton projectConfiguration;
 		private MethodItemTypeInfo methodItemTypeInfo;
 
 		private string projectConfigPath;
@@ -45,7 +43,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		public DebugMethodViewModel(
 			IAuthenticationManager authManager,
 			IProjectConfigurationManager projectConfigurationManager,
-			IProjectConfiguraiton projectConfiguration,
 			MethodInfo methodInformation,
 			IDialogFactory dialogFactory,
 			string methodCode,
@@ -55,13 +52,11 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		{
 			if (authManager == null) throw new ArgumentNullException(nameof(authManager));
 			if (projectConfigurationManager == null) throw new ArgumentNullException(nameof(projectConfigurationManager));
-			if (projectConfiguration == null) throw new ArgumentNullException(nameof(projectConfiguration));
 			if (methodInformation == null) throw new ArgumentNullException(nameof(methodInformation));
 			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));
 
 			this.authManager = authManager;
 			this.projectConfigurationManager = projectConfigurationManager;
-			this.projectConfiguration = projectConfiguration;
 			this.dialogFactory = dialogFactory;
 
 			this.projectConfigPath = projectConfigPath;
@@ -81,7 +76,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.methodName = methodInformation.MethodName;
 
 			//TODO: How to know current connection?
-			ConnectionInformation = projectConfiguration.Connections.First(c => c.LastConnection);
+			ConnectionInformation = projectConfigurationManager.CurrentProjectConfiguraiton.Connections.First(c => c.LastConnection);
 		}
 
 		#region Properties
@@ -168,12 +163,12 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		private void EditConnectionInfoCommandClick(object window)
 		{
-			var loginAdapter = this.dialogFactory.GetLoginView(projectConfiguration, projectName, projectFullName);
+			var loginAdapter = this.dialogFactory.GetLoginView(projectConfigurationManager.CurrentProjectConfiguraiton, projectName, projectFullName);
 			var loginDialogResult = loginAdapter.ShowDialog();
 			if (loginDialogResult.DialogOperationResult == true)
 			{
-				projectConfigurationManager.Save(projectConfigPath, projectConfiguration);
-				ConnectionInformation = projectConfiguration.Connections.First(c => c.LastConnection);
+				projectConfigurationManager.Save(projectConfigPath);
+				ConnectionInformation = projectConfigurationManager.CurrentProjectConfiguraiton.Connections.First(c => c.LastConnection);
 			}
 		}
 	}

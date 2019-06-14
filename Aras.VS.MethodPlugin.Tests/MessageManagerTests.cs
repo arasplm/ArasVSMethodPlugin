@@ -21,7 +21,6 @@ namespace Aras.VS.MethodPlugin.Tests
 		[TestCase("MethodNameCaNotBeEmpty", "Method name can not be empty.")]
 		[TestCase("TemplateNotFound", "Template not found.")]
 		[TestCase("NoAttributeFound", "No attribute found.")]
-		[TestCase("DefaultCodeTemplateFileWithTemplateNameEventDataNotFound", "Default code template file with templateName=\"{0}\" eventData=\"{1}\" not found.")]
 		[TestCase("PropertyInTheItemTypeNotFound", "'{0}' property in the {0} ItemType not found.")]
 		[TestCase("CurrentCodeTypeIsNotSupported", "Current code type is not supported.")]
 		[TestCase("CurrentCodeElementTypeIsNotSupported", "Current code element type is not supported.")]

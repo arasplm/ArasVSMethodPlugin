@@ -2,6 +2,9 @@
 	<lastSelectedDir>C:\</lastSelectedDir>
 	<lastSelectedMfFile>C:\file.mf</lastSelectedMfFile>
 	<connections></connections>
+	<MethodsFolderPath></MethodsFolderPath>
+	<MethodConfigPath></MethodConfigPath>
+	<IOMFilePath></IOMFilePath>
 	<methods>
 		<methodInfo>
 			<configId>6D5D2A114135409D82561DC1C422C87F</configId>
@@ -14,10 +17,6 @@
 			<packageName>MSO_Standard</packageName>
 			<eventData>None</eventData>
 			<executionAllowedTo keyedName="World">A73B655731924CD0B027E4F4D5FCC0A9</executionAllowedTo>
-			<partialClasses>
-				<path>TestPartial\Partials\GetLicenseInfo</path>
-			</partialClasses>
-			<externalItems />
 		</methodInfo>
 	</methods>
 	<lastSavedSearch>

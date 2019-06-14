@@ -29,7 +29,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 				SelectedIdentityId = viewModel.SelectedIdentityId,
 				SelectedIdentityKeyedName = viewModel.SelectedIdentityKeyedName,
 				SelectedLanguage = viewModel.SelectedLanguage,
-				SelectedPackage = viewModel.SelectedPackage,
+				SelectedPackage = viewModel.SelectedPackageInfo,
 				SelectedTemplate = viewModel.SelectedTemplate,
 				UseRecommendedDefaultCode = viewModel.UseRecommendedDefaultCode,
 				IsUseVSFormattingCode = viewModel.IsUseVSFormattingCode,

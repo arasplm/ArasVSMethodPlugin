@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using Aras.Method.Libs.Aras.Package;
 using Aras.Method.Libs.Code;
 using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.Method.Libs.Templates;
@@ -62,7 +63,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			SelectedActionLocation = actionLocations.First(al=>al.Value ==  currentMethodInfo.MethodType);
 			SelectedLanguage = allLanguages.First(l => l.Value == currentMethodInfo.MethodLanguage);
 			SelectedTemplate = Templates.First(t=>t.TemplateName == currentMethodInfo.TemplateName);
-			SelectedPackageText = currentMethodInfo.PackageName;
+			SelectedPackageText = currentMethodInfo.Package.Name;
 
 			okCommand = new RelayCommand<object>(OnOkClick);
 			cancelCommand = new RelayCommand<object>(OnCancelClick);
@@ -118,7 +119,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			}
 		}
 
-		public List<string> AvaliablePackages { get { return packageManager.GetPackageDefinitionList(); } }
+		public List<PackageInfo> AvaliablePackages { get { return packageManager.GetPackageDefinitionList(); } }
 
 
 		private string selectedPackageText;

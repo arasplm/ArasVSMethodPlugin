@@ -25,6 +25,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aras.VS.MethodPlugin.Tests"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aras.Method.Libs", "Aras.Method.Libs\Aras.Method.Libs.csproj", "{8450A949-CB6B-4530-A968-AD9D9D1D63CF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{4F7FD5FA-BFA4-4717-919C-76D637246105}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aras.Method.Libs.Tests", "Aras.Method.Libs.Tests\Aras.Method.Libs.Tests.csproj", "{7A329665-1A57-4559-9DBE-8D757DDE413A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,9 +51,17 @@ Global
 		{8450A949-CB6B-4530-A968-AD9D9D1D63CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8450A949-CB6B-4530-A968-AD9D9D1D63CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8450A949-CB6B-4530-A968-AD9D9D1D63CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A329665-1A57-4559-9DBE-8D757DDE413A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A329665-1A57-4559-9DBE-8D757DDE413A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A329665-1A57-4559-9DBE-8D757DDE413A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A329665-1A57-4559-9DBE-8D757DDE413A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{31606639-0A7D-4786-90FE-FD2317313D02} = {4F7FD5FA-BFA4-4717-919C-76D637246105}
+		{7A329665-1A57-4559-9DBE-8D757DDE413A} = {4F7FD5FA-BFA4-4717-919C-76D637246105}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1ACEE032-E6A5-4432-A161-A89529B05931}

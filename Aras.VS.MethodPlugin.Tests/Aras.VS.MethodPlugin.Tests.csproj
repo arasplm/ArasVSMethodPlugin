@@ -52,7 +52,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Castle.Core.4.2.0\lib\net45\Castle.Core.dll</HintPath>
+      <HintPath>..\packages\Castle.Core.4.4.0\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>False</EmbedInteropTypes>
@@ -129,8 +129,8 @@
     <Reference Include="Microsoft.VisualStudio.Validation, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.VisualStudio.Validation.14.1.111\lib\net45\Microsoft.VisualStudio.Validation.dll</HintPath>
     </Reference>
-    <Reference Include="NSubstitute, Version=3.1.0.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
-      <HintPath>..\packages\NSubstitute.3.1.0\lib\net45\NSubstitute.dll</HintPath>
+    <Reference Include="NSubstitute, Version=4.2.0.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
+      <HintPath>..\packages\NSubstitute.4.2.0\lib\net46\NSubstitute.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=3.4.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnitTDNet.3.4.1\lib\net45\nunit.framework.dll</HintPath>
@@ -158,17 +158,12 @@
   <ItemGroup>
     <Compile Include="Authentication\AuthenticationManagerProxy.cs" />
     <Compile Include="Authentication\AuthenticationManagerTest.cs" />
-    <Compile Include="Code\CodeProviderFactoryTests.cs" />
-    <Compile Include="Code\CSharpCodeItemProviderTests.cs" />
-    <Compile Include="Code\CSharpCodeProviderTests.cs" />
-    <Compile Include="Code\DefaultCodeProviderTest.cs" />
     <Compile Include="Dialogs\SubAdapters\LoginViewTestAdapter.cs" />
     <Compile Include="Dialogs\SubAdapters\OpenFileDialogTestAdapter.cs" />
     <Compile Include="Dialogs\SubAdapters\OpenFromPackageTreeViewTestAdapter.cs" />
     <Compile Include="Dialogs\ViewModels\CreateCodeItemViewModelTest.cs" />
     <Compile Include="Dialogs\ViewModels\DebugMethodViewModelTest.cs" />
     <Compile Include="Dialogs\ViewModels\LoginViewModelTest.cs" />
-    <Compile Include="Code\XmlMethodLoaderTest.cs" />
     <Compile Include="Commands\AuthenticationCommandBaseTest.cs" />
     <Compile Include="Commands\CmdBaseTest.cs" />
     <Compile Include="Commands\ConnectionInfoCmdTest.cs" />
@@ -189,7 +184,6 @@
     <Compile Include="Dialogs\ViewModels\SaveMethodViewModelTest.cs" />
     <Compile Include="Dialogs\ViewModels\SaveToPackageViewModelTest.cs" />
     <Compile Include="Dialogs\ViewModels\ShortMethodInfoViewModelTest.cs" />
-    <Compile Include="GlobalConstsTests.cs" />
     <Compile Include="ItemSearch\Preferences\ItemGridLayoutTests.cs" />
     <Compile Include="MessageManagerTests.cs" />
     <Compile Include="PackageManagement\PackageManagementTest.cs" />
@@ -200,9 +194,6 @@
     <Compile Include="SolutionManagement\ProjectManagerTest.cs" />
     <Compile Include="Stubs\AuthManagerStub.cs" />
     <Compile Include="Stubs\MethodItemStub.cs" />
-    <Compile Include="Templates\TemplateInfoTests.cs" />
-    <Compile Include="Templates\TemplateLoaderTest.cs" />
-    <Compile Include="Templates\TemplateMapperTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -221,93 +212,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Code\TestData\CodeElementTypeTemplates\ExternalClass.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Code\TestData\CodeElementTypeTemplates\ExternalCustom.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Code\TestData\CodeElementTypeTemplates\ExternalEnum.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Code\TestData\CodeElementTypeTemplates\ExternalInterface.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Code\TestData\CodeElementTypeTemplates\ExternalStruct.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Code\TestData\CodeElementTypeTemplates\PartialClass.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Code\TestData\CodeElementTypeTemplates\PartialCustom.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Code\TestData\CodeElementTypeTemplates\PartialEnum.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Code\TestData\CodeElementTypeTemplates\PartialInterface.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Code\TestData\CodeElementTypeTemplates\PartialMethod.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Code\TestData\CodeElementTypeTemplates\PartialStruct.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Code\TestData\CreateCodeItemInfo\ExternalClassEmpty.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Code\TestData\CreateMainNew\MethodCode.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Code\TestData\CreateMainNew\DefaultTemplateCode.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Code\TestData\CreatePartialClasses\ExpectedMainPartFor2Partial.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Code\TestData\CreatePartialClasses\ExpectedMainPart.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Code\TestData\CreatePartialClasses\ExpectedSecondPartialClass.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Code\TestData\CreatePartialClasses\ExpectedFirstPartialClass.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Code\TestData\CreatePartialClasses\ExpectedPartialPart.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Code\TestData\CreatePartialClasses\MethodCodeInfo2Partial.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Code\TestData\CreatePartialClasses\MethodCodeInfo.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Code\TestData\CreateCodeItemInfo\PartialClassEmpty.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Code\TestData\CreateCodeItemInfo\MethodCode.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Code\TestData\CreateTestsNew\ExpectedTestCode.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Code\TestData\LoadMethodCode\ExpectedSourceCodeWithTwoPartials.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Code\TestData\LoadMethodCode\ExpectedSourceCodeWithSinglePartial.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Code\TestData\LoadMethodCode\PartialsItemTypeInfo.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Code\TestData\LoadMethodCode\PartialsGetLicenseInfo.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Code\TestData\MethodAml\ReturnNullMethodAml.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Configurations\TestData\config.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -315,6 +219,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Dialogs\ViewModels\TestData\IdentityItemType.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Dialogs\ViewModels\TestData\MethodAml\ReturnNullMethodAml.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Dialogs\ViewModels\TestData\MethodItemType.xml">
@@ -344,22 +251,10 @@
     <Content Include="ProjectConfiguration\TestData\FilledProjectConfig.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Templates\TestData\method-config.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="TestData\CSharpNone.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Code\TestData\LoadMethodCode\ExpectedSourceCode.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="TestData\method-config.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Code\TestData\LoadMethodCode\SourceCode.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Code\TestData\CreateWrapper\WrapperCodeInfo.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="TestData\TestMethod.txt">

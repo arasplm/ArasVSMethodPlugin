@@ -7,7 +7,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Aras.Method.Libs.Code;
-using Aras.VS.MethodPlugin.ItemSearch;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
 
 namespace OfficeConnector.Dialogs
 {

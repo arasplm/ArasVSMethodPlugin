@@ -14,7 +14,7 @@ namespace Aras.VS.MethodPlugin.ItemSearch
 {
 	public class ItemSearchCellProvider
 	{
-		public DataGridViewCell GetCell(PropertyInfo property)
+		public DataGridViewCell GetCell(ItemSearchPropertyInfo property)
 		{
 			
 			var lockProperInfo = property as LockedByPropertyInfo;

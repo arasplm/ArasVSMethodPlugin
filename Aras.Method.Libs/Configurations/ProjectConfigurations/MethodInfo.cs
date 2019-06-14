@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections.Generic;
+using Aras.Method.Libs.Aras.Package;
 using Aras.Method.Libs.Code;
 
 namespace Aras.Method.Libs.Configurations.ProjectConfigurations
@@ -20,19 +20,15 @@ namespace Aras.Method.Libs.Configurations.ProjectConfigurations
 			this.MethodLanguage = methodInfo.MethodLanguage;
 			this.MethodComment = methodInfo.MethodComment;
 			this.TemplateName = methodInfo.TemplateName;
-			this.PackageName = methodInfo.PackageName;
+			this.Package = methodInfo.Package;
 			this.EventData = methodInfo.EventData;
-			this.PartialClasses = new List<string>(methodInfo.PartialClasses);
-			this.ExternalItems = new List<string>(methodInfo.ExternalItems);
 			this.ExecutionAllowedToKeyedName = methodInfo.ExecutionAllowedToKeyedName;
 			this.ExecutionAllowedToId = methodInfo.ExecutionAllowedToId;
-			this.MethodPath = methodInfo.MethodPath;
 		}
 
 		public MethodInfo()
 		{
-			this.PartialClasses = new List<string>();
-			this.ExternalItems = new List<string>();
+
 		}
 
 		public string InnovatorMethodId { get; set; }
@@ -49,18 +45,12 @@ namespace Aras.Method.Libs.Configurations.ProjectConfigurations
 
 		public string TemplateName { get; set; }
 
-		public string PackageName { get; set; }
+		public PackageInfo Package { get; set; }
 
 		public EventSpecificData EventData { get; set; }
-
-		public List<string> PartialClasses { get; set; }
-
-		public List<string> ExternalItems { get; set; }
 
 		public string ExecutionAllowedToKeyedName { get; set; }
 
 		public string ExecutionAllowedToId { get; set; }
-
-		public string MethodPath { get; set; }
 	}
 }

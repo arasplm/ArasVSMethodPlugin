@@ -4,12 +4,12 @@ using System.IO;
 using System.Xml;
 using Aras.IOM;
 using Aras.Method.Libs;
+using Aras.Method.Libs.Aras.Package;
 using Aras.Method.Libs.Code;
 using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.Method.Libs.Templates;
 using Aras.VS.MethodPlugin.ArasInnovator;
 using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.Dialogs.ViewModels;
 using Aras.VS.MethodPlugin.ItemSearch;
@@ -60,7 +60,11 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 			this.projectManager = Substitute.For<IProjectManager>();
 			this.arasDataProvider = Substitute.For<IArasDataProvider>();
 			this.iOWrapper = Substitute.For<IIOWrapper>();
-			this.methodInformation = new MethodInfo();
+			this.methodInformation = new MethodInfo()
+			{
+				MethodName = string.Empty,
+				Package = new PackageInfo(string.Empty)
+			};
 
 			this.projectConfiguration.LastSavedSearch.Returns(new Dictionary<string, List<PropertyInfo>>());
 
@@ -72,7 +76,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 			MethodItemTypeInfo methodItemTypeInfo = new MethodItemTypeInfo(methodItemType, messageManager);
 			this.arasDataProvider.GetMethodItemTypeInfo().Returns(methodItemTypeInfo);
 
-			string pathToFileForSave = Path.Combine(currentPath, @"Code\TestData\MethodAml\ReturnNullMethodAml.xml");
+			string pathToFileForSave = Path.Combine(currentPath, @"Dialogs\ViewModels\TestData\MethodAml\ReturnNullMethodAml.xml");
 			this.saveToPackageViewModel = new SaveToPackageViewModel(authManager,
 				dialogFactory,
 				projectConfiguration,

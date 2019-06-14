@@ -38,6 +38,11 @@ namespace Aras.Method.Libs
 			return Directory.GetFiles(path, searchPattern);
 		}
 
+		public string[] DirectoryGetFiles(string path, string searchPattern, SearchOption searchOption)
+		{
+			return Directory.GetFiles(path, searchPattern, searchOption);
+		}
+
 		public void DirectoryMove(string sourceDirName, string destDirName)
 		{
 			Directory.Move(sourceDirName, destDirName);
@@ -63,6 +68,11 @@ namespace Aras.Method.Libs
 			File.Delete(path);
 		}
 
+		public string[] FileReadAllLine(string excludePath)
+		{
+			return File.ReadAllLines(excludePath);
+		}
+
 		public void WriteAllTextIntoFile(string path, string text, Encoding encoding)
 		{
 			File.WriteAllText(path, text, encoding);
@@ -73,9 +83,19 @@ namespace Aras.Method.Libs
 			return File.ReadAllText(path, encoding);
 		}
 
+		public string PathGetFileNameWithoutExtension(string fileName)
+		{
+			return Path.GetFileNameWithoutExtension(fileName);
+		}
+
 		public string PathCombine(string folder, string fileName)
 		{
 			return Path.Combine(folder, fileName);
+		}
+
+		public string PathCombine(string path1, string path2, string path3)
+		{
+			return Path.Combine(path1, path2, path3);
 		}
 
 		public bool PathHasExtension(string path)
@@ -91,6 +111,31 @@ namespace Aras.Method.Libs
 		public char PathAltDirectorySeparatorChar()
 		{
 			return Path.AltDirectorySeparatorChar;
+		}
+
+		public string PathGetFileName(string path)
+		{
+			return Path.GetFileName(path);
+		}
+
+		public string PathGetFullPath(string path)
+		{
+			return Path.GetFullPath(path);
+		}
+
+		public string GetFileNameWithoutExtension(string path)
+		{
+			return Path.GetFileNameWithoutExtension(path);
+		}
+
+		public string PathGetDirectoryName(string path)
+		{
+			return Path.GetDirectoryName(path);
+		}
+
+		public bool PathIsPathRooted(string path)
+		{
+			return Path.IsPathRooted(path);
 		}
 
 		public XmlDocument XmlDocumentLoad(string path)

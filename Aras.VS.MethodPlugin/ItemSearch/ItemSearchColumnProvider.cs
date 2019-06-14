@@ -13,7 +13,7 @@ namespace Aras.VS.MethodPlugin.ItemSearch
 	{
 		public ItemSearchColumnProvider() { }
 
-		public DataGridViewColumn GetColumn(PropertyInfo property)
+		public DataGridViewColumn GetColumn(ItemSearchPropertyInfo property)
 		{
 			DataGridViewColumn column = null;
 

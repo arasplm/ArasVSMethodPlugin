@@ -30,7 +30,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 				MethodComment = viewModel.MethodComment,
 				SelectedIdentityId = viewModel.SelectedIdentityId,
 				SelectedIdentityKeyedName = viewModel.SelectedIdentityKeyedName,
-				SelectedPackage = viewModel.SelectedPackage,
+				SelectedPackageInfo = viewModel.SelectedPackageInfo,
 				CurrentMethodPackage = viewModel.CurrentMethodPackage,
 				TemplateName = viewModel.TemplateName
 			};

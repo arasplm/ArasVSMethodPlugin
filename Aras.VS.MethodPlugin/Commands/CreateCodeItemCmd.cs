@@ -11,7 +11,7 @@ using System.Linq;
 using Aras.Method.Libs;
 using Aras.Method.Libs.Code;
 using Aras.Method.Libs.Configurations.ProjectConfigurations;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
+using Aras.Method.Libs.Templates;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using Microsoft.VisualStudio.Shell;
@@ -43,9 +43,7 @@ namespace Aras.VS.MethodPlugin.Commands
 		private CreateCodeItemCmd(IProjectManager projectManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, MessageManager messageManager)
 			: base(projectManager, dialogFactory, projectConfigurationManager, messageManager)
 		{
-			if (codeProviderFactory == null) throw new ArgumentNullException(nameof(codeProviderFactory));
-
-			this.codeProviderFactory = codeProviderFactory;
+			this.codeProviderFactory = codeProviderFactory ?? throw new ArgumentNullException(nameof(codeProviderFactory));
 
 			if (projectManager.CommandService != null)
 			{
@@ -77,62 +75,68 @@ namespace Aras.VS.MethodPlugin.Commands
 
 		public override void ExecuteCommandImpl(object sender, EventArgs args)
 		{
-			var project = projectManager.SelectedProject;
-
 			string selectedMethodName = projectManager.MethodName;
 			string serverMethodFolderPath = projectManager.ServerMethodFolderPath;
 			string selectedFolderPath = projectManager.SelectedFolderPath;
-			string projectConfigPath = projectManager.ProjectConfigPath;
 
-			var projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
-			MethodInfo methodInformation = projectConfiguration.MethodInfos.FirstOrDefault(m => m.MethodName == selectedMethodName);
+			MethodInfo methodInformation = projectConfigurationManager.CurrentProjectConfiguraiton.MethodInfos.FirstOrDefault(m => m.MethodName == selectedMethodName);
 			if (methodInformation == null)
 			{
 				throw new Exception(this.messageManager.GetMessage("ConfigurationsForTheMethodNotFound", selectedMethodName));
 			}
 
-			var view = dialogFactory.GetCreateCodeItemView(this.codeProviderFactory.GetCodeItemProvider(project.CodeModel.Language), projectConfiguration.UseVSFormatting);
+			var view = dialogFactory.GetCreateCodeItemView(this.codeProviderFactory.GetCodeItemProvider(projectManager.Language), projectConfigurationManager.CurrentProjectConfiguraiton.UseVSFormatting);
 			var viewResult = view.ShowDialog();
 			if (viewResult?.DialogOperationResult != true)
 			{
 				return;
 			}
 
-			string codeItemPath = selectedFolderPath.Substring(serverMethodFolderPath.IndexOf(serverMethodFolderPath) + serverMethodFolderPath.Length);
+			string methodWorkingFolder = Path.Combine(serverMethodFolderPath, methodInformation.Package.MethodFolderPath, methodInformation.MethodName);
+
+			string codeItemPath = selectedFolderPath.Substring(methodWorkingFolder.Length).TrimStart('\\', '/');
 			codeItemPath = Path.Combine(codeItemPath, viewResult.FileName);
 
-			if (methodInformation.PartialClasses.Contains(codeItemPath, StringComparer.InvariantCultureIgnoreCase) ||
-				methodInformation.ExternalItems.Contains(codeItemPath, StringComparer.InvariantCultureIgnoreCase))
+			string newFilePath = Path.Combine(methodWorkingFolder, codeItemPath) + GlobalConsts.CSExtension;
+			if (File.Exists(newFilePath))
 			{
 				throw new Exception(this.messageManager.GetMessage("CodeItemAlreadyExists"));
 			}
 
-			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language);
-			CodeInfo codeItemInfo = codeProvider.CreateCodeItemInfo(methodInformation,
-				viewResult.FileName,
-				viewResult.SelectedCodeType,
-				viewResult.SelectedElementType,
-				viewResult.IsUseVSFormattingCode,
-				projectManager.ServerMethodFolderPath,
-				projectManager.SelectedFolderPath,
-				projectManager.MethodName,
-				projectManager.MethodConfigPath,
-				projectManager.MethodPath,
-				projectManager.DefaultCodeTemplatesPath);
+			TemplateLoader templateLoader = new TemplateLoader();
+			templateLoader.Load(projectManager.MethodConfigPath);
 
-			projectManager.AddItemTemplateToProjectNew(codeItemInfo, true, 0);
-
+			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(projectManager.Language);
+			CodeInfo codeItemInfo = null;
 			if (viewResult.SelectedCodeType == CodeType.Partial)
 			{
-				methodInformation.PartialClasses.Add(codeItemInfo.Path);
+				codeItemInfo = codeProvider.CreatePartialCodeItemInfo(methodInformation,
+					viewResult.FileName,
+					viewResult.SelectedElementType,
+					viewResult.IsUseVSFormattingCode,
+					methodWorkingFolder,
+					projectManager.SelectedFolderPath,
+					projectManager.MethodName,
+					templateLoader,
+					projectManager.MethodPath);
 			}
 			else if (viewResult.SelectedCodeType == CodeType.External)
 			{
-				methodInformation.ExternalItems.Add(codeItemInfo.Path);
+				codeItemInfo = codeProvider.CreateExternalCodeItemInfo(methodInformation,
+					viewResult.FileName,
+					viewResult.SelectedElementType,
+					viewResult.IsUseVSFormattingCode,
+					methodWorkingFolder,
+					projectManager.SelectedFolderPath,
+					projectManager.MethodName,
+					templateLoader,
+					projectManager.MethodPath);
 			}
 
-			projectConfiguration.UseVSFormatting = viewResult.IsUseVSFormattingCode;
-			projectConfigurationManager.Save(projectManager.ProjectConfigPath, projectConfiguration);
+			projectManager.AddItemTemplateToProjectNew(codeItemInfo, methodInformation.Package.MethodFolderPath, true, 0);
+
+			projectConfigurationManager.CurrentProjectConfiguraiton.UseVSFormatting = viewResult.IsUseVSFormattingCode;
+			projectConfigurationManager.Save(projectManager.ProjectConfigPath);
 		}
 	}
 }

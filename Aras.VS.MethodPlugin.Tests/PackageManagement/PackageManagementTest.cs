@@ -57,7 +57,7 @@ namespace Aras.VS.MethodPlugin.Tests.PackageManagement
 			var expected = packageManager.GetPackageDefinitionByElementName(name);
 
 			//Assert
-			Assert.AreEqual(expected, string.Empty);
+			Assert.AreEqual(expected.Name, string.Empty);
 		}
 
 		[Test]
@@ -70,7 +70,7 @@ namespace Aras.VS.MethodPlugin.Tests.PackageManagement
 			var expected = packageManager.GetPackageDefinitionByElementName(name);
 
 			//Assert
-			Assert.AreEqual(expected, string.Empty);
+			Assert.AreEqual(expected.Name, string.Empty);
 		}
 
 		[Test]

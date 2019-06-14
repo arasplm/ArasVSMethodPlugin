@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Aras.Method.Libs.Aras.Package;
 using Aras.Method.Libs.Configurations.ProjectConfigurations;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
-using Aras.VS.MethodPlugin.ItemSearch;
 using NUnit.Framework;
 
 namespace Aras.VS.MethodPlugin.Tests.ProjectConfiguration
@@ -41,7 +40,8 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectConfiguration
 			var configPath = Path.Combine(currentPath, @"ProjectConfiguration\TestData\EmptyProjectConfig.xml");
 
 			//Act
-			var expected = projectConfigurationManager.Load(configPath);
+			projectConfigurationManager.Load(configPath);
+			var expected = projectConfigurationManager.CurrentProjectConfiguraiton;
 
 			//Assert
 			Assert.AreEqual(expected.Connections.Count, 0);
@@ -60,7 +60,8 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectConfiguration
 			var configPath = Path.Combine(currentPath, @"ProjectConfiguration\TestData\FilledProjectConfig.xml");
 
 			//Act
-			var expected = projectConfigurationManager.Load(configPath);
+			projectConfigurationManager.Load(configPath);
+			var expected = projectConfigurationManager.CurrentProjectConfiguraiton;
 
 			//Assert
 			Assert.AreEqual(expected.Connections.First().Database, "110SP15");
@@ -78,10 +79,9 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectConfiguration
 			Assert.AreEqual(expected.MethodInfos.First().MethodComment, "");
 			Assert.AreEqual(expected.MethodInfos.First().MethodLanguage, "C#");
 			Assert.AreEqual(expected.MethodInfos.First().TemplateName, "CSharp");
-			Assert.AreEqual(expected.MethodInfos.First().PackageName, "MSO_Standard");
+			Assert.AreEqual(expected.MethodInfos.First().Package.Name, "MSO_Standard");
 			Assert.AreEqual(expected.MethodInfos.First().ExecutionAllowedToId, "A73B655731924CD0B027E4F4D5FCC0A9");
 			Assert.AreEqual(expected.MethodInfos.First().ExecutionAllowedToKeyedName, "World");
-			Assert.AreEqual(expected.MethodInfos.First().PartialClasses.First(), @"TestPartial\Partials\GetLicenseInfo");
 			Assert.AreEqual(expected.LastSelectedDir, @"C:\");
 			Assert.AreEqual(expected.UseVSFormatting, true);
 		}
@@ -95,7 +95,7 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectConfiguration
 			File.Delete(pathForConfig);
 
 			//Act
-			projectConfigurationManager.Save(pathForConfig, new ProjectConfiguraiton());
+			projectConfigurationManager.Save(pathForConfig);
 
 			//Assert
 			Assert.That(File.ReadAllText(pathForConfig),
@@ -109,9 +109,7 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectConfiguration
 			var currentPath = System.AppDomain.CurrentDomain.BaseDirectory;
 			var pathForConfig = Path.Combine(currentPath, "ProjectConfiguration\\TestData\\projectConfig.xml");
 			File.Delete(pathForConfig);
-			var projectConfiguration = new ProjectConfiguraiton
-			{
-				LastSavedSearch = new Dictionary<string, List<PropertyInfo>>
+			projectConfigurationManager.CurrentProjectConfiguraiton.LastSavedSearch = new Dictionary<string, List<PropertyInfo>>
 				{
 					{ "Method", new List<PropertyInfo>
 						{
@@ -122,11 +120,11 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectConfiguration
 							}
 						}
 					}
-				},
-				LastSelectedDir = @"C:\",
-				LastSelectedMfFile = @"C:\file.mf",
-				UseVSFormatting = true,
-				MethodInfos = new List<MethodInfo>
+				};
+			projectConfigurationManager.CurrentProjectConfiguraiton.LastSelectedDir = @"C:\";
+			projectConfigurationManager.CurrentProjectConfiguraiton.LastSelectedMfFile = @"C:\file.mf";
+			projectConfigurationManager.CurrentProjectConfiguraiton.UseVSFormatting = true;
+			projectConfigurationManager.CurrentProjectConfiguraiton.MethodInfos = new List<MethodInfo>
 				{
 					new MethodInfo
 					{
@@ -139,15 +137,13 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectConfiguration
 						MethodLanguage = "C#",
 						MethodName = "Method1",
 						MethodType = "server",
-						PackageName = "MSO_Standard",
-						PartialClasses = new List<string> { @"TestPartial\Partials\GetLicenseInfo"},
+						Package = new PackageInfo("MSO_Standard"),
 						TemplateName = "CSharp"
 					}
-				}
-			};
+				};
 
 			//Act
-			projectConfigurationManager.Save(pathForConfig, projectConfiguration);
+			projectConfigurationManager.Save(pathForConfig);
 
 			//Assert
 			Assert.That(File.ReadAllText(pathForConfig),

@@ -12,12 +12,13 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Aras.Method.Libs;
+using Aras.Method.Libs.Aras.Package;
 using Aras.Method.Libs.Code;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.Method.Libs.Templates;
 using Aras.VS.MethodPlugin.ArasInnovator;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Configurations;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.Extensions;
 using Aras.VS.MethodPlugin.ItemSearch;
@@ -226,6 +227,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				SelectedLanguage = languages.Count == 1 ? languages[0] : null;
 			}
 		}
+
 		private string selectedPackage;
 
 		public string SelectedPackage
@@ -238,7 +240,9 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			}
 		}
 
-		public List<string> AvaliablePackages { get { return packageManager.GetPackageDefinitionList(); } }
+		public PackageInfo SelectedPackageInfo { get { return new PackageInfo(selectedPackage); } }
+
+		public List<PackageInfo> AvaliablePackages { get { return packageManager.GetPackageDefinitionList(); } }
 
 		public TemplateInfo SelectedTemplate
 		{
@@ -361,8 +365,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				}
 				else
 				{
-					GeneratedCodeInfo codeInfo = codeProvider.CreateWrapper(selectedTemplate, selectedEventSpecificData, methodName, isUseVSFormattingCode, projectManager.DefaultCodeTemplatesPath);
-					codeInfo = codeProvider.CreateMainNew(codeInfo, selectedTemplate, selectedEventSpecificData, methodName, false, selectedUserCodeTemplate.Value?.Code, projectManager.DefaultCodeTemplatesPath);
+					GeneratedCodeInfo codeInfo = codeProvider.GenerateCodeInfo(selectedTemplate, selectedEventSpecificData, methodName, selectedUserCodeTemplate.Value?.Code, isUseVSFormattingCode);
 					return codeInfo.MethodCodeInfo.Code;
 				}
 			}
@@ -446,7 +449,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		private bool IsEnabledOkButton(object obj)
 		{
-			if (string.IsNullOrEmpty(this.methodName))
+			if (string.IsNullOrEmpty(this.methodName) || string.IsNullOrEmpty(this.selectedPackage))
 			{
 				return false;
 			}

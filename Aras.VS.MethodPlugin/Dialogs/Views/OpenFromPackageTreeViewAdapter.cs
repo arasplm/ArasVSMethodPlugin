@@ -16,7 +16,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 			return new OpenFromPackageTreeViewResult()
 			{
 				DialogOperationResult = result,
-				SelectedPackageName = viewModel.SelectedPackageName,
+				SelectedPackage = viewModel.SelectedPakckageInfo,
 				SelectedPath = viewModel.SelectPathViewModel.SelectedPath,
 				SelectedSearchType = viewModel.SelectedSearchType,
 				SelectedMethodFullName = viewModel.SelectedMethod?.FullName

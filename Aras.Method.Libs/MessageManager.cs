@@ -17,9 +17,10 @@ namespace Aras.Method.Libs
 			{ "MethodNameCaNotBeEmpty", "Method name can not be empty." },
 			{ "TemplateNotFound", "Template not found." },
 			{ "NoAttributeFound", "No attribute found." },
-			{ "DefaultCodeTemplateFileWithTemplateNameEventDataNotFound", "Default code template file with templateName=\"{0}\" eventData=\"{1}\" not found." },
 			{ "CurrentCodeTypeIsNotSupported", "Current code type is not supported." },
-			{ "CurrentCodeElementTypeIsNotSupported", "Current code element type is not supported." }
+			{ "CurrentCodeElementTypeIsNotSupported", "Current code element type is not supported." },
+			{ "startYourCodeInsideRegionMethodCodeDoNotChangeCodeAbove", "// start your code inside region MethodCode - DO NOT CHANGE CODE ABOVE" },
+			{ "endyourCodeInsideRegionMethodCodeDoNotChangeCodeBelow", "// end your code inside region MethodCode - DO NOT CHANGE CODE BELOW" }
 		};
 
 		public virtual string GetMessage(string key)

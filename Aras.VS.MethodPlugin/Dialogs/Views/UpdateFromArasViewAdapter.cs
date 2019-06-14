@@ -34,7 +34,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 				MethodName = viewModel.MethodName,
 				MethodType = viewModel.MethodType,
 				MethodComment = viewModel.MethodComment,
-				PackageName = viewModel.PackageName,
+				Package = viewModel.Package,
 				IsUseVSFormattingCode = viewModel.IsUseVSFormattingCode
 			};
 		}

@@ -8,8 +8,8 @@ using System;
 using System.Linq;
 using Aras.Method.Libs;
 using Aras.Method.Libs.Code;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.SolutionManagement;
 
@@ -40,22 +40,22 @@ namespace Aras.VS.MethodPlugin.Commands
 			try
 			{
 				string projectConfigPath = projectManager.ProjectConfigPath;
-				var projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
+				projectConfigurationManager.Load(projectConfigPath);
 
-				var lastConnection = projectConfiguration.Connections.FirstOrDefault(c => c.LastConnection);
+				var lastConnection = projectConfigurationManager.CurrentProjectConfiguraiton.Connections.FirstOrDefault(c => c.LastConnection);
 				if (!authManager.IsLoginedForCurrentProject(projectManager.SelectedProject.Name, lastConnection))
 				{
-					var loginView = dialogFactory.GetLoginView(projectManager, projectConfiguration);
+					var loginView = dialogFactory.GetLoginView(projectManager, projectConfigurationManager.CurrentProjectConfiguraiton);
 					if (loginView.ShowDialog()?.DialogOperationResult != true)
 					{
 						return;
 					}
 				}
 
-				projectConfiguration.Update(projectManager);
-				projectConfigurationManager.Save(projectConfigPath, projectConfiguration);
+				UpdateProjectConfiguration(projectConfigurationManager.CurrentProjectConfiguraiton, projectManager);
+				projectConfigurationManager.Save(projectConfigPath);
 
-				bool saved = projectManager.SaveDirtyFiles(projectConfiguration.MethodInfos);
+				bool saved = projectManager.SaveDirtyFiles(dialogFactory, projectConfigurationManager.CurrentProjectConfiguraiton.MethodInfos);
 				if (saved)
 				{
 					ExecuteCommandImpl(sender, args);

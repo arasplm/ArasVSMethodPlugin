@@ -1,0 +1,12 @@
+﻿{0}using Common;
+using Common.Attributes;
+
+namespace {4}
+{{
+
+    [ExternalPath("{2}", {3})]
+    internal enum {5}
+    {{
+        None
+    }}
+}}

@@ -57,7 +57,7 @@ namespace Aras.VS.MethodPlugin.ItemSearch
 						var properties = doc.FirstChild.ChildNodes;
 						foreach (XmlNode prop in properties)
 						{
-							var propertyInfo = new PropertyInfo();
+							var propertyInfo = new ItemSearchPropertyInfo();
 							propertyInfo.PropertyName = prop.Name;
 							propertyInfo.PropertyValue = prop.InnerText;
 							search.SavedSearchProperties.Add(propertyInfo);

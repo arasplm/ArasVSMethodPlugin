@@ -15,7 +15,6 @@ using Aras.Method.Libs;
 using Aras.Method.Libs.Code;
 using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.SolutionManagement;
@@ -80,8 +79,6 @@ namespace Aras.VS.MethodPlugin.Commands
 		{
 			var project = projectManager.SelectedProject;
 
-			//var projectConfigPath = projectManager.ProjectConfigPath;
-			//var methodConfigPath = projectManager.MethodConfigPath;
 			EnvDTE.Configuration config = project.ConfigurationManager.ActiveConfiguration;
 			EnvDTE.Properties props = config.Properties;
 
@@ -89,11 +86,10 @@ namespace Aras.VS.MethodPlugin.Commands
 			var dllFullPath = Path.Combine(project.Properties.Item("FullPath").Value.ToString(), outputPath.Value.ToString(), project.Properties.Item("OutputFileName").Value.ToString());
 			var selectedMethodName = projectManager.MethodName;
 
-			var projectConfigPath = projectManager.ProjectConfigPath;
-			var projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
+			string projectConfigPath = projectManager.ProjectConfigPath;
 
-			MethodInfo methodInformation = projectConfiguration.MethodInfos.FirstOrDefault(m => m.MethodName == selectedMethodName);
-			var pkgName = methodInformation.PackageName;
+			MethodInfo methodInformation = projectConfigurationManager.CurrentProjectConfiguraiton.MethodInfos.FirstOrDefault(m => m.MethodName == selectedMethodName);
+			var pkgName = methodInformation.Package;
 
 			string selectedMethodPath = projectManager.MethodPath;
 			string sourceCode = File.ReadAllText(selectedMethodPath, new UTF8Encoding(true));
@@ -116,10 +112,12 @@ namespace Aras.VS.MethodPlugin.Commands
 			var directoryPath = Path.GetDirectoryName(currentDllPath);
 			var launcherPath = Path.Combine(directoryPath, "MethodLauncher", "MethodLauncher.exe");
 
-			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language);
-			string methodCode = codeProvider.LoadMethodCode(sourceCode, methodInformation, projectManager.ServerMethodFolderPath);
+			string methodWorkingFolder = Path.Combine(projectManager.ServerMethodFolderPath, methodInformation.Package.MethodFolderPath, methodInformation.MethodName);
+			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(projectManager.Language);
 
-			var debugMethodView = dialogFactory.GetDebugMethodView(projectConfigurationManager, projectConfiguration, methodInformation, methodCode, projectConfigPath, project.Name, project.FullName);
+			string methodCode = codeProvider.LoadMethodCode(methodWorkingFolder, sourceCode);
+
+			var debugMethodView = dialogFactory.GetDebugMethodView(projectConfigurationManager, methodInformation, methodCode, projectConfigPath, project.Name, project.FullName);
 			var debugMethodViewResult = debugMethodView.ShowDialog();
 			if (debugMethodViewResult?.DialogOperationResult != true)
 			{

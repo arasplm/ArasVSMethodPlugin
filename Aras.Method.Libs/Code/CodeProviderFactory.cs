@@ -11,14 +11,12 @@ namespace Aras.Method.Libs.Code
 {
 	public class CodeProviderFactory : ICodeProviderFactory
 	{
-		private readonly DefaultCodeProvider defaultCodeProvider;
 		private readonly ICodeFormatter codeFormatter;
 		private readonly MessageManager messageManager;
 		private readonly IIOWrapper iOWrapper;
 
-		public CodeProviderFactory(DefaultCodeProvider defaultCodeProvider, ICodeFormatter codeFormatter, MessageManager messageManager, IIOWrapper iOWrapper)
+		public CodeProviderFactory(ICodeFormatter codeFormatter, MessageManager messageManager, IIOWrapper iOWrapper)
 		{
-			this.defaultCodeProvider = defaultCodeProvider ?? throw new ArgumentNullException(nameof(defaultCodeProvider));
 			this.codeFormatter = codeFormatter ?? throw new ArgumentNullException(nameof(codeFormatter));
 			this.messageManager = messageManager ?? throw new ArgumentNullException(nameof(messageManager));
 			this.iOWrapper = iOWrapper ?? throw new ArgumentNullException(nameof(iOWrapper));
@@ -44,7 +42,7 @@ namespace Aras.Method.Libs.Code
 			ICodeProvider codeProvider = null;
 			if (projectLanguageCode == CodeModelLanguageConstants.vsCMLanguageCSharp || projectLanguageCode == GlobalConsts.CSharp)
 			{
-				codeProvider = new CSharpCodeProvider(defaultCodeProvider, new CSharpCodeItemProvider(messageManager), codeFormatter, this.iOWrapper, this.messageManager);
+				codeProvider = new CSharpCodeProvider(new CSharpCodeItemProvider(messageManager), codeFormatter, this.iOWrapper, this.messageManager);
 			}
 			else if (projectLanguageCode == CodeModelLanguageConstants.vsCMLanguageVB)
 			{
