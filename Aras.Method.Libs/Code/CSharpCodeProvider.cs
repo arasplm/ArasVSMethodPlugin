@@ -194,7 +194,7 @@ namespace Aras.Method.Libs.Code
 			TemplateLoader templateLoader,
 			string MethodPath)
 		{
-			string codeItemPath = selectedFolderPath.Substring(serverMethodFolderPath.IndexOf(serverMethodFolderPath) + serverMethodFolderPath.Length + 1);
+			string codeItemPath = selectedFolderPath.Substring(serverMethodFolderPath.Length).TrimStart('\\', '/');
 			codeItemPath = Path.Combine(methodName, codeItemPath, fileName);
 			string codeItemAttributePath = codeItemPath.Substring(codeItemPath.IndexOf(methodName) + methodName.Length + 1);
 			codeItemAttributePath = codeItemAttributePath.Replace("\\", "/");
@@ -265,7 +265,7 @@ namespace Aras.Method.Libs.Code
 			TemplateLoader templateLoader,
 			string MethodPath)
 		{
-			string codeItemPath = selectedFolderPath.Substring(serverMethodFolderPath.IndexOf(serverMethodFolderPath) + serverMethodFolderPath.Length + 1);
+			string codeItemPath = selectedFolderPath.Substring(serverMethodFolderPath.Length).TrimStart('\\', '/');
 			codeItemPath = Path.Combine(methodName, codeItemPath, fileName);
 			string codeItemAttributePath = codeItemPath.Substring(codeItemPath.IndexOf(methodName) + methodName.Length + 1);
 			codeItemAttributePath = codeItemAttributePath.Replace("\\", "/");
@@ -335,7 +335,7 @@ namespace Aras.Method.Libs.Code
 		public CodeInfo InsertActiveNodeToMainMethod(string mainMethodFullPath, string serverMethodFolderPath, SyntaxNode activeSyntaxNode, string activeDocumentPath)
 		{
 			string code = string.Empty;
-			string codeItemPath = mainMethodFullPath.Substring(serverMethodFolderPath.IndexOf(serverMethodFolderPath) + serverMethodFolderPath.Length);
+			string codeItemPath = mainMethodFullPath.Substring(serverMethodFolderPath.Length).TrimStart('\\', '/');
 			if (Path.HasExtension(codeItemPath))
 			{
 				string extention = Path.GetExtension(codeItemPath);
@@ -422,7 +422,7 @@ namespace Aras.Method.Libs.Code
 		public CodeInfo InsertActiveNodeToPartial(string partialfullPath, string serverMethodFolderPath, string methodName, SyntaxNode activeSyntaxNode, string activeDocumentMethodFullPath)
 		{
 			string code = string.Empty;
-			string codeItemPath = partialfullPath.Substring(serverMethodFolderPath.IndexOf(serverMethodFolderPath) + serverMethodFolderPath.Length);
+			string codeItemPath = partialfullPath.Substring(serverMethodFolderPath.Length).TrimStart('\\', '/');
 			if (Path.HasExtension(codeItemPath))
 			{
 				string extention = Path.GetExtension(codeItemPath);
@@ -515,7 +515,7 @@ namespace Aras.Method.Libs.Code
 		public CodeInfo InsertActiveNodeToExternal(string externalFullPath, string serverMethodFolderPath, string methodName, SyntaxNode activeSyntaxNode, string activeDocumentMethodFullPath)
 		{
 			string code = string.Empty;
-			string codeItemPath = externalFullPath.Substring(serverMethodFolderPath.IndexOf(serverMethodFolderPath) + serverMethodFolderPath.Length);
+			string codeItemPath = externalFullPath.Substring(serverMethodFolderPath.Length).TrimStart('\\', '/');
 			if (Path.HasExtension(codeItemPath))
 			{
 				string extention = Path.GetExtension(codeItemPath);

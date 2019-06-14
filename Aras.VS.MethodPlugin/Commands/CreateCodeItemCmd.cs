@@ -94,7 +94,7 @@ namespace Aras.VS.MethodPlugin.Commands
 
 			string methodWorkingFolder = Path.Combine(serverMethodFolderPath, methodInformation.Package.MethodFolderPath, methodInformation.MethodName);
 
-			string codeItemPath = selectedFolderPath.Substring(methodWorkingFolder.IndexOf(methodWorkingFolder) + methodWorkingFolder.Length + 1);
+			string codeItemPath = selectedFolderPath.Substring(methodWorkingFolder.Length).TrimStart('\\', '/');
 			codeItemPath = Path.Combine(codeItemPath, viewResult.FileName);
 
 			string newFilePath = Path.Combine(methodWorkingFolder, codeItemPath) + GlobalConsts.CSExtension;
