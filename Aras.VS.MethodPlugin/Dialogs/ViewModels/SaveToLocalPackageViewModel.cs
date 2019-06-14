@@ -7,15 +7,16 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using Aras.Method.Libs;
+using Aras.Method.Libs.Aras.Package;
 using Aras.Method.Libs.Code;
 using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.Method.Libs.Templates;
 using Aras.VS.MethodPlugin.ArasInnovator;
 using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs.Directory.Data;
 using Aras.VS.MethodPlugin.ItemSearch;
 using Aras.VS.MethodPlugin.PackageManagement;
@@ -103,8 +104,10 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			MethodComment = MethodInformation.MethodComment;
 			PackagePath = projectConfiguration.LastSelectedDir;
 			MethodName = MethodInformation.MethodName;
-			MethodCode = codeProvider.LoadMethodCode(sourceCode, MethodInformation, projectManager.ServerMethodFolderPath);
-			SelectedPackage = MethodInformation.PackageName;
+
+			string methodWorkingFolder = Path.Combine(projectManager.ServerMethodFolderPath, methodInformation.Package.MethodFolderPath, methodInformation.MethodName);
+			MethodCode = codeProvider.LoadMethodCode(methodWorkingFolder, sourceCode);
+			SelectedPackage = MethodInformation.Package.Name;
 			selectedIdentityKeyedName = MethodInformation.ExecutionAllowedToKeyedName;
 			selectedIdentityId = MethodInformation.ExecutionAllowedToId;
 		}
@@ -199,7 +202,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			set { methodCode = value; RaisePropertyChanged(nameof(MethodCode)); }
 		}
 
-		public List<string> AvaliablePackages { get { return packageManager.GetPackageDefinitionList(); } }
+		public List<PackageInfo> AvaliablePackages { get { return packageManager.GetPackageDefinitionList(); } }
 
 		public string SelectedPackage
 		{
@@ -210,6 +213,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				RaisePropertyChanged(nameof(SelectedPackage));
 			}
 		}
+
+		public PackageInfo SelectedPackageInfo { get { return new PackageInfo(selectedPackage); } }
 
 		public string SelectedIdentityKeyedName
 		{

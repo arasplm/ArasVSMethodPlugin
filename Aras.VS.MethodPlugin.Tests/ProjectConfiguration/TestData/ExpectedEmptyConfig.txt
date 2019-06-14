@@ -2,6 +2,9 @@
 	<lastSelectedDir></lastSelectedDir>
 	<lastSelectedMfFile></lastSelectedMfFile>
 	<connections></connections>
+	<MethodsFolderPath></MethodsFolderPath>
+	<MethodConfigPath></MethodConfigPath>
+	<IOMFilePath></IOMFilePath>
 	<methods></methods>
 	<lastSavedSearch></lastSavedSearch>
 	<useVSFormatting>False</useVSFormatting>

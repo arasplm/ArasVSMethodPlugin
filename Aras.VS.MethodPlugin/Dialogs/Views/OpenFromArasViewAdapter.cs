@@ -32,7 +32,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 				MethodName = viewModel.MethodName,
 				MethodType = viewModel.MethodType,
 				MethodComment = viewModel.MethodComment,
-				Package = viewModel.Package,
+				Package = viewModel.SelectedPackageInfo,
 				SelectedTemplate = viewModel.SelectedTemplate,
 				SelectedEventSpecificData = viewModel.SelectedEventSpecificData,
 				IsUseVSFormattingCode = viewModel.IsUseVSFormattingCode

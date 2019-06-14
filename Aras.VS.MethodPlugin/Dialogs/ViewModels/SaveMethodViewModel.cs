@@ -10,17 +10,17 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using Aras.Method.Libs;
+using Aras.Method.Libs.Aras.Package;
 using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.ArasInnovator;
 using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.ItemSearch;
 using Aras.VS.MethodPlugin.PackageManagement;
 using OfficeConnector.Dialogs;
 
 namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 {
-	public class SaveMethodViewModel:BaseViewModel
+	public class SaveMethodViewModel : BaseViewModel
 	{
 		private readonly IAuthenticationManager authManager;
 		private readonly IDialogFactory dialogFactory;
@@ -29,7 +29,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private readonly IArasDataProvider arasDataProvider;
 		private readonly MessageManager messageManager;
 
-		private IProjectConfiguraiton projectConfiguration;
 		private MethodItemTypeInfo methodItemTypeInfo;
 
 		private string projectConfigPath;
@@ -62,7 +61,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			IAuthenticationManager authManager,
 			IDialogFactory dialogFactory,
 			IProjectConfigurationManager projectConfigurationManager,
-			IProjectConfiguraiton projectConfiguration,
 			PackageManager packageManager,
 			IArasDataProvider arasDataProvider,
 			MethodInfo methodInformation,
@@ -75,7 +73,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			if (authManager == null) throw new ArgumentNullException(nameof(authManager));
 			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));
 			if (projectConfigurationManager == null) throw new ArgumentNullException(nameof(projectConfigurationManager));
-			if (projectConfiguration == null) throw new ArgumentNullException(nameof(projectConfiguration));
 			if (packageManager == null) throw new ArgumentNullException(nameof(packageManager));
 			if (arasDataProvider == null) throw new ArgumentNullException(nameof(arasDataProvider));
 			if (methodInformation == null) throw new ArgumentNullException(nameof(methodInformation));
@@ -84,7 +81,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.authManager = authManager;
 			this.dialogFactory = dialogFactory;
 			this.projectConfigurationManager = projectConfigurationManager;
-			this.projectConfiguration = projectConfiguration;
 			this.packageManager = packageManager;
 			this.arasDataProvider = arasDataProvider;
 			this.messageManager = messageManager;
@@ -112,11 +108,11 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.eventData = methodInformation.EventData.ToString();
 			this.selectedIdentityKeyedName = methodInformation.ExecutionAllowedToKeyedName;
 			this.selectedIdentityId = methodInformation.ExecutionAllowedToId;
-			this.selectedPackage = methodInformation.PackageName;
+			this.selectedPackage = methodInformation.Package.Name;
 			this.MethodName = methodInformation.MethodName;
 
 			//TODO: How to know current connection?
-			ConnectionInformation = projectConfiguration.Connections.First(c => c.LastConnection);
+			ConnectionInformation = projectConfigurationManager.CurrentProjectConfiguraiton.Connections.First(c => c.LastConnection);
 		}
 
 		#region Properties
@@ -177,7 +173,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			set { }
 		}
 
-		public List<string> AvaliablePackages { get { return packageManager.GetPackageDefinitionList(); } }
+		public List<PackageInfo> AvaliablePackages { get { return packageManager.GetPackageDefinitionList(); } }
 
 		public string SelectedPackage
 		{
@@ -188,6 +184,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				RaisePropertyChanged(nameof(SelectedPackage));
 			}
 		}
+
+		public PackageInfo SelectedPackageInfo { get { return new PackageInfo(selectedPackage); } }
 
 		public string CurrentMethodPackage
 		{
@@ -280,7 +278,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 			try
 			{
-				this.currentMethodPackage = packageManager.GetPackageDefinitionByElementName(this.methodName);
+				this.currentMethodPackage = packageManager.GetPackageDefinitionByElementName(this.methodName)?.Name;
 				if (!string.IsNullOrEmpty(currentMethodPackage) && !string.Equals(this.currentMethodPackage, this.selectedPackage))
 				{
 					var messageWindow = this.dialogFactory.GetMessageBoxWindow();
@@ -336,13 +334,13 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		private void EditConnectionInfoCommandClick(object window)
 		{
-			var dialogAdapter = this.dialogFactory.GetLoginView(projectConfiguration, projectName, projectFullName);
+			var dialogAdapter = this.dialogFactory.GetLoginView(projectConfigurationManager.CurrentProjectConfiguraiton, projectName, projectFullName);
 			var dialogResult = dialogAdapter.ShowDialog();
 
 			if (dialogResult.DialogOperationResult == true)
 			{
-				projectConfigurationManager.Save(projectConfigPath, projectConfiguration);
-				ConnectionInformation = projectConfiguration.Connections.First(c => c.LastConnection);
+				projectConfigurationManager.Save(projectConfigPath);
+				ConnectionInformation = projectConfigurationManager.CurrentProjectConfiguraiton.Connections.First(c => c.LastConnection);
 
 				this.methodItemTypeInfo = arasDataProvider.GetMethodItemTypeInfo();
 				this.MethodNameMaxLength = methodItemTypeInfo.NameStoredLength;
@@ -370,7 +368,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			string itemTypeSingularLabel = "Identity";
 
 			List<PropertyInfo> predefinedSearchItems;
-			if (!projectConfiguration.LastSavedSearch.TryGetValue(itemTypeName, out predefinedSearchItems))
+			if (!projectConfigurationManager.CurrentProjectConfiguraiton.LastSavedSearch.TryGetValue(itemTypeName, out predefinedSearchItems))
 			{
 				predefinedSearchItems = new List<PropertyInfo>();
 			}
@@ -394,13 +392,13 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				this.SelectedIdentityKeyedName = item.getProperty("keyed_name");
 				this.selectedIdentityId = result.ItemId;
 
-				if (projectConfiguration.LastSavedSearch.ContainsKey(result.ItemType))
+				if (projectConfigurationManager.CurrentProjectConfiguraiton.LastSavedSearch.ContainsKey(result.ItemType))
 				{
-					projectConfiguration.LastSavedSearch[result.ItemType] = result.LastSavedSearch;
+					projectConfigurationManager.CurrentProjectConfiguraiton.LastSavedSearch[result.ItemType] = result.LastSavedSearch;
 				}
 				else
 				{
-					projectConfiguration.LastSavedSearch.Add(result.ItemType, result.LastSavedSearch);
+					projectConfigurationManager.CurrentProjectConfiguraiton.LastSavedSearch.Add(result.ItemType, result.LastSavedSearch);
 				}
 			}
 		}

@@ -9,6 +9,9 @@
       <lastConnection>True</lastConnection>
     </connectionInfo>
   </connections>
+  <MethodsFolderPath></MethodsFolderPath>
+  <MethodConfigPath></MethodConfigPath>
+  <IOMFilePath></IOMFilePath>
   <methods>
     <methodInfo>
       <configId>6D5D2A114135409D82561DC1C422C87F</configId>

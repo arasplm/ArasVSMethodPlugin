@@ -9,11 +9,11 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using Aras.Method.Libs;
+using Aras.Method.Libs.Aras.Package;
 using Aras.Method.Libs.Code;
 using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.Method.Libs.Templates;
 using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.PackageManagement;
 
@@ -23,7 +23,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 	{
 		private readonly IAuthenticationManager authManager;
 		private readonly IProjectConfigurationManager projectConfigurationManager;
-		private readonly IProjectConfiguraiton projectConfiguration;
 		private readonly IDialogFactory dialogFactory;
 		private readonly TemplateLoader templateLoader;
 		private readonly PackageManager packageManager;
@@ -45,7 +44,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private string methodCode;
 		private string executionIdentityKeyedName;
 		private string executionIdentityId;
-		private string packageName;
+		private PackageInfo package;
 		private bool isUseVSFormattingCode;
 
 		private ICommand editConnectionInfoCommand;
@@ -55,7 +54,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		public UpdateFromArasViewModel(
 			IAuthenticationManager authManager,
 			IProjectConfigurationManager projectConfigurationManager,
-			IProjectConfiguraiton projectConfiguration,
 			IDialogFactory dialogFactory,
 			TemplateLoader templateLoader,
 			PackageManager packageManager,
@@ -67,7 +65,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		{
 			if (authManager == null) throw new ArgumentNullException(nameof(authManager));
 			if (projectConfigurationManager == null) throw new ArgumentNullException(nameof(projectConfigurationManager));
-			if (projectConfiguration == null) throw new ArgumentNullException(nameof(projectConfiguration));
 			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));
 			if (templateLoader == null) throw new ArgumentNullException(nameof(templateLoader));
 			if (packageManager == null) throw new ArgumentNullException(nameof(packageManager));
@@ -76,7 +73,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 			this.authManager = authManager;
 			this.projectConfigurationManager = projectConfigurationManager;
-			this.projectConfiguration = projectConfiguration;
 			this.dialogFactory = dialogFactory;
 			this.templateLoader = templateLoader;
 			this.packageManager = packageManager;
@@ -84,7 +80,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.projectConfigPath = projectConfigPath;
 			this.projectName = projectName;
 			this.projectFullName = projectFullName;
-			this.isUseVSFormattingCode = projectConfiguration.UseVSFormatting;
+			this.isUseVSFormattingCode = projectConfigurationManager.CurrentProjectConfiguraiton.UseVSFormatting;
 
 			this.methodName = methodInfo.MethodName;
 			this.eventData = methodInfo.EventData;
@@ -93,7 +89,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.okCommand = new RelayCommand<object>(OkCommandClick, IsEnabledOkButton);
 			this.closeCommand = new RelayCommand<object>(OnCloseCliked);
 
-			ConnectionInformation = projectConfiguration.Connections.First(c => c.LastConnection);
+			ConnectionInformation = projectConfigurationManager.CurrentProjectConfiguraiton.Connections.First(c => c.LastConnection);
 
 			UpdateMethodView(null);
 		}
@@ -184,7 +180,13 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		public string PackageName
 		{
-			get { return packageName; }
+			get { return package?.Name; }
+			set { }
+		}
+
+		public PackageInfo Package
+		{
+			get { return package; }
 			set { }
 		}
 
@@ -211,14 +213,14 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			Window viewWindow = view as Window;
 
 			var loginView = new LoginView();
-			var loginViewModel = new LoginViewModel(authManager, projectConfiguration, projectName, projectFullName);
+			var loginViewModel = new LoginViewModel(authManager, projectConfigurationManager.CurrentProjectConfiguraiton, projectName, projectFullName);
 			loginView.DataContext = loginViewModel;
 			loginView.Owner = viewWindow;
 
 			if (loginView.ShowDialog() == true)
 			{
-				projectConfigurationManager.Save(projectConfigPath, projectConfiguration);
-				ConnectionInformation = projectConfiguration.Connections.First(c => c.LastConnection);
+				projectConfigurationManager.Save(projectConfigPath);
+				ConnectionInformation = projectConfigurationManager.CurrentProjectConfiguraiton.Connections.First(c => c.LastConnection);
 
 				UpdateMethodView(viewWindow);
 			}
@@ -269,7 +271,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				methodType = string.Empty;
 				methodComment = string.Empty;
 				this.selectedTemplate = null;
-				packageName = string.Empty;
+				package = null;
 			}
 			else
 			{
@@ -313,15 +315,14 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 				this.SelectedTemplate = template;
 
-				var packageName = string.Empty;
-
 				try
 				{
-					packageName = packageManager.GetPackageDefinitionByElementName(methodName);
+					this.package = packageManager.GetPackageDefinitionByElementName(methodName);
 				}
-				catch (Exception ex) { }
-
-				this.packageName = packageName;
+				catch (Exception ex)
+				{
+					this.package = null;
+				}
 			}
 
 			RaisePropertyChanged(string.Empty);

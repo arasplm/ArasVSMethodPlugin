@@ -7,6 +7,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.ItemSearch;
 
 namespace OfficeConnector.Dialogs
@@ -73,7 +74,7 @@ namespace OfficeConnector.Dialogs
 				ItemId = selectedIds.First(),
 				ItemType = selectedType.itemTypeName,
 				DialogResult = View.DialogResult,
-				LastSavedSearch = this.currentSearch.SavedSearchProperties,
+				LastSavedSearch = this.currentSearch.SavedSearchProperties.Cast<PropertyInfo>().ToList(),
 			};
 		}
 

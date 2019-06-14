@@ -13,9 +13,9 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 	{
 		private SavedSearch savedSearch;
 
-		private ObservableCollection<PropertyInfo> foundedItems;
+		private ObservableCollection<ItemSearchPropertyInfo> foundedItems;
 
-		public ObservableCollection<PropertyInfo> FoundedItems 
+		public ObservableCollection<ItemSearchPropertyInfo> FoundedItems 
 		{
 			get { return foundedItems; }
 			set { foundedItems = value; RaisePropertyChanged(nameof(FoundedItems)); }

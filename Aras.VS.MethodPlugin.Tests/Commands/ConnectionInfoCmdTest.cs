@@ -1,8 +1,8 @@
 ﻿using System.Threading;
 using Aras.Method.Libs;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Commands;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.SolutionManagement;

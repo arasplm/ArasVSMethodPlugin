@@ -6,15 +6,13 @@
 
 using System;
 using System.ComponentModel.Design;
-using System.Linq;
+using System.IO;
 using Aras.Method.Libs;
 using Aras.Method.Libs.Code;
 using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.Method.Libs.Templates;
 using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.Configurations;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.PackageManagement;
 using Aras.VS.MethodPlugin.SolutionManagement;
@@ -78,24 +76,21 @@ namespace Aras.VS.MethodPlugin.Commands
 
 		public override void ExecuteCommandImpl(object sender, EventArgs args)
 		{
-			var project = projectManager.SelectedProject;
-			var projectConfiguration = projectConfigurationManager.Load(projectManager.ProjectConfigPath);
-
-			var templateLoader = new TemplateLoader();
+			TemplateLoader templateLoader = new TemplateLoader();
 			templateLoader.Load(projectManager.MethodConfigPath);
 
 			PackageManager packageManager = new PackageManager(authManager, this.messageManager);
-			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language);
+			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(projectManager.Language);
 
-			var createView = dialogFactory.GetCreateView(projectConfiguration, templateLoader, packageManager, projectManager, codeProvider, globalConfiguration);
+			var createView = dialogFactory.GetCreateView(projectConfigurationManager.CurrentProjectConfiguraiton, templateLoader, packageManager, projectManager, codeProvider, globalConfiguration);
 			var createViewResult = createView.ShowDialog();
 			if (createViewResult?.DialogOperationResult != true)
 			{
 				return;
 			}
 
-			GeneratedCodeInfo codeInfo = codeProvider.GenerateCodeInfo(createViewResult.SelectedTemplate, createViewResult.SelectedEventSpecificData, createViewResult.MethodName, createViewResult.UseRecommendedDefaultCode, createViewResult.SelectedUserCodeTemplate.Code, createViewResult.IsUseVSFormattingCode, projectManager.DefaultCodeTemplatesPath);
-			projectManager.CreateMethodTree(codeInfo);
+			GeneratedCodeInfo codeInfo = codeProvider.GenerateCodeInfo(createViewResult.SelectedTemplate, createViewResult.SelectedEventSpecificData, createViewResult.MethodName, createViewResult.SelectedUserCodeTemplate.Code, createViewResult.IsUseVSFormattingCode);
+			projectManager.CreateMethodTree(codeInfo, createViewResult.SelectedPackage);
 			projectManager.AddSuppression("assembly: System.Diagnostics.CodeAnalysis.SuppressMessage", "Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", "namespace", codeInfo.Namespace);
 
 			string newInnovatorMethodId = authManager.InnovatorInstance.getNewID();
@@ -107,18 +102,16 @@ namespace Aras.VS.MethodPlugin.Commands
 				MethodName = createViewResult.MethodName,
 				MethodType = createViewResult.SelectedActionLocation.Value,
 				MethodComment = createViewResult.MethodComment,
-				PackageName = createViewResult.SelectedPackage,
+				Package = createViewResult.SelectedPackage,
 				TemplateName = createViewResult.SelectedTemplate.TemplateName,
 				EventData = createViewResult.SelectedEventSpecificData.EventSpecificData,
 				ExecutionAllowedToId = createViewResult.SelectedIdentityId,
-				ExecutionAllowedToKeyedName = createViewResult.SelectedIdentityKeyedName,
-				PartialClasses = codeInfo.PartialCodeInfoList.Select(pci => pci.Path).ToList(),
-				ExternalItems = codeInfo.ExternalItemsInfoList.Select(pci => pci.Path).ToList()
+				ExecutionAllowedToKeyedName = createViewResult.SelectedIdentityKeyedName
 			};
 
-			projectConfiguration.AddMethodInfo(methodInfo);
-			projectConfiguration.UseVSFormatting = createViewResult.IsUseVSFormattingCode;
-			projectConfigurationManager.Save(projectManager.ProjectConfigPath, projectConfiguration);
+			projectConfigurationManager.CurrentProjectConfiguraiton.AddMethodInfo(methodInfo);
+			projectConfigurationManager.CurrentProjectConfiguraiton.UseVSFormatting = createViewResult.IsUseVSFormattingCode;
+			projectConfigurationManager.Save(projectManager.ProjectConfigPath);
 		}
 	}
 }

@@ -12,7 +12,7 @@ namespace Aras.VS.MethodPlugin.ItemSearch
 	{
 		List<ItemSearchResult> RunSearch(string itemType, SavedSearch search);
 
-		List<PropertyInfo> GetPropertiesForSearch(string itemType);
+		List<ItemSearchPropertyInfo> GetPropertiesForSearch(string itemType);
 
 		List<ItemTypeItem> GetItemTypes();
 

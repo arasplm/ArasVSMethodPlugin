@@ -224,12 +224,6 @@
     <Compile Include="Dialogs\Views\IView.cs" />
     <Compile Include="IVsPackageWrapper.cs" />
     <Compile Include="PackageManagement\PackageManager.cs" />
-    <Compile Include="Configurations\ProjectConfigurations\IProjectConfiguraiton.cs" />
-    <Compile Include="Configurations\ProjectConfigurations\IProjectConfigurationManager.cs" />
-    <Compile Include="Configurations\ProjectConfigurations\ProjectConfigurationManager.cs" />
-    <Compile Include="Configurations\ProjectConfigurations\ConnectionInfo.cs" />
-    <Compile Include="Configurations\ProjectConfigurations\ProjectConfiguraiton.cs" />
-    <Compile Include="Configurations\ProjectConfigurations\PackageMethodInfo.cs" />
     <Compile Include="Dialogs\ViewModels\ShortMethodInfoViewModel.cs" />
     <Compile Include="Properties\Resources.Designer.cs" />
     <Compile Include="Properties\Resources1.Designer.cs">
@@ -267,7 +261,7 @@
     <Compile Include="ItemSearch\LockedByPropertyInfo.cs" />
     <Compile Include="ItemSearch\PropertyDataType.cs" />
     <Compile Include="ItemSearch\PropertyDataTypeParser.cs" />
-    <Compile Include="ItemSearch\PropertyInfo.cs" />
+    <Compile Include="ItemSearch\ItemSearchPropertyInfo.cs" />
     <Compile Include="ItemSearch\SavedSearch.cs" />
     <Compile Include="ItemSearch\SavedSearchItem.cs" />
     <Compile Include="ItemSearch\SavedSearchProvider.cs" />

@@ -23,5 +23,25 @@
 		public const string EndregionMethodCode = "#endregion MethodCode";
 
 		#endregion
+
+		#region Dlls
+
+		public const string IOMnamespace = "Aras.IOM";
+
+		#endregion
+
+		#region FileNames
+
+		public const string methodConfigFileName = "method-config.xml";
+		public const string projectConfigFileName = "projectConfig.xml";
+		public const string globalSuppressionsFileName = "GlobalSuppressions.cs";
+
+		#endregion
+
+		#region Extensions
+
+		public static string CSExtension { get { return ".cs"; } }
+
+		#endregion
 	}
 }

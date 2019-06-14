@@ -12,9 +12,9 @@ namespace Aras.VS.MethodPlugin.ItemSearch
 	{
 		public ItemSearchResult()
 		{
-			FoundedItems = new List<PropertyInfo>();
+			FoundedItems = new List<ItemSearchPropertyInfo>();
 		}
 
-		public List<PropertyInfo> FoundedItems { get; set; }
+		public List<ItemSearchPropertyInfo> FoundedItems { get; set; }
 	}
 }

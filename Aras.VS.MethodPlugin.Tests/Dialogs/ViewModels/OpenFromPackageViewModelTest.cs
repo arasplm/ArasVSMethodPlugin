@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO;
 using Aras.Method.Libs;
+using Aras.Method.Libs.Aras.Package;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.Method.Libs.Templates;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.Dialogs.ViewModels;
 using Aras.VS.MethodPlugin.Dialogs.Views;
@@ -71,7 +72,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 		public void FolderBrowserCommand_ShouldLeaveNullAndEmpty()
 		{
 			//Arrange
-			var adapter = new OpenFromPackageTreeViewAdapterTest(false, string.Empty, string.Empty, string.Empty, string.Empty);
+			var adapter = new OpenFromPackageTreeViewAdapterTest(false, new PackageInfo(string.Empty), string.Empty, string.Empty, string.Empty);
 			this.dialogFactory.GetOpenFromPackageTreeView(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>()).Returns(adapter);
 
 			//Act
@@ -93,9 +94,9 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 		{
 			//Arrange
 			string currentPath = AppDomain.CurrentDomain.BaseDirectory;
-			string pathToMethodAml = Path.Combine(currentPath, @"Code\TestData\MethodAml\ReturnNullMethodAml.xml");
+			string pathToMethodAml = Path.Combine(currentPath, @"Dialogs\ViewModels\TestData\MethodAml\ReturnNullMethodAml.xml");
 
-			var adapter = new OpenFromPackageTreeViewAdapterTest(true, "testPackageName", "MfFilePath", "searchType", pathToMethodAml);
+			var adapter = new OpenFromPackageTreeViewAdapterTest(true, new PackageInfo("testPackageName"), "MfFilePath", "searchType", pathToMethodAml);
 			this.dialogFactory.GetOpenFromPackageTreeView(Arg.Is("C:\\"), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>()).Returns(adapter);
 
 			//Act

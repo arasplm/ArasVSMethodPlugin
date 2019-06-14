@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using Aras.Method.Libs.Aras.Package;
 using Aras.Method.Libs.Code;
 using Aras.Method.Libs.Templates;
 
@@ -23,7 +24,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 
 		public ListInfo SelectedActionLocation { get; set; }
 
-		public string SelectedPackage { get; set; }
+		public PackageInfo SelectedPackage { get; set; }
 
 		public string SelectedIdentityId { get; set; }
 

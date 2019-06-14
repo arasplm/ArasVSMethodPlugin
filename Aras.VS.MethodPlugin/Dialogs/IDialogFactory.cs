@@ -9,7 +9,6 @@ using Aras.Method.Libs.Code;
 using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.Method.Libs.Templates;
 using Aras.VS.MethodPlugin.Configurations;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs.Directory.Data;
 using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.ItemSearch;
@@ -40,7 +39,6 @@ namespace Aras.VS.MethodPlugin.Dialogs
 		IViewAdaper<ConnectionInfoView, ViewResult> GetConnectionInfoView(IProjectManager projectManager, IProjectConfigurationManager configurationManager);
 
 		IViewAdaper<OpenFromArasView, OpenFromArasViewResult> GetOpenFromArasView(IProjectConfigurationManager configurationManager,
-		   IProjectConfiguraiton projectConfiguration,
 		   TemplateLoader templateLoader,
 		   PackageManager packageManager,
 		   string pathToProjectConfigFile,
@@ -51,7 +49,6 @@ namespace Aras.VS.MethodPlugin.Dialogs
 		IViewAdaper<OpenFromPackageView, OpenFromPackageViewResult> GetOpenFromPackageView(TemplateLoader templateLoader, string projectLanguage, IProjectConfiguraiton projectConfiguraiton);
 
 		IViewAdaper<SaveMethodView, SaveMethodViewResult> GetSaveToArasView(IProjectConfigurationManager projectConfigurationManager,
-			IProjectConfiguraiton projectConfiguration,
 			PackageManager packageManager,
 			MethodInfo methodInformation,
 			string methodCode,
@@ -68,7 +65,6 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			string sourceCode);
 
 		IViewAdaper<UpdateFromArasView, UpdateFromArasViewResult> GetUpdateFromArasView(IProjectConfigurationManager projectConfigurationManager,
-			IProjectConfiguraiton projectConfiguration,
 			TemplateLoader templateLoader,
 			PackageManager packageManager,
 			MethodInfo methodInfo,
@@ -79,7 +75,6 @@ namespace Aras.VS.MethodPlugin.Dialogs
 		IViewAdaper<CreateCodeItemView, CreateCodeItemViewResult> GetCreateCodeItemView(ICodeItemProvider codeItemProvider, bool usedVSFormatting);
 
 		IViewAdaper<DebugMethodView, DebugMethodViewResult> GetDebugMethodView(IProjectConfigurationManager projectConfigurationManager,
-			IProjectConfiguraiton projectConfiguration,
 			MethodInfo methodInformation,
 			string methodCode,
 			string projectConfigPath,

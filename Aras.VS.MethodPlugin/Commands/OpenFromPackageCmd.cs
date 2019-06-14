@@ -6,13 +6,13 @@
 
 using System;
 using System.ComponentModel.Design;
+using System.IO;
 using System.Linq;
 using Aras.Method.Libs;
 using Aras.Method.Libs.Code;
 using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.Method.Libs.Templates;
 using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using Microsoft.VisualStudio.Shell;
@@ -79,28 +79,20 @@ namespace Aras.VS.MethodPlugin.Commands
 
 		public override void ExecuteCommandImpl(object sender, EventArgs args)
 		{
-			var project = projectManager.SelectedProject;
+			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(projectManager.Language);
 
-			string projectConfigPath = projectManager.ProjectConfigPath;
-			string methodConfigPath = projectManager.MethodConfigPath;
+			TemplateLoader templateLoader = new TemplateLoader();
+			templateLoader.Load(projectManager.MethodConfigPath);
 
-			var projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
-			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language);
-
-			var templateLoader = new TemplateLoader();
-			templateLoader.Load(methodConfigPath);
-
-			var openView = dialogFactory.GetOpenFromPackageView(templateLoader, codeProvider.Language, projectConfiguration);
-
+			var openView = dialogFactory.GetOpenFromPackageView(templateLoader, codeProvider.Language, projectConfigurationManager.CurrentProjectConfiguraiton);
 			var openViewResult = openView.ShowDialog();
 			if (openViewResult?.DialogOperationResult != true)
 			{
 				return;
 			}
 
-			MethodInfo methodInformation = projectConfiguration.MethodInfos.FirstOrDefault(m => m.MethodName == openViewResult.MethodName);
-			bool isMethodExist = projectManager.IsMethodExist(openViewResult.MethodName);
-			if (projectManager.IsMethodExist(openViewResult.MethodName))
+			MethodInfo methodInformation = projectConfigurationManager.CurrentProjectConfiguraiton.MethodInfos.FirstOrDefault(m => m.MethodName == openViewResult.MethodName);
+			if (projectManager.IsMethodExist(openViewResult.Package.MethodFolderPath, openViewResult.MethodName))
 			{
 				var messageWindow = this.dialogFactory.GetMessageBoxWindow();
 				var dialogReuslt = messageWindow.ShowDialog(this.messageManager.GetMessage("MethodAlreadyAddedToProjectDoYouWantReplaceMethod"),
@@ -111,7 +103,7 @@ namespace Aras.VS.MethodPlugin.Commands
 				if (dialogReuslt == MessageDialogResult.Yes)
 				{
 					projectManager.RemoveMethod(methodInformation);
-					projectConfiguration.MethodInfos.Remove(methodInformation);
+					projectConfigurationManager.CurrentProjectConfiguraiton.MethodInfos.Remove(methodInformation);
 				}
 				else
 				{
@@ -119,8 +111,8 @@ namespace Aras.VS.MethodPlugin.Commands
 				}
 			}
 
-			GeneratedCodeInfo codeInfo = codeProvider.GenerateCodeInfo(openViewResult.SelectedTemplate, openViewResult.SelectedEventSpecificData, openViewResult.MethodName, false, openViewResult.MethodCode, openViewResult.IsUseVSFormattingCode, projectManager.DefaultCodeTemplatesPath);
-			projectManager.CreateMethodTree(codeInfo);
+			GeneratedCodeInfo codeInfo = codeProvider.GenerateCodeInfo(openViewResult.SelectedTemplate, openViewResult.SelectedEventSpecificData, openViewResult.MethodName, openViewResult.MethodCode, openViewResult.IsUseVSFormattingCode);
+			projectManager.CreateMethodTree(codeInfo, openViewResult.Package);
 
 			var methodInfo = new PackageMethodInfo()
 			{
@@ -130,24 +122,22 @@ namespace Aras.VS.MethodPlugin.Commands
 				MethodName = openViewResult.MethodName,
 				MethodType = openViewResult.MethodType,
 				MethodComment = openViewResult.MethodComment,
-				PackageName = openViewResult.Package,
+				Package = openViewResult.Package,
 				TemplateName = openViewResult.SelectedTemplate.TemplateName,
 				EventData = openViewResult.SelectedEventSpecificData.EventSpecificData,
 				ExecutionAllowedToId = openViewResult.IdentityId,
 				ExecutionAllowedToKeyedName = openViewResult.IdentityKeyedName,
-				PartialClasses = codeInfo.PartialCodeInfoList.Select(pci => pci.Path).ToList(),
-				ExternalItems = codeInfo.ExternalItemsInfoList.Select(pci => pci.Path).ToList(),
 				ManifestFileName = openViewResult.SelectedManifestFileName
 			};
 
 			projectManager.AddSuppression("assembly: System.Diagnostics.CodeAnalysis.SuppressMessage", "Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", "namespace", codeInfo.Namespace);
 
-			projectConfiguration.LastSelectedDir = openViewResult.SelectedFolderPath;
-			projectConfiguration.LastSelectedMfFile = openViewResult.SelectedManifestFullPath;
-			projectConfiguration.UseVSFormatting = openViewResult.IsUseVSFormattingCode;
-			projectConfiguration.LastSelectedSearchTypeInOpenFromPackage = openViewResult.SelectedSearchType;
-			projectConfiguration.AddMethodInfo(methodInfo);
-			projectConfigurationManager.Save(projectConfigPath, projectConfiguration);
+			projectConfigurationManager.CurrentProjectConfiguraiton.LastSelectedDir = openViewResult.SelectedFolderPath;
+			projectConfigurationManager.CurrentProjectConfiguraiton.LastSelectedMfFile = openViewResult.SelectedManifestFullPath;
+			projectConfigurationManager.CurrentProjectConfiguraiton.UseVSFormatting = openViewResult.IsUseVSFormattingCode;
+			projectConfigurationManager.CurrentProjectConfiguraiton.LastSelectedSearchTypeInOpenFromPackage = openViewResult.SelectedSearchType;
+			projectConfigurationManager.CurrentProjectConfiguraiton.AddMethodInfo(methodInfo);
+			projectConfigurationManager.Save(projectManager.ProjectConfigPath);
 		}
 	}
 }

@@ -5,10 +5,12 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using Aras.Method.Libs;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.SolutionManagement;
+using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
@@ -49,12 +51,12 @@ namespace Aras.VS.MethodPlugin.Commands
 			try
 			{
 				string projectConfigPath = projectManager.ProjectConfigPath;
-				var projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
+				projectConfigurationManager.Load(projectConfigPath);
 
-				projectConfiguration.Update(projectManager);
-				projectConfigurationManager.Save(projectConfigPath, projectConfiguration);
+				UpdateProjectConfiguration(projectConfigurationManager.CurrentProjectConfiguraiton, projectManager);
+				projectConfigurationManager.Save(projectConfigPath);
 
-				bool saved = projectManager.SaveDirtyFiles(projectConfiguration.MethodInfos);
+				bool saved = projectManager.SaveDirtyFiles(dialogFactory, projectConfigurationManager.CurrentProjectConfiguraiton.MethodInfos);
 				if (saved)
 				{
 					ExecuteCommandImpl(sender, args);
@@ -86,6 +88,40 @@ namespace Aras.VS.MethodPlugin.Commands
 			}
 
 			command.Enabled = false;
+		}
+
+		public void UpdateProjectConfiguration(IProjectConfiguraiton projectConfiguration, IProjectManager projectManager)
+		{
+			ProjectItems serverMethods = projectManager.ServerMethodFolderItems;
+			if (serverMethods.Count == 0)
+			{
+				projectConfiguration.MethodInfos.Clear();
+				return;
+			}
+
+			var updatedMethodInfos = new List<MethodInfo>();
+
+			foreach (MethodInfo methodInfo in projectConfiguration.MethodInfos)
+			{
+				if (!projectManager.IsMethodExist(methodInfo.Package.MethodFolderPath, methodInfo.MethodName))
+				{
+					continue;
+				}
+
+				MethodInfo updatedMethodInfo;
+				if (methodInfo is PackageMethodInfo)
+				{
+					updatedMethodInfo = new PackageMethodInfo((PackageMethodInfo)methodInfo);
+				}
+				else
+				{
+					updatedMethodInfo = new MethodInfo(methodInfo);
+				}
+
+				updatedMethodInfos.Add(updatedMethodInfo);
+			}
+
+			projectConfiguration.MethodInfos = updatedMethodInfos;
 		}
 	}
 }

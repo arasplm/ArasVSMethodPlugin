@@ -38,17 +38,6 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectTemplates
 			"ArasLibs/SPConnector.dll"
 		};
 
-		readonly List<string> listOfCommonMethods = new List<string>
-		{
-			"DefaultCodeTemplates/CDLocRule",
-			"DefaultCodeTemplates/CDLRSimpl",
-			"DefaultCodeTemplates/CSharpIO",
-			"DefaultCodeTemplates/CSharp",
-			"DefaultCodeTemplates/TDFExtend",
-			"DefaultCodeTemplates/TDFStrict"
-		};
-
-
 		readonly List<string> listOfEvents = new List<string> {
 			"None",
 			"FailedLogin",
@@ -156,33 +145,6 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectTemplates
 			Assert.IsTrue(expectedResult);
 		}
 
-
-		[TestCase(8)]
-		[TestCase(9)]
-		[TestCase(10)]
-		[TestCase(11)]
-		[TestCase(12)]
-		[TestCase(14)]
-		[TestCase(15)]
-		public void CheckForExistingMethodsXml(int spVersion)
-		{
-			//Arrange
-			bool expectedResult;
-			var methodNames = GetMethodsNamesBySpVersion(spVersion);
-
-			//Action 
-			using (FileStream zipToOpen = new FileStream(Path.Combine(pathToZipFolder, $"Aras11SP{spVersion}MethodProject.zip"), FileMode.Open))
-			{
-				using (ZipArchive archive = new ZipArchive(zipToOpen))
-				{
-					expectedResult = methodNames.All(methodName => archive.Entries.FirstOrDefault(entry => entry.FullName == methodName) != null);
-				}
-			}
-
-			//Assert
-			Assert.IsTrue(expectedResult);
-		}
-
 		private List<string> GetCommonFilesBySpVersion(int spVersion)
 		{
 			var list = new List<string>(listOfCommonFiles);
@@ -198,21 +160,6 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectTemplates
 				list.Add("ArasLibs/Aras.TreeGridView.dll");
 			}
 			return list;
-		}
-
-		private List<string> GetMethodsNamesBySpVersion(int spVersion)
-		{
-			var list = new List<string>(listOfCommonMethods);
-
-			if (spVersion >= 12)
-			{
-				list.Add("DefaultCodeTemplates/CoreAccess");
-				list.Add("DefaultCodeTemplates/CoreConfig");
-				list.Add("DefaultCodeTemplates/CoreScope");
-				list.Add("DefaultCodeTemplates/TreeGrid");
-			}
-
-			return list.SelectMany(method => listOfEvents.Select(evnt => method + evnt + ".xml")).ToList();
 		}
 	}
 }

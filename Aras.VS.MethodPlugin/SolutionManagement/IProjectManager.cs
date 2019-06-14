@@ -6,8 +6,10 @@
 
 using System;
 using System.Collections.Generic;
+using Aras.Method.Libs.Aras.Package;
 using Aras.Method.Libs.Code;
 using Aras.Method.Libs.Configurations.ProjectConfigurations;
+using Aras.VS.MethodPlugin.Dialogs;
 using EnvDTE;
 using Microsoft.VisualStudio.LanguageServices;
 using Microsoft.VisualStudio.Shell;
@@ -17,11 +19,13 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 {
 	public interface IProjectManager
 	{
-		string ProjectConfigPath { get; }
-
 		string MethodConfigPath { get; }
 
-		string DefaultCodeTemplatesPath { get; }
+		string IOMFilePath { get; }
+
+		string ProjectFolderPath { get; }
+
+		string ProjectConfigPath { get; }
 
 		string ServerMethodFolderPath { get; }
 
@@ -32,6 +36,8 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 		Microsoft.CodeAnalysis.Document ActiveDocument { get; }
 
 		string ActiveDocumentMethodFullPath { get; }
+
+		string ActiveDocumentFilePath { get; }
 
 		string ActiveDocumentMethodName { get; }
 
@@ -61,21 +67,23 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 
 		bool SolutionHasProject{ get; }
 
+		string Language { get; }
+
 		bool IsCommandForMethod(Guid commandId);
 
 		IEnumerable<string> GetSelectedFiles();
 
-		string AddItemTemplateToProjectNew(CodeInfo codeInfo, bool openAfterCreation, int cursorIndex = -1);
+		string AddItemTemplateToProjectNew(CodeInfo codeInfo, string packagePath, bool openAfterCreation, int cursorIndex = -1);
 
-		bool IsMethodExist(string methodName);
+		bool IsMethodExist(string packagePath, string methodName);
 
 		bool IsFileExist(string path);
 
 		void RemoveMethod(MethodInfo methodInfo);
 
-		void CreateMethodTree(GeneratedCodeInfo generatedCodeInfo);
+		void CreateMethodTree(GeneratedCodeInfo generatedCodeInfo, PackageInfo packageInfo);
 
-		bool SaveDirtyFiles(List<MethodInfo> methodInfos);
+		bool SaveDirtyFiles(IDialogFactory dialogFactory, List<MethodInfo> methodInfos);
 
 		void ExecuteCommand(string commandName);
 

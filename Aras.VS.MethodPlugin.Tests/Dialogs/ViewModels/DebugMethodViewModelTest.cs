@@ -6,7 +6,6 @@ using System.Xml;
 using Aras.Method.Libs.Code;
 using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.Dialogs.ViewModels;
 using Aras.VS.MethodPlugin.Tests.Dialogs.SubAdapters;
@@ -23,7 +22,6 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 
 		private IAuthenticationManager authenticationManager;
 		private IProjectConfigurationManager projectConfigurationManager;
-		private IProjectConfiguraiton projectConfiguration;
 		private IDialogFactory dialogFactory;
 		private MethodInfo methodInformation;
 
@@ -51,8 +49,9 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 		public void Setup()
 		{
 			this.authenticationManager = Substitute.For<IAuthenticationManager>();
+			IProjectConfiguraiton projectConfiguration = Substitute.For<IProjectConfiguraiton>();
 			this.projectConfigurationManager = Substitute.For<IProjectConfigurationManager>();
-			this.projectConfiguration = Substitute.For<IProjectConfiguraiton>();
+			this.projectConfigurationManager.CurrentProjectConfiguraiton.Returns(projectConfiguration);
 			this.dialogFactory = Substitute.For<IDialogFactory>();
 			this.methodInformation = new MethodInfo();
 
@@ -67,7 +66,8 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 				}
 			};
 
-			this.projectConfiguration.Connections.Returns(this.connectionInfos);
+			projectConfiguration.Connections.Returns(this.connectionInfos);
+			
 		}
 
 		[Test]
@@ -79,7 +79,6 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 				//Act
 				DebugMethodViewModel debugMethodViewModel = new DebugMethodViewModel(null,
 					this.projectConfigurationManager,
-					this.projectConfiguration,
 					this.methodInformation,
 					this.dialogFactory,
 					"testMethodCode",
@@ -97,26 +96,6 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 			{
 				//Act
 				DebugMethodViewModel debugMethodViewModel = new DebugMethodViewModel(this.authenticationManager,
-					null,
-					this.projectConfiguration,
-					this.methodInformation,
-					this.dialogFactory,
-					"testMethodCode",
-					"testProjectConfigPath",
-					"testProjectName",
-					"testProjectFullName");
-			});
-		}
-
-		[Test]
-		public void Ctor_ShouldProjectProjectConfiguraitonThrowArgumentNullException()
-		{
-			//Assert
-			Assert.Throws<ArgumentNullException>(() =>
-			{
-				//Act
-				DebugMethodViewModel debugMethodViewModel = new DebugMethodViewModel(this.authenticationManager,
-					this.projectConfigurationManager,
 					null,
 					this.methodInformation,
 					this.dialogFactory,
@@ -136,7 +115,6 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 				//Act
 				DebugMethodViewModel debugMethodViewModel = new DebugMethodViewModel(this.authenticationManager,
 					this.projectConfigurationManager,
-					this.projectConfiguration,
 					null,
 					this.dialogFactory,
 					"testMethodCode",
@@ -155,7 +133,6 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 				//Act
 				DebugMethodViewModel debugMethodViewModel = new DebugMethodViewModel(this.authenticationManager,
 					this.projectConfigurationManager,
-					this.projectConfiguration,
 					this.methodInformation,
 					null,
 					"testMethodCode",
@@ -174,7 +151,6 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 			//Act
 			DebugMethodViewModel debugMethodViewModel = new DebugMethodViewModel(authenticationManager,
 				this.projectConfigurationManager,
-				this.projectConfiguration,
 				this.methodInformation,
 				this.dialogFactory,
 				this.methodCode,
@@ -201,7 +177,6 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 			string projectFullName = "testProjectFullName";
 			DebugMethodViewModel debugMethodViewModel = new DebugMethodViewModel(authenticationManager,
 				this.projectConfigurationManager,
-				this.projectConfiguration,
 				this.methodInformation,
 				this.dialogFactory,
 				this.methodCode,
@@ -210,7 +185,7 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 				projectFullName);
 
 			LoginViewTestAdapter adapter = new LoginViewTestAdapter(false);
-			this.dialogFactory.GetLoginView(this.projectConfiguration, projectName, projectFullName).Returns(adapter);
+			this.dialogFactory.GetLoginView(this.projectConfigurationManager.CurrentProjectConfiguraiton, projectName, projectFullName).Returns(adapter);
 
 			//Act
 			debugMethodViewModel.EditConnectionInfoCommand.Execute(null);
@@ -229,7 +204,6 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 
 			DebugMethodViewModel debugMethodViewModel = new DebugMethodViewModel(authenticationManager,
 				this.projectConfigurationManager,
-				this.projectConfiguration,
 				this.methodInformation,
 				this.dialogFactory,
 				this.methodCode,
@@ -246,8 +220,8 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 			};
 
 			LoginViewTestAdapter adapter =new LoginViewTestAdapter(true);
-			this.dialogFactory.GetLoginView(this.projectConfiguration, projectName, projectFullName).Returns(adapter);
-			this.dialogFactory.When(x => x.GetLoginView(this.projectConfiguration, projectName, projectFullName)).Do(callback =>
+			this.dialogFactory.GetLoginView(this.projectConfigurationManager.CurrentProjectConfiguraiton, projectName, projectFullName).Returns(adapter);
+			this.dialogFactory.When(x => x.GetLoginView(this.projectConfigurationManager.CurrentProjectConfiguraiton, projectName, projectFullName)).Do(callback =>
 				{
 					connectionInfos[0].LastConnection = false;
 					connectionInfos.Add(newConnection);

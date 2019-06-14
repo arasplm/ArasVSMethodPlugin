@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Aras.Method.Libs;
+using Aras.Method.Libs.Aras.Package;
 using Aras.Method.Libs.Code;
 using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Commands;
@@ -34,34 +35,61 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 {
 	public class ProjectManager : IProjectManager
 	{
-		private const string arasLibsFolderName = "DefaultCodeTemplates";
-		private const string defaultCodeTemplatesFolderName = "DefaultCodeTemplates";
-		private const string serverMethodsFolderName = "ServerMethods";
-		private const string projectConfigFileName = "projectConfig.xml";
-		private const string methodConfigFileName = "method-config.xml";
-		private const string globalSuppressionsFileName = "GlobalSuppressions.cs";
-
-		private VisualStudioWorkspace visualStudioWorkspace;
-
 		private readonly IServiceProvider serviceProvider;
-		private readonly IDialogFactory dialogFactory;
 		private readonly IIOWrapper iOWrapper;
 		private readonly IVsPackageWrapper vsPackageWrapper;
 		private readonly MessageManager messageManager;
+		private readonly IProjectConfigurationManager projectConfigurationManager;
 
-		public ProjectManager(IServiceProvider serviceProvider, IDialogFactory dialogFactory, IIOWrapper iOWrapper, IVsPackageWrapper vsPackageWrapper, MessageManager messageManager)
+		private VisualStudioWorkspace visualStudioWorkspace;
+
+		public ProjectManager(IServiceProvider serviceProvider,
+			IIOWrapper iOWrapper,
+			IVsPackageWrapper vsPackageWrapper,
+			MessageManager messageManager,
+			IProjectConfigurationManager projectConfigurationManager)
 		{
-			if (serviceProvider == null) throw new ArgumentNullException(nameof(serviceProvider));
-			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));
-			if (iOWrapper == null) throw new ArgumentNullException(nameof(iOWrapper));
-			if (vsPackageWrapper == null) throw new ArgumentNullException(nameof(vsPackageWrapper));
-			if (messageManager == null) throw new ArgumentNullException(nameof(messageManager));
+			this.serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+			this.iOWrapper = iOWrapper ?? throw new ArgumentNullException(nameof(iOWrapper));
+			this.vsPackageWrapper = vsPackageWrapper ?? throw new ArgumentNullException(nameof(vsPackageWrapper));
+			this.messageManager = messageManager ?? throw new ArgumentNullException(nameof(messageManager));
+			this.projectConfigurationManager = projectConfigurationManager ?? throw new ArgumentNullException(nameof(projectConfigurationManager));
+		}
 
-			this.serviceProvider = serviceProvider;
-			this.dialogFactory = dialogFactory;
-			this.iOWrapper = iOWrapper;
-			this.vsPackageWrapper = vsPackageWrapper;
-			this.messageManager = messageManager;
+		public string MethodConfigPath
+		{
+			get
+			{
+				string methodConfigPath = this.projectConfigurationManager.CurrentProjectConfiguraiton.MethodConfigPath;
+				if (!iOWrapper.PathIsPathRooted(methodConfigPath))
+				{
+					methodConfigPath = iOWrapper.PathCombine(this.ProjectFolderPath, methodConfigPath);
+				}
+
+				return methodConfigPath;
+			}
+		}
+
+		public string IOMFilePath
+		{
+			get
+			{
+				string iOMFilePath = this.projectConfigurationManager.CurrentProjectConfiguraiton.IOMFilePath;
+				if (!iOWrapper.PathIsPathRooted(iOMFilePath))
+				{
+					iOMFilePath = iOWrapper.PathCombine(this.ProjectFolderPath, iOMFilePath);
+				}
+
+				return iOMFilePath;
+			}
+		}
+
+		public string ProjectFolderPath
+		{
+			get
+			{
+				return Path.GetDirectoryName(GetFirstSelectedProject().FullName);
+			}
 		}
 
 		public string ProjectConfigPath
@@ -69,28 +97,8 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 			get
 			{
 				var project = GetFirstSelectedProject();
-				ProjectItem projectConfigItem = project.ProjectItems.Item(projectConfigFileName);
+				ProjectItem projectConfigItem = project.ProjectItems.Item(GlobalConsts.projectConfigFileName);
 				return projectConfigItem.FileNames[0];
-			}
-		}
-
-		public string MethodConfigPath
-		{
-			get
-			{
-				var project = GetFirstSelectedProject();
-				var methodConfigFile = project.ProjectItems.Item(methodConfigFileName);
-				return methodConfigFile.FileNames[0];
-			}
-		}
-
-		public string DefaultCodeTemplatesPath
-		{
-			get
-			{
-				var project = GetFirstSelectedProject();
-				ProjectItem defaultmethodConfigFile = project.ProjectItems.Item(defaultCodeTemplatesFolderName);
-				return defaultmethodConfigFile.FileNames[0];
 			}
 		}
 
@@ -99,7 +107,7 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 			get
 			{
 				var project = GetFirstSelectedProject();
-				ProjectItem defaultmethodConfigFile = project.ProjectItems.Item(globalSuppressionsFileName);
+				ProjectItem defaultmethodConfigFile = project.ProjectItems.Item(GlobalConsts.globalSuppressionsFileName);
 				return defaultmethodConfigFile.FileNames[0];
 			}
 		}
@@ -117,9 +125,7 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 		{
 			get
 			{
-				string methodPath = this.MethodPath;
-				string methodName = Path.GetFileNameWithoutExtension(methodPath);
-				return methodName;
+				return Path.GetFileNameWithoutExtension(this.MethodPath);
 			}
 		}
 
@@ -158,6 +164,14 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 				var dte = (DTE2)serviceProvider.GetService(typeof(DTE));
 				string ActiveDocumentlFilePath = dte.ActiveDocument.FullName;
 				return GetMethodPath(ActiveDocumentlFilePath);
+			}
+		}
+
+		public string ActiveDocumentFilePath
+		{
+			get
+			{
+				return this.ActiveDocument.FilePath;
 			}
 		}
 
@@ -233,12 +247,7 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 		{
 			get
 			{
-				if (!SelectedProject.ProjectItems.Exists(serverMethodsFolderName))
-				{
-					SelectedProject.ProjectItems.AddFolder(serverMethodsFolderName);
-				}
-
-				return SelectedProject.ProjectItems.Item(serverMethodsFolderName);
+				return ForceLoadProjectFolder(this.projectConfigurationManager.CurrentProjectConfiguraiton.MethodsFolderPath);
 			}
 		}
 
@@ -254,7 +263,6 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 		{
 			get
 			{
-				var project = GetFirstSelectedProject();
 				ProjectItem defaultmethodConfigFile = this.ServerMethodsFolderItem;
 				return defaultmethodConfigFile.FileNames[0];
 			}
@@ -277,11 +285,8 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 				{
 					return false;
 				}
-				if (selectedProject.ProjectItems.Exists(arasLibsFolderName) &&
-					selectedProject.ProjectItems.Exists(defaultCodeTemplatesFolderName) &&
-					selectedProject.ProjectItems.Exists(serverMethodsFolderName) &&
-					selectedProject.ProjectItems.Exists(methodConfigFileName) &&
-					selectedProject.ProjectItems.Exists(projectConfigFileName))
+
+				if (selectedProject.ProjectItems.Exists(GlobalConsts.projectConfigFileName))
 				{
 					return true;
 				}
@@ -304,6 +309,8 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 				return false;
 			}
 		}
+
+		public string Language { get { return SelectedProject.CodeModel.Language; } }
 
 		public bool IsCommandForMethod(Guid commandId)
 		{
@@ -362,36 +369,36 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 				   select pi?.FileNames[1];
 		}
 
-		public void CreateMethodTree(GeneratedCodeInfo generatedCodeInfo)
+		public void CreateMethodTree(GeneratedCodeInfo generatedCodeInfo, PackageInfo packageInfo)
 		{
-			AddItemTemplateToProjectNew(generatedCodeInfo.WrapperCodeInfo, false);
+			AddItemTemplateToProjectNew(generatedCodeInfo.WrapperCodeInfo, packageInfo.MethodFolderPath, false);
 
 			var splittedByLinesArray = generatedCodeInfo.MethodCodeInfo.Code.Split(new string[] { "\r\n" }, StringSplitOptions.None);
 			int index = 1;
 			for (int i = 0; i < splittedByLinesArray.Length; i++)
 			{
-				if (splittedByLinesArray[i].Contains("#region MethodCode"))
+				if (splittedByLinesArray[i].Contains(GlobalConsts.RegionMethodCode))
 				{
 					index = i + 2;
 				}
 			}
-			AddItemTemplateToProjectNew(generatedCodeInfo.MethodCodeInfo, true, index);
-			AddItemTemplateToProjectNew(generatedCodeInfo.TestsCodeInfo, false);
+			AddItemTemplateToProjectNew(generatedCodeInfo.MethodCodeInfo, packageInfo.MethodFolderPath, true, index);
 
 			foreach (var partialCodeInfo in generatedCodeInfo.PartialCodeInfoList)
 			{
-				AddItemTemplateToProjectNew(partialCodeInfo, false);
+				AddItemTemplateToProjectNew(partialCodeInfo, packageInfo.MethodFolderPath, false);
 			}
 
 			foreach (var externalItemsInfo in generatedCodeInfo.ExternalItemsInfoList)
 			{
-				AddItemTemplateToProjectNew(externalItemsInfo, false);
+				AddItemTemplateToProjectNew(externalItemsInfo, packageInfo.MethodFolderPath, false);
 			}
 		}
 
-		public string AddItemTemplateToProjectNew(CodeInfo codeInfo, bool openAfterCreation, int cursorIndex = -1)
+		public string AddItemTemplateToProjectNew(CodeInfo codeInfo, string packagePath, bool openAfterCreation, int cursorIndex = -1)
 		{
-			string codeFilePath = !Path.HasExtension(codeInfo.Path) ? codeInfo.Path + ".cs" : codeInfo.Path;
+			string codeFilePath = !Path.HasExtension(codeInfo.Path) ? codeInfo.Path + GlobalConsts.CSExtension : codeInfo.Path;
+			codeFilePath = Path.Combine(packagePath, codeFilePath);
 
 			var folder = GetProjectFolder(codeFilePath);
 			var fullPathToFolder = folder.Properties.Item("FullPath").Value.ToString();
@@ -418,29 +425,35 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 			dte.ExecuteCommand(commandName);
 		}
 
-		public bool IsMethodExist(string methodName)
+		public bool IsMethodExist(string packagePath, string methodName)
 		{
 			string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(methodName);
 			ProjectItem folder;
-			ProjectItems serverMethodFolderItems = ServerMethodFolderItems;
-			if (serverMethodFolderItems.Exists(fileNameWithoutExtension))
+			ProjectItem serverMethodFolderItems = LoadProjectFolder(packagePath);
+			if (serverMethodFolderItems == null)
 			{
-				folder = serverMethodFolderItems.Item(fileNameWithoutExtension);
-				string methodNameWithExtension = !Path.HasExtension(methodName) ? methodName + ".cs" : methodName;
+				return false;
+			}
+
+			if (serverMethodFolderItems.ProjectItems.Exists(fileNameWithoutExtension))
+			{
+				folder = serverMethodFolderItems.ProjectItems.Item(fileNameWithoutExtension);
+				string methodNameWithExtension = !Path.HasExtension(methodName) ? methodName + GlobalConsts.CSExtension : methodName;
 				return folder.ProjectItems.Exists(methodNameWithExtension);
 			}
 
 			return false;
 		}
 
-		public bool IsFileExist(string path)
+		public bool IsFileExist(string filePath)
 		{
-			string[] pathParts = path.Split(new string[] { @"\" }, StringSplitOptions.RemoveEmptyEntries);
+			string[] pathParts = filePath.Split(new string[] { @"\", "/" }, StringSplitOptions.RemoveEmptyEntries);
 
 			string fileName = pathParts.Last();
-			var fileNameWithExtension = !Path.HasExtension(fileName) ? fileName + ".cs" : fileName;
+			var fileNameWithExtension = !Path.HasExtension(fileName) ? fileName + GlobalConsts.CSExtension : fileName;
 
-			ProjectItem folder = LoadProjectFolder(path);
+			string folderPath = iOWrapper.PathGetDirectoryName(filePath);
+			ProjectItem folder = LoadProjectFolder(folderPath);
 			if (folder == null || !folder.ProjectItems.Exists(fileNameWithExtension))
 			{
 				return false;
@@ -451,8 +464,8 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 
 		public void RemoveMethod(MethodInfo methodInfo)
 		{
-			var methodFolder = GetProjectFolder(methodInfo.MethodName);
-			var methodNameWithExtension = !Path.HasExtension(methodInfo.MethodName) ? methodInfo.MethodName + ".cs" : methodInfo.MethodName;
+			var methodFolder = GetProjectFolder(Path.Combine(methodInfo.Package.MethodFolderPath, methodInfo.MethodName));
+			var methodNameWithExtension = !Path.HasExtension(methodInfo.MethodName) ? methodInfo.MethodName + GlobalConsts.CSExtension : methodInfo.MethodName;
 			//remove method
 			if (methodFolder.ProjectItems.Exists(methodNameWithExtension))
 			{
@@ -461,9 +474,10 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 				methodItem.Remove();
 				this.iOWrapper.FileDelete(pathToItem);
 			}
+
 			//remove wrapper
 			var methodName = methodInfo.MethodName + "Wrapper";
-			methodNameWithExtension = !Path.HasExtension(methodName) ? methodName + ".cs" : methodName;
+			methodNameWithExtension = !Path.HasExtension(methodName) ? methodName + GlobalConsts.CSExtension : methodName;
 			if (methodFolder.ProjectItems.Exists(methodNameWithExtension))
 			{
 
@@ -472,104 +486,21 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 				methodItem.Remove();
 				this.iOWrapper.FileDelete(pathToItem);
 			}
-
-			//remove tests
-			methodName = methodInfo.MethodName + "Tests";
-			methodNameWithExtension = !Path.HasExtension(methodName) ? methodName + ".cs" : methodName;
-			if (methodFolder.ProjectItems.Exists(methodNameWithExtension))
-			{
-
-				var methodItem = methodFolder.ProjectItems.Item(methodNameWithExtension);
-				var pathToItem = methodItem.Properties.Item("FullPath").Value.ToString();
-				methodItem.Remove();
-				this.iOWrapper.FileDelete(pathToItem);
-			}
-
-			//remove partial classes
-			var partialClassesForDelete = new List<string>();
-			foreach (var partialCodeInfo in methodInfo.PartialClasses)
-			{
-				var folder = methodFolder.ProjectItems;
-				string pathToFolder = string.Empty;
-				var updatedPath = partialCodeInfo.Replace("\"", "");
-				string[] partialFilePath = updatedPath.Split(new string[] { @"/" }, StringSplitOptions.RemoveEmptyEntries);
-
-				var partialFileName = !Path.HasExtension(partialFilePath.Last()) ? partialFilePath.Last() + ".cs" : partialFilePath.Last();
-				for (int i = 0; i < partialFilePath.Length - 1; i++)
-				{
-					string partialMethodNameWithoutExtension = Path.GetFileNameWithoutExtension(partialFilePath[i]);
-					if (folder.Exists(partialMethodNameWithoutExtension))
-					{
-						pathToFolder = folder.Item(partialMethodNameWithoutExtension).Properties.Item("FullPath").Value.ToString();
-						folder = folder.Item(partialMethodNameWithoutExtension).ProjectItems;
-					}
-				}
-
-				if (folder.Exists(partialFileName))
-				{
-					var methodItem = folder.Item(partialFileName);
-					var pathToItem = methodItem.Properties.Item("FullPath").Value.ToString();
-					methodItem.Remove();
-					this.iOWrapper.FileDelete(pathToItem);
-				}
-
-				partialClassesForDelete.Add(partialCodeInfo);
-			}
-
-			foreach (var pcfd in partialClassesForDelete)
-			{
-				methodInfo.PartialClasses.Remove(pcfd);
-			}
-
-			//remove external codes
-			var externalItemsForDelete = new List<string>();
-			foreach (var externalItemInfo in methodInfo.ExternalItems)
-			{
-				var folder = methodFolder.ProjectItems;
-				string pathToFolder = string.Empty;
-				var updatedPath = externalItemInfo.Replace("\"", "");
-				string[] externalFilePath = updatedPath.Split(new string[] { @"/" }, StringSplitOptions.RemoveEmptyEntries);
-
-				var externalFileName = !Path.HasExtension(externalFilePath.Last()) ? externalFilePath.Last() + ".cs" : externalFilePath.Last();
-				for (int i = 0; i < externalFilePath.Length - 1; i++)
-				{
-					string externalMethodNameWithoutExtension = Path.GetFileNameWithoutExtension(externalFilePath[i]);
-					if (folder.Exists(externalMethodNameWithoutExtension))
-					{
-						pathToFolder = folder.Item(externalMethodNameWithoutExtension).Properties.Item("FullPath").Value.ToString();
-						folder = folder.Item(externalMethodNameWithoutExtension).ProjectItems;
-					}
-				}
-
-				if (folder.Exists(externalFileName))
-				{
-					var methodItem = folder.Item(externalFileName);
-					var pathToItem = methodItem.Properties.Item("FullPath").Value.ToString();
-					methodItem.Remove();
-					this.iOWrapper.FileDelete(pathToItem);
-				}
-
-				externalItemsForDelete.Add(externalItemInfo);
-			}
-
-			foreach (var pcfd in externalItemsForDelete)
-			{
-				methodInfo.ExternalItems.Remove(pcfd);
-			}
-
-			//remove folder if no files inside
 		}
 
-		public bool SaveDirtyFiles(List<MethodInfo> methodInfos)
+		public bool SaveDirtyFiles(IDialogFactory dialogFactory, List<MethodInfo> methodInfos)
 		{
+			string serverMethodFolderPath = ServerMethodFolderPath;
+
 			bool saveIsApproved = false;
 
 			foreach (MethodInfo methodInfo in methodInfos)
 			{
-				var methodPaths = new List<string>();
-				methodPaths.Add(methodInfo.MethodName + "\\" + methodInfo.MethodName);
-				methodPaths.AddRange(methodInfo.PartialClasses);
-				methodPaths.AddRange(methodInfo.ExternalItems);
+				string methodWorkingFolder = Path.Combine(serverMethodFolderPath, methodInfo.Package.MethodFolderPath, methodInfo.MethodName);
+				List<string> methodPaths = iOWrapper.DirectoryGetFiles(methodWorkingFolder, $"*{GlobalConsts.CSExtension}", SearchOption.AllDirectories)
+					.Select(x => x.Substring(serverMethodFolderPath.Length))
+					.ToList();
+
 				foreach (string methodPath in methodPaths)
 				{
 					ProjectItem fileProjectItem = LoadItemFolder(methodPath);
@@ -611,7 +542,7 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 
 		private ProjectItem GetProjectFolder(string path)
 		{
-			string[] pathParts = path.Split(new string[] { @"\" }, StringSplitOptions.RemoveEmptyEntries);
+			string[] pathParts = path.Split(new string[] { @"\", "/" }, StringSplitOptions.RemoveEmptyEntries);
 			string fileName = pathParts.Last();
 			ProjectItem folder = this.ServerMethodsFolderItem;
 			for (int i = 0; i < pathParts.Length; i++)
@@ -639,11 +570,47 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 			return folder;
 		}
 
+		private ProjectItem ForceLoadProjectFolder(string path)
+		{
+			Project root = SelectedProject;
+
+			string[] pathParts = path.Split(new string[] { @"\", "/" }, StringSplitOptions.RemoveEmptyEntries);
+			int count = iOWrapper.PathHasExtension(path) ? pathParts.Length - 1 : pathParts.Length;
+
+			if (count == 0)
+			{
+				return null;
+			}
+
+
+			if (!root.ProjectItems.Exists(pathParts[0]))
+			{
+				root.ProjectItems.AddFolder(pathParts[0]);
+			}
+
+			ProjectItem projectItemFolder = root.ProjectItems.Item(pathParts[0]);
+
+			for (int i = 1; i < count; i++)
+			{
+				if (!projectItemFolder.ProjectItems.Exists(pathParts[i]))
+				{
+					projectItemFolder.ProjectItems.AddFolder(pathParts[i]);
+				}
+
+				projectItemFolder = projectItemFolder.ProjectItems.Item(pathParts[i]);
+			}
+
+			return projectItemFolder;
+		}
+
 		private ProjectItem LoadProjectFolder(string path)
 		{
-			string[] pathParts = path.Split(new string[] { @"\" }, StringSplitOptions.RemoveEmptyEntries);
+			string[] pathParts = path.Split(new string[] { @"\", "/" }, StringSplitOptions.RemoveEmptyEntries);
 			ProjectItem folder = this.ServerMethodsFolderItem;
-			for (int i = 0; i < pathParts.Length - 1; i++)
+
+			int count = iOWrapper.PathHasExtension(path) ? pathParts.Length - 1 : pathParts.Length;
+
+			for (int i = 0; i < count; i++)
 			{
 				if (folder.ProjectItems.Exists(pathParts[i]))
 				{
@@ -661,10 +628,10 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 
 		private ProjectItem LoadItemFolder(string path)
 		{
-			string[] pathParts = path.Split(new string[] { @"\" }, StringSplitOptions.RemoveEmptyEntries);
+			string[] pathParts = path.Split(new string[] { @"\", "/" }, StringSplitOptions.RemoveEmptyEntries);
 			string methodName = pathParts.Last();
 			string methodNameWithoutExtension = Path.GetFileNameWithoutExtension(methodName);
-			string methodNameWithExtension = !Path.HasExtension(methodName) ? methodName + ".cs" : methodName;
+			string methodNameWithExtension = !Path.HasExtension(methodName) ? methodName + GlobalConsts.CSExtension : methodName;
 
 			ProjectItem fileProjectItem = null;
 			ProjectItem folderProjectItem = LoadProjectFolder(path);
@@ -721,7 +688,7 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 			this.iOWrapper.WriteAllTextIntoFile(GlobalSuppressionsPath, stringBuilder.ToString(), new UTF8Encoding(true));
 		}
 
-		private static string GetMethodPath(string selectedFilePath)
+		private string GetMethodPath(string selectedFilePath)
 		{
 			string mainFilePath = string.Empty;
 			if (!string.IsNullOrEmpty(selectedFilePath))
@@ -733,9 +700,9 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 					string rootFolderName = parrentDirectoryInfo.Name;
 					string methodFolderName = directoryInfo.Name;
 
-					if (rootFolderName == serverMethodsFolderName && !Path.HasExtension(methodFolderName))
+					if (rootFolderName == "Method" && !Path.HasExtension(methodFolderName))
 					{
-						mainFilePath = Path.Combine(directoryInfo.FullName, methodFolderName + ".cs");
+						mainFilePath = Path.Combine(directoryInfo.FullName, methodFolderName + GlobalConsts.CSExtension);
 						break;
 					}
 

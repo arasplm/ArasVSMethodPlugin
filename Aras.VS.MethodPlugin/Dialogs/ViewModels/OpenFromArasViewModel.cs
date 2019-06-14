@@ -12,10 +12,11 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Aras.Method.Libs;
+using Aras.Method.Libs.Aras.Package;
 using Aras.Method.Libs.Code;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.Method.Libs.Templates;
 using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.ItemSearch;
 using Aras.VS.MethodPlugin.PackageManagement;
@@ -36,7 +37,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private string projectFullName;
 		private string projectLanguage;
 
-		private IProjectConfiguraiton projectConfiguration;
 		private ConnectionInfo connectionInfo;
 
 		private string methodComment;
@@ -62,7 +62,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			IAuthenticationManager authenticationManager,
 			IDialogFactory dialogFactory,
 			IProjectConfigurationManager configurationManager,
-			IProjectConfiguraiton projectConfiguration,
 			TemplateLoader templateLoader,
 			PackageManager packageManager,
 			MessageManager messageManager,
@@ -74,7 +73,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			if (authenticationManager == null) throw new ArgumentNullException(nameof(authenticationManager));
 			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));
 			if (configurationManager == null) throw new ArgumentNullException(nameof(configurationManager));
-			if (projectConfiguration == null) throw new ArgumentNullException(nameof(projectConfiguration));
 			if (templateLoader == null) throw new ArgumentNullException(nameof(templateLoader));
 			if (packageManager == null) throw new ArgumentNullException(nameof(packageManager));
 			if (messageManager == null) throw new ArgumentNullException(nameof(messageManager));
@@ -82,7 +80,6 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.authenticationManager = authenticationManager;
 			this.dialogFactory = dialogFactory;
 			this.configurationManager = configurationManager;
-			this.projectConfiguration = projectConfiguration;
 			this.templateLoader = templateLoader;
 			this.packageManager = packageManager;
 			this.messageManager = messageManager;
@@ -91,14 +88,14 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.projectName = projectName;
 			this.projectFullName = projectFullName;
 			this.projectLanguage = projectLanguage;
-			this.isUseVSFormattingCode = projectConfiguration.UseVSFormatting;
+			this.isUseVSFormattingCode = configurationManager.CurrentProjectConfiguraiton.UseVSFormatting;
 
 			this.editConnectionInfoCommand = new RelayCommand<object>(EditConnectionInfoCommandClicked);
 			this.searchMethodDialogCommand = new RelayCommand<object>(SearchMethodDialogCommandClicked);
 			this.okCommand = new RelayCommand<object>(OkCommandCliked, IsEnabledOkButton);
 			this.closeCommand = new RelayCommand<object>(OnCloseCliked);
 
-			ConnectionInformation = projectConfiguration.Connections.First(c => c.LastConnection);
+			ConnectionInformation = configurationManager.CurrentProjectConfiguraiton.Connections.First(c => c.LastConnection);
 			SelectedEventSpecificData = EventSpecificData.First();
 		}
 
@@ -240,6 +237,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			}
 		}
 
+		public PackageInfo SelectedPackageInfo { get { return new PackageInfo(package); } }
+
 		public bool IsUseVSFormattingCode
 		{
 			get { return isUseVSFormattingCode; }
@@ -263,14 +262,14 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private void EditConnectionInfoCommandClicked(object window)
 		{
 			var loginView = new LoginView();
-			var loginViewModel = new LoginViewModel(authenticationManager, projectConfiguration, projectName, projectFullName);
+			var loginViewModel = new LoginViewModel(authenticationManager, configurationManager.CurrentProjectConfiguraiton, projectName, projectFullName);
 			loginView.DataContext = loginViewModel;
 			loginView.Owner = window as Window;
 
 			if (loginView.ShowDialog() == true)
 			{
-				configurationManager.Save(pathToProjectConfigFile, projectConfiguration);
-				ConnectionInformation = projectConfiguration.Connections.First(c => c.LastConnection);
+				configurationManager.Save(pathToProjectConfigFile);
+				ConnectionInformation = configurationManager.CurrentProjectConfiguraiton.Connections.First(c => c.LastConnection);
 
 				this.MethodName = string.Empty;
 				this.MethodId = string.Empty;
@@ -291,10 +290,10 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			string itemTypeName = "Method";
 			string itemTypeSingularLabel = "Method";
 
-			var predefinedPropertyValues = new List<PropertyInfo> { new PropertyInfo() { PropertyName = "method_type", PropertyValue = projectLanguage, IsReadonly = true } };
+			List<PropertyInfo> predefinedPropertyValues = new List<PropertyInfo> { new PropertyInfo() { PropertyName = "method_type", PropertyValue = projectLanguage, IsReadonly = true } };
 
 			List<PropertyInfo> predefinedSearchItems;
-			if (!projectConfiguration.LastSavedSearch.TryGetValue(itemTypeName, out predefinedSearchItems))
+			if (!configurationManager.CurrentProjectConfiguraiton.LastSavedSearch.TryGetValue(itemTypeName, out predefinedSearchItems))
 			{
 				predefinedSearchItems = new List<PropertyInfo>();
 			}
@@ -306,7 +305,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 					continue;
 				}
 
-				predefinedPropertyValues.Add(new PropertyInfo() { PropertyName = searchItem.PropertyName, PropertyValue = searchItem.PropertyValue });
+				predefinedPropertyValues.Add(new ItemSearchPropertyInfo() { PropertyName = searchItem.PropertyName, PropertyValue = searchItem.PropertyValue });
 			}
 
 			var presenter = dialogFactory.GetItemSearchPresenter(itemTypeName, itemTypeSingularLabel);
@@ -347,7 +346,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 				try
 				{
-					packageName = packageManager.GetPackageDefinitionByElementName(methodName);
+					packageName = packageManager.GetPackageDefinitionByElementName(methodName).Name;
 				}
 				catch (Exception ex) { }
 
@@ -376,13 +375,13 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 				this.SelectedTemplate = template;
 
-				if (projectConfiguration.LastSavedSearch.ContainsKey(result.ItemType))
+				if (configurationManager.CurrentProjectConfiguraiton.LastSavedSearch.ContainsKey(result.ItemType))
 				{
-					projectConfiguration.LastSavedSearch[result.ItemType] = result.LastSavedSearch;
+					configurationManager.CurrentProjectConfiguraiton.LastSavedSearch[result.ItemType] = result.LastSavedSearch.Cast<PropertyInfo>().ToList();
 				}
 				else
 				{
-					projectConfiguration.LastSavedSearch.Add(result.ItemType, result.LastSavedSearch);
+					configurationManager.CurrentProjectConfiguraiton.LastSavedSearch.Add(result.ItemType, result.LastSavedSearch.Cast<PropertyInfo>().ToList());
 				}
 			}
 		}
@@ -402,7 +401,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 		private bool IsEnabledOkButton(object obj)
 		{
-			if (string.IsNullOrEmpty(methodName))
+			if (string.IsNullOrEmpty(methodName) || string.IsNullOrEmpty(package))
 			{
 				return false;
 			}

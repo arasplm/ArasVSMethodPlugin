@@ -6,7 +6,6 @@ using Aras.Method.Libs.Code;
 using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Commands;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using NSubstitute;
@@ -55,9 +54,16 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			codeProviderFactory = Substitute.For<ICodeProviderFactory>();
 			messageManager = Substitute.For<MessageManager>();
 			authenticationCommandBaseTest = new AuthenticationCommandBaseTest(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory, messageManager);
-			var projectConfiguraiton = Substitute.For<IProjectConfiguraiton>();
-			projectConfigurationManager.Load(projectManager.ProjectConfigPath).Returns(projectConfiguraiton);
+
+			IProjectConfiguraiton projectConfiguraiton = Substitute.For<IProjectConfiguraiton>();
 			projectConfiguraiton.Connections.Returns(Substitute.For<List<ConnectionInfo>>());
+			projectConfiguraiton.MethodInfos.Returns(Substitute.For<List<MethodInfo>>());
+
+			projectConfigurationManager.When(x => x.Load(projectManager.ProjectConfigPath))
+				.Do(callback => 
+				{
+					projectConfigurationManager.CurrentProjectConfiguraiton.Returns(projectConfiguraiton);
+				});
 		}
 
 		[Test]
@@ -86,13 +92,13 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 		{
 			//Arrange 
 			authManager.IsLoginedForCurrentProject(null, null).ReturnsForAnyArgs(true);
-			projectManager.SaveDirtyFiles(null).ReturnsForAnyArgs(true);
+			projectManager.SaveDirtyFiles(dialogFactory, null).ReturnsForAnyArgs(true);
 
 			//Act
 			authenticationCommandBaseTest.ExecuteCommand(null, null);
 
 			//Assert
-			Assert.IsTrue(projectManager.SaveDirtyFiles(Arg.Any<List<MethodInfo>>()));
+			Assert.IsTrue(projectManager.SaveDirtyFiles(dialogFactory, projectConfigurationManager.CurrentProjectConfiguraiton.MethodInfos));
 		}
 	}
 }

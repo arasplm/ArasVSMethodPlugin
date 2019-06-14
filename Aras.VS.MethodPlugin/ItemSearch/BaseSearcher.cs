@@ -34,9 +34,9 @@ namespace Aras.VS.MethodPlugin.ItemSearch
 
 		public abstract List<ItemTypeItem> GetItemTypes();
 
-		public virtual List<PropertyInfo> GetPropertiesForSearch(string itemType)
+		public virtual List<ItemSearchPropertyInfo> GetPropertiesForSearch(string itemType)
 		{
-			List<PropertyInfo> notSortedList = new List<PropertyInfo>();
+			List<ItemSearchPropertyInfo> notSortedList = new List<ItemSearchPropertyInfo>();
 			List<dynamic> properties = Utils.GetItemTypeProperties(innovatorInstance, itemType);
 
 			foreach (dynamic property in properties)
@@ -49,7 +49,7 @@ namespace Aras.VS.MethodPlugin.ItemSearch
 				}
 
 				var dataType = PropertyDataTypeParser.ParseDataType(property.getProperty("data_type"));
-				PropertyInfo propertyInfo;
+				ItemSearchPropertyInfo propertyInfo;
 				if (dataType == PropertyDataType.List)
 				{
 					var pinfo = new ListPropertyInfo();
@@ -88,7 +88,7 @@ namespace Aras.VS.MethodPlugin.ItemSearch
 				}
 				else
 				{
-					propertyInfo = new PropertyInfo();
+					propertyInfo = new ItemSearchPropertyInfo();
 				}
 
 				propertyInfo.PropertyName = property.getProperty("name");
@@ -114,9 +114,9 @@ namespace Aras.VS.MethodPlugin.ItemSearch
 				propertyInfo.Alignment = property.getProperty("column_alignment");
 				notSortedList.Add(propertyInfo);
 			}
-			notSortedList.Add(new PropertyInfo() { PropertyName = "id", IsHidden = true });
+			notSortedList.Add(new ItemSearchPropertyInfo() { PropertyName = "id", IsHidden = true });
 			UpdatePropertiesForSearch(notSortedList);
-			List<PropertyInfo> resultList = new List<PropertyInfo>();
+			List<ItemSearchPropertyInfo> resultList = new List<ItemSearchPropertyInfo>();
 			var layout = preferencesProvider.GetItemGridLayout(itemType);
 			if (layout != null)
 			{
@@ -236,7 +236,7 @@ namespace Aras.VS.MethodPlugin.ItemSearch
 				foreach (var item in search.SavedSearchProperties)
 				{
 					var value = currentItem.getProperty(item.PropertyName);
-					PropertyInfo foundedPropertyInfo;
+					ItemSearchPropertyInfo foundedPropertyInfo;
 					if (item.PropertyName == "locked_by_id")
 					{
 						var lockedPropertyInfo = new LockedByPropertyInfo();
@@ -261,7 +261,7 @@ namespace Aras.VS.MethodPlugin.ItemSearch
 					{
 						var label = currentItem.getPropertyAttribute(item.PropertyName, "keyed_name", string.Empty);
 
-						foundedPropertyInfo = new PropertyInfo()
+						foundedPropertyInfo = new ItemSearchPropertyInfo()
 						{
 							PropertyName = item.PropertyName,
 							PropertyValue = value,
@@ -271,7 +271,7 @@ namespace Aras.VS.MethodPlugin.ItemSearch
 					}
 					else
 					{
-						foundedPropertyInfo = new PropertyInfo()
+						foundedPropertyInfo = new ItemSearchPropertyInfo()
 						{
 							PropertyName = item.PropertyName,
 							PropertyValue = value,
@@ -304,11 +304,11 @@ namespace Aras.VS.MethodPlugin.ItemSearch
 			return resultSearchList;
 		}
 
-		protected virtual void UpdateSearch(dynamic defaultItemForSearch, string itemType, List<PropertyInfo> propertyForSearch)
+		protected virtual void UpdateSearch(dynamic defaultItemForSearch, string itemType, List<ItemSearchPropertyInfo> propertyForSearch)
 		{
 		}
 
-		protected virtual void UpdatePropertiesForSearch(List<PropertyInfo> properties)
+		protected virtual void UpdatePropertiesForSearch(List<ItemSearchPropertyInfo> properties)
 		{
 		}
 

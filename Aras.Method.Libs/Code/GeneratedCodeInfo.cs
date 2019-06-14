@@ -21,7 +21,6 @@ namespace Aras.Method.Libs.Code
 			this.MethodCodeInfo = new CodeInfo() { Code = codeInfo.MethodCodeInfo.Code, Path = codeInfo.MethodCodeInfo.Path };
 			this.PartialCodeInfoList = new List<CodeInfo>(codeInfo.PartialCodeInfoList);
 			this.ExternalItemsInfoList = new List<CodeInfo>(codeInfo.ExternalItemsInfoList);
-			this.TestsCodeInfo = new CodeInfo() { Code = codeInfo.TestsCodeInfo.Code, Path = codeInfo.TestsCodeInfo.Path };
 		}
 
 		public GeneratedCodeInfo()
@@ -30,7 +29,6 @@ namespace Aras.Method.Libs.Code
 			this.MethodCodeInfo = new CodeInfo();
 			this.PartialCodeInfoList = new List<CodeInfo>();
 			this.ExternalItemsInfoList = new List<CodeInfo>();
-			this.TestsCodeInfo = new CodeInfo();
 		}
 
 		public string Namespace { get; set; }
@@ -49,8 +47,6 @@ namespace Aras.Method.Libs.Code
 		public List<CodeInfo> PartialCodeInfoList { get; set; }
 
 		public List<CodeInfo> ExternalItemsInfoList { get; set; }
-
-		public CodeInfo TestsCodeInfo { get; set; }
 
 		public bool IsUseVSFormatting{ get; set; }
 	}

@@ -30,7 +30,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 				PackagePath = viewModel.PackagePath,
 				SelectedIdentityId = viewModel.SelectedIdentityId,
 				SelectedIdentityKeyedName = viewModel.SelectedIdentityKeyedName,
-				SelectedPackage = viewModel.SelectedPackage
+				SelectedPackage = viewModel.SelectedPackageInfo
 			};
 		}
 	}

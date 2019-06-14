@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using System.Xml;
 using Aras.Method.Libs;
+using Aras.Method.Libs.Aras.Package;
 using Aras.VS.MethodPlugin.Dialogs.Directory.Data;
 
 namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
@@ -132,6 +133,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				RaisePropertyChanged(nameof(this.SelectedPackageName));
 			}
 		}
+
+		public PackageInfo SelectedPakckageInfo { get { return new PackageInfo(selectedPackageName); } }
 
 		public List<ShortMethodInfoViewModel> Methods
 		{

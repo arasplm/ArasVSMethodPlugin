@@ -13,7 +13,6 @@ using Aras.Method.Libs.Code;
 using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.Method.Libs.Templates;
 using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.PackageManagement;
 using Aras.VS.MethodPlugin.SolutionManagement;
@@ -77,24 +76,20 @@ namespace Aras.VS.MethodPlugin.Commands
 			var project = projectManager.SelectedProject;
 
 			string projectConfigPath = projectManager.ProjectConfigPath;
-			string methodConfigPath = projectManager.MethodConfigPath;
-
-			var projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
-
 			string selectedMethodPath = projectManager.MethodPath;
 			string selectedMethodName = Path.GetFileNameWithoutExtension(selectedMethodPath);
-			MethodInfo methodInformation = projectConfiguration.MethodInfos.FirstOrDefault(m => m.MethodName == selectedMethodName);
+			MethodInfo methodInformation = projectConfigurationManager.CurrentProjectConfiguraiton.MethodInfos.FirstOrDefault(m => m.MethodName == selectedMethodName);
 			if (methodInformation == null)
 			{
 				throw new Exception();
 			}
 
-			var templateLoader = new TemplateLoader();
-			templateLoader.Load(methodConfigPath);
+			TemplateLoader templateLoader = new TemplateLoader();
+			templateLoader.Load(projectManager.MethodConfigPath);
 
 			var packageManager = new PackageManager(authManager, this.messageManager);
 
-			var updateView = dialogFactory.GetUpdateFromArasView(projectConfigurationManager, projectConfiguration, templateLoader, packageManager, methodInformation, projectConfigPath, project.Name, project.FullName);
+			var updateView = dialogFactory.GetUpdateFromArasView(projectConfigurationManager, templateLoader, packageManager, methodInformation, projectConfigPath, project.Name, project.FullName);
 			var updateViewResult = updateView.ShowDialog();
 			if (updateViewResult?.DialogOperationResult != true)
 			{
@@ -103,9 +98,9 @@ namespace Aras.VS.MethodPlugin.Commands
 
 			var eventData = CommonData.EventSpecificDataTypeList.First(x => x.EventSpecificData == updateViewResult.EventSpecificData);
 
-			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(project.CodeModel.Language);
-			GeneratedCodeInfo codeInfo = codeProvider.GenerateCodeInfo(updateViewResult.SelectedTemplate, eventData, updateViewResult.MethodName, false, updateViewResult.MethodCode, updateViewResult.IsUseVSFormattingCode, projectManager.DefaultCodeTemplatesPath);
-			projectManager.CreateMethodTree(codeInfo);
+			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(projectManager.Language);
+			GeneratedCodeInfo codeInfo = codeProvider.GenerateCodeInfo(updateViewResult.SelectedTemplate, eventData, updateViewResult.MethodName, updateViewResult.MethodCode, updateViewResult.IsUseVSFormattingCode);
+			projectManager.CreateMethodTree(codeInfo, updateViewResult.Package);
 
 			var methodInfo = new MethodInfo()
 			{
@@ -114,19 +109,17 @@ namespace Aras.VS.MethodPlugin.Commands
 				MethodLanguage = updateViewResult.MethodLanguage,
 				MethodName = updateViewResult.MethodName,
 				MethodType = updateViewResult.MethodType,
-				PackageName = updateViewResult.PackageName,
+				Package = updateViewResult.Package,
 				TemplateName = updateViewResult.SelectedTemplate.TemplateName,
 				EventData = updateViewResult.EventSpecificData,
 				ExecutionAllowedToId = updateViewResult.ExecutionIdentityId,
 				ExecutionAllowedToKeyedName = updateViewResult.ExecutionIdentityKeyedName,
-				MethodComment = updateViewResult.MethodComment,
-				PartialClasses = codeInfo.PartialCodeInfoList.Select(pci => pci.Path).ToList(),
-				ExternalItems = codeInfo.ExternalItemsInfoList.Select(pci => pci.Path).ToList()
+				MethodComment = updateViewResult.MethodComment
 			};
 
-			projectConfiguration.AddMethodInfo(methodInfo);
-			projectConfiguration.UseVSFormatting = updateViewResult.IsUseVSFormattingCode;
-			projectConfigurationManager.Save(projectConfigPath, projectConfiguration);
+			projectConfigurationManager.CurrentProjectConfiguraiton.AddMethodInfo(methodInfo);
+			projectConfigurationManager.CurrentProjectConfiguraiton.UseVSFormatting = updateViewResult.IsUseVSFormattingCode;
+			projectConfigurationManager.Save(projectConfigPath);
 		}
 	}
 }

@@ -1,0 +1,15 @@
+﻿{0}using Common;
+using Common.Attributes;
+
+namespace {4}
+{{
+    public partial class {1}
+    {{
+
+        [PartialPath("{2}", {3})]
+        internal void {5}()
+        {{
+
+        }}
+    }}
+}}

@@ -10,11 +10,11 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using Aras.Method.Libs;
 using Aras.Method.Libs.Code;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.ArasInnovator;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.Configurations;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using EnvDTE;
@@ -53,12 +53,11 @@ namespace Aras.VS.MethodPlugin
 		/// </summary>
 		public const string PackageGuidString = "7afa5f12-ad2b-4fda-85d3-818f2d1e6c8c";
 
+		private IProjectConfigurationManager projectConfigurationManager;
 		private IAuthenticationManager authManager;
 		private IArasDataProvider arasDataProvider;
 		private IDialogFactory dialogFactory;
-		private IProjectConfigurationManager projectConfigurationManager;
 		private IProjectManager projectManager;
-		private DefaultCodeProvider defaultCodeProvider;
 		private ICodeProviderFactory codeProviderFactory;
 		private IIOWrapper iOWrapper;
 		private IVsPackageWrapper vsPackageWrapper;
@@ -91,15 +90,15 @@ namespace Aras.VS.MethodPlugin
 
 			this.messageManager = new VisualStudioMessageManager();
 			this.iOWrapper = new IOWrapper();
-			this.authManager = new AuthenticationManager(messageManager);
+			this.projectConfigurationManager = new ProjectConfigurationManager();
+			
+			this.vsPackageWrapper = new VsPackageWrapper();
+			this.projectManager = new ProjectManager(this, iOWrapper, vsPackageWrapper, messageManager, projectConfigurationManager);
+			this.authManager = new AuthenticationManager(messageManager, projectManager);
 			this.arasDataProvider = new ArasDataProvider(authManager, messageManager);
 			this.dialogFactory = new DialogFactory(authManager, arasDataProvider, this, iOWrapper, messageManager);
-			this.projectConfigurationManager = new ProjectConfigurationManager();
-			this.vsPackageWrapper = new VsPackageWrapper();
-			this.projectManager = new ProjectManager(this, dialogFactory, iOWrapper, vsPackageWrapper, messageManager);
-			this.defaultCodeProvider = new DefaultCodeProvider(iOWrapper);
 			ICodeFormatter codeFormatter = new VisualStudioCodeFormatter(this.projectManager);
-			this.codeProviderFactory = new CodeProviderFactory(defaultCodeProvider, codeFormatter, messageManager, iOWrapper);
+			this.codeProviderFactory = new CodeProviderFactory(codeFormatter, messageManager, iOWrapper);
 			this.globalConfiguration = new GlobalConfiguration(iOWrapper);
 
 			Commands.OpenFromArasCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
@@ -133,12 +132,12 @@ namespace Aras.VS.MethodPlugin
 				}
 
 				string projectConfigPath = this.projectManager.ProjectConfigPath;
-				var projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
+				projectConfigurationManager.Load(projectConfigPath);
 
 				string methodName = this.projectManager.MethodName;
 
-				projectConfiguration.RemoveFromMethodInfo(methodName, ProjectItem);
-				projectConfigurationManager.Save(projectConfigPath, projectConfiguration);
+				projectConfigurationManager.CurrentProjectConfiguraiton.RemoveFromMethodInfo(methodName, ProjectItem);
+				projectConfigurationManager.Save(projectConfigPath);
 			}
 			catch
 			{
@@ -156,12 +155,12 @@ namespace Aras.VS.MethodPlugin
 				}
 
 				string projectConfigPath = this.projectManager.ProjectConfigPath;
-				var projectConfiguration = projectConfigurationManager.Load(projectConfigPath);
+				projectConfigurationManager.Load(projectConfigPath);
 
 				string methodName = this.projectManager.MethodName;
 
-				projectConfiguration.UpdateMethodInfo(methodName, ProjectItem, OldName);
-				projectConfigurationManager.Save(projectConfigPath, projectConfiguration);
+				projectConfigurationManager.CurrentProjectConfiguraiton.UpdateMethodInfo(methodName, ProjectItem, OldName);
+				projectConfigurationManager.Save(projectConfigPath);
 			}
 			catch
 			{

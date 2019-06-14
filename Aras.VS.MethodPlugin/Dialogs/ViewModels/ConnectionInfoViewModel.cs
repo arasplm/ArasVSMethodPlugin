@@ -8,9 +8,8 @@ using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.Dialogs.Views;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.SolutionManagement;
 
 namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
@@ -33,20 +32,17 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			IAuthenticationManager authenticationManager,
 			IDialogFactory dialogFactory,
 			IProjectConfigurationManager configurationManager,
-			IProjectManager projectManager,
-			IProjectConfiguraiton projectConfiguration)
+			IProjectManager projectManager)
 		{
 			if (authenticationManager == null) throw new ArgumentNullException(nameof(authenticationManager));
 			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));
 			if (configurationManager == null) throw new ArgumentNullException(nameof(configurationManager));
 			if (projectManager == null) throw new ArgumentNullException(nameof(projectManager));
-			if (projectConfiguration == null) throw new ArgumentNullException(nameof(projectConfiguration));
 
 			this.authenticationManager = authenticationManager;
 			this.dialogFactory = dialogFactory;
 			this.configurationManager = configurationManager;
 			this.projectManager = projectManager;
-			this.projectConfiguration = projectConfiguration;
 
 			this.closeCommand = new RelayCommand<object>(OnCloseCliked);
 			this.editConnectionInfoCommand = new RelayCommand<object>(OnEditConnectionInfoCommandCliked);
@@ -90,7 +86,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 			if (loginView.ShowDialog()?.DialogOperationResult == true)
 			{
-				configurationManager.Save(projectManager.ProjectConfigPath, projectConfiguration);
+				configurationManager.Save(projectManager.ProjectConfigPath);
 				ConnectionInformation = projectConfiguration.Connections.First(c => c.LastConnection);
 			}
 		}

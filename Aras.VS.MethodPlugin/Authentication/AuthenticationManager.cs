@@ -7,24 +7,28 @@
 using System;
 using System.Collections.Generic;
 using System.Windows;
-using Aras.VS.MethodPlugin.Dialogs.Views;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using Aras.Method.Libs;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
+using Aras.VS.MethodPlugin.Dialogs.Views;
+using Aras.VS.MethodPlugin.SolutionManagement;
 
 namespace Aras.VS.MethodPlugin.Authentication
 {
 	public class AuthenticationManager : IAuthenticationManager
 	{
 		private readonly MessageManager messageManager;
+		private readonly IProjectManager projectManager;
+		private readonly IProjectConfigurationManager projectConfigurationManager;
 
 		private dynamic serverConnection;
 		private dynamic innovator;
 		private InnovatorUser innovatorUser;
 		private IIOMWrapper iOMWrapper;
 
-		public AuthenticationManager(MessageManager messageManager)
+		public AuthenticationManager(MessageManager messageManager, IProjectManager projectManager)
 		{
 			this.messageManager = messageManager ?? throw new ArgumentNullException(nameof(messageManager));
+			this.projectManager = projectManager ?? throw new ArgumentNullException(nameof(projectManager));
 		}
 
 		public dynamic InnovatorInstance
@@ -231,7 +235,7 @@ namespace Aras.VS.MethodPlugin.Authentication
 		{
 			if (iOMWrapper == null || iOMWrapper.ProjectFullName != projectFullName)
 			{
-				iOMWrapper = new IOMWrapper(messageManager, projectFullName);
+				iOMWrapper = new IOMWrapper(messageManager, projectFullName, projectManager.IOMFilePath);
 			}
 		}
 	}

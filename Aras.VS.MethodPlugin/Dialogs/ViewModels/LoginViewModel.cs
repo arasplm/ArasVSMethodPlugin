@@ -8,10 +8,10 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
-using System.Windows.Input;
-using Aras.VS.MethodPlugin.Authentication;
-using Aras.VS.MethodPlugin.Configurations.ProjectConfigurations;
 using System.Windows.Controls;
+using System.Windows.Input;
+using Aras.Method.Libs.Configurations.ProjectConfigurations;
+using Aras.VS.MethodPlugin.Authentication;
 
 namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 {

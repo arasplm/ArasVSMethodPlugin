@@ -42,7 +42,7 @@ namespace OfficeConnector.Dialogs
 
 		void SetSavedSearch(List<SavedSearch> savedSearches);
 
-		void SetSearchColumns(List<PropertyInfo> searchColumnList);
+		void SetSearchColumns(List<ItemSearchPropertyInfo> searchColumnList);
 
 		void SetSearchResult(List<ItemSearchResult> searchResults);
 	}

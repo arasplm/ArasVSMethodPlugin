@@ -4,6 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using Aras.Method.Libs.Aras.Package;
+
 namespace Aras.VS.MethodPlugin.Dialogs.Views
 {
 	public class SaveMethodViewResult : ViewResult
@@ -14,7 +16,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 		public string MethodLanguage { get; set; }
 		public string SelectedIdentityId { get; set; }
 		public string SelectedIdentityKeyedName { get; set; }
-		public string SelectedPackage { get; set; }
+		public PackageInfo SelectedPackageInfo { get; set; }
 		public string CurrentMethodPackage { get; set; }
 		public dynamic MethodItem { get; set; }
 		public string MethodComment { get; set; }

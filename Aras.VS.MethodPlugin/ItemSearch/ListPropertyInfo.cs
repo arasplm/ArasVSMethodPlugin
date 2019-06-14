@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace Aras.VS.MethodPlugin.ItemSearch
 {
-	public class ListPropertyInfo : PropertyInfo
+	public class ListPropertyInfo : ItemSearchPropertyInfo
 	{
 		public List<string> ItemsSource { get; set; }
 	}

@@ -23,22 +23,22 @@ namespace Aras.Method.Libs.Code
 			{
 				CodeType.Partial, new Dictionary<CodeElementType, string>
 				{
-					{ CodeElementType.Interface , "{0}using Common;\r\nusing Common.Attributes;\r\n\r\nnamespace {3}\r\n{{\r\n    public partial class {1}\r\n    {{\r\n        [PartialPath(\"{2}\")]\r\n        internal interface {4}\r\n        {{\r\n\r\n        }}\r\n    }}\r\n}}" },
-					{ CodeElementType.Class , "{0}using Common;\r\nusing Common.Attributes;\r\n\r\nnamespace {3}\r\n{{\r\n    public partial class {1}\r\n    {{\r\n        [PartialPath(\"{2}\")]\r\n        internal class {4}\r\n        {{\r\n\r\n        }}\r\n    }}\r\n}}" },
-					{ CodeElementType.Struct , "{0}using Common;\r\nusing Common.Attributes;\r\n\r\nnamespace {3}\r\n{{\r\n    public partial class {1}\r\n    {{\r\n        [PartialPath(\"{2}\")]\r\n        internal struct {4}\r\n        {{\r\n\r\n        }}\r\n    }}\r\n}}" },
-					{ CodeElementType.Method , "{0}using Common;\r\nusing Common.Attributes;\r\n\r\nnamespace {3}\r\n{{\r\n    public partial class {1}\r\n    {{\r\n        [PartialPath(\"{2}\")]\r\n        internal void {4}()\r\n        {{\r\n\r\n        }}\r\n    }}\r\n}}" },
-					{ CodeElementType.Enum , "{0}using Common;\r\nusing Common.Attributes;\r\n\r\nnamespace {3}\r\n{{\r\n    public partial class {1}\r\n    {{\r\n        [PartialPath(\"{2}\")]\r\n        internal enum {4}\r\n        {{\r\n            None\r\n        }}\r\n    }}\r\n}}" },
-					{ CodeElementType.Custom , "{0}using Common;\r\nusing Common.Attributes;\r\n\r\nnamespace {3}\r\n{{\r\n    internal partial class {1}\r\n    {{\r\n        //[PartialPath(\"{2}\")]\r\n    }}\r\n}}" }
+					{ CodeElementType.Interface , "{0}using Common;\r\nusing Common.Attributes;\r\n\r\nnamespace {4}\r\n{{\r\n    public partial class {1}\r\n    {{\r\n\r\n        [PartialPath(\"{2}\", {3})]\r\n        internal interface {5}\r\n        {{\r\n\r\n        }}\r\n    }}\r\n}}" },
+					{ CodeElementType.Class , "{0}using Common;\r\nusing Common.Attributes;\r\n\r\nnamespace {4}\r\n{{\r\n    public partial class {1}\r\n    {{\r\n\r\n        [PartialPath(\"{2}\", {3})]\r\n        internal class {5}\r\n        {{\r\n\r\n        }}\r\n    }}\r\n}}" },
+					{ CodeElementType.Struct , "{0}using Common;\r\nusing Common.Attributes;\r\n\r\nnamespace {4}\r\n{{\r\n    public partial class {1}\r\n    {{\r\n\r\n        [PartialPath(\"{2}\", {3})]\r\n        internal struct {5}\r\n        {{\r\n\r\n        }}\r\n    }}\r\n}}" },
+					{ CodeElementType.Method , "{0}using Common;\r\nusing Common.Attributes;\r\n\r\nnamespace {4}\r\n{{\r\n    public partial class {1}\r\n    {{\r\n\r\n        [PartialPath(\"{2}\", {3})]\r\n        internal void {5}()\r\n        {{\r\n\r\n        }}\r\n    }}\r\n}}" },
+					{ CodeElementType.Enum , "{0}using Common;\r\nusing Common.Attributes;\r\n\r\nnamespace {4}\r\n{{\r\n    public partial class {1}\r\n    {{\r\n\r\n        [PartialPath(\"{2}\", {3})]\r\n        internal enum {5}\r\n        {{\r\n            None\r\n        }}\r\n    }}\r\n}}" },
+					{ CodeElementType.Custom , "{0}using Common;\r\nusing Common.Attributes;\r\n\r\nnamespace {4}\r\n{{\r\n    internal partial class {1}\r\n    {{\r\n\r\n        //[PartialPath(\"{2}\", {3})]\r\n    }}\r\n}}" }
 				}
 			},
 			{
 				CodeType.External, new Dictionary<CodeElementType, string>
 				{
-					{ CodeElementType.Interface , "{0}using Common;\r\nusing Common.Attributes;\r\n\r\nnamespace {3}\r\n{{\r\n    [ExternalPath(\"{2}\")]\r\n    internal interface {4}\r\n    {{\r\n\r\n    }}\r\n}}" },
-					{ CodeElementType.Class , "{0}using Common;\r\nusing Common.Attributes;\r\n\r\nnamespace {3}\r\n{{\r\n    [ExternalPath(\"{2}\")]\r\n    internal class {4}\r\n    {{\r\n\r\n    }}\r\n}}" },
-					{ CodeElementType.Struct , "{0}using Common;\r\nusing Common.Attributes;\r\n\r\nnamespace {3}\r\n{{\r\n    [ExternalPath(\"{2}\")]\r\n    internal struct {4}\r\n    {{\r\n\r\n    }}\r\n}}" },
-					{ CodeElementType.Enum , "{0}using Common;\r\nusing Common.Attributes;\r\n\r\nnamespace {3}\r\n{{\r\n    [ExternalPath(\"{2}\")]\r\n    internal enum {4}\r\n    {{\r\n        None\r\n    }}\r\n}}" },
-					{ CodeElementType.Custom , "{0}using Common;\r\nusing Common.Attributes;\r\n\r\nnamespace {3}\r\n{{\r\n    //[ExternalPath(\"{2}\")]\r\n}}" }
+					{ CodeElementType.Interface , "{0}using Common;\r\nusing Common.Attributes;\r\n\r\nnamespace {4}\r\n{{\r\n\r\n    [ExternalPath(\"{2}\", {3})]\r\n    internal interface {5}\r\n    {{\r\n\r\n    }}\r\n}}" },
+					{ CodeElementType.Class , "{0}using Common;\r\nusing Common.Attributes;\r\n\r\nnamespace {4}\r\n{{\r\n\r\n    [ExternalPath(\"{2}\", {3})]\r\n    internal class {5}\r\n    {{\r\n\r\n    }}\r\n}}" },
+					{ CodeElementType.Struct , "{0}using Common;\r\nusing Common.Attributes;\r\n\r\nnamespace {4}\r\n{{\r\n\r\n    [ExternalPath(\"{2}\", {3})]\r\n    internal struct {5}\r\n    {{\r\n\r\n    }}\r\n}}" },
+					{ CodeElementType.Enum , "{0}using Common;\r\nusing Common.Attributes;\r\n\r\nnamespace {4}\r\n{{\r\n\r\n    [ExternalPath(\"{2}\", {3})]\r\n    internal enum {5}\r\n    {{\r\n        None\r\n    }}\r\n}}" },
+					{ CodeElementType.Custom , "{0}using Common;\r\nusing Common.Attributes;\r\n\r\nnamespace {4}\r\n{{\r\n\r\n    //[ExternalPath(\"{2}\", {3})]\r\n}}" }
 				}
 			},
 		};

@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using Aras.Method.Libs;
+using Aras.Method.Libs.Aras.Package;
 using Aras.VS.MethodPlugin.Authentication;
 
 namespace Aras.VS.MethodPlugin.PackageManagement
@@ -32,21 +33,24 @@ namespace Aras.VS.MethodPlugin.PackageManagement
 			this.messageManager = messageManager ?? throw new ArgumentNullException(nameof(messageManager));
 		}
 
-		public List<string> GetPackageDefinitionList()
+		public List<PackageInfo> GetPackageDefinitionList()
 		{
-			var resultList = new List<string>();
+			List<PackageInfo> resultList = new List<PackageInfo>();
 
 			string amlQuery = allPackageDefinition;
 			var reusltItem = innovatorInst.applyAML(amlQuery);
 			for (int i = 0; i < reusltItem.getItemCount(); i++)
 			{
-				resultList.Add(reusltItem.getItemByIndex(i).getProperty("name"));
+				string name = reusltItem.getItemByIndex(i).getProperty("name");
+
+				PackageInfo packageInfo = new PackageInfo(name);
+				resultList.Add(packageInfo);
 			}
 
 			return resultList;
 		}
 
-		public string GetPackageDefinitionByElementName(string name)
+		public PackageInfo GetPackageDefinitionByElementName(string name)
 		{
 			string amlQuery = string.Format(packageDefinitionByElementNameTemplate, name);
 			var reusltItem = innovatorInst.applyAML(amlQuery);
@@ -56,11 +60,10 @@ namespace Aras.VS.MethodPlugin.PackageManagement
 			}
 			if (reusltItem.getItemCount() == 0)
 			{
-				return string.Empty;
+				return new PackageInfo(string.Empty);
 			}
 
-
-			return reusltItem.getItemByIndex(0).getProperty("name");
+			return new PackageInfo(reusltItem.getItemByIndex(0).getProperty("name"));
 		}
 
 		public bool DeletePackageElementByNameFromPackageDefinition(string name)
