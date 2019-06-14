@@ -5,8 +5,8 @@
 		public PackageInfo(string name)
 		{
 			Name = name;
-			Path = $"{name}\\Import";
-			MethodFolderPath = $"{name}\\Import\\Method\\";
+			Path = $"{name.Replace(".", "\\")}\\Import";
+			MethodFolderPath = $"{Path}\\Method\\";
 		}
 
 		public PackageInfo(string name, string path)
@@ -16,7 +16,7 @@
 
 			if (Path == @".\")
 			{
-				path = path.Replace(".", "\\");
+				path = name.Replace(".", "\\");
 			}
 
 			MethodFolderPath = $"{path}\\Method\\";
