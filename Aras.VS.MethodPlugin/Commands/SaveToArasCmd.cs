@@ -177,7 +177,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			}
 
 			var newId = currentMethodItem.getID();
-			if (saveViewResult.CurrentMethodPackage == null)
+			if (string.IsNullOrEmpty(saveViewResult.CurrentMethodPackage))
 			{
 				packageManager.AddPackageElementToPackageDefinition(newId, saveViewResult.MethodName, saveViewResult.SelectedPackageInfo.Name);
 			}
