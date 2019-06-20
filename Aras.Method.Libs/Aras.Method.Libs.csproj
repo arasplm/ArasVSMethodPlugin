@@ -215,7 +215,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Templates\TemplateInfo.cs" />
     <Compile Include="Templates\TemplateLoader.cs" />
-    <Compile Include="Templates\TemplateMapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
