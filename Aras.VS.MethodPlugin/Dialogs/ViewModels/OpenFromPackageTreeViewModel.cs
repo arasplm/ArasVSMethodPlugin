@@ -134,7 +134,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			}
 		}
 
-		public PackageInfo SelectedPakckageInfo { get { return new PackageInfo(selectedPackageName); } }
+		public PackageInfo SelectedPakckageInfo { get { return new PackageInfo(selectedPackageName ?? string.Empty); } }
 
 		public List<ShortMethodInfoViewModel> Methods
 		{

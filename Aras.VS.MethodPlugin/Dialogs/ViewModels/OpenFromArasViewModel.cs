@@ -237,7 +237,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			}
 		}
 
-		public PackageInfo SelectedPackageInfo { get { return new PackageInfo(package); } }
+		public PackageInfo SelectedPackageInfo { get { return new PackageInfo(package ?? string.Empty); } }
 
 		public bool IsUseVSFormattingCode
 		{
