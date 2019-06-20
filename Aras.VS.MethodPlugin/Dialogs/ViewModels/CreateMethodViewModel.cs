@@ -240,7 +240,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			}
 		}
 
-		public PackageInfo SelectedPackageInfo { get { return new PackageInfo(selectedPackage); } }
+		public PackageInfo SelectedPackageInfo { get { return new PackageInfo(selectedPackage ?? string.Empty); } }
 
 		public List<PackageInfo> AvaliablePackages { get { return packageManager.GetPackageDefinitionList(); } }
 
