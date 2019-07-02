@@ -5,7 +5,6 @@
 //------------------------------------------------------------------------------
 
 using System.Collections.Generic;
-using EnvDTE;
 
 namespace Aras.Method.Libs.Configurations.ProjectConfigurations
 {
@@ -30,10 +29,6 @@ namespace Aras.Method.Libs.Configurations.ProjectConfigurations
 		string MethodConfigPath { get; set; }
 
 		string IOMFilePath { get; set; }
-
-		void RemoveFromMethodInfo(string methodName, ProjectItem projectItem);
-
-		void UpdateMethodInfo(string methodName, ProjectItem projectItem, string oldName);
 
 		void AddConnection(ConnectionInfo connection);
 

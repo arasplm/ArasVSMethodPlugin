@@ -5,7 +5,6 @@
 //------------------------------------------------------------------------------
 
 using System;
-using EnvDTE;
 
 namespace Aras.Method.Libs.Code
 {
@@ -14,6 +13,9 @@ namespace Aras.Method.Libs.Code
 		private readonly ICodeFormatter codeFormatter;
 		private readonly MessageManager messageManager;
 		private readonly IIOWrapper iOWrapper;
+
+		private const string vsCMLanguageCSharp = "{B5E9BD34-6D3E-4B5D-925E-8A43B79820B4}";
+		private const string vsCMLanguageVB = "{B5E9BD33-6D3E-4B5D-925E-8A43B79820B4}";
 
 		public CodeProviderFactory(ICodeFormatter codeFormatter, MessageManager messageManager, IIOWrapper iOWrapper)
 		{
@@ -25,7 +27,7 @@ namespace Aras.Method.Libs.Code
 		public ICodeItemProvider GetCodeItemProvider(string projectLanguageCode)
 		{
 			ICodeItemProvider codeItemProvider = null;
-			if (projectLanguageCode == CodeModelLanguageConstants.vsCMLanguageCSharp)
+			if (projectLanguageCode == vsCMLanguageCSharp)
 			{
 				codeItemProvider = new CSharpCodeItemProvider(messageManager);
 			}
@@ -40,11 +42,11 @@ namespace Aras.Method.Libs.Code
 		public ICodeProvider GetCodeProvider(string projectLanguageCode)
 		{
 			ICodeProvider codeProvider = null;
-			if (projectLanguageCode == CodeModelLanguageConstants.vsCMLanguageCSharp || projectLanguageCode == GlobalConsts.CSharp)
+			if (projectLanguageCode == vsCMLanguageCSharp || projectLanguageCode == GlobalConsts.CSharp)
 			{
 				codeProvider = new CSharpCodeProvider(new CSharpCodeItemProvider(messageManager), codeFormatter, this.iOWrapper, this.messageManager);
 			}
-			else if (projectLanguageCode == CodeModelLanguageConstants.vsCMLanguageVB)
+			else if (projectLanguageCode == vsCMLanguageVB)
 			{
 				codeProvider = new VBCodeProvider();
 			}
