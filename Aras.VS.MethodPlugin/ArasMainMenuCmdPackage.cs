@@ -6,7 +6,10 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using Aras.Method.Libs;
 using Aras.Method.Libs.Code;
 using Aras.Method.Libs.Configurations.ProjectConfigurations;
@@ -141,7 +144,7 @@ namespace Aras.VS.MethodPlugin
 
 				string methodName = this.projectManager.MethodName;
 
-				projectConfigurationManager.CurrentProjectConfiguraiton.RemoveFromMethodInfo(methodName, ProjectItem);
+				RemoveFromMethodInfo(methodName, ProjectItem);
 				projectConfigurationManager.Save(projectConfigPath);
 			}
 			catch
@@ -164,7 +167,7 @@ namespace Aras.VS.MethodPlugin
 
 				string methodName = this.projectManager.MethodName;
 
-				projectConfigurationManager.CurrentProjectConfiguraiton.UpdateMethodInfo(methodName, ProjectItem, OldName);
+				UpdateMethodInfo(methodName, ProjectItem, OldName);
 				projectConfigurationManager.Save(projectConfigPath);
 			}
 			catch
@@ -172,6 +175,69 @@ namespace Aras.VS.MethodPlugin
 
 			}
 		}
+
+		private void RemoveFromMethodInfo(string methodName, ProjectItem projectItem)
+		{
+			MethodInfo methodInfos = projectConfigurationManager.CurrentProjectConfiguraiton.MethodInfos.FirstOrDefault(m => m.MethodName == methodName);
+			if (methodInfos == null)
+			{
+				return;
+			}
+
+			string methodFolderPath = iOWrapper.PathCombine(projectConfigurationManager.CurrentProjectConfiguraiton.MethodsFolderPath, methodInfos.Package.MethodFolderPath);
+			string filePath = projectItem.FileNames[0];
+			int index = filePath.IndexOf(projectConfigurationManager.CurrentProjectConfiguraiton.MethodsFolderPath);
+			if (index == 1)
+			{
+				return;
+			}
+
+			string attributePath = filePath.Substring(index + methodFolderPath.Length);
+			attributePath = Path.ChangeExtension(attributePath, null);
+
+			string fodlerPath = methodName + "\\";
+
+			if (fodlerPath == attributePath)
+			{
+				projectConfigurationManager.CurrentProjectConfiguraiton.MethodInfos.RemoveAll(x => x.MethodName == methodName);
+				return;
+			}
+		}
+
+		private void UpdateMethodInfo(string methodName, ProjectItem projectItem, string oldName)
+		{
+			MethodInfo methodInformation = projectConfigurationManager.CurrentProjectConfiguraiton.MethodInfos.FirstOrDefault(m => m.MethodName == methodName);
+			if (methodInformation == null)
+			{
+				return;
+			}
+
+			string newFilePath = projectItem.FileNames[0];
+			int index = newFilePath.IndexOf(projectConfigurationManager.CurrentProjectConfiguraiton.MethodsFolderPath);
+			if (index == -1)
+			{
+				return;
+			}
+
+			string methodFolderPath = iOWrapper.PathCombine(projectConfigurationManager.CurrentProjectConfiguraiton.MethodsFolderPath, methodInformation.Package.MethodFolderPath);
+
+			string newAttributePath = newFilePath.Substring(index + methodFolderPath.Length);
+			newAttributePath = Path.ChangeExtension(newAttributePath, null);
+			string oldAttributePath = iOWrapper.PathCombine(iOWrapper.PathGetDirectoryName(newAttributePath), oldName);
+			oldAttributePath = Path.ChangeExtension(oldAttributePath, null);
+
+			string oldPartialAttribute = oldAttributePath.Substring(oldAttributePath.IndexOf("\\") + 1).Replace("\\", "/");
+			string newPartialAttribute = newAttributePath.Substring(newAttributePath.IndexOf("\\") + 1).Replace("\\", "/");
+			string oldExternalAttribute = oldAttributePath.Substring(oldAttributePath.IndexOf("\\") + 1).Replace("\\", "/");
+			string newExternalAttribute = newAttributePath.Substring(newAttributePath.IndexOf("\\") + 1).Replace("\\", "/");
+
+			Encoding witoutBom = new UTF8Encoding(true);
+			string code = File.ReadAllText(newFilePath, witoutBom);
+			code = code.Replace($"[PartialPath(\"{oldPartialAttribute}\"", $"[PartialPath(\"{newPartialAttribute}\"");
+			code = code.Replace($"[ExternalPath(\"{oldExternalAttribute}\"", $"[ExternalPath(\"{newExternalAttribute}\"");
+			File.WriteAllText(newFilePath, code, witoutBom);
+		}
+
 		#endregion
 	}
 }
