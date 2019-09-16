@@ -551,6 +551,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\aras.ico" />
+    <Content Include="ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP1MethodProject.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="Resources\16x16-Run.png" />
     <Content Include="Resources\32x32-DiscussionPanelOn.png" />
     <Content Include="Resources\32x32-help.png" />
