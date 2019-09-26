@@ -90,6 +90,11 @@ namespace MethodLauncher
                 return null;
 
             string innovatorCorePath = Path.Combine(directoryPath, "InnovatorCore.dll");
+            if (!File.Exists(innovatorCorePath))
+            {
+                innovatorCorePath = Path.Combine(directoryPath, "Aras.Server.Core.dll");
+            }
+
             var innCoreAssembly = Assembly.LoadFrom(innovatorCorePath);
 
             object[] paramsInstances = new object[parameters.Length];
