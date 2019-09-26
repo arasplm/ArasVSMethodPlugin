@@ -28,8 +28,11 @@ on the official Visual Studio extension gallery.
 - [x] Added possibility view type of method in "Open method from AML package" dialog.
 - [x] Added update Aras VS buttons enabled/disabled states based on selected project
 - [x] Formatting code after method opened or created
-- [x] Added support for CSharp:Aras.Server.Core.Configurator for SP 12
-- [x] Added SP 15 project template
+- [x] Added support for CSharp:Aras.Server.Core.Configurator for Aras 11 SP 12
+- [x] Added Aras 11 SP 15 project template
+- [x] Added Aras 12 0 project template
+- [x] Added Aras 12 SP 1 project template
+- [x] Added support of Visual Studio 2019
 
 ## 1.3
 - [x] Possibility to debug server method and pass context
