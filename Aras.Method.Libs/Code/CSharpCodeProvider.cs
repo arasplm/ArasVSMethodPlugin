@@ -159,7 +159,7 @@ namespace Aras.Method.Libs.Code
 			if (eventData.EventSpecificData != EventSpecificData.None)
 			{
 				codeInfo.MethodCodeInfo.Code = codeInfo.MethodCodeInfo.Code.Insert(0, "#define EventDataIsAvailable\r\n");
-				codeInfo.WrapperCodeInfo.Code = codeInfo.MethodCodeInfo.Code.Insert(0, "#define EventDataIsAvailable\r\n");
+				codeInfo.WrapperCodeInfo.Code = codeInfo.WrapperCodeInfo.Code.Insert(0, "#define EventDataIsAvailable\r\n");
 			}
 
 			return codeInfo;
@@ -177,7 +177,7 @@ namespace Aras.Method.Libs.Code
 			if (eventData.EventSpecificData != EventSpecificData.None)
 			{
 				codeInfo.MethodCodeInfo.Code = codeInfo.MethodCodeInfo.Code.Insert(0, "#define EventDataIsAvailable\r\n");
-				codeInfo.WrapperCodeInfo.Code = codeInfo.MethodCodeInfo.Code.Insert(0, "#define EventDataIsAvailable\r\n");
+				codeInfo.WrapperCodeInfo.Code = codeInfo.WrapperCodeInfo.Code.Insert(0, "#define EventDataIsAvailable\r\n");
 			}
 
 			return codeInfo;
