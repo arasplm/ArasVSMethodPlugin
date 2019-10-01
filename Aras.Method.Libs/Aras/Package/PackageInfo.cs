@@ -1,11 +1,26 @@
-﻿namespace Aras.Method.Libs.Aras.Package
+﻿using System;
+using System.Text.RegularExpressions;
+
+namespace Aras.Method.Libs.Aras.Package
 {
 	public class PackageInfo
 	{
 		public PackageInfo(string name)
 		{
 			Name = name;
-			Path = $"{name.Replace(".", "\\")}\\Import";
+
+			if (IsStandardPackage(name))
+			{
+				Path = $"{name.Replace(".", @"\")}\\Import";
+			}
+			else
+			{
+				Regex regLabel = new Regex(@"([^\.]+)$", RegexOptions.IgnoreCase);
+				Match matchLab = regLabel.Match(name);
+				string solNameSuf = matchLab.Groups[1].ToString();
+				Path = $"{solNameSuf}\\Import";
+			}
+
 			MethodFolderPath = $"{Path}\\Method\\";
 		}
 
@@ -32,5 +47,24 @@
 		{
 			return Name;
 		}
+
+		#region Private methods
+
+		private bool IsStandardPackage(string packageName)
+		{
+			return IsDefaultPackage(packageName) || IsCorePackage(packageName);
+		}
+
+		private bool IsDefaultPackage(string packageName)
+		{
+			return packageName.StartsWith("com.aras.defaults.", StringComparison.OrdinalIgnoreCase);
+		}
+
+		private bool IsCorePackage(string packageName)
+		{
+			return packageName.StartsWith("com.aras.innovator.") && !packageName.StartsWith("com.aras.innovator.solution.");
+		}
+
+		#endregion
 	}
 }
