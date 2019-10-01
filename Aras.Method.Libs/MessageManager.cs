@@ -20,7 +20,9 @@ namespace Aras.Method.Libs
 			{ "CurrentCodeTypeIsNotSupported", "Current code type is not supported." },
 			{ "CurrentCodeElementTypeIsNotSupported", "Current code element type is not supported." },
 			{ "startYourCodeInsideRegionMethodCodeDoNotChangeCodeAbove", "// start your code inside region MethodCode - DO NOT CHANGE CODE ABOVE" },
-			{ "endyourCodeInsideRegionMethodCodeDoNotChangeCodeBelow", "// end your code inside region MethodCode - DO NOT CHANGE CODE BELOW" }
+			{ "endyourCodeInsideRegionMethodCodeDoNotChangeCodeBelow", "// end your code inside region MethodCode - DO NOT CHANGE CODE BELOW" },
+			{ "errorWhileLoadingProjectConfigFile", "Error while loading project config file." },
+			{ "errorWhileSavingProjectConfigFile", "Error while saving project config file." }
 		};
 
 		public virtual string GetMessage(string key)

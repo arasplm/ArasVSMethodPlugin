@@ -15,35 +15,51 @@ namespace Aras.Method.Libs.Configurations.ProjectConfigurations
 {
 	public class ProjectConfigurationManager : IProjectConfigurationManager
 	{
-		public ProjectConfigurationManager()
-		{
+		private readonly MessageManager messageManager;
 
+		public ProjectConfigurationManager(MessageManager messageManager)
+		{
+			this.messageManager = messageManager ?? throw new ArgumentNullException(nameof(messageManager));
 		}
 
 		public IProjectConfiguraiton CurrentProjectConfiguraiton { get; } = new ProjectConfiguraiton();
 
 		public void Load(string configFilePath)
 		{
-			XmlDocument doc = new XmlDocument();
-			doc.Load(configFilePath);
+			try
+			{
+				XmlDocument doc = new XmlDocument();
+				doc.Load(configFilePath);
 
-			this.CurrentProjectConfiguraiton.CleanUp();
+				this.CurrentProjectConfiguraiton.CleanUp();
 
-			MapXmlDocToProjectConfig(this.CurrentProjectConfiguraiton, doc);
+				MapXmlDocToProjectConfig(this.CurrentProjectConfiguraiton, doc);
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(this.messageManager.GetMessage("errorWhileLoadingProjectConfigFile"), ex);
+			}
 		}
 
 		public void Save(string configFilePath)
 		{
-			XmlDocument xmlDoc = MapProjectConfigToXmlDoc(this.CurrentProjectConfiguraiton);
-			XmlWriterSettings settings = new XmlWriterSettings();
-			settings.Encoding = new UTF8Encoding(true);
-			settings.Indent = true;
-			settings.IndentChars = "\t";
-			settings.NewLineOnAttributes = false;
-			settings.OmitXmlDeclaration = true;
-			using (XmlWriter xmlWriter = XmlWriter.Create(configFilePath, settings))
+			try
 			{
-				xmlDoc.Save(xmlWriter);
+				XmlDocument xmlDoc = MapProjectConfigToXmlDoc(this.CurrentProjectConfiguraiton);
+				XmlWriterSettings settings = new XmlWriterSettings();
+				settings.Encoding = new UTF8Encoding(true);
+				settings.Indent = true;
+				settings.IndentChars = "\t";
+				settings.NewLineOnAttributes = false;
+				settings.OmitXmlDeclaration = true;
+				using (XmlWriter xmlWriter = XmlWriter.Create(configFilePath, settings))
+				{
+					xmlDoc.Save(xmlWriter);
+				}
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(this.messageManager.GetMessage("errorWhileSavingProjectConfigFile"), ex);
 			}
 		}
 

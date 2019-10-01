@@ -65,7 +65,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			catch (Exception ex)
 			{
 				var messageWindow = dialogFactory.GetMessageBoxWindow();
-				messageWindow.ShowDialog(ex.Message,
+				messageWindow.ShowDialog(ex.ToString(),
 					messageManager.GetMessage("ArasVSMethodPlugin"),
 					MessageButtons.OK,
 					MessageIcon.Error);

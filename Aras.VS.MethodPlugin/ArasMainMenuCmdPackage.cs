@@ -99,7 +99,7 @@ namespace Aras.VS.MethodPlugin
 
 			this.messageManager = new VisualStudioMessageManager();
 			this.iOWrapper = new IOWrapper();
-			this.projectConfigurationManager = new ProjectConfigurationManager();
+			this.projectConfigurationManager = new ProjectConfigurationManager(this.messageManager);
 			this.vsPackageWrapper = new VsPackageWrapper();
 			this.projectManager = new ProjectManager(serviceProvider, iOWrapper, vsPackageWrapper, messageManager, projectConfigurationManager);
 			this.authManager = new AuthenticationManager(messageManager, projectManager);
