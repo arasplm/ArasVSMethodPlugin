@@ -42,13 +42,13 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 		[SetUp]
 		public void Init()
 		{
+			messageManager = Substitute.For<MessageManager>();
 			projectManager = Substitute.For<IProjectManager>();
-			projectConfigurationManager = new ProjectConfigurationManager();
+			projectConfigurationManager = new ProjectConfigurationManager(messageManager);
 			dialogFactory = Substitute.For<IDialogFactory>();
 			authManager = new AuthManagerStub();
 			codeProviderFactory = Substitute.For<ICodeProviderFactory>();
 			globalConfiguration = Substitute.For<IGlobalConfiguration>();
-			messageManager = Substitute.For<MessageManager>();
 			CreateMethodCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, globalConfiguration, messageManager);
 			createMethodCmd = CreateMethodCmd.Instance;
 			iVsUIShell = Substitute.For<IVsUIShell>();

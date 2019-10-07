@@ -27,11 +27,11 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 		[SetUp]
 		public void Init()
 		{
+			messageManager = Substitute.For<MessageManager>();
 			projectManager = Substitute.For<IProjectManager>();
-			projectConfigurationManager = new ProjectConfigurationManager();
+			projectConfigurationManager = new ProjectConfigurationManager(messageManager);
 			dialogFactory = Substitute.For<IDialogFactory>();
 			authManager = Substitute.For<IAuthenticationManager>();
-			messageManager = Substitute.For<MessageManager>();
 			ConnectionInfoCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, messageManager);
 			сonnectionInfoCmd = ConnectionInfoCmd.Instance;
 			iVsUIShell = Substitute.For<IVsUIShell>();

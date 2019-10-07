@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Aras.Method.Libs;
 using Aras.Method.Libs.Aras.Package;
 using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using NUnit.Framework;
@@ -11,16 +12,18 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectConfiguration
 	[TestFixture]
 	public class ProjectConfigurationManagerTest
 	{
+		private MessageManager messageManager;
 		private ProjectConfigurationManager projectConfigurationManager;
 
 		[SetUp]
 		public void Init()
 		{
-			projectConfigurationManager = new ProjectConfigurationManager();
+			messageManager = new VisualStudioMessageManager();
+			projectConfigurationManager = new ProjectConfigurationManager(messageManager);
 		}
 
 		[Test]
-		public void Load_ShouldThrowArgumentException()
+		public void Load_ShouldThrowException()
 		{
 			//Arrange
 			var configPath = "";
@@ -29,7 +32,7 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectConfiguration
 			var testDelegate = new TestDelegate(() => projectConfigurationManager.Load(configPath));
 
 			//Assert
-			Assert.Throws<ArgumentException>(testDelegate);
+			Assert.Throws<Exception>(testDelegate);
 		}
 
 		[Test]
