@@ -100,7 +100,8 @@ namespace Aras.VS.MethodPlugin.Commands
 				throw new Exception();
 			}
 
-			string methodWorkingFolder = Path.Combine(projectManager.ServerMethodFolderPath, methodInformation.Package.MethodFolderPath, methodInformation.MethodName);
+			string packageMethodFolderPath = this.projectConfigurationManager.CurrentProjectConfiguraiton.UseCommonProjectStructure ? methodInformation.Package.MethodFolderPath : string.Empty;
+			string methodWorkingFolder = Path.Combine(projectManager.ServerMethodFolderPath, packageMethodFolderPath, methodInformation.MethodName);
 
 			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(projectManager.Language);
 
@@ -116,7 +117,7 @@ namespace Aras.VS.MethodPlugin.Commands
 					return;
 				}
 
-				projectManager.AddItemTemplateToProjectNew(codeItemInfo, methodInformation.Package.MethodFolderPath, true, 0);
+				projectManager.AddItemTemplateToProjectNew(codeItemInfo, packageMethodFolderPath, true, 0);
 				sourceCode = codeItemInfo.Code;
 			}
 

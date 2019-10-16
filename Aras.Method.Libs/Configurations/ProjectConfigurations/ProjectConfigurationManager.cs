@@ -15,6 +15,10 @@ namespace Aras.Method.Libs.Configurations.ProjectConfigurations
 {
 	public class ProjectConfigurationManager : IProjectConfigurationManager
 	{
+		private const string DefaultMethodsFolderPath = "ServerMethods";
+		private const string DefaultMethodConfigFilePath = "method-config.xml";
+		private const string DefaultIOMDllFilePath = @"ArasLibs\IOM.dll";
+
 		private readonly MessageManager messageManager;
 
 		public ProjectConfigurationManager(MessageManager messageManager)
@@ -66,7 +70,7 @@ namespace Aras.Method.Libs.Configurations.ProjectConfigurations
 		private XmlDocument MapProjectConfigToXmlDoc(IProjectConfiguraiton configuration)
 		{
 			//TODO: Refactoring: move to constant. All hardcoded sting should be constants if using more then 2 times.
-			string configTempalte = "<?xml version = '1.0\' encoding = 'utf-8' ?><projectinfo><lastSelectedDir></lastSelectedDir><lastSelectedMfFile></lastSelectedMfFile><connections></connections><MethodsFolderPath></MethodsFolderPath><MethodConfigPath></MethodConfigPath><IOMFilePath></IOMFilePath><methods></methods><lastSavedSearch></lastSavedSearch><useVSFormatting></useVSFormatting><OpenFromPackageLastSearchType></OpenFromPackageLastSearchType></projectinfo>";
+			string configTempalte = "<?xml version = '1.0\' encoding = 'utf-8' ?><projectinfo><lastSelectedDir></lastSelectedDir><lastSelectedMfFile></lastSelectedMfFile><connections></connections><MethodsFolderPath></MethodsFolderPath><MethodConfigPath></MethodConfigPath><IOMFilePath></IOMFilePath><methods></methods><lastSavedSearch></lastSavedSearch><useVSFormatting></useVSFormatting><UseCommonProjectStructure></UseCommonProjectStructure><OpenFromPackageLastSearchType></OpenFromPackageLastSearchType></projectinfo>";
 
 			var xmlDoc = new XmlDocument();
 			xmlDoc.LoadXml(configTempalte);
@@ -78,6 +82,9 @@ namespace Aras.Method.Libs.Configurations.ProjectConfigurations
 
 			var usedVSFormat = xmlDoc.SelectSingleNode("projectinfo/useVSFormatting");
 			usedVSFormat.InnerText = configuration.UseVSFormatting.ToString();
+
+			var useCommonProjectStructureXmlNode = xmlDoc.SelectSingleNode("projectinfo/UseCommonProjectStructure");
+			useCommonProjectStructureXmlNode.InnerText = configuration.UseCommonProjectStructure.ToString();
 
 			var openFromPackageLastSearchType = xmlDoc.SelectSingleNode("projectinfo/OpenFromPackageLastSearchType");
 			openFromPackageLastSearchType.InnerText = configuration.LastSelectedSearchTypeInOpenFromPackage;
@@ -217,10 +224,13 @@ namespace Aras.Method.Libs.Configurations.ProjectConfigurations
 			projectConfiguration.LastSelectedMfFile = xmlDoc.SelectSingleNode("projectinfo/lastSelectedMfFile")?.InnerText;
 			bool.TryParse(xmlDoc.SelectSingleNode("projectinfo/useVSFormatting")?.InnerText, out bool isUsedVSFormatting);
 			projectConfiguration.UseVSFormatting = isUsedVSFormatting;
+			bool.TryParse(xmlDoc.SelectSingleNode("projectinfo/UseCommonProjectStructure")?.InnerText, out bool isUsedCommonProjectStructure);
+			projectConfiguration.UseCommonProjectStructure = isUsedCommonProjectStructure;
+
 			projectConfiguration.LastSelectedSearchTypeInOpenFromPackage = xmlDoc.SelectSingleNode("projectinfo/OpenFromPackageLastSearchType")?.InnerText;
-			projectConfiguration.MethodsFolderPath = xmlDoc.SelectSingleNode("projectinfo/MethodsFolderPath")?.InnerText;
-			projectConfiguration.MethodConfigPath = xmlDoc.SelectSingleNode("projectinfo/MethodConfigPath")?.InnerText;
-			projectConfiguration.IOMFilePath = xmlDoc.SelectSingleNode("projectinfo/IOMFilePath")?.InnerText;
+			projectConfiguration.MethodsFolderPath = xmlDoc.SelectSingleNode("projectinfo/MethodsFolderPath")?.InnerText ?? DefaultMethodsFolderPath;
+			projectConfiguration.MethodConfigPath = xmlDoc.SelectSingleNode("projectinfo/MethodConfigPath")?.InnerText ?? DefaultMethodConfigFilePath;
+			projectConfiguration.IOMFilePath = xmlDoc.SelectSingleNode("projectinfo/IOMFilePath")?.InnerText ?? DefaultIOMDllFilePath;
 
 			var connectionInfoXmlNodes = xmlDoc.SelectNodes("projectinfo/connections/connectionInfo");
 			foreach (XmlNode connectionInfoNode in connectionInfoXmlNodes)

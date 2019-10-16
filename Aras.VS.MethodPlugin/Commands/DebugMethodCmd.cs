@@ -89,7 +89,6 @@ namespace Aras.VS.MethodPlugin.Commands
 			string projectConfigPath = projectManager.ProjectConfigPath;
 
 			MethodInfo methodInformation = projectConfigurationManager.CurrentProjectConfiguraiton.MethodInfos.FirstOrDefault(m => m.MethodName == selectedMethodName);
-			var pkgName = methodInformation.Package;
 
 			string selectedMethodPath = projectManager.MethodPath;
 			string sourceCode = File.ReadAllText(selectedMethodPath, new UTF8Encoding(true));
@@ -112,7 +111,8 @@ namespace Aras.VS.MethodPlugin.Commands
 			var directoryPath = Path.GetDirectoryName(currentDllPath);
 			var launcherPath = Path.Combine(directoryPath, "MethodLauncher", "MethodLauncher.exe");
 
-			string methodWorkingFolder = Path.Combine(projectManager.ServerMethodFolderPath, methodInformation.Package.MethodFolderPath, methodInformation.MethodName);
+			string packageMethodFolderPath = this.projectConfigurationManager.CurrentProjectConfiguraiton.UseCommonProjectStructure ? methodInformation.Package.MethodFolderPath : string.Empty;
+			string methodWorkingFolder = Path.Combine(projectManager.ServerMethodFolderPath, packageMethodFolderPath, methodInformation.MethodName);
 			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(projectManager.Language);
 
 			string methodCode = codeProvider.LoadMethodCode(methodWorkingFolder, sourceCode);

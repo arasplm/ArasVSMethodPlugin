@@ -106,8 +106,9 @@ namespace Aras.VS.MethodPlugin.Commands
 					itemCodeInfo = codeProvider.InsertActiveNodeToExternal(moveToViewResult.SelectedFullPath, serverMethodFolderPath, activeDocumentMethodName, activeSyntaxNode, projectManager.ActiveDocumentMethodFullPath);
 				}
 
-				projectManager.AddItemTemplateToProjectNew(activeDocumentCodeInfo, methodInformation.Package.MethodFolderPath, false);
-				projectManager.AddItemTemplateToProjectNew(itemCodeInfo, methodInformation.Package.MethodFolderPath, false);
+				string packageMethodFolderPath = this.projectConfigurationManager.CurrentProjectConfiguraiton.UseCommonProjectStructure ? methodInformation.Package.MethodFolderPath : string.Empty;
+				projectManager.AddItemTemplateToProjectNew(activeDocumentCodeInfo, packageMethodFolderPath, false);
+				projectManager.AddItemTemplateToProjectNew(itemCodeInfo, packageMethodFolderPath, false);
 
 				projectConfigurationManager.Save(projectManager.ProjectConfigPath);
 			}
@@ -126,8 +127,10 @@ namespace Aras.VS.MethodPlugin.Commands
 					ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(activeDocument.Project.Language);
 					CodeInfo activeDocumentCodeInfo = codeProvider.RemoveActiveNodeFromActiveDocument(activeDocument, activeSyntaxNode, serverMethodFolderPath);
 					CodeInfo methodDocumentCodeInfo = codeProvider.InsertActiveNodeToMainMethod(activeDocumentMethodFullPath, serverMethodFolderPath, activeSyntaxNode, activeDocument.FilePath);
-					projectManager.AddItemTemplateToProjectNew(activeDocumentCodeInfo, methodInformation.Package.MethodFolderPath, false);
-					projectManager.AddItemTemplateToProjectNew(methodDocumentCodeInfo, methodInformation.Package.MethodFolderPath, false);
+
+					string packageMethodFolderPath = this.projectConfigurationManager.CurrentProjectConfiguraiton.UseCommonProjectStructure ? methodInformation.Package.MethodFolderPath : string.Empty;
+					projectManager.AddItemTemplateToProjectNew(activeDocumentCodeInfo, packageMethodFolderPath, false);
+					projectManager.AddItemTemplateToProjectNew(methodDocumentCodeInfo, packageMethodFolderPath, false);
 				}
 			}
 		}
@@ -135,7 +138,7 @@ namespace Aras.VS.MethodPlugin.Commands
 		protected override void CheckCommandAccessibility(object sender, EventArgs e)
 		{
 			OleMenuCommand command = (OleMenuCommand)sender;
-			if (!projectManager.IsArasProject | string.IsNullOrEmpty(projectManager.ActiveDocumentMethodName))
+			if (!projectManager.SolutionHasProject | !projectManager.IsArasProject | string.IsNullOrEmpty(projectManager.ActiveDocumentMethodName))
 			{
 				command.Enabled = false;
 				return;

@@ -16,6 +16,8 @@ namespace Aras.Method.Libs.Configurations.ProjectConfigurations
 
 		bool UseVSFormatting { get; set; }
 
+		bool UseCommonProjectStructure { get; set; }
+
 		string LastSelectedSearchTypeInOpenFromPackage { get; set; }
 
 		List<ConnectionInfo> Connections { get; }

@@ -86,22 +86,26 @@ namespace Aras.VS.MethodPlugin.Commands
 			}
 
 			MethodInfo methodInformation = projectConfigurationManager.CurrentProjectConfiguraiton.MethodInfos.FirstOrDefault(m => m.MethodName == openViewResult.MethodName);
-			if (methodInformation != null && projectManager.IsMethodExist(methodInformation.Package.MethodFolderPath, methodInformation.MethodName))
+			if (methodInformation != null)
 			{
-				var messageWindow = this.dialogFactory.GetMessageBoxWindow();
-				var dialogReuslt = messageWindow.ShowDialog(this.messageManager.GetMessage("MethodAlreadyAddedToProjectDoYouWantReplaceMethod"),
-					this.messageManager.GetMessage("Warning"),
-					MessageButtons.YesNo,
-					MessageIcon.None);
+				string packageMethodFolderPath = this.projectConfigurationManager.CurrentProjectConfiguraiton.UseCommonProjectStructure ? methodInformation.Package.MethodFolderPath : string.Empty;
+				if (projectManager.IsMethodExist(packageMethodFolderPath, methodInformation.MethodName))
+				{
+					var messageWindow = this.dialogFactory.GetMessageBoxWindow();
+					var dialogReuslt = messageWindow.ShowDialog(this.messageManager.GetMessage("MethodAlreadyAddedToProjectDoYouWantReplaceMethod"),
+						this.messageManager.GetMessage("Warning"),
+						MessageButtons.YesNo,
+						MessageIcon.None);
 
-				if (dialogReuslt == MessageDialogResult.Yes)
-				{
-					projectManager.RemoveMethod(methodInformation);
-					projectConfigurationManager.CurrentProjectConfiguraiton.MethodInfos.Remove(methodInformation);
-				}
-				else
-				{
-					return;
+					if (dialogReuslt == MessageDialogResult.Yes)
+					{
+						projectManager.RemoveMethod(methodInformation);
+						projectConfigurationManager.CurrentProjectConfiguraiton.MethodInfos.Remove(methodInformation);
+					}
+					else
+					{
+						return;
+					}
 				}
 			}
 

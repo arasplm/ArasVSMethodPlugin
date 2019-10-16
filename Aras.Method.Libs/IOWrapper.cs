@@ -58,7 +58,7 @@ namespace Aras.Method.Libs
 			return File.Exists(path);
 		}
 
-		public string FileReadAllText(string path, UTF8Encoding encoding)
+		public string FileReadAllText(string path, Encoding encoding)
 		{
 			return File.ReadAllText(path, encoding);
 		}
@@ -136,6 +136,11 @@ namespace Aras.Method.Libs
 		public bool PathIsPathRooted(string path)
 		{
 			return Path.IsPathRooted(path);
+		}
+
+		public string PathChangeExtension(string path, string extension)
+		{
+			return Path.ChangeExtension(path, extension);
 		}
 
 		public XmlDocument XmlDocumentLoad(string path)

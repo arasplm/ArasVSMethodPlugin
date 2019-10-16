@@ -22,7 +22,7 @@ namespace Aras.Method.Libs
 		void DirectoryMove(string pathFrom, string pathTo);
 		void DirectoryDelete(string path, bool recursive);
 		bool FileExists(string path);
-		string FileReadAllText(string path, UTF8Encoding encoding);
+		string FileReadAllText(string path, Encoding encoding);
 		void FileDelete(string path);
 		string[] FileReadAllLine(string excludePath);
 		void WriteAllTextIntoFile(string path, string text, Encoding encoding);
@@ -35,6 +35,7 @@ namespace Aras.Method.Libs
 		char PathDirectorySeparatorChar();
 		char PathAltDirectorySeparatorChar();
 		string PathGetFileName(string path);
+		string PathChangeExtension(string path, string extension);
 		string GetFileNameWithoutExtension(string path);
 		string PathGetDirectoryName(string path);
 		bool PathIsPathRooted(string path);

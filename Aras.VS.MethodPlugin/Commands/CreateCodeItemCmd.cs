@@ -92,7 +92,8 @@ namespace Aras.VS.MethodPlugin.Commands
 				return;
 			}
 
-			string methodWorkingFolder = Path.Combine(serverMethodFolderPath, methodInformation.Package.MethodFolderPath, methodInformation.MethodName);
+			string packageMethodFolderPath = this.projectConfigurationManager.CurrentProjectConfiguraiton.UseCommonProjectStructure ? methodInformation.Package.MethodFolderPath : string.Empty;
+			string methodWorkingFolder = Path.Combine(serverMethodFolderPath, packageMethodFolderPath, methodInformation.MethodName);
 
 			string codeItemPath = selectedFolderPath.Substring(methodWorkingFolder.Length).TrimStart('\\', '/');
 			codeItemPath = Path.Combine(codeItemPath, viewResult.FileName);
@@ -133,7 +134,7 @@ namespace Aras.VS.MethodPlugin.Commands
 					projectManager.MethodPath);
 			}
 
-			projectManager.AddItemTemplateToProjectNew(codeItemInfo, methodInformation.Package.MethodFolderPath, true, 0);
+			projectManager.AddItemTemplateToProjectNew(codeItemInfo, packageMethodFolderPath, true, 0);
 
 			projectConfigurationManager.CurrentProjectConfiguraiton.UseVSFormatting = viewResult.IsUseVSFormattingCode;
 			projectConfigurationManager.Save(projectManager.ProjectConfigPath);
