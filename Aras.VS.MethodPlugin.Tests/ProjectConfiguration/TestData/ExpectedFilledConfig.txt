@@ -28,5 +28,6 @@
 		</searchItem>
 	</lastSavedSearch>
 	<useVSFormatting>True</useVSFormatting>
+	<UseCommonProjectStructure>False</UseCommonProjectStructure>
 	<OpenFromPackageLastSearchType></OpenFromPackageLastSearchType>
 </projectinfo>
