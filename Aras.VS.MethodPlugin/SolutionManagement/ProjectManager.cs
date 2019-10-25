@@ -320,6 +320,7 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 				CommandIds.OpenFromPackage,
 				CommandIds.ConnectionInfo,
 				CommandIds.RefreshConfig,
+				CommandIds.ImportOpenInVSAction
 			};
 
 			if (listOfMethodNotDependentOfSelection.Contains(commandId))

@@ -12,6 +12,7 @@ using Aras.VS.MethodPlugin.Configurations;
 using Aras.VS.MethodPlugin.Dialogs.Directory.Data;
 using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.ItemSearch;
+using Aras.VS.MethodPlugin.OpenMethodInVS;
 using Aras.VS.MethodPlugin.PackageManagement;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using Microsoft.CodeAnalysis;
@@ -44,7 +45,8 @@ namespace Aras.VS.MethodPlugin.Dialogs
 		   string pathToProjectConfigFile,
 		   string projectName,
 		   string projectFullName,
-		   string projectLanguage);
+		   string projectLanguage,
+		   string startMethodId);
 
 		IViewAdaper<OpenFromPackageView, OpenFromPackageViewResult> GetOpenFromPackageView(TemplateLoader templateLoader, string projectLanguage, IProjectConfiguraiton projectConfiguraiton);
 

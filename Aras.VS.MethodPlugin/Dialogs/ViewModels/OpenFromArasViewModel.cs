@@ -68,7 +68,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			string pathToProjectConfigFile,
 			string projectName,
 			string projectFullName,
-			string projectLanguage)
+			string projectLanguage,
+			string startMethodId)
 		{
 			if (authenticationManager == null) throw new ArgumentNullException(nameof(authenticationManager));
 			if (dialogFactory == null) throw new ArgumentNullException(nameof(dialogFactory));
@@ -97,6 +98,12 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 			ConnectionInformation = configurationManager.CurrentProjectConfiguraiton.Connections.First(c => c.LastConnection);
 			SelectedEventSpecificData = EventSpecificData.First();
+
+			if (!string.IsNullOrEmpty(startMethodId))
+			{
+				IsSearchButtonEnabled = false;
+				InitializeItemData("Method", startMethodId);
+			}
 		}
 
 		#region Properties
@@ -245,6 +252,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			set { isUseVSFormattingCode = value; }
 		}
 
+		public bool IsSearchButtonEnabled { get; } = true;
+
 		#endregion
 
 		#region Commands
@@ -318,62 +327,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			var result = presenter.Run(searchArguments);
 			if (result.DialogResult == DialogResult.OK)
 			{
-				dynamic item = authenticationManager.InnovatorInstance.newItem(result.ItemType, "get");
-				item.setID(result.ItemId);
-				item = item.apply();
-
-				this.MethodName = item.getProperty("name", string.Empty);
-				this.MethodId = item.getProperty("id", string.Empty);
-				this.MethodConfigId = item.getProperty("config_id", string.Empty);
-				this.MethodLanguage = item.getProperty("method_type", string.Empty);
-				this.IdentityKeyedName = item.getPropertyAttribute("execution_allowed_to", "keyed_name", string.Empty);
-				this.IdentityId = item.getProperty("execution_allowed_to", string.Empty);
-				this.MethodComment = item.getProperty("comments", string.Empty);
-
-				var methodCode = item.getProperty("method_code", string.Empty);
-				this.MethodCode = Regex.Replace(methodCode, @"//MethodTemplateName=[\S]+\r\n", "");
-
-				if (methodLanguage == "C#" || methodLanguage == "VB")
-				{
-					this.MethodType = "server";
-				}
-				else
-				{
-					this.MethodType = "client";
-				}
-
-				var packageName = string.Empty;
-
-				try
-				{
-					packageName = packageManager.GetPackageDefinitionByElementName(methodName).Name;
-				}
-				catch (Exception ex) { }
-
-				this.Package = packageName;
-
-				TemplateInfo template;
-				string templateName = templateLoader.GetMethodTemplateName(methodCode);
-				if (string.IsNullOrEmpty(templateName))
-				{
-					template = templateLoader.GetDefaultTemplate(methodLanguage);
-				}
-				else
-				{
-					template = templateLoader.GetTemplateFromCodeString(templateName, methodLanguage);
-					if (template == null)
-					{
-						var messageWindow = this.dialogFactory.GetMessageBoxWindow();
-						messageWindow.ShowDialog(messageManager.GetMessage("TheTemplateFromSelectedMethodNotFoundDefaultTemplateWillBeUsed", templateName),
-							"Open method from Aras Innovator",
-							MessageButtons.OK,
-							MessageIcon.Information);
-
-						template = templateLoader.GetDefaultTemplate(methodLanguage);
-					}
-				}
-
-				this.SelectedTemplate = template;
+				InitializeItemData(result.ItemType, result.ItemId);
 
 				if (configurationManager.CurrentProjectConfiguraiton.LastSavedSearch.ContainsKey(result.ItemType))
 				{
@@ -407,6 +361,70 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			}
 
 			return true;
+		}
+
+		private void InitializeItemData(string itemType, string id)
+		{
+			dynamic item = authenticationManager.InnovatorInstance.newItem(itemType, "get");
+			item.setID(id);
+			item = item.apply();
+			if (item.isError())
+			{
+				return;
+			}
+
+			this.MethodName = item.getProperty("name", string.Empty);
+			this.MethodId = item.getProperty("id", string.Empty);
+			this.MethodConfigId = item.getProperty("config_id", string.Empty);
+			this.MethodLanguage = item.getProperty("method_type", string.Empty);
+			this.IdentityKeyedName = item.getPropertyAttribute("execution_allowed_to", "keyed_name", string.Empty);
+			this.IdentityId = item.getProperty("execution_allowed_to", string.Empty);
+			this.MethodComment = item.getProperty("comments", string.Empty);
+
+			var methodCode = item.getProperty("method_code", string.Empty);
+			this.MethodCode = Regex.Replace(methodCode, @"//MethodTemplateName=[\S]+\r\n", "");
+
+			if (methodLanguage == "C#" || methodLanguage == "VB")
+			{
+				this.MethodType = "server";
+			}
+			else
+			{
+				this.MethodType = "client";
+			}
+
+			var packageName = string.Empty;
+
+			try
+			{
+				packageName = packageManager.GetPackageDefinitionByElementName(methodName).Name;
+			}
+			catch (Exception ex) { }
+
+			this.Package = packageName;
+
+			TemplateInfo template;
+			string templateName = templateLoader.GetMethodTemplateName(methodCode);
+			if (string.IsNullOrEmpty(templateName))
+			{
+				template = templateLoader.GetDefaultTemplate(methodLanguage);
+			}
+			else
+			{
+				template = templateLoader.GetTemplateFromCodeString(templateName, methodLanguage);
+				if (template == null)
+				{
+					var messageWindow = this.dialogFactory.GetMessageBoxWindow();
+					messageWindow.ShowDialog(messageManager.GetMessage("TheTemplateFromSelectedMethodNotFoundDefaultTemplateWillBeUsed", templateName),
+						"Open method from Aras Innovator",
+						MessageButtons.OK,
+						MessageIcon.Information);
+
+					template = templateLoader.GetDefaultTemplate(methodLanguage);
+				}
+			}
+
+			this.SelectedTemplate = template;
 		}
 	}
 }

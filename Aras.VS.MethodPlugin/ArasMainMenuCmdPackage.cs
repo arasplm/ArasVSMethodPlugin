@@ -18,11 +18,13 @@ using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Code;
 using Aras.VS.MethodPlugin.Configurations;
 using Aras.VS.MethodPlugin.Dialogs;
+using Aras.VS.MethodPlugin.OpenMethodInVS;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Aras.VS.MethodPlugin
 {
@@ -50,6 +52,7 @@ namespace Aras.VS.MethodPlugin
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
 	[ProvideAutoLoad(VSConstants.UICONTEXT.NoSolution_string, PackageAutoLoadFlags.BackgroundLoad)]
 	[ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string, PackageAutoLoadFlags.BackgroundLoad)]
+	[ProvideAppCommandLine(OpenInVSConstants.ProtocolName, typeof(ArasMainMenuCmdPackage), Arguments = "1", DemandLoad = 1)]
 	public sealed class ArasMainMenuCmdPackage : AsyncPackage
 	{
 		/// <summary>
@@ -69,6 +72,8 @@ namespace Aras.VS.MethodPlugin
 		private MessageManager messageManager;
 		private ProjectUpdater projectUpdater;
 		private EventListener eventListener;
+		private IOpenContextParser openContextParser;
+		private IMethodOpener methodOpener;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ArasMainMenuCmdPackage"/> class.
@@ -111,6 +116,8 @@ namespace Aras.VS.MethodPlugin
 			this.globalConfiguration = new GlobalConfiguration(iOWrapper);
 			this.projectUpdater = new ProjectUpdater(this.iOWrapper);
 			this.eventListener = new EventListener(projectManager, projectUpdater, projectConfigurationManager, iOWrapper);
+			this.openContextParser = new OpenContextParser();
+			this.methodOpener = new MethodOpener(projectManager, dialogFactory, openContextParser, messageManager);
 
 			Commands.OpenFromArasCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
 			Commands.OpenFromPackageCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
@@ -123,8 +130,16 @@ namespace Aras.VS.MethodPlugin
 			Commands.RefreshConfigCmd.Initialize(projectManager, dialogFactory, projectConfigurationManager, messageManager);
 			Commands.DebugMethodCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
 			Commands.MoveToCmd.Initialize(projectManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
+			Commands.ImportOpenInVSActionCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
 
 			this.eventListener.StartListening();
+			
+			IVsAppCommandLine cmdLine = await GetServiceAsync(typeof(SVsAppCommandLine)) as IVsAppCommandLine;
+			ErrorHandler.ThrowOnFailure(cmdLine.GetOption(OpenInVSConstants.ProtocolName, out int isPresent, out string openMethodRequest));
+			if (isPresent == 1)
+			{
+				methodOpener.OpenMethodFromAras(openMethodRequest);
+			}
 		}
 
 		#endregion

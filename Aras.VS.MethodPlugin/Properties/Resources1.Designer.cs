@@ -131,6 +131,26 @@ namespace Aras.VS.MethodPlugin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;AML&gt;
+        ///	&lt;Item type=&quot;Method&quot; id=&quot;7FA1FE7EC5A84B65B28A8DF9EB5E518C&quot; action=&quot;add&quot;&gt;
+        ///		&lt;execution_allowed_to keyed_name=&quot;World&quot; type=&quot;Identity&quot;&gt;A73B655731924CD0B027E4F4D5FCC0A9&lt;/execution_allowed_to&gt;
+        ///		&lt;method_code&gt;
+        ///			&lt;![CDATA[var currentItem;
+        ///
+        ///if (window.work &amp;&amp; window.work.grid &amp;&amp; work.grid.getSelectedItemIDs().length === 1) {
+        ///    var selectedId = work.grid.getSelectedItemIDs()[0];
+        ///    currentItem = this.getInnovator().getItemById(&quot;Method&quot;, selectedId);
+        ///}
+        ///
+        ///if (!currentItem &amp;&amp; typeof getIOMItem === &quot; [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ImportOpenInVSActionAML {
+            get {
+                return ResourceManager.GetString("ImportOpenInVSActionAML", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap keysearch {
