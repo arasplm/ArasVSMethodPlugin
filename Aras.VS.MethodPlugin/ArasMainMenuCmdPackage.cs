@@ -20,6 +20,7 @@ using Aras.VS.MethodPlugin.Configurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using EnvDTE;
+using EnvDTE80;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 
@@ -66,8 +67,8 @@ namespace Aras.VS.MethodPlugin
 		private IVsPackageWrapper vsPackageWrapper;
 		private IGlobalConfiguration globalConfiguration;
 		private MessageManager messageManager;
-
-		private ProjectItemsEvents projectItemsEvents;
+		private ProjectUpdater projectUpdater;
+		private EventListener eventListener;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ArasMainMenuCmdPackage"/> class.
@@ -108,6 +109,8 @@ namespace Aras.VS.MethodPlugin
 			ICodeFormatter codeFormatter = new VisualStudioCodeFormatter(this.projectManager);
 			this.codeProviderFactory = new CodeProviderFactory(codeFormatter, messageManager, iOWrapper);
 			this.globalConfiguration = new GlobalConfiguration(iOWrapper);
+			this.projectUpdater = new ProjectUpdater(this.iOWrapper);
+			this.eventListener = new EventListener(projectManager, projectUpdater, projectConfigurationManager, iOWrapper);
 
 			Commands.OpenFromArasCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
 			Commands.OpenFromPackageCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
@@ -121,121 +124,7 @@ namespace Aras.VS.MethodPlugin
 			Commands.DebugMethodCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
 			Commands.MoveToCmd.Initialize(projectManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
 
-			var dte = (DTE)serviceProvider.GetService(typeof(DTE));
-			this.projectItemsEvents = dte.Events.GetObject("CSharpProjectItemsEvents") as ProjectItemsEvents;
-			if (this.projectItemsEvents != null)
-			{
-				this.projectItemsEvents.ItemRemoved += this.ProjectItemsEvents_ItemRemoved;
-				this.projectItemsEvents.ItemRenamed += this.ProjectItemsEvents_ItemRenamed;
-			}
-		}
-
-		private void ProjectItemsEvents_ItemRemoved(ProjectItem ProjectItem)
-		{
-			try
-			{
-				if (!this.projectManager.IsArasProject)
-				{
-					return;
-				}
-
-				string projectConfigPath = this.projectManager.ProjectConfigPath;
-				projectConfigurationManager.Load(projectConfigPath);
-
-				string methodName = this.projectManager.MethodName;
-
-				RemoveFromMethodInfo(methodName, ProjectItem);
-				projectConfigurationManager.Save(projectConfigPath);
-			}
-			catch
-			{
-
-			}
-		}
-
-		private void ProjectItemsEvents_ItemRenamed(ProjectItem ProjectItem, string OldName)
-		{
-			try
-			{
-				if (!this.projectManager.IsArasProject)
-				{
-					return;
-				}
-
-				string projectConfigPath = this.projectManager.ProjectConfigPath;
-				projectConfigurationManager.Load(projectConfigPath);
-
-				string methodName = this.projectManager.MethodName;
-
-				UpdateMethodInfo(methodName, ProjectItem, OldName);
-				projectConfigurationManager.Save(projectConfigPath);
-			}
-			catch
-			{
-
-			}
-		}
-
-		private void RemoveFromMethodInfo(string methodName, ProjectItem projectItem)
-		{
-			MethodInfo methodInfos = projectConfigurationManager.CurrentProjectConfiguraiton.MethodInfos.FirstOrDefault(m => m.MethodName == methodName);
-			if (methodInfos == null)
-			{
-				return;
-			}
-
-			string methodFolderPath = iOWrapper.PathCombine(projectConfigurationManager.CurrentProjectConfiguraiton.MethodsFolderPath, methodInfos.Package.MethodFolderPath);
-			string filePath = projectItem.FileNames[0];
-			int index = filePath.IndexOf(projectConfigurationManager.CurrentProjectConfiguraiton.MethodsFolderPath);
-			if (index == 1)
-			{
-				return;
-			}
-
-			string attributePath = filePath.Substring(index + methodFolderPath.Length);
-			attributePath = Path.ChangeExtension(attributePath, null);
-
-			string fodlerPath = methodName + "\\";
-
-			if (fodlerPath == attributePath)
-			{
-				projectConfigurationManager.CurrentProjectConfiguraiton.MethodInfos.RemoveAll(x => x.MethodName == methodName);
-				return;
-			}
-		}
-
-		private void UpdateMethodInfo(string methodName, ProjectItem projectItem, string oldName)
-		{
-			MethodInfo methodInformation = projectConfigurationManager.CurrentProjectConfiguraiton.MethodInfos.FirstOrDefault(m => m.MethodName == methodName);
-			if (methodInformation == null)
-			{
-				return;
-			}
-
-			string newFilePath = projectItem.FileNames[0];
-			int index = newFilePath.IndexOf(projectConfigurationManager.CurrentProjectConfiguraiton.MethodsFolderPath);
-			if (index == -1)
-			{
-				return;
-			}
-
-			string methodFolderPath = iOWrapper.PathCombine(projectConfigurationManager.CurrentProjectConfiguraiton.MethodsFolderPath, methodInformation.Package.MethodFolderPath);
-
-			string newAttributePath = newFilePath.Substring(index + methodFolderPath.Length);
-			newAttributePath = Path.ChangeExtension(newAttributePath, null);
-			string oldAttributePath = iOWrapper.PathCombine(iOWrapper.PathGetDirectoryName(newAttributePath), oldName);
-			oldAttributePath = Path.ChangeExtension(oldAttributePath, null);
-
-			string oldPartialAttribute = oldAttributePath.Substring(oldAttributePath.IndexOf("\\") + 1).Replace("\\", "/");
-			string newPartialAttribute = newAttributePath.Substring(newAttributePath.IndexOf("\\") + 1).Replace("\\", "/");
-			string oldExternalAttribute = oldAttributePath.Substring(oldAttributePath.IndexOf("\\") + 1).Replace("\\", "/");
-			string newExternalAttribute = newAttributePath.Substring(newAttributePath.IndexOf("\\") + 1).Replace("\\", "/");
-
-			Encoding witoutBom = new UTF8Encoding(true);
-			string code = File.ReadAllText(newFilePath, witoutBom);
-			code = code.Replace($"[PartialPath(\"{oldPartialAttribute}\"", $"[PartialPath(\"{newPartialAttribute}\"");
-			code = code.Replace($"[ExternalPath(\"{oldExternalAttribute}\"", $"[ExternalPath(\"{newExternalAttribute}\"");
-			File.WriteAllText(newFilePath, code, witoutBom);
+			this.eventListener.StartListening();
 		}
 
 		#endregion

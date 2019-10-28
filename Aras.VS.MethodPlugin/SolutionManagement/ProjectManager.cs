@@ -25,7 +25,6 @@ using Microsoft.CodeAnalysis.Text;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.LanguageServices;
-using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
@@ -314,21 +313,25 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 
 		public bool IsCommandForMethod(Guid commandId)
 		{
-			var listOfMethodNotDependentOfSelection = new List<Guid> {
-					CommandIds.CreateMethod,
-					CommandIds.OpenFromAras,
-					CommandIds.OpenFromPackage,
-					CommandIds.ConnectionInfo,
-					CommandIds.RefreshConfig,
-				};
+			List<Guid> listOfMethodNotDependentOfSelection = new List<Guid>
+			{
+				CommandIds.CreateMethod,
+				CommandIds.OpenFromAras,
+				CommandIds.OpenFromPackage,
+				CommandIds.ConnectionInfo,
+				CommandIds.RefreshConfig,
+			};
+
 			if (listOfMethodNotDependentOfSelection.Contains(commandId))
 			{
 				return true;
 			}
+
 			if (string.IsNullOrEmpty(MethodName))
 			{
 				return false;
 			}
+
 			return true;
 		}
 
@@ -371,7 +374,9 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 
 		public void CreateMethodTree(GeneratedCodeInfo generatedCodeInfo, PackageInfo packageInfo)
 		{
-			AddItemTemplateToProjectNew(generatedCodeInfo.WrapperCodeInfo, packageInfo.MethodFolderPath, false);
+			string packageMethodFolderPath = this.projectConfigurationManager.CurrentProjectConfiguraiton.UseCommonProjectStructure ? packageInfo.MethodFolderPath : string.Empty;
+
+			AddItemTemplateToProjectNew(generatedCodeInfo.WrapperCodeInfo, packageMethodFolderPath, false);
 
 			var splittedByLinesArray = generatedCodeInfo.MethodCodeInfo.Code.Split(new string[] { "\r\n" }, StringSplitOptions.None);
 			int index = 1;
@@ -382,16 +387,16 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 					index = i + 2;
 				}
 			}
-			AddItemTemplateToProjectNew(generatedCodeInfo.MethodCodeInfo, packageInfo.MethodFolderPath, true, index);
+			AddItemTemplateToProjectNew(generatedCodeInfo.MethodCodeInfo, packageMethodFolderPath, true, index);
 
 			foreach (var partialCodeInfo in generatedCodeInfo.PartialCodeInfoList)
 			{
-				AddItemTemplateToProjectNew(partialCodeInfo, packageInfo.MethodFolderPath, false);
+				AddItemTemplateToProjectNew(partialCodeInfo, packageMethodFolderPath, false);
 			}
 
 			foreach (var externalItemsInfo in generatedCodeInfo.ExternalItemsInfoList)
 			{
-				AddItemTemplateToProjectNew(externalItemsInfo, packageInfo.MethodFolderPath, false);
+				AddItemTemplateToProjectNew(externalItemsInfo, packageMethodFolderPath, false);
 			}
 		}
 
@@ -464,7 +469,8 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 
 		public void RemoveMethod(MethodInfo methodInfo)
 		{
-			var methodFolder = GetProjectFolder(Path.Combine(methodInfo.Package.MethodFolderPath, methodInfo.MethodName));
+			string packageMethodFolderPath = this.projectConfigurationManager.CurrentProjectConfiguraiton.UseCommonProjectStructure ? methodInfo.Package.MethodFolderPath : string.Empty;
+			var methodFolder = GetProjectFolder(Path.Combine(packageMethodFolderPath, methodInfo.MethodName));
 			var methodNameWithExtension = !Path.HasExtension(methodInfo.MethodName) ? methodInfo.MethodName + GlobalConsts.CSExtension : methodInfo.MethodName;
 			//remove method
 			if (methodFolder.ProjectItems.Exists(methodNameWithExtension))
@@ -496,7 +502,8 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 
 			foreach (MethodInfo methodInfo in methodInfos)
 			{
-				string methodWorkingFolder = Path.Combine(serverMethodFolderPath, methodInfo.Package.MethodFolderPath, methodInfo.MethodName);
+				string packageMethodFolderPath = this.projectConfigurationManager.CurrentProjectConfiguraiton.UseCommonProjectStructure ? methodInfo.Package.MethodFolderPath : string.Empty;
+				string methodWorkingFolder = Path.Combine(serverMethodFolderPath, packageMethodFolderPath, methodInfo.MethodName);
 				List<string> methodPaths = iOWrapper.DirectoryGetFiles(methodWorkingFolder, $"*{GlobalConsts.CSExtension}", SearchOption.AllDirectories)
 					.Select(x => x.Substring(serverMethodFolderPath.Length))
 					.ToList();
@@ -690,7 +697,9 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 
 		private string GetMethodPath(string selectedFilePath)
 		{
+			string expectedRootFolderName = projectConfigurationManager.CurrentProjectConfiguraiton.UseCommonProjectStructure ? "Method" : this.projectConfigurationManager.CurrentProjectConfiguraiton.MethodsFolderPath;
 			string mainFilePath = string.Empty;
+
 			if (!string.IsNullOrEmpty(selectedFilePath))
 			{
 				var directoryInfo = new DirectoryInfo(selectedFilePath);
@@ -700,7 +709,7 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 					string rootFolderName = parrentDirectoryInfo.Name;
 					string methodFolderName = directoryInfo.Name;
 
-					if (rootFolderName == "Method" && !Path.HasExtension(methodFolderName))
+					if (rootFolderName == expectedRootFolderName && !Path.HasExtension(methodFolderName))
 					{
 						mainFilePath = Path.Combine(directoryInfo.FullName, methodFolderName + GlobalConsts.CSExtension);
 						break;

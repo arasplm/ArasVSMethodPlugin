@@ -92,7 +92,8 @@ namespace Aras.VS.MethodPlugin.Commands
 			}
 
 			MethodInfo methodInformation = projectConfigurationManager.CurrentProjectConfiguraiton.MethodInfos.FirstOrDefault(m => m.MethodName == openViewResult.MethodName);
-			if (projectManager.IsMethodExist(openViewResult.Package.MethodFolderPath, openViewResult.MethodName))
+			string packageMethodFolderPath = this.projectConfigurationManager.CurrentProjectConfiguraiton.UseCommonProjectStructure ? openViewResult.Package.MethodFolderPath : string.Empty;
+			if (projectManager.IsMethodExist(packageMethodFolderPath, openViewResult.MethodName))
 			{
 				var messageWindow = this.dialogFactory.GetMessageBoxWindow();
 				var dialogReuslt = messageWindow.ShowDialog(this.messageManager.GetMessage("MethodAlreadyAddedToProjectDoYouWantReplaceMethod"),

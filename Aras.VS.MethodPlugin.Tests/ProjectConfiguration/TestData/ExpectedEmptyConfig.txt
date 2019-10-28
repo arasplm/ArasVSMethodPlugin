@@ -8,5 +8,6 @@
 	<methods></methods>
 	<lastSavedSearch></lastSavedSearch>
 	<useVSFormatting>False</useVSFormatting>
+	<UseCommonProjectStructure>False</UseCommonProjectStructure>
 	<OpenFromPackageLastSearchType></OpenFromPackageLastSearchType>
 </projectinfo>

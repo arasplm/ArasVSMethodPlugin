@@ -5,9 +5,6 @@
 //------------------------------------------------------------------------------
 
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace Aras.Method.Libs.Configurations.ProjectConfigurations
 {
@@ -27,6 +24,7 @@ namespace Aras.Method.Libs.Configurations.ProjectConfigurations
 			LastSelectedDir = string.Empty;
 			LastSelectedMfFile = string.Empty;
 			UseVSFormatting = default(bool);
+			UseCommonProjectStructure = default(bool);
 			LastSelectedSearchTypeInOpenFromPackage = string.Empty;
 			Connections.Clear();
 			MethodInfos.Clear();
@@ -41,6 +39,8 @@ namespace Aras.Method.Libs.Configurations.ProjectConfigurations
 		public string LastSelectedMfFile { get; set; }
 
 		public bool UseVSFormatting { get; set; }
+
+		public bool UseCommonProjectStructure { get; set; }
 
 		public string LastSelectedSearchTypeInOpenFromPackage
 		{

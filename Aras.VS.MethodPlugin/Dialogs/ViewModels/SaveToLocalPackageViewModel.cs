@@ -105,7 +105,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			PackagePath = projectConfiguration.LastSelectedDir;
 			MethodName = MethodInformation.MethodName;
 
-			string methodWorkingFolder = Path.Combine(projectManager.ServerMethodFolderPath, methodInformation.Package.MethodFolderPath, methodInformation.MethodName);
+			string packageMethodFolderPath = projectConfiguration.UseCommonProjectStructure ? methodInformation.Package.MethodFolderPath : string.Empty;
+			string methodWorkingFolder = Path.Combine(projectManager.ServerMethodFolderPath, packageMethodFolderPath, methodInformation.MethodName);
 			MethodCode = codeProvider.LoadMethodCode(methodWorkingFolder, sourceCode);
 			SelectedPackage = MethodInformation.Package.Name;
 			selectedIdentityKeyedName = MethodInformation.ExecutionAllowedToKeyedName;

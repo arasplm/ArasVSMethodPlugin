@@ -75,6 +75,7 @@ namespace Aras.VS.MethodPlugin.Commands
 				uiShell.EnableModeless(1);
 			}
 		}
+
 		//TODO: remove uiShell from parameters
 		public abstract void ExecuteCommandImpl(object sender, EventArgs args);
 
@@ -103,7 +104,8 @@ namespace Aras.VS.MethodPlugin.Commands
 
 			foreach (MethodInfo methodInfo in projectConfiguration.MethodInfos)
 			{
-				if (!projectManager.IsMethodExist(methodInfo.Package.MethodFolderPath, methodInfo.MethodName))
+				string packageMethodFolderPath = this.projectConfigurationManager.CurrentProjectConfiguraiton.UseCommonProjectStructure ? methodInfo.Package.MethodFolderPath : string.Empty;
+				if (!projectManager.IsMethodExist(packageMethodFolderPath, methodInfo.MethodName))
 				{
 					continue;
 				}
