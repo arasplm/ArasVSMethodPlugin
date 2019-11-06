@@ -1,6 +1,6 @@
 ﻿//------------------------------------------------------------------------------
 // <copyright file="OpenFromArasCmd.cs" company="Aras Corporation">
-//     © 2017-2018 Aras Corporation. All rights reserved.
+//     © 2017-2019 Aras Corporation. All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 
@@ -14,6 +14,7 @@ using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.Method.Libs.Templates;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Dialogs;
+using Aras.VS.MethodPlugin.OpenMethodInVS;
 using Aras.VS.MethodPlugin.PackageManagement;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using Microsoft.VisualStudio.Shell;
@@ -77,7 +78,8 @@ namespace Aras.VS.MethodPlugin.Commands
 			templateLoader.Load(projectManager.MethodConfigPath);
 
 			var packageManager = new PackageManager(authManager, this.messageManager);
-			var openView = dialogFactory.GetOpenFromArasView(projectConfigurationManager, templateLoader, packageManager, projectConfigPath, project.Name, project.FullName, codeProvider.Language);
+			OpenMethodContext openContext = args as OpenMethodContext;
+			var openView = dialogFactory.GetOpenFromArasView(projectConfigurationManager, templateLoader, packageManager, projectConfigPath, project.Name, project.FullName, codeProvider.Language, openContext?.MethodId);
 
 			var openViewResult = openView.ShowDialog();
 			if (openViewResult?.DialogOperationResult != true)

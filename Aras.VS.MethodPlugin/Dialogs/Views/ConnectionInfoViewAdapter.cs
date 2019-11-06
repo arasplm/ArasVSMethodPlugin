@@ -1,6 +1,6 @@
 ﻿//------------------------------------------------------------------------------
 // <copyright file="ConnectionInfoViewAdapter.cs" company="Aras Corporation">
-//     © 2017-2018 Aras Corporation. All rights reserved.
+//     © 2017-2019 Aras Corporation. All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 

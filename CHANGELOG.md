@@ -9,9 +9,10 @@
 - [x] Possibility to debug server method
 - [x] Formatting code after method opened or created
 - [x] Add support for CSharp:Aras.Server.Core.Configurator for SP 12
-- [ ] Add Hotkey for plugin actions
 - [x] Add project tempalte for SP 15
+- [ ] Add Hotkey for plugin actions
 - [ ] Add Aras code anylizer to project templates
+- [ ] Add project template for Aras 12.0 SP3.
 
 
 Features that have a checkmark are complete and available for
@@ -22,6 +23,11 @@ download in the
 
 These are the changes to each version that has been released
 on the official Visual Studio extension gallery.
+
+## 1.5
+- [x] Added "Open in Visual Studio" action inside Aras Innovator.
+- [x] Added project template for Aras 12.0 SP2.
+- [x] Added common approach to store methods in a project structure.
 
 ## 1.4
 - [x] Added file filter for showing only *.mf files in "Open from AML package" dialog.

@@ -117,6 +117,11 @@
         <Parent guid="ArasProjGroupCmdSet" id="ArasProjMenu" />
       </Group>
 
+			<!--Import groups-->
+			<Group guid="ArasImportGroupCmdSet" id="ProjImportGroup" priority="0x0204">
+				<Parent guid="ArasProjGroupCmdSet" id="ArasProjMenu" />
+			</Group>
+
       <!--Folder menu groups-->
       <Group guid="ArasFolderGroupCmdSet" id="FolderGroup" priority="0x0200">
         <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_FOLDERNODE" />
@@ -227,6 +232,15 @@
         </Strings>
       </Button>
 
+			<Button guid="ArasImportOpenInVSActionCmdSet" id="ArasImportOpenInVSActionCommandId" priority="0x0106" type="Button">
+				<Icon guid="guidImportOpenInVSActionImages" id="bmpPic1" />
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<CommandFlag>DefaultInvisible</CommandFlag>
+				<Strings>
+					<ButtonText>Import 'Open in Visual Studio' Action</ButtonText>
+				</Strings>
+			</Button>
+
       <Button guid="ArasCreateCodeItemCmdSet" id="ArasCreateCodeItemCommandId" priority="0x0101" type="Button">
         <Icon guid="guidCreateImages" id="bmpPic1" />
         <CommandFlag>DynamicVisibility</CommandFlag>
@@ -303,6 +317,8 @@
 
       <Bitmap guid="guidRefreshMethodFromArasImages" href="Resources\refresh-16x16.png" usedList="bmpPic1" />
       <Bitmap guid="guidDebugMethodImages" href="Resources\16x16-Run.png" usedList="bmpPic1" />
+
+			<Bitmap guid="guidImportOpenInVSActionImages" href="Resources\16x16-ImportOpenInVSAction.png" usedList="bmpPic1" />
     </Bitmaps>
   </Commands>
 
@@ -338,6 +354,9 @@
     <CommandPlacement guid="ArasDebugMethodCmdSet" id="ArasDebugMethodCommandId" priority="0x0111">
       <Parent guid="ArasToolbarGroupCmdSet" id="ToolbarGroup" />
     </CommandPlacement>
+		<CommandPlacement guid="ArasImportOpenInVSActionCmdSet" id="ArasImportOpenInVSActionCommandId" priority="0x0112">
+			<Parent guid="ArasToolbarGroupCmdSet" id="ToolbarGroup" />
+		</CommandPlacement>
 
     <!--Project-->
     <CommandPlacement guid="ArasCreateCmdSet" id="ArasCreateMethodCommandId" priority="0x0101">
@@ -355,6 +374,9 @@
     <CommandPlacement guid="ArasSettingCmdSet" id="ArasSedttingCommandId" priority="0x0105">
       <Parent guid="ArasProjSettingGroupCmdSet" id="ProjSettingGroup" />
     </CommandPlacement>
+		<CommandPlacement guid="ArasImportOpenInVSActionCmdSet" id="ArasImportOpenInVSActionCommandId" priority="0x0106">
+			<Parent guid="ArasImportGroupCmdSet" id="ProjImportGroup" />
+		</CommandPlacement>
 
     <!--Folder-->
     <CommandPlacement guid="ArasCreateCodeItemCmdSet" id="ArasCreateCodeItemCommandId" priority="0x0101">
@@ -417,6 +439,9 @@
     <GuidSymbol name="ArasSettingCmdSet" value="{E15DDF0A-1B6E-46A8-8B78-AEC2A7BB4922}">
       <IDSymbol name="ArasSedttingCommandId" value="0x104"/>
     </GuidSymbol>
+		<GuidSymbol name="ArasImportOpenInVSActionCmdSet" value="{9FA04931-AC92-4234-92AA-0EBBD0F9A798}">
+			<IDSymbol name="ArasImportOpenInVSActionCommandId" value="0x106"/>
+		</GuidSymbol>
 
     <!-- This is the guid used to group the menu commands together -->
     <!--Project-->
@@ -449,6 +474,12 @@
       <IDSymbol name="ProjGroup" value="0x1020" />
       <IDSymbol name="ArasProjMenuSedttingCommandId" value="0x0104" />
     </GuidSymbol>
+
+		<GuidSymbol name="ArasImportGroupCmdSet" value="{9FA04931-AC92-4234-92AA-0EBBD0F9A798}">
+			<IDSymbol name="ProjImportGroup" value="0x0206" />
+			<IDSymbol name="ProjGroup" value="0x1020" />
+			<IDSymbol name="ArasImportMenuCommandId" value="0x0106" />
+		</GuidSymbol>
 
     <!--Folder -->
     <GuidSymbol name="ArasFolderGroupCmdSet" value="{4043fa7c-a89a-4597-a4b9-086c504c5871}">
@@ -559,6 +590,9 @@
     <GuidSymbol name="guidDebugMethodImages" value="{26969D84-B33C-4E29-ADD0-8E37A107C2F7}">
       <IDSymbol name="bmpPic1" value="1" />
     </GuidSymbol>
+		<GuidSymbol name="guidImportOpenInVSActionImages" value="{E2B187BD-414F-4095-9BA4-38480DC6DC54}">
+			<IDSymbol name="bmpPic1" value="1" />
+		</GuidSymbol>
 
   </Symbols>
 </CommandTable>

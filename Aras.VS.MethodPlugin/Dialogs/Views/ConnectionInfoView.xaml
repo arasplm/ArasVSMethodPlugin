@@ -1,6 +1,6 @@
 ﻿<!--
  <copyright file="ConnectionInfoView.xaml" company="Aras Corporation">
-     © 2017-2018 Aras Corporation. All rights reserved.
+     © 2017-2019 Aras Corporation. All rights reserved.
  </copyright>
 -->
 
@@ -55,8 +55,12 @@
                 <Label Grid.Row="2" Grid.Column="0" Content="User:" VerticalAlignment="Center" />
                 <TextBox Grid.Row="2" Grid.Column="1" Height="24" Text="{Binding Path=ConnectionInformation.Login}" IsReadOnly="True" VerticalContentAlignment="Center" Margin="0, 3.5" />
 
-                <Button Grid.Row="3" Content="Edit Connection Info" HorizontalAlignment="Right" Margin="0, 5"
+				<DockPanel Grid.Row="3" Grid.Column="2" HorizontalAlignment="Right">
+					<Button Content="Import 'Open in Visual Studio' Action" Margin="0, 5" Command="{Binding Path=ImportOpenInVsActionCommand}"/>
+
+					<Button Content="Edit Connection Info" Margin="0, 5"
                         Command="{Binding Path=EditConnectionInfoCommand}" CommandParameter="{Binding ElementName=ConnectionInfoWindow}" Grid.Column="2"/>
+				</DockPanel>
             </Grid>
         </GroupBox>
 

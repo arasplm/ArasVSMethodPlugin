@@ -1,6 +1,6 @@
 ﻿//------------------------------------------------------------------------------
 // <copyright file="AuthenticationCommandBase.cs" company="Aras Corporation">
-//     © 2017-2018 Aras Corporation. All rights reserved.
+//     © 2017-2019 Aras Corporation. All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 
@@ -11,6 +11,7 @@ using Aras.Method.Libs.Code;
 using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Dialogs;
+using Aras.VS.MethodPlugin.OpenMethodInVS;
 using Aras.VS.MethodPlugin.SolutionManagement;
 
 namespace Aras.VS.MethodPlugin.Commands
@@ -41,6 +42,11 @@ namespace Aras.VS.MethodPlugin.Commands
 			{
 				string projectConfigPath = projectManager.ProjectConfigPath;
 				projectConfigurationManager.Load(projectConfigPath);
+
+				if (args is OpenMethodContext openMethodContext)
+				{
+					projectConfigurationManager.CurrentProjectConfiguraiton.AddConnection(openMethodContext.ConnectionInfo);
+				}
 
 				var lastConnection = projectConfigurationManager.CurrentProjectConfiguraiton.Connections.FirstOrDefault(c => c.LastConnection);
 				if (!authManager.IsLoginedForCurrentProject(projectManager.SelectedProject.Name, lastConnection))

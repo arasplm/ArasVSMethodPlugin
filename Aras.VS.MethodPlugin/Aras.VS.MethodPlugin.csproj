@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Microsoft.VSSDK.BuildTools.15.5.100\build\Microsoft.VSSDK.BuildTools.props" Condition="Exists('..\packages\Microsoft.VSSDK.BuildTools.15.5.100\build\Microsoft.VSSDK.BuildTools.props')" />
+  <Import Project="..\packages\Microsoft.VSSDK.BuildTools.16.4.1053\build\Microsoft.VSSDK.BuildTools.props" Condition="Exists('..\packages\Microsoft.VSSDK.BuildTools.16.4.1053\build\Microsoft.VSSDK.BuildTools.props')" />
   <PropertyGroup>
     <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -89,6 +89,7 @@
     <Compile Include="Commands\CommandIdsList.cs" />
     <Compile Include="Commands\DebugMethodCmd.cs" />
     <Compile Include="Commands\MoveToCmd.cs" />
+    <Compile Include="Commands\ImportOpenInVSActionCmd.cs" />
     <Compile Include="Commands\RefreshConfigCmd.cs" />
     <Compile Include="Commands\CreateCodeItemCmd.cs" />
     <Compile Include="Commands\UpdateMethodCmd.cs" />
@@ -224,6 +225,12 @@
     <Compile Include="Dialogs\Views\IView.cs" />
     <Compile Include="IVisualStudioServiceProvider.cs" />
     <Compile Include="IVsPackageWrapper.cs" />
+    <Compile Include="OpenMethodInVS\IMethodOpener.cs" />
+    <Compile Include="OpenMethodInVS\IOpenContextParser.cs" />
+    <Compile Include="OpenMethodInVS\MethodOpener.cs" />
+    <Compile Include="OpenMethodInVS\OpenContextParser.cs" />
+    <Compile Include="OpenMethodInVS\OpenInVSConstants.cs" />
+    <Compile Include="OpenMethodInVS\OpenMethodContext.cs" />
     <Compile Include="PackageManagement\PackageManager.cs" />
     <Compile Include="Dialogs\ViewModels\ShortMethodInfoViewModel.cs" />
     <Compile Include="Properties\Resources.Designer.cs" />
@@ -292,6 +299,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Aras.VS.MethodPlugin.licenseheader" />
+    <ContentManifest Include="ContentManifest.json" />
     <None Include="Key.snk" />
     <Content Include="MethodLauncher\MethodLauncher.exe.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -315,6 +323,9 @@
     <Content Include="MethodLauncher\NSubstitute.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="OpenMethodInVS\Import\ImportOpenInVSActionAML.xml">
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="ProjectTemplates\CSharp\Aras Innovator\Methods\Aras11SP10MethodProject.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -573,6 +584,7 @@
     <Content Include="Resources\32x32-show_arasform.png" />
     <Content Include="Resources\ArasMainMenuCommandPackage.png" />
     <Content Include="Resources\ArasMainMenuCommandPackagePackage.ico" />
+    <Content Include="Resources\16x16-ImportOpenInVSAction.png" />
     <Content Include="Resources\aras_16x16.png" />
     <Content Include="Resources\Aras_A_300.png" />
     <Content Include="Resources\Create.png" />
@@ -757,12 +769,12 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.VSSDK.BuildTools.15.5.100\build\Microsoft.VSSDK.BuildTools.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.VSSDK.BuildTools.15.5.100\build\Microsoft.VSSDK.BuildTools.props'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.VSSDK.BuildTools.15.5.100\build\Microsoft.VSSDK.BuildTools.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.VSSDK.BuildTools.15.5.100\build\Microsoft.VSSDK.BuildTools.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.VSSDK.BuildTools.16.4.1053\build\Microsoft.VSSDK.BuildTools.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.VSSDK.BuildTools.16.4.1053\build\Microsoft.VSSDK.BuildTools.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.VSSDK.BuildTools.16.4.1053\build\Microsoft.VSSDK.BuildTools.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.VSSDK.BuildTools.16.4.1053\build\Microsoft.VSSDK.BuildTools.targets'))" />
     <Error Condition="!Exists('..\packages\Microsoft.VisualStudio.Threading.Analyzers.15.8.168\build\Microsoft.VisualStudio.Threading.Analyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.VisualStudio.Threading.Analyzers.15.8.168\build\Microsoft.VisualStudio.Threading.Analyzers.targets'))" />
     <Error Condition="!Exists('..\packages\Microsoft.VisualStudio.SDK.Analyzers.15.8.36\build\Microsoft.VisualStudio.SDK.Analyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.VisualStudio.SDK.Analyzers.15.8.36\build\Microsoft.VisualStudio.SDK.Analyzers.targets'))" />
   </Target>
-  <Import Project="..\packages\Microsoft.VSSDK.BuildTools.15.5.100\build\Microsoft.VSSDK.BuildTools.targets" Condition="Exists('..\packages\Microsoft.VSSDK.BuildTools.15.5.100\build\Microsoft.VSSDK.BuildTools.targets')" />
+  <Import Project="..\packages\Microsoft.VSSDK.BuildTools.16.4.1053\build\Microsoft.VSSDK.BuildTools.targets" Condition="Exists('..\packages\Microsoft.VSSDK.BuildTools.16.4.1053\build\Microsoft.VSSDK.BuildTools.targets')" />
   <Import Project="..\packages\Microsoft.VisualStudio.Threading.Analyzers.15.8.168\build\Microsoft.VisualStudio.Threading.Analyzers.targets" Condition="Exists('..\packages\Microsoft.VisualStudio.Threading.Analyzers.15.8.168\build\Microsoft.VisualStudio.Threading.Analyzers.targets')" />
   <Import Project="..\packages\Microsoft.VisualStudio.SDK.Analyzers.15.8.36\build\Microsoft.VisualStudio.SDK.Analyzers.targets" Condition="Exists('..\packages\Microsoft.VisualStudio.SDK.Analyzers.15.8.36\build\Microsoft.VisualStudio.SDK.Analyzers.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

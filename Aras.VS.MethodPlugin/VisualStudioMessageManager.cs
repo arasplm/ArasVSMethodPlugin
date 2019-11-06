@@ -1,6 +1,6 @@
 ﻿//------------------------------------------------------------------------------
 // <copyright file="VisulaStudioMessageManager.cs" company="Aras Corporation">
-//     © 2017-2018 Aras Corporation. All rights reserved.
+//     © 2017-2019 Aras Corporation. All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 
@@ -53,7 +53,10 @@ namespace Aras.VS.MethodPlugin
 			{ "ItemHasBeenLockedBySomeone", "Item has been locked by someone." },
 			{ "GetLockStatusError", "Get Lock Status Error" },
 			{ "MethodSaved", "Method \"{0}\" saved." },
-			{ "MethodSavedToPackage", "Method \"{0}\" saved to package \"{1}\"." }
+			{ "MethodSavedToPackage", "Method \"{0}\" saved to package \"{1}\"." },
+			{ "CreateNewOrOpenExistingProject", "Do you whant open this method in a new project?" },
+			{ "OpenInVSActionImported", "'Open in Visual Studio' action has been imported to Aras Innovator." },
+			{ "OpenInVSActionImportFailed", "Failed to import 'Open in Visual Studio' action to Aras Innovator.\r\n{0}" }
 		};
 
 		public override string GetMessage(string key)

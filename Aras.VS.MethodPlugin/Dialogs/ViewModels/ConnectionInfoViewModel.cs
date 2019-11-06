@@ -1,6 +1,6 @@
 ﻿//------------------------------------------------------------------------------
 // <copyright file="ConnectionInfoViewModel.cs" company="Aras Corporation">
-//     © 2017-2018 Aras Corporation. All rights reserved.
+//     © 2017-2019 Aras Corporation. All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 
@@ -46,6 +46,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.closeCommand = new RelayCommand<object>(OnCloseCliked);
 			this.editConnectionInfoCommand = new RelayCommand<object>(OnEditConnectionInfoCommandCliked);
 			this.logOutCommand = new RelayCommand<object>(OnLogOutCommandCliked, LogOutButtonIsEnabled);
+			this.ImportOpenInVsActionCommand = new RelayCommand(ImportOpenInVsAction, CanImportOpenInVsAction);
 
 			ConnectionInformation = authenticationManager.InnovatorInstance == null ? null : configurationManager.CurrentProjectConfiguraiton.Connections.First(c => c.LastConnection);
 		}
@@ -71,6 +72,8 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		public ICommand EditConnectionInfoCommand { get { return editConnectionInfoCommand; } }
 
 		public ICommand LogOutCommand { get { return logOutCommand; } }
+
+		public ICommand ImportOpenInVsActionCommand { get; }
 
 		#endregion
 
@@ -104,6 +107,16 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			}
 
 			return true;
+		}
+
+		private void ImportOpenInVsAction()
+		{
+			Commands.ImportOpenInVSActionCmd.Instance.ExecuteCommandImpl(this, EventArgs.Empty);
+		}
+
+		private bool CanImportOpenInVsAction()
+		{
+			return authenticationManager.IsLoginedForCurrentProject(projectManager.SelectedProject.Name, ConnectionInformation);
 		}
 	}
 }

@@ -1,6 +1,6 @@
 ﻿//------------------------------------------------------------------------------
 // <copyright file="ProjectManager.cs" company="Aras Corporation">
-//     © 2017-2018 Aras Corporation. All rights reserved.
+//     © 2017-2019 Aras Corporation. All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 
@@ -320,6 +320,7 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 				CommandIds.OpenFromPackage,
 				CommandIds.ConnectionInfo,
 				CommandIds.RefreshConfig,
+				CommandIds.ImportOpenInVSAction
 			};
 
 			if (listOfMethodNotDependentOfSelection.Contains(commandId))

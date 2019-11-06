@@ -1,6 +1,6 @@
 ﻿//------------------------------------------------------------------------------
 // <copyright file="DialogFactory.cs" company="Aras Corporation">
-//     © 2017-2018 Aras Corporation. All rights reserved.
+//     © 2017-2019 Aras Corporation. All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 
@@ -119,9 +119,10 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			string pathToProjectConfigFile,
 			string projectName,
 			string projectFullName,
-			string projectLanguage)
+			string projectLanguage,
+			string startMethodId)
 		{
-			var viewModel = new OpenFromArasViewModel(authManager, this, configurationManager, templateLoader, packageManager, messageManager, pathToProjectConfigFile, projectName, projectFullName, projectLanguage);
+			var viewModel = new OpenFromArasViewModel(authManager, this, configurationManager, templateLoader, packageManager, messageManager, pathToProjectConfigFile, projectName, projectFullName, projectLanguage, startMethodId);
 			var view = new OpenFromArasView();
 			view.DataContext = viewModel;
 

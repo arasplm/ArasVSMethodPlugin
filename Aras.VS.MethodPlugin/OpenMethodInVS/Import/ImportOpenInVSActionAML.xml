@@ -1,0 +1,68 @@
+﻿<AML>
+	<Item type="Method" id="482D8CE152FF4AEB9DC5DED7F0C3ACF0" action="add">
+		<execution_allowed_to keyed_name="World" type="Identity">A73B655731924CD0B027E4F4D5FCC0A9</execution_allowed_to>
+		<method_code><![CDATA[var currentItem;
+
+if (window.work && window.work.grid && work.grid.getSelectedItemIDs().length === 1) {
+    var selectedId = work.grid.getSelectedItemIDs()[0];
+    currentItem = this.getInnovator().getItemById("Method", selectedId);
+}
+
+if (!currentItem && typeof getIOMItem === "function"){
+    currentItem = getIOMItem();
+}
+
+if (currentItem){
+    var methodType = currentItem.getProperty("method_type", "");
+    return methodType === "C#" || methodType === "VB";
+}
+
+return false;]]></method_code>
+		<method_type>JavaScript</method_type>
+		<name>VSP_CanExecuteOpenInVS</name>
+	</Item>
+	<Item type="Method" id="6B342854BBCD4A81BFF0118CE8B680B0" action="add">
+		<execution_allowed_to keyed_name="World" type="Identity">A73B655731924CD0B027E4F4D5FCC0A9</execution_allowed_to>
+		<method_code><![CDATA[var methodId = this.getID();
+
+var userName = aras.getLoginName();
+var database = aras.getDatabase();
+var url = aras.getInnovatorUrl();
+
+var inn = this.getInnovator();
+var majorVersion = inn.getItemByKeyedName("Variable", "VersionMajor").getProperty("value");
+var minorVersion = inn.getItemByKeyedName("Variable", "VersionMinor").getProperty("value");
+var servicePack = inn.getItemByKeyedName("Variable", "VersionServicePack").getProperty("value");
+
+var innovatorVersion = `${majorVersion}.${minorVersion} ${servicePack}`;
+
+var openInVsLink = `openinvs://ArasVersion=${innovatorVersion.trim()}&MethodId=${methodId}&ServerUrl=${url}&Database=${database}&UserName=${userName}`;
+window.open(openInVsLink, 'popUpWindow', 'height=500,width=500,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no,status=yes');]]></method_code>
+		<method_type>JavaScript</method_type>
+		<name>VSP_OpenInVS</name>
+	</Item>
+	<Item type="Item Action" id="BF9023867A7341E3985312499CCBDD57" action="add">
+		<related_id keyed_name="VSP_OpenInVSAction" type="Action">
+			<Item type="Action" id="6AAB7C0F9F854AF6BBAFAE7CC064F9E7" action="add">
+				<can_execute keyed_name="VSP_CanExecuteOpenInVS" type="Method">
+					<Item type="Method" action="get" select="id">
+						<name>VSP_CanExecuteOpenInVS</name>
+					</Item>
+				</can_execute>
+				<item_query>&lt;Item type="{@type}" id="{@id}" levels= "1" action="get" /&gt;</item_query>
+				<label xml:lang="en">Open in Visual Studio</label>
+				<location>client</location>
+				<method keyed_name="VSP_OpenInVS" type="Method">
+					<Item type="Method" action="get" select="id">
+						<name>VSP_OpenInVS</name>
+					</Item>
+				</method>
+				<target>none</target>
+				<type>item</type>
+				<name>VSP_OpenInVSAction</name>
+			</Item>
+		</related_id>
+		<sort_order>256</sort_order>
+		<source_id keyed_name="Method" type="ItemType" name="Method">87879A09B8044DE380D59DF22DE1867F</source_id>
+	</Item>
+</AML>

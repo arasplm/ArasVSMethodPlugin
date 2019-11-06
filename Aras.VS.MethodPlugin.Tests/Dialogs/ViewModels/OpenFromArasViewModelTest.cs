@@ -72,7 +72,8 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 				"tesPathToProjectConfigFile",
 				"testProjectName",
 				"testProjectFullName",
-				"testProjectLanguage");
+				"testProjectLanguage",
+				null);
 		}
 
 		[Test]
@@ -91,7 +92,8 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 					"tesPathToProjectConfigFile",
 					"testProjectName",
 					"testProjectFullName",
-					"testProjectLanguage");
+					"testProjectLanguage",
+					null);
 			});
 		}
 
@@ -111,7 +113,8 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 					"tesPathToProjectConfigFile",
 					"testProjectName",
 					"testProjectFullName",
-					"testProjectLanguage");
+					"testProjectLanguage",
+					null);
 			});
 		}
 
@@ -131,7 +134,8 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 					"tesPathToProjectConfigFile",
 					"testProjectName",
 					"testProjectFullName",
-					"testProjectLanguage");
+					"testProjectLanguage",
+					null);
 			});
 		}
 
@@ -151,7 +155,8 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 					"tesPathToProjectConfigFile",
 					"testProjectName",
 					"testProjectFullName",
-					"testProjectLanguage");
+					"testProjectLanguage",
+					null);
 			});
 		}
 
@@ -171,7 +176,8 @@ namespace Aras.VS.MethodPlugin.Tests.Dialogs.ViewModels
 					"tesPathToProjectConfigFile",
 					"testProjectName",
 					"testProjectFullName",
-					"testProjectLanguage");
+					"testProjectLanguage",
+					null);
 			});
 		}
 

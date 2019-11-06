@@ -1,6 +1,6 @@
 ﻿<!--
  <copyright file="OpenFromArasView.xaml" company="Aras Corporation">
-     © 2017-2018 Aras Corporation. All rights reserved.
+     © 2017-2019 Aras Corporation. All rights reserved.
  </copyright>
 -->
 
@@ -114,7 +114,8 @@
                         </Grid.ColumnDefinitions>
                         <Label Content="Method Name:" Margin="0,0,5,0"/>
                         <TextBox Text="{Binding Path=MethodName}" IsReadOnly="True" Grid.Column="1" VerticalContentAlignment="Center" HorizontalAlignment="Stretch"/>
-                        <Button Content="  ...  " Grid.Column="2" Command="{Binding Path=SearchMethodDialogCommand}" CommandParameter="{Binding ElementName=OpenFromArasViewWindow}" VerticalAlignment="Center" Margin="5, 0"/>
+                        <Button Content="  ...  " Grid.Column="2" Command="{Binding Path=SearchMethodDialogCommand}" CommandParameter="{Binding ElementName=OpenFromArasViewWindow}" VerticalAlignment="Center" Margin="5, 0"
+								IsEnabled="{Binding IsSearchButtonEnabled}"/>
                     </Grid>
 
                     <Grid Grid.Row="1" Margin="5">

@@ -63,7 +63,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 		{
 			// Arrange
 			var project = projectManager.SelectedProject;
-			dialogFactory.GetOpenFromArasView(projectConfigurationManager, templateLoader, packageManager, projectManager.ProjectConfigPath, project.Name, project.FullName, codeProvider.Language).
+			dialogFactory.GetOpenFromArasView(projectConfigurationManager, templateLoader, packageManager, projectManager.ProjectConfigPath, project.Name, project.FullName, codeProvider.Language, null).
 				ReturnsForAnyArgs(Substitute.For<OpenFromArasViewAdapterTest>());
 			codeProvider.GenerateCodeInfo(null, null, null, null, false).ReturnsForAnyArgs(Substitute.For<GeneratedCodeInfo>());
 
@@ -71,7 +71,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			openFromArasCmd.ExecuteCommandImpl(null, null);
 
 			// Assert
-			dialogFactory.Received().GetOpenFromArasView(projectConfigurationManager, Arg.Any<TemplateLoader>(), Arg.Any<PackageManager>(), projectManager.ProjectConfigPath, project.Name, project.FullName, codeProvider.Language);
+			dialogFactory.Received().GetOpenFromArasView(projectConfigurationManager, Arg.Any<TemplateLoader>(), Arg.Any<PackageManager>(), projectManager.ProjectConfigPath, project.Name, project.FullName, codeProvider.Language, null);
 		}
 
 		[Test]
@@ -81,7 +81,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			// Arrange
 			var project = projectManager.SelectedProject;
 			var openFromPackageViewAdapterTest = Substitute.For<OpenFromArasViewAdapterTest>();
-			dialogFactory.GetOpenFromArasView(projectConfigurationManager, templateLoader, packageManager, projectManager.ProjectConfigPath, project.Name, project.FullName, codeProvider.Language).
+			dialogFactory.GetOpenFromArasView(projectConfigurationManager, templateLoader, packageManager, projectManager.ProjectConfigPath, project.Name, project.FullName, codeProvider.Language, null).
 				ReturnsForAnyArgs(openFromPackageViewAdapterTest);
 			codeProvider.GenerateCodeInfo(null, null, null, null, false).ReturnsForAnyArgs(Substitute.For<GeneratedCodeInfo>());
 			var showDialogResult = openFromPackageViewAdapterTest.ShowDialog();
