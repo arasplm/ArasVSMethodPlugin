@@ -419,7 +419,15 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 				var window = folder.ProjectItems.Item(codefileName).Open(EnvDTE.Constants.vsViewKindCode);
 				window.Visible = true;
 				DTE dte = (DTE)this.vsPackageWrapper.GetGlobalService(typeof(DTE));
-				dte.ExecuteCommand("Edit.Goto", cursorIndex.ToString());
+
+				try
+				{
+					dte.ExecuteCommand("Edit.Goto", cursorIndex.ToString());
+				}
+				catch
+				{
+
+				}
 			}
 
 			return fileFullPath;
