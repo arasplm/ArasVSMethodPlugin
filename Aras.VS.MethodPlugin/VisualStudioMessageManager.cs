@@ -54,7 +54,7 @@ namespace Aras.VS.MethodPlugin
 			{ "GetLockStatusError", "Get Lock Status Error" },
 			{ "MethodSaved", "Method \"{0}\" saved." },
 			{ "MethodSavedToPackage", "Method \"{0}\" saved to package \"{1}\"." },
-			{ "CreateNewOrOpenExistingProject", "Do you whant open this method in a new project?" },
+			{ "CreateNewOrOpenExistingProject", "Do you want to open this method in a new project?" },
 			{ "OpenInVSActionImported", "'Open in Visual Studio' action has been imported to Aras Innovator." },
 			{ "OpenInVSActionImportFailed", "Failed to import 'Open in Visual Studio' action to Aras Innovator.\r\n{0}" }
 		};
