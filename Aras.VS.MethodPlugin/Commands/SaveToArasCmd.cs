@@ -177,24 +177,26 @@ namespace Aras.VS.MethodPlugin.Commands
 				throw new Exception(currentMethodItem.getErrorString());
 			}
 
-			var newId = currentMethodItem.getID();
+			string newId = currentMethodItem.getID();
+			string configId = currentMethodItem.getProperty("config_id");
+
 			if (string.IsNullOrEmpty(saveViewResult.CurrentMethodPackage))
 			{
-				packageManager.AddPackageElementToPackageDefinition(newId, saveViewResult.MethodName, saveViewResult.SelectedPackageInfo.Name);
+				packageManager.AddPackageElementToPackageDefinition(configId, saveViewResult.MethodName, saveViewResult.SelectedPackageInfo.Name);
 			}
 			else
 			{
-				if (!string.Equals(saveViewResult.CurrentMethodPackage, saveViewResult.SelectedPackageInfo))
+				if (!string.Equals(saveViewResult.CurrentMethodPackage, saveViewResult.SelectedPackageInfo.ToString()))
 				{
-					packageManager.DeletePackageElementByNameFromPackageDefinition(saveViewResult.MethodName);
-					packageManager.AddPackageElementToPackageDefinition(newId, saveViewResult.MethodName, saveViewResult.SelectedPackageInfo.Name);
+					packageManager.DeletePackageByElementIdFromPackageDefinition(configId);
+					packageManager.AddPackageElementToPackageDefinition(configId, saveViewResult.MethodName, saveViewResult.SelectedPackageInfo.Name);
 				}
 			}
 
 			if (methodInformation.MethodName == saveViewResult.MethodName &&
 				methodInformation.Package.Name == saveViewResult.SelectedPackageInfo.Name)
 			{
-				methodInformation.InnovatorMethodConfigId = currentMethodItem.getProperty("config_id");
+				methodInformation.InnovatorMethodConfigId = configId;
 				methodInformation.InnovatorMethodId = newId;
 				methodInformation.Package = saveViewResult.SelectedPackageInfo;
 				methodInformation.ExecutionAllowedToKeyedName = saveViewResult.SelectedIdentityKeyedName;

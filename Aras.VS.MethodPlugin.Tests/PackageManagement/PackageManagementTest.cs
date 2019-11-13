@@ -50,11 +50,11 @@ namespace Aras.VS.MethodPlugin.Tests.PackageManagement
 		public void GetPackageDefinitionByElementName_NameisNull_ShouldReturnEmptyString1111111()
 		{
 			//Arrange
-			string name = null;
+			string configId = null;
 
 
 			//Act
-			var expected = packageManager.GetPackageDefinitionByElementName(name);
+			var expected = packageManager.GetPackageDefinitionByElementId(configId);
 
 			//Assert
 			Assert.AreEqual(expected.Name, string.Empty);
@@ -64,10 +64,10 @@ namespace Aras.VS.MethodPlugin.Tests.PackageManagement
 		public void GetPackageDefinitionByElementName_NameisNull_ShouldReturnEmptyString()
 		{
 			//Arrange
-			string name = null;
+			string configId = null;
 
 			//Act
-			var expected = packageManager.GetPackageDefinitionByElementName(name);
+			var expected = packageManager.GetPackageDefinitionByElementId(configId);
 
 			//Assert
 			Assert.AreEqual(expected.Name, string.Empty);
@@ -77,10 +77,10 @@ namespace Aras.VS.MethodPlugin.Tests.PackageManagement
 		public void DeletePackageElementByNameFromPackageDefinition_NameisNull_ShouldReturnFalse()
 		{
 			//Arrange
-			string name = null;
+			string configId = null;
 
 			//Act
-			var expected = packageManager.DeletePackageElementByNameFromPackageDefinition(name);
+			var expected = packageManager.DeletePackageByElementIdFromPackageDefinition(configId);
 
 			//Assert
 			Assert.IsFalse(expected);
@@ -91,23 +91,14 @@ namespace Aras.VS.MethodPlugin.Tests.PackageManagement
 		{
 			//Arrange
 			string name = null;
-			string id = null;
+			string configId = null;
 			string packageName = null;
 
 			//Act
-			var testDelegate = new TestDelegate(() => packageManager.AddPackageElementToPackageDefinition(id, name, packageName));
+			var testDelegate = new TestDelegate(() => packageManager.AddPackageElementToPackageDefinition(configId, name, packageName));
 
 			//Assert
 			Assert.DoesNotThrow(testDelegate);
 		}
-
-
-
-
-
-
-
-
-
 	}
 }
