@@ -317,7 +317,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 				try
 				{
-					this.package = packageManager.GetPackageDefinitionByElementName(methodName);
+					this.package = packageManager.GetPackageDefinitionByElementId(methodConfigId);
 				}
 				catch (Exception ex)
 				{

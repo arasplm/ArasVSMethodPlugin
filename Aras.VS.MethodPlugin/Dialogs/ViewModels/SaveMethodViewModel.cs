@@ -50,6 +50,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 		private string selectedPackage;
 		private string currentMethodPackage;
 		private string methodName;
+		private string methodConfigId;
 		private int methodNameMaxLength;
 
 		private ICommand okCommand;
@@ -110,6 +111,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			this.selectedIdentityId = methodInformation.ExecutionAllowedToId;
 			this.selectedPackage = methodInformation.Package.Name;
 			this.MethodName = methodInformation.MethodName;
+			this.methodConfigId = methodInformation.InnovatorMethodConfigId;
 
 			//TODO: How to know current connection?
 			ConnectionInformation = projectConfigurationManager.CurrentProjectConfiguraiton.Connections.First(c => c.LastConnection);
@@ -278,7 +280,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 
 			try
 			{
-				this.currentMethodPackage = packageManager.GetPackageDefinitionByElementName(this.methodName)?.Name;
+				this.currentMethodPackage = packageManager.GetPackageDefinitionByElementId(this.methodConfigId)?.Name;
 				if (!string.IsNullOrEmpty(currentMethodPackage) && !string.Equals(this.currentMethodPackage, this.selectedPackage))
 				{
 					var messageWindow = this.dialogFactory.GetMessageBoxWindow();
