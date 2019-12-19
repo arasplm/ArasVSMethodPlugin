@@ -46,6 +46,6 @@ namespace Aras.Method.Libs.Code
 
 		CodeInfo InsertActiveNodeToExternal(string externalFullPath, string serverMethodFolderPath, string methodName, SyntaxNode activeSyntaxNode, string activeDocumentMethodFullPath);
 
-		CodeInfo UpdateSourceCodeToInsertExternalItems(string methodFolderPath, string sourceCode, MethodInfo methodInformation);
+		CodeInfo UpdateSourceCodeToInsertExternalItems(string methodFolderPath, string sourceCode, MethodInfo methodInformation, bool useVSFormatting);
 	}
 }

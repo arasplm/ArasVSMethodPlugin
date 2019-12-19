@@ -63,7 +63,7 @@ namespace Aras.Method.Libs.Code
 			throw new NotImplementedException();
 		}
 
-		public CodeInfo UpdateSourceCodeToInsertExternalItems(string methodFolderPath, string sourceCode, MethodInfo methodInformation)
+		public CodeInfo UpdateSourceCodeToInsertExternalItems(string methodFolderPath, string sourceCode, MethodInfo methodInformation, bool useVSFormatting)
 		{
 			throw new NotImplementedException();
 		}

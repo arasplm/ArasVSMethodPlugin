@@ -583,7 +583,7 @@ namespace Aras.Method.Libs.Code
 			return codeInfo;
 		}
 
-		public CodeInfo UpdateSourceCodeToInsertExternalItems(string methodFolderPath, string sourceCode, MethodInfo methodInformation)
+		public CodeInfo UpdateSourceCodeToInsertExternalItems(string methodFolderPath, string sourceCode, MethodInfo methodInformation, bool useVSFormatting)
 		{
 			MemberDeclarationSyntax[] externalsSyntaxNodes = LoadSyntaxNodesByAttribute(GlobalConsts.ExternalPath, methodFolderPath);
 			if (externalsSyntaxNodes.Length == 0)
@@ -621,10 +621,11 @@ namespace Aras.Method.Libs.Code
 				}
 			}
 
-			var codeInfo = new CodeInfo()
+			string code = Regex.Replace(sourceCode, $"(\r\n)([' '|\t]*{GlobalConsts.EndregionMethodCode})", $"$1        }}\r\n    }}\r\n\r\n    [System.Diagnostics.CodeAnalysis.SuppressMessage(\"Microsoft.Performance\", \"CA1812: AvoidUninstantiatedInternalClasses\")]\r\n    internal class ArasPluginFin\r\n    {{\r\n        internal ArasPluginFin()\r\n        {{\r\n{GlobalConsts.EndregionMethodCode}");
+			CodeInfo codeInfo = new CodeInfo()
 			{
 				Path = iOWrapper.PathCombine(methodInformation.MethodName, methodInformation.MethodName),
-				Code = Regex.Replace(sourceCode, $"(\r\n)([' '|\t]*{GlobalConsts.EndregionMethodCode})", $"$1        }}\r\n    }}\r\n\r\n    [System.Diagnostics.CodeAnalysis.SuppressMessage(\"Microsoft.Performance\", \"CA1812: AvoidUninstantiatedInternalClasses\")]\r\n    internal class ArasPluginFin\r\n    {{\r\n        internal ArasPluginFin()\r\n        {{\r\n{GlobalConsts.EndregionMethodCode}")
+				Code = useVSFormatting ? this.codeFormatter.Format(code) : code
 			};
 
 			return codeInfo;
@@ -633,7 +634,7 @@ namespace Aras.Method.Libs.Code
 		public GeneratedCodeInfo InitializeCodeInfo(string methodName, bool useCodeFormatting)
 		{
 			string methodNameWithOutSpases = Regex.Replace(methodName, "[^a-zA-Z0-9]+", string.Empty, RegexOptions.Compiled);
-			string clsname = string.Format(ArasCLS, methodNameWithOutSpases);
+			string clsname = string.Format(ArasCLS, methodNameWithOutSpases); 
 			string pkgname = string.Format(ArasPKG, methodNameWithOutSpases);
 
 			GeneratedCodeInfo codeInfo = new GeneratedCodeInfo();
