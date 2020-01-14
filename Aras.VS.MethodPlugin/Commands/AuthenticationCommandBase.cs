@@ -13,6 +13,7 @@ using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.OpenMethodInVS;
 using Aras.VS.MethodPlugin.SolutionManagement;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Aras.VS.MethodPlugin.Commands
 {
@@ -38,6 +39,9 @@ namespace Aras.VS.MethodPlugin.Commands
 
 		public override void ExecuteCommand(object sender, EventArgs args)
 		{
+			IVsUIShell uiShell = projectManager.UIShell;
+			uiShell.EnableModeless(0);
+
 			try
 			{
 				string projectConfigPath = projectManager.ProjectConfigPath;
@@ -74,6 +78,10 @@ namespace Aras.VS.MethodPlugin.Commands
 					messageManager.GetMessage("ArasVSMethodPlugin"),
 					MessageButtons.OK,
 					MessageIcon.Error);
+			}
+			finally
+			{
+				uiShell.EnableModeless(1);
 			}
 		}
 	}

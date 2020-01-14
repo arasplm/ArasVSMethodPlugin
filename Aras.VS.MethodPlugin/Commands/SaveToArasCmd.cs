@@ -105,7 +105,7 @@ namespace Aras.VS.MethodPlugin.Commands
 
 			ICodeProvider codeProvider = codeProviderFactory.GetCodeProvider(projectManager.Language);
 
-			CodeInfo codeItemInfo = codeProvider.UpdateSourceCodeToInsertExternalItems(methodWorkingFolder, sourceCode, methodInformation);
+			CodeInfo codeItemInfo = codeProvider.UpdateSourceCodeToInsertExternalItems(methodWorkingFolder, sourceCode, methodInformation, projectConfigurationManager.CurrentProjectConfiguraiton.UseVSFormatting);
 			if (codeItemInfo != null)
 			{
 				var dialogResult = dialogFactory.GetMessageBoxWindow().ShowDialog(messageManager.GetMessage("CouldNotInsertExternalItemsInsideOfMethodCodeSection"),
