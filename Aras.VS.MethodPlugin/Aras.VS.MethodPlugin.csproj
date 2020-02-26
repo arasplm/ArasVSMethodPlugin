@@ -367,7 +367,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-	<Content Include="ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP4MethodProject.zip">
+    <Content Include="ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP4MethodProject.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP5MethodProject.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
