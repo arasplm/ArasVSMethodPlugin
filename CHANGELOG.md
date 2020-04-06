@@ -9,10 +9,13 @@
 - [x] Possibility to debug server method
 - [x] Formatting code after method opened or created
 - [x] Add support for CSharp:Aras.Server.Core.Configurator for SP 12
-- [x] Add project tempalte for SP 15
+- [x] Add project tempalte for Aras 11.0 SP 15
+- [x] Add project template for Aras 12.0 SP 3.
+- [x] Add project template for Aras 12.0 SP 4.
+- [x] Add project template for Aras 12.0 SP 5.
+- [x] Add project template for Aras 12.0 SP 6.
 - [ ] Add Hotkey for plugin actions
 - [ ] Add Aras code anylizer to project templates
-- [ ] Add project template for Aras 12.0 SP3.
 
 
 Features that have a checkmark are complete and available for
