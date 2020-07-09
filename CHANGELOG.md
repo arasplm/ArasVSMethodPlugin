@@ -14,6 +14,8 @@
 - [x] Add project template for Aras 12.0 SP 4.
 - [x] Add project template for Aras 12.0 SP 5.
 - [x] Add project template for Aras 12.0 SP 6.
+- [x] Add project template for Aras 12.0 SP 7.
+- [x] Add project template for Aras 12.0 SP 8.
 - [ ] Add Hotkey for plugin actions
 - [ ] Add Aras code anylizer to project templates
 
@@ -29,7 +31,7 @@ on the official Visual Studio extension gallery.
 
 ## 1.5
 - [x] Added "Open in Visual Studio" action inside Aras Innovator.
-- [x] Added project template for Aras 12.0 SP2.
+- [x] Added project template for Aras 12.0 SP2, SP3, SP4, SP5, SP6, SP7, SP8.
 - [x] Added common approach to store methods in a project structure.
 
 ## 1.4
