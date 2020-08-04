@@ -160,7 +160,10 @@ namespace Aras.VS.MethodPlugin.Commands
 				var template = templateLoader.Templates.FirstOrDefault(t => t.TemplateName == saveViewResult.TemplateName);
 				if (template != null && !template.IsSupported)
 				{
-					methodCode = methodCode.Insert(0, string.Format("//MethodTemplateName={0}\r\n", template.TemplateName));
+					if (!methodCode.Contains(string.Format("//MethodTemplateName={0}", template.TemplateName)))
+					{
+						methodCode = methodCode.Insert(0, string.Format("//MethodTemplateName={0}\r\n", template.TemplateName));
+					}
 				}
 
 				currentMethodItem = authManager.InnovatorInstance.newItem("Method", "add");
