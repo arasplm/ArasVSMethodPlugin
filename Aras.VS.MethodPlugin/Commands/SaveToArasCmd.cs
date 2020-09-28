@@ -17,6 +17,7 @@ using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.PackageManagement;
 using Aras.VS.MethodPlugin.SolutionManagement;
+using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 
 namespace Aras.VS.MethodPlugin.Commands
@@ -35,6 +36,8 @@ namespace Aras.VS.MethodPlugin.Commands
 		/// Command menu group (command set GUID).
 		/// </summary>
 		public static readonly Guid ItemCommandSet = CommandIds.SaveToAras;
+
+		private static IVsPackageWrapper VsPackageWrapper;
 
 
 		private SaveToArasCmd(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, MessageManager messageManager) : base(authManager, dialogFactory, projectManager, projectConfigurationManager, codeProviderFactory, messageManager)
@@ -58,8 +61,11 @@ namespace Aras.VS.MethodPlugin.Commands
 			private set;
 		}
 
-		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager, IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager, ICodeProviderFactory codeProviderFactory, MessageManager messageManager)
+		public static void Initialize(IProjectManager projectManager, IAuthenticationManager authManager,
+			IDialogFactory dialogFactory, IProjectConfigurationManager projectConfigurationManager,
+			ICodeProviderFactory codeProviderFactory, MessageManager messageManager, IVsPackageWrapper vsPackageWrapper)
 		{
+			VsPackageWrapper = vsPackageWrapper;
 			Instance = new SaveToArasCmd(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
 		}
 
@@ -153,6 +159,21 @@ namespace Aras.VS.MethodPlugin.Commands
 				currentMethodItem.setProperty("name", saveViewResult.MethodName);
 				currentMethodItem.setProperty("method_type", saveViewResult.MethodLanguage);
 				currentMethodItem.setProperty("execution_allowed_to", saveViewResult.SelectedIdentityId);
+
+				DTE dte = (DTE)VsPackageWrapper.GetGlobalService(typeof(DTE));
+				if (dte.Debugger.CurrentMode == dbgDebugMode.dbgBreakMode)
+				{
+					var dialogResult = this.dialogFactory.GetMessageBoxWindow()
+						.ShowDialog("Debug In Progress. Debugging will be terminated", "Debug In Progress", MessageButtons.OKCancel, MessageIcon.Warning);
+					if (dialogResult == MessageDialogResult.OK)
+					{
+						dte.Debugger.Stop();
+					}
+					else
+					{
+						return;
+					}
+				}
 
 				var action = GetUpdateAction(currentMethodItem.getLockStatus());
 				currentMethodItem = currentMethodItem.apply(action);

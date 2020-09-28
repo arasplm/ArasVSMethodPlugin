@@ -36,7 +36,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 		PackageManager packageManager;
 
 		[SetUp]
-		public void Init()
+		public void Init(IVsPackageWrapper vsPackageWrapper)
 		{
 			projectManager = Substitute.For<IProjectManager>();
 			projectConfigurationManager = Substitute.For<ProjectConfigurationManager>();
@@ -46,7 +46,7 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 			codeProvider = Substitute.For<ICodeProvider>();
 			codeProviderFactory.GetCodeProvider(null).ReturnsForAnyArgs(codeProvider);
 			messageManager = Substitute.For<MessageManager>();
-			SaveToArasCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
+			SaveToArasCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager, vsPackageWrapper);
 			saveToArasCmd = SaveToArasCmd.Instance;
 			iVsUIShell = Substitute.For<IVsUIShell>();
 			var currentPath = AppDomain.CurrentDomain.BaseDirectory;
