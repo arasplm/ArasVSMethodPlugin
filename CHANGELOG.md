@@ -33,6 +33,9 @@ download in the
 These are the changes to each version that has been released
 on the official Visual Studio extension gallery.
 
+## 1.6
+- [x] Added project template for Aras 12.0 SP9, SP10, SP11, SP12.
+
 ## 1.5
 - [x] Added "Open in Visual Studio" action inside Aras Innovator.
 - [x] Added project template for Aras 12.0 SP2, SP3, SP4, SP5, SP6, SP7, SP8.
