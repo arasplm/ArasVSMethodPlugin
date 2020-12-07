@@ -19,6 +19,7 @@
 - [x] Add project template for Aras 12.0 SP 9.
 - [x] Add project template for Aras 12.0 SP 10.
 - [x] Add project template for Aras 12.0 SP 11.
+- [x] Add project template for Aras 12.0 SP 12.
 - [ ] Add Hotkey for plugin actions
 - [ ] Add Aras code anylizer to project templates
 
