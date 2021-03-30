@@ -35,6 +35,9 @@ download in the
 These are the changes to each version that has been released
 on the official Visual Studio extension gallery.
 
+## 1.8
+- [x] Added project template for Aras 12.0 SP15.
+
 ## 1.7
 - [x] Added project template for Aras 12.0 SP14.
 
