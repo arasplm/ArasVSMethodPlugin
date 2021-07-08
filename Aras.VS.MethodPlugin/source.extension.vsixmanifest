@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="8424E2CB-F5F4-40EA-85B8-260998634ED5" Version="1.10" Language="en-US" Publisher="Aras Corporation" />
+        <Identity Id="8424E2CB-F5F4-40EA-85B8-260998634ED5" Version="1.11" Language="en-US" Publisher="Aras Corporation" />
         <DisplayName>Aras Innovator Method Plugin</DisplayName>
         <Description xml:space="preserve">Aras Innovator Method Plugin provides easy way to create and modify Aras Innovator server-side methods. Method code can be open or saved directly from/to an instance of Aras Innovator or from/to a local AML package. Aras Innovator Method Plugin for Visual Studio has also additional capabilities like generating template code to unit test the method; creating a new package directly in Aras Innovator prior to saving the method in it; etc. The Plugin provides extension for Visual Studio with all operations and project templates for different releases of Aras Innovator starting with Aras Innovator 11 SP8. Aras Corporation provides this plugin as is and will not provide any support or other related services related to this plugin.</Description>
         <License>Resources\LICENSE</License>
