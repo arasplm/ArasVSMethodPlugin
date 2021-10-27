@@ -301,7 +301,63 @@
     <None Include="Aras.VS.MethodPlugin.licenseheader" />
     <ContentManifest Include="ContentManifest.json" />
     <None Include="Key.snk" />
+    <Content Include="MethodLauncherNetCore\netcoreapp3.1\Castle.Core.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="MethodLauncherNetCore\netcoreapp3.1\MethodLauncherNetCore.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="MethodLauncherNetCore\netcoreapp3.1\MethodLauncherNetCore.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="MethodLauncherNetCore\netcoreapp3.1\MethodLauncherNetCore.pdb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="MethodLauncherNetCore\netcoreapp3.1\Microsoft.Extensions.Logging.Abstractions.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="MethodLauncherNetCore\netcoreapp3.1\NSubstitute.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="MethodLauncherNetCore\netcoreapp3.1\nunit.framework.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="MethodLauncherNetCore\netcoreapp3.1\System.Private.ServiceModel.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="MethodLauncherNetCore\netcoreapp3.1\System.Reflection.DispatchProxy.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="MethodLauncherNetCore\netcoreapp3.1\System.ServiceModel.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="MethodLauncherNetCore\netcoreapp3.1\System.ServiceModel.Primitives.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="MethodLauncher\MethodLauncher.exe.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="MethodLauncherNetCore\netcoreapp3.1\MethodLauncherNetCore.deps.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="MethodLauncherNetCore\netcoreapp3.1\MethodLauncherNetCore.runtimeconfig.dev.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="MethodLauncherNetCore\netcoreapp3.1\MethodLauncherNetCore.runtimeconfig.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
@@ -420,6 +476,10 @@
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP18MethodProject.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="ProjectTemplates\CSharp\Aras Innovator\Methods\Aras1400MethodProject.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
