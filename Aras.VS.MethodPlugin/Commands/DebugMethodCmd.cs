@@ -110,6 +110,14 @@ namespace Aras.VS.MethodPlugin.Commands
 			var currentDllPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
 			var directoryPath = Path.GetDirectoryName(currentDllPath);
 			var launcherPath = Path.Combine(directoryPath, "MethodLauncher", "MethodLauncher.exe");
+			string netCoreLauncherPath = Path.Combine(directoryPath, "MethodLauncherNetCore", "netcoreapp3.1", "MethodLauncherNetCore.exe");
+
+			string projectType = project.Properties.Item("TargetFrameworkMoniker")?.Value?.ToString();
+			bool isNetCoreProject = projectType.Contains(".NETCoreApp");
+			if (isNetCoreProject)
+			{
+				launcherPath = netCoreLauncherPath;
+			}
 
 			string packageMethodFolderPath = this.projectConfigurationManager.CurrentProjectConfiguraiton.UseCommonProjectStructure ? methodInformation.Package.MethodFolderPath : string.Empty;
 			string methodWorkingFolder = Path.Combine(projectManager.ServerMethodFolderPath, packageMethodFolderPath, methodInformation.MethodName);

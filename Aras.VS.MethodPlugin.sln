@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2020
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31321.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B89DC826-187A-4CE5-A6FA-D5DFCBC8E021}"
 	ProjectSection(SolutionItems) = preProject
@@ -24,10 +24,16 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aras.VS.MethodPlugin.Tests", "Aras.VS.MethodPlugin.Tests\Aras.VS.MethodPlugin.Tests.csproj", "{31606639-0A7D-4786-90FE-FD2317313D02}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aras.Method.Libs", "Aras.Method.Libs\Aras.Method.Libs.csproj", "{8450A949-CB6B-4530-A968-AD9D9D1D63CF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AD4D1D0B-A775-4ABB-A25D-19BD7EE52560} = {AD4D1D0B-A775-4ABB-A25D-19BD7EE52560}
+		{E8CD6B11-2B91-417A-8C87-210DB84C94F0} = {E8CD6B11-2B91-417A-8C87-210DB84C94F0}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{4F7FD5FA-BFA4-4717-919C-76D637246105}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aras.Method.Libs.Tests", "Aras.Method.Libs.Tests\Aras.Method.Libs.Tests.csproj", "{7A329665-1A57-4559-9DBE-8D757DDE413A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MethodLauncherNetCore", "MethodLauncherNetCore\MethodLauncherNetCore.csproj", "{AD4D1D0B-A775-4ABB-A25D-19BD7EE52560}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +61,10 @@ Global
 		{7A329665-1A57-4559-9DBE-8D757DDE413A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A329665-1A57-4559-9DBE-8D757DDE413A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A329665-1A57-4559-9DBE-8D757DDE413A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD4D1D0B-A775-4ABB-A25D-19BD7EE52560}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD4D1D0B-A775-4ABB-A25D-19BD7EE52560}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD4D1D0B-A775-4ABB-A25D-19BD7EE52560}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD4D1D0B-A775-4ABB-A25D-19BD7EE52560}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
