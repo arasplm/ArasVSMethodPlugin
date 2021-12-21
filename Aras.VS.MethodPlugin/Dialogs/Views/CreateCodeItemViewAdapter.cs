@@ -1,6 +1,6 @@
 ﻿//------------------------------------------------------------------------------
 // <copyright file="CreateCodeItemViewAdapter.cs" company="Aras Corporation">
-//     Copyright © 2021 Aras Corporation.  All rights reserved.
+//     Copyright © 2022 Aras Corporation.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 

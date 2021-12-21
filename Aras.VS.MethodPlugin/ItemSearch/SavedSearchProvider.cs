@@ -1,6 +1,6 @@
 ﻿//------------------------------------------------------------------------------
 // <copyright file="SavedSearchProvider.cs" company="Aras Corporation">
-//     © 2017-2021 Aras Corporation. All rights reserved.
+//     © 2017-2022 Aras Corporation. All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 
