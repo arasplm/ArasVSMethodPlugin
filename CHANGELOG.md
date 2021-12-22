@@ -27,6 +27,7 @@
 - [x] Add project template for Aras 12.0 SP 18.
 - [x] Add project template for Aras 14.0.0.
 - [x] Add project template for Aras 14.0.1.
+- [x] Add project template for Aras 14.0.2.
 - [ ] Add Hotkey for plugin actions
 - [ ] Add Aras code anylizer to project templates
 
@@ -39,6 +40,9 @@ download in the
 
 These are the changes to each version that has been released
 on the official Visual Studio extension gallery.
+
+## 1.14
+- [x] Added project template for Aras 14.0.2.
 
 ## 1.13
 - [x] Added project template for Aras 14.0.1.
