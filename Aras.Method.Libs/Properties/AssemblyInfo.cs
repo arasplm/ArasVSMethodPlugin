@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Aras Corporation")]
 [assembly: AssemblyProduct("Aras Innovator Method Libs")]
-[assembly: AssemblyCopyright("© 2017-2021 Aras Corporation. All rights reserved.")]
+[assembly: AssemblyCopyright("© 2017-2022 Aras Corporation. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
