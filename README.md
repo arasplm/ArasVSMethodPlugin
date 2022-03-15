@@ -35,5 +35,9 @@ to install the
 extension for Visual Studio which enables some features
 used by this project.
 
+## Project structure
+
+Brief overview of the [project structure](ProjectStructure.md).
+
 ## License
 Projects are published to Github under the MIT license. See the LICENSE file for license rights and limitations.
