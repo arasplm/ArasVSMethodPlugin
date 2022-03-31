@@ -18,7 +18,7 @@
              mc:Ignorable="d"
              WindowStartupLocation="CenterScreen"
              WindowStyle="None"
-             xmlns:shell="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.14.0"
+             xmlns:shell="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
              Style="{DynamicResource WindowVsTheme}" >
     <Window.Resources>
         <ResourceDictionary>

@@ -19,7 +19,7 @@ namespace Aras.VS.MethodPlugin.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -132,17 +132,16 @@ namespace Aras.VS.MethodPlugin.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;AML&gt;
-        ///	&lt;Item type=&quot;Method&quot; id=&quot;7FA1FE7EC5A84B65B28A8DF9EB5E518C&quot; action=&quot;add&quot;&gt;
+        ///	&lt;Item type=&quot;Method&quot; id=&quot;482D8CE152FF4AEB9DC5DED7F0C3ACF0&quot; action=&quot;add&quot;&gt;
         ///		&lt;execution_allowed_to keyed_name=&quot;World&quot; type=&quot;Identity&quot;&gt;A73B655731924CD0B027E4F4D5FCC0A9&lt;/execution_allowed_to&gt;
-        ///		&lt;method_code&gt;
-        ///			&lt;![CDATA[var currentItem;
+        ///		&lt;method_code&gt;&lt;![CDATA[var currentItem;
         ///
         ///if (window.work &amp;&amp; window.work.grid &amp;&amp; work.grid.getSelectedItemIDs().length === 1) {
         ///    var selectedId = work.grid.getSelectedItemIDs()[0];
         ///    currentItem = this.getInnovator().getItemById(&quot;Method&quot;, selectedId);
         ///}
         ///
-        ///if (!currentItem &amp;&amp; typeof getIOMItem === &quot; [rest of string was truncated]&quot;;.
+        ///if (!currentItem &amp;&amp; typeof getIOMItem === &quot;funct [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ImportOpenInVSActionAML {
             get {

@@ -3,8 +3,6 @@ using System.IO;
 using System.Linq;
 using Aras.Method.Libs;
 using Aras.Method.Libs.Templates;
-using Microsoft.VisualStudio.Shell.Interop;
-using NSubstitute;
 using NUnit.Framework;
 
 namespace Aras.VS.MethodPlugin.Tests.Templates
@@ -13,12 +11,10 @@ namespace Aras.VS.MethodPlugin.Tests.Templates
 	public class TemplateLoaderTest
 	{
 		private TemplateLoader templateLoader;
-		private IVsUIShell4 iVsUIShell;
 
 		[SetUp]
 		public void SetUp()
 		{
-			this.iVsUIShell = Substitute.For<IVsUIShell4>();
 			this.templateLoader = new TemplateLoader();
 		}
 
