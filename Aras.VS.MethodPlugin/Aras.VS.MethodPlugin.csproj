@@ -383,38 +383,6 @@
     <Content Include="OpenMethodInVS\Import\ImportOpenInVSActionAML.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="ProjectTemplates\CSharp\Aras Innovator\Methods\Aras11SP10MethodProject.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="ProjectTemplates\CSharp\Aras Innovator\Methods\Aras11SP11MethodProject.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="ProjectTemplates\CSharp\Aras Innovator\Methods\Aras11SP9MethodProject.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="ProjectTemplates\CSharp\Aras Innovator\Methods\Aras11SP8MethodProject.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="ProjectTemplates\CSharp\Aras Innovator\Methods\Aras11SP12MethodProject.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="ProjectTemplates\CSharp\Aras Innovator\Methods\Aras11SP14MethodProject.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="ProjectTemplates\CSharp\Aras Innovator\Methods\Aras11SP15MethodProject.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12MethodProject.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
     <Content Include="ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP2MethodProject.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
@@ -704,10 +672,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\aras.ico" />
-    <Content Include="ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP1MethodProject.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
     <Content Include="Resources\16x16-Run.png" />
     <Content Include="Resources\32x32-DiscussionPanelOn.png" />
     <Content Include="Resources\32x32-help.png" />

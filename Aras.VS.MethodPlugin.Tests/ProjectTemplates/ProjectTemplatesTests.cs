@@ -87,7 +87,7 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectTemplates
 		public void IsZipExists(int spVersion)
 		{
 			//Act
-			var isExists = File.Exists(Path.Combine(pathToZipFolder, $"Aras11SP{spVersion}MethodProject.zip"));
+			var isExists = File.Exists(Path.Combine(pathToZipFolder, $"Aras12SP{spVersion}MethodProject.zip"));
 
 			//Assert
 			Assert.IsTrue(isExists);
@@ -107,7 +107,7 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectTemplates
 
 			var files = GetCommonFilesBySpVersion(spVersion);
 			//Action 
-			using (FileStream zipToOpen = new FileStream(Path.Combine(pathToZipFolder, $"Aras11SP{spVersion}MethodProject.zip"), FileMode.Open))
+			using (FileStream zipToOpen = new FileStream(Path.Combine(pathToZipFolder, $"Aras12SP{spVersion}MethodProject.zip"), FileMode.Open))
 			{
 				using (ZipArchive archive = new ZipArchive(zipToOpen))
 				{
@@ -133,7 +133,7 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectTemplates
 			var libs = GetDllLibsBySpVersion(spVersion);
 
 			//Action 
-			using (FileStream zipToOpen = new FileStream(Path.Combine(pathToZipFolder, $"Aras11SP{spVersion}MethodProject.zip"), FileMode.Open))
+			using (FileStream zipToOpen = new FileStream(Path.Combine(pathToZipFolder, $"Aras12SP{spVersion}MethodProject.zip"), FileMode.Open))
 			{
 				using (ZipArchive archive = new ZipArchive(zipToOpen))
 				{
@@ -148,17 +148,13 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectTemplates
 		private List<string> GetCommonFilesBySpVersion(int spVersion)
 		{
 			var list = new List<string>(listOfCommonFiles);
-			list.Add($"Aras.VS.MethodPlugin.11sp{spVersion}CSharp.csproj");
+			list.Add($"Aras.VS.MethodPlugin.12sp{spVersion}CSharp.csproj");
 			return list;
 		}
 
 		private List<string> GetDllLibsBySpVersion(int spVersion)
 		{
 			var list = new List<string>(listOfCommonFiles);
-			if (spVersion >= 12)
-			{
-				list.Add("ArasLibs/Aras.TreeGridView.dll");
-			}
 			return list;
 		}
 	}
