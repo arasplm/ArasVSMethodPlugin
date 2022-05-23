@@ -44,6 +44,7 @@ on the official Visual Studio extension gallery.
 
 ## 1.17
 - [x] Removed project templates for obsolete service packs (11.0 - 12.0 SP1).
+- [x] Added project template for Aras 14.0.5.
 
 ## 1.16
 - [x] Added project template for Aras 14.0.4.
