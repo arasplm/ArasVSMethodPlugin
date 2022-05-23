@@ -9,7 +9,6 @@
 - [x] Possibility to debug server method
 - [x] Formatting code after method opened or created
 - [x] Add support for CSharp:Aras.Server.Core.Configurator for SP 12
-- [x] Add project tempalte for Aras 11.0 SP 15
 - [x] Add project template for Aras 12.0 SP 3.
 - [x] Add project template for Aras 12.0 SP 4.
 - [x] Add project template for Aras 12.0 SP 5.
@@ -42,6 +41,9 @@ download in the
 
 These are the changes to each version that has been released
 on the official Visual Studio extension gallery.
+
+## 1.17
+- [x] Removed project templates for obsolete service packs (11.0 - 12.0 SP1).
 
 ## 1.16
 - [x] Added project template for Aras 14.0.4.
