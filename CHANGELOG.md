@@ -29,6 +29,7 @@
 - [x] Add project template for Aras 14.0.2.
 - [x] Add project template for Aras 14.0.3.
 - [x] Add project template for Aras 14.0.4.
+- [x] Add project template for Aras 14.0.5.
 - [ ] Add Hotkey for plugin actions
 - [ ] Add Aras code anylizer to project templates
 
