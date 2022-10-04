@@ -1,0 +1,129 @@
+﻿<!--
+ <copyright file="SelectPathDialog.xaml" company="Aras Corporation">
+     © 2017-2022 Aras Corporation. All rights reserved.
+ </copyright>-->
+
+<Window
+	x:Class="Aras.VS.MethodPlugin.Dialogs.Views.SelectPathDialog"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:converters="clr-namespace:Aras.VS.MethodPlugin.Dialogs.Converters"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:local="clr-namespace:Aras.VS.MethodPlugin.Dialogs.Views"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:shell="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
+	x:Name="SelectPathWindow"
+	Title="Select path dialog"
+	Width="380"
+	Height="430"
+	MinWidth="200"
+	MinHeight="200"
+	Icon="../../Resources/aras.ico"
+	Style="{DynamicResource WindowVsTheme}"
+	WindowStartupLocation="CenterScreen"
+	WindowStyle="None"
+	mc:Ignorable="d">
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="Styles/ButtonControl.xaml" />
+				<ResourceDictionary Source="Styles/LabelControl.xaml" />
+				<ResourceDictionary Source="Styles/ListBoxControl.xaml" />
+				<ResourceDictionary Source="Styles/TextBoxControl.xaml" />
+				<ResourceDictionary Source="Styles/TreeViewControl.xaml" />
+				<ResourceDictionary Source="Styles/Window.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Window.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition />
+			<RowDefinition Height="40" />
+			<RowDefinition Height="40" />
+		</Grid.RowDefinitions>
+		<TreeView
+			x:Name="FolderView"
+			ItemsSource="{Binding DirectoryItems}"
+			Tag="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
+			<TreeView.ItemContainerStyle>
+				<Style TargetType="{x:Type TreeViewItem}">
+					<Setter Property="Foreground" Value="{DynamicResource {x:Static shell:EnvironmentColors.ComboBoxTextBrushKey}}" />
+					<Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+					<Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+					<EventSetter Event="TreeViewItem.MouseRightButtonDown" Handler="TreeViewItem_MouseRightButtonDown" />
+					<EventSetter Event="Selected" Handler="TreeViewItem_BringIntoView" />
+				</Style>
+			</TreeView.ItemContainerStyle>
+			<TreeView.ItemTemplate>
+				<HierarchicalDataTemplate ItemsSource="{Binding Children}">
+					<StackPanel Orientation="Horizontal">
+						<Image
+							Width="20"
+							Margin="3"
+							Source="{Binding Type, Converter={x:Static converters:HeaderToImageConverter.Instance}}" />
+						<TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
+					</StackPanel>
+				</HierarchicalDataTemplate>
+			</TreeView.ItemTemplate>
+			<TreeView.ContextMenu>
+				<ContextMenu>
+					<MenuItem
+						Command="{Binding Path=NewFolderCommand}"
+						CommandParameter="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+						Header="New folder" />
+					<MenuItem
+						Command="{Binding Path=RenameFolderCommand}"
+						CommandParameter="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+						Header="Rename"
+						IsEnabled="{Binding RenameIsEnabled}" />
+					<MenuItem
+						Command="{Binding Path=DeleteFolderCommand}"
+						CommandParameter="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+						Header="Delete"
+						IsEnabled="{Binding DeleteIsEnabled}" />
+				</ContextMenu>
+			</TreeView.ContextMenu>
+		</TreeView>
+		<Grid Grid.Row="1" Margin="5,5">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition />
+			</Grid.ColumnDefinitions>
+			<Label Margin="0,0,5,0" Content="Path:" />
+			<TextBox
+				Grid.Column="1"
+				HorizontalAlignment="Stretch"
+				VerticalContentAlignment="Center"
+				Text="{Binding Path=SelectedPath, UpdateSourceTrigger=PropertyChanged}">
+				<TextBox.InputBindings>
+					<KeyBinding
+						Key="Enter"
+						Command="{Binding Path=PathChangeCommand}"
+						CommandParameter="{Binding ElementName=SelectPathWindow}" />
+				</TextBox.InputBindings>
+			</TextBox>
+		</Grid>
+		<Grid Grid.Row="2">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition />
+			</Grid.ColumnDefinitions>
+			<WrapPanel Grid.Column="2" HorizontalAlignment="Right">
+				<Button
+					Width="70"
+					Margin="5"
+					Command="{Binding Path=OkCommand}"
+					CommandParameter="{Binding ElementName=SelectPathWindow}"
+					Content="OK" />
+				<Button
+					Grid.Row="4"
+					Grid.Column="2"
+					Width="70"
+					Margin="5"
+					Command="{Binding Path=CloseCommand}"
+					CommandParameter="{Binding ElementName=SelectPathWindow}"
+					Content="Cancel" />
+			</WrapPanel>
+		</Grid>
+	</Grid>
+</Window>

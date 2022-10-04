@@ -18,7 +18,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\Aras.VS.MethodPlugin\MethodLauncher\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -54,4 +54,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "$(TargetDir)*.*" "$(SolutionDir)Aras.VS.MethodPlugin\MethodLauncher" /Y /I /E
+xcopy "$(TargetDir)*.*" "$(SolutionDir)Aras.VS.MethodPlugin.2019\MethodLauncher" /Y /I /E
+</PostBuildEvent>
+  </PropertyGroup>
 </Project>
