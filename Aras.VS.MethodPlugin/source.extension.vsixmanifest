@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="8424E2CB-F5F4-40EA-85B8-260998634ED5" Version="1.20" Language="en-US" Publisher="Aras Corporation" />
+        <Identity Id="D0562762-FE4A-4BE0-96AB-D91CB70909FD" Version="1.21" Language="en-US" Publisher="Aras Corporation" />
         <DisplayName>Aras Innovator Method Plugin</DisplayName>
         <Description xml:space="preserve">Aras Innovator Method Plugin provides easy way to create and modify Aras Innovator server-side methods. Method code can be open or saved directly from/to an instance of Aras Innovator or from/to a local AML package. Aras Innovator Method Plugin for Visual Studio has also additional capabilities like generating template code to unit test the method; creating a new package directly in Aras Innovator prior to saving the method in it; etc. The Plugin provides extension for Visual Studio with all operations and project templates for different releases of Aras Innovator starting with Aras Innovator 11 SP8. Aras Corporation provides this plugin as is and will not provide any support or other related services related to this plugin.</Description>
         <License>Resources\LICENSE</License>
@@ -9,9 +9,15 @@
         <Tags >Aras, Innovator, method</Tags>
     </Metadata>
     <Installation AllUsers="true">
-        <InstallationTarget Version="[14.0,17.0)" Id="Microsoft.VisualStudio.Community" />
-        <InstallationTarget Version="[14.0,17.0)" Id="Microsoft.VisualStudio.Pro" />
-        <InstallationTarget Version="[14.0,17.0)" Id="Microsoft.VisualStudio.Enterprise" />
+        <InstallationTarget Version="[17.0,18.0)" Id="Microsoft.VisualStudio.Community">
+            <ProductArchitecture>amd64</ProductArchitecture>
+        </InstallationTarget>
+        <InstallationTarget Version="[17.0,18.0)" Id="Microsoft.VisualStudio.Pro">
+            <ProductArchitecture>amd64</ProductArchitecture>
+        </InstallationTarget>
+        <InstallationTarget Version="[17.0,18.0)" Id="Microsoft.VisualStudio.Enterprise">
+            <ProductArchitecture>amd64</ProductArchitecture>
+        </InstallationTarget>
     </Installation>
     <Dependencies>
         <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
@@ -47,6 +53,6 @@
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\CSharp\Aras Innovator\Methods\Aras1408MethodProject.zip" />
     </Assets>
     <Prerequisites>
-        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.6.27309.0,17.0)" DisplayName="Visual Studio core editor" />
+        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.6.27309.0,18.0)" DisplayName="Visual Studio core editor" />
     </Prerequisites>
 </PackageManifest>

@@ -13,12 +13,10 @@ namespace Aras.VS.MethodPlugin.Tests.Templates
 	public class TemplateLoaderTest
 	{
 		private TemplateLoader templateLoader;
-		private IVsUIShell4 iVsUIShell;
 
 		[SetUp]
 		public void SetUp()
 		{
-			this.iVsUIShell = Substitute.For<IVsUIShell4>();
 			this.templateLoader = new TemplateLoader();
 		}
 

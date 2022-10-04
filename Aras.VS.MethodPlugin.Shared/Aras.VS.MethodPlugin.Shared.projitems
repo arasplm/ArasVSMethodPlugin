@@ -1,0 +1,394 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>72fbaf0d-1817-43cb-b2de-9229a76acf81</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Aras.VS.MethodPlugin.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ArasInnovator\ArasDataProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ArasInnovator\IArasDataProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ArasInnovator\MethodItemTypeInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ArasMainMenuCmdPackage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Authentication\AuthenticationManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Authentication\IAuthenticationManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Authentication\InnovatorUser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Code\VisualStudioCodeFormatter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\AuthenticationCommandBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\CmdBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\CommandIdsList.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\ConnectionInfoCmd.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\CreateCodeItemCmd.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\CreateMethodCmd.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\DebugMethodCmd.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\ImportOpenInVSActionCmd.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\MoveToCmd.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\OpenFromArasCmd.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\OpenFromPackageCmd.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\RefreshConfigCmd.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\SaveToArasCmd.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\SaveToPackageCmd.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\UpdateMethodCmd.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configurations\GlobalConfiguration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configurations\IGlobalConfiguration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Converters\BitmapToBitmapImageConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Converters\HeaderToImageConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Converters\LoginViewMultiValueConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\DialogFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Directory\Data\DirectoryItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Directory\Data\DirectoryItemType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Directory\DirectoryStructure.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\IDialogFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\MessageButtons.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\MessageDialogResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\MessageIcon.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\ToolStripSystemRendererHook.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\ViewModels\BaseViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\ViewModels\ConnectionInfoViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\ViewModels\CreateCodeItemViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\ViewModels\CreateMethodViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\ViewModels\DebugMethodViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\ViewModels\DirectoryItemViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\ViewModels\FolderNameViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\ViewModels\LoginViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\ViewModels\MessageBoxViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\ViewModels\MethodInformationViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\ViewModels\MoveToViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\ViewModels\OpenFromArasViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\ViewModels\OpenFromPackageTreeViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\ViewModels\OpenFromPackageViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\ViewModels\RelayCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\ViewModels\SaveMethodViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\ViewModels\SaveToLocalPackageViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\ViewModels\SearchResultViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\ViewModels\SelectPathViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\ViewModels\ShortMethodInfoViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\ViewModels\UpdateFromArasViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\ViewResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\BasePresener.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\ConnectionInfoView.xaml.cs">
+      <DependentUpon>ConnectionInfoView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\ConnectionInfoViewAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\CreateCodeItemView.xaml.cs">
+      <DependentUpon>CreateCodeItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\CreateCodeItemViewAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\CreateCodeItemViewResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\CreateMethodView.xaml.cs">
+      <DependentUpon>CreateMethodView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\CreateMethodViewAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\CreateMethodViewResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\DebugMethodView.xaml.cs">
+      <DependentUpon>DebugMethodView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\DebugMethodViewAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\DebugMethodViewResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\FolderNameDialog.xaml.cs">
+      <DependentUpon>FolderNameDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\FolderNameDialogAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\FolderNameDialogResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\IItemSearchView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\IMessageBoxWindow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\IPresenter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\ItemSearchDialog.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\ItemSearchDialog.designer.cs">
+      <DependentUpon>ItemSearchDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\ItemSearchDialogStyle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\ItemSearchPresenter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\ItemSearchPresenterArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\ItemSearchPresenterResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\IView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\LoginView.xaml.cs">
+      <DependentUpon>LoginView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\LoginViewAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\MessageBoxWindow.xaml.cs">
+      <DependentUpon>MessageBoxWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\MethodInfoView.xaml.cs">
+      <DependentUpon>MethodInfoView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\MoveToView.xaml.cs">
+      <DependentUpon>MoveToView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\MoveToViewAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\MoveToViewResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\OpenFileDialogAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\OpenFileDialogResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\OpenFromArasView.xaml.cs">
+      <DependentUpon>OpenFromArasView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\OpenFromArasViewAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\OpenFromArasViewResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\OpenFromPackageTreeView.xaml.cs">
+      <DependentUpon>OpenFromPackageTreeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\OpenFromPackageTreeViewAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\OpenFromPackageTreeViewResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\OpenFromPackageView.xaml.cs">
+      <DependentUpon>OpenFromPackageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\OpenFromPackageViewAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\OpenFromPackageViewResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\SaveMethodView.xaml.cs">
+      <DependentUpon>SaveMethodView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\SaveMethodViewAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\SaveMethodViewResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\SaveToPackageView.xaml.cs">
+      <DependentUpon>SaveToPackageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\SaveToPackageViewAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\SaveToPackageViewResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\SelectPathDialog.xaml.cs">
+      <DependentUpon>SelectPathDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\SelectPathDialogAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\SelectPathDialogResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\UpdateFromArasView.xaml.cs">
+      <DependentUpon>UpdateFromArasView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\UpdateFromArasViewAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\UpdateFromArasViewResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\ViewAdaper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ProjectItemsExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IIOMWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IOMWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ItemSearch\BaseSearcher.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ItemSearch\ColorListPropertyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ItemSearch\DataGridViewCalendarCell.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ItemSearch\DataGridViewCalendarEditingControl.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ItemSearch\DataGridViewComboBoxCellLable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ItemSearch\IdentitySearcher.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ItemSearch\ISavedSearchProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ItemSearch\ISearcher.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ItemSearch\ItemSearchCellProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ItemSearch\ItemSearchColumnProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ItemSearch\ItemSearchPropertyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ItemSearch\ItemSearchResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ItemSearch\ItemTypeItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ItemSearch\IUpdatedCell.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ItemSearch\ListPropertyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ItemSearch\LockedByPropertyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ItemSearch\Preferences\IPreferenceProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ItemSearch\Preferences\ItemGridLayout.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ItemSearch\Preferences\PreferenceProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ItemSearch\PropertyDataType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ItemSearch\PropertyDataTypeParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ItemSearch\SavedSearch.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ItemSearch\SavedSearchItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ItemSearch\SavedSearchProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IVisualStudioServiceProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IVsPackageWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OpenMethodInVS\IMethodOpener.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OpenMethodInVS\IOpenContextParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OpenMethodInVS\MethodOpener.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OpenMethodInVS\OpenContextParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OpenMethodInVS\OpenInVSConstants.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OpenMethodInVS\OpenMethodContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PackageManagement\PackageManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SolutionManagement\EventListener.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SolutionManagement\IProjectManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SolutionManagement\ProjectManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SolutionManagement\ProjectUpdater.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\Utils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\XmlNodeExt.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)VisualStudioMessageManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)VisualStudioServiceProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)VSPackage.Designer.cs">
+      <DependentUpon>VSPackage.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)VsPackageWrapper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)Dialogs\Views\ConnectionInfoView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Dialogs\Views\CreateCodeItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Dialogs\Views\CreateMethodView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Dialogs\Views\DebugMethodView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Dialogs\Views\FolderNameDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Dialogs\Views\LoginView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Dialogs\Views\MessageBoxWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Dialogs\Views\MethodInfoView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Dialogs\Views\MoveToView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Dialogs\Views\OpenFromArasView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Dialogs\Views\OpenFromPackageTreeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Dialogs\Views\OpenFromPackageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Dialogs\Views\SaveMethodView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Dialogs\Views\SaveToPackageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Dialogs\Views\SelectPathDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Dialogs\Views\Styles\ButtonControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Dialogs\Views\Styles\CheckBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Dialogs\Views\Styles\ComboBoxControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Dialogs\Views\Styles\ExpanderControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Dialogs\Views\Styles\Grid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Dialogs\Views\Styles\GroupBoxControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Dialogs\Views\Styles\LabelControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Dialogs\Views\Styles\ListBoxControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Dialogs\Views\Styles\PasswordBoxControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Dialogs\Views\Styles\ScrollViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Dialogs\Views\Styles\TextBlockControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Dialogs\Views\Styles\TextBoxControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Dialogs\Views\Styles\TreeViewControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Dialogs\Views\Styles\Window.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Dialogs\Views\UpdateFromArasView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Dialogs\Views\ItemSearchDialog.resx">
+      <DependentUpon>ItemSearchDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)VSPackage.resx">
+      <SubType>Designer</SubType>
+      <LastGenOutput>VSPackage.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Resources\16x16-ImportOpenInVSAction.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\16x16-Run.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\32x32-DiscussionPanelOn.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\32x32-help.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\32x32-new-aras-doc.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\32x32-open-from-aras.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\32x32-open-from-link.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\32x32-promote.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\32x32-refresh.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\32x32-save-to-aras.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\32x32-show_arasform.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\aras.ico" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\ArasMainMenuCommandPackage.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\ArasMainMenuCommandPackagePackage.ico" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\aras_16x16.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\Aras_A_300.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\Create.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\drive.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\Elipse.bmp" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\Ellipsis.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\file.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\folder-closed.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\folder-open.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\getNextPage.Image.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\getPreviousPage.Image.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\keysearch.gif" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\locked.gif" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\locked_else.gif" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\newsearch.gif" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\newSearchBtn.Image.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\next_page.gif" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\off2013_innovator.bmp" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\off2013_innovator.ico" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\OpenFromAras.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\OpenFromPackage.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\Package_16x16.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\Preference30x30.ico" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\Preferences32x32.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\prev_page.gif" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\refresh-16x16.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\Run.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\runSearchBtn.Image.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\Save.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\SaveAsPackage.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\SaveUnlockClose-32.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\searchByContent.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\searchFile.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\Settings.png" />
+  </ItemGroup>
+</Project>
