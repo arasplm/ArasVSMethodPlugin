@@ -135,6 +135,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Methods", "Methods", "{DAE4
 		SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras1406MethodProject.zip = SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras1406MethodProject.zip
 		SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras1407MethodProject.zip = SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras1407MethodProject.zip
 		SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras1408MethodProject.zip = SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras1408MethodProject.zip
+		SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras1409MethodProject.zip = SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras1409MethodProject.zip
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aras.VS.MethodPlugin", "Aras.VS.MethodPlugin\Aras.VS.MethodPlugin.csproj", "{111629B1-A99D-432C-A2B9-4AEB1C09F8F4}"
