@@ -10,8 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B89DC8
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aras.VS.MethodPlugin", "Aras.VS.MethodPlugin\Aras.VS.MethodPlugin.csproj", "{95381532-F7F9-4556-9178-EEC0AEFD2122}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FDFAB02B-45BB-4220-926A-C5A08BBFA662}"
 	ProjectSection(SolutionItems) = preProject
 		appveyor.yml = appveyor.yml
@@ -33,38 +31,181 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{4F7FD5FA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aras.Method.Libs.Tests", "Aras.Method.Libs.Tests\Aras.Method.Libs.Tests.csproj", "{7A329665-1A57-4559-9DBE-8D757DDE413A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MethodLauncherNetCore", "MethodLauncherNetCore\MethodLauncherNetCore.csproj", "{AD4D1D0B-A775-4ABB-A25D-19BD7EE52560}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MethodLauncherNetCore", "MethodLauncherNetCore\MethodLauncherNetCore.csproj", "{AD4D1D0B-A775-4ABB-A25D-19BD7EE52560}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Aras.VS.MethodPlugin.Shared", "Aras.VS.MethodPlugin.Shared\Aras.VS.MethodPlugin.Shared.shproj", "{72FBAF0D-1817-43CB-B2DE-9229A76ACF81}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aras.VS.MethodPlugin.2019", "Aras.VS.MethodPlugin.2019\Aras.VS.MethodPlugin.2019.csproj", "{E38F77A2-BAE9-4968-88C7-CA822150D284}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AD4D1D0B-A775-4ABB-A25D-19BD7EE52560} = {AD4D1D0B-A775-4ABB-A25D-19BD7EE52560}
+		{E8CD6B11-2B91-417A-8C87-210DB84C94F0} = {E8CD6B11-2B91-417A-8C87-210DB84C94F0}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SharedFiles", "SharedFiles", "{2DBFE489-D4AF-4452-94BB-C43571A0D6E9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OpenMethodInVS", "OpenMethodInVS", "{C18C9108-0CDF-4944-8A0F-2D6CC167C5A9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProjectTemplates", "ProjectTemplates", "{BADC7422-ED33-45A2-AAD7-68FDB631C90E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resources", "Resources", "{3A264A34-13C9-481F-929F-F1072C67D481}"
+	ProjectSection(SolutionItems) = preProject
+		SharedFiles\Resources\16x16-ImportOpenInVSAction.png = SharedFiles\Resources\16x16-ImportOpenInVSAction.png
+		SharedFiles\Resources\16x16-Run.png = SharedFiles\Resources\16x16-Run.png
+		SharedFiles\Resources\32x32-DiscussionPanelOn.png = SharedFiles\Resources\32x32-DiscussionPanelOn.png
+		SharedFiles\Resources\32x32-help.png = SharedFiles\Resources\32x32-help.png
+		SharedFiles\Resources\32x32-new-aras-doc.png = SharedFiles\Resources\32x32-new-aras-doc.png
+		SharedFiles\Resources\32x32-open-from-aras.png = SharedFiles\Resources\32x32-open-from-aras.png
+		SharedFiles\Resources\32x32-open-from-link.png = SharedFiles\Resources\32x32-open-from-link.png
+		SharedFiles\Resources\32x32-promote.png = SharedFiles\Resources\32x32-promote.png
+		SharedFiles\Resources\32x32-refresh.png = SharedFiles\Resources\32x32-refresh.png
+		SharedFiles\Resources\32x32-save-to-aras.png = SharedFiles\Resources\32x32-save-to-aras.png
+		SharedFiles\Resources\32x32-show_arasform.png = SharedFiles\Resources\32x32-show_arasform.png
+		SharedFiles\Resources\aras.ico = SharedFiles\Resources\aras.ico
+		SharedFiles\Resources\aras_16x16.png = SharedFiles\Resources\aras_16x16.png
+		SharedFiles\Resources\Aras_A_300.png = SharedFiles\Resources\Aras_A_300.png
+		SharedFiles\Resources\ArasMainMenuCommandPackage.png = SharedFiles\Resources\ArasMainMenuCommandPackage.png
+		SharedFiles\Resources\ArasMainMenuCommandPackagePackage.ico = SharedFiles\Resources\ArasMainMenuCommandPackagePackage.ico
+		SharedFiles\Resources\Create.png = SharedFiles\Resources\Create.png
+		SharedFiles\Resources\drive.png = SharedFiles\Resources\drive.png
+		SharedFiles\Resources\Elipse.bmp = SharedFiles\Resources\Elipse.bmp
+		SharedFiles\Resources\Ellipsis.png = SharedFiles\Resources\Ellipsis.png
+		SharedFiles\Resources\file.png = SharedFiles\Resources\file.png
+		SharedFiles\Resources\folder-closed.png = SharedFiles\Resources\folder-closed.png
+		SharedFiles\Resources\folder-open.png = SharedFiles\Resources\folder-open.png
+		SharedFiles\Resources\getNextPage.Image.png = SharedFiles\Resources\getNextPage.Image.png
+		SharedFiles\Resources\getPreviousPage.Image.png = SharedFiles\Resources\getPreviousPage.Image.png
+		SharedFiles\Resources\keysearch.gif = SharedFiles\Resources\keysearch.gif
+		SharedFiles\Resources\locked.gif = SharedFiles\Resources\locked.gif
+		SharedFiles\Resources\locked_else.gif = SharedFiles\Resources\locked_else.gif
+		SharedFiles\Resources\newsearch.gif = SharedFiles\Resources\newsearch.gif
+		SharedFiles\Resources\newSearchBtn.Image.png = SharedFiles\Resources\newSearchBtn.Image.png
+		SharedFiles\Resources\next_page.gif = SharedFiles\Resources\next_page.gif
+		SharedFiles\Resources\off2013_innovator.bmp = SharedFiles\Resources\off2013_innovator.bmp
+		SharedFiles\Resources\off2013_innovator.ico = SharedFiles\Resources\off2013_innovator.ico
+		SharedFiles\Resources\OpenFromAras.png = SharedFiles\Resources\OpenFromAras.png
+		SharedFiles\Resources\OpenFromPackage.png = SharedFiles\Resources\OpenFromPackage.png
+		SharedFiles\Resources\Package_16x16.png = SharedFiles\Resources\Package_16x16.png
+		SharedFiles\Resources\Preference30x30.ico = SharedFiles\Resources\Preference30x30.ico
+		SharedFiles\Resources\Preferences32x32.png = SharedFiles\Resources\Preferences32x32.png
+		SharedFiles\Resources\prev_page.gif = SharedFiles\Resources\prev_page.gif
+		SharedFiles\Resources\refresh-16x16.png = SharedFiles\Resources\refresh-16x16.png
+		SharedFiles\Resources\Run.png = SharedFiles\Resources\Run.png
+		SharedFiles\Resources\runSearchBtn.Image.png = SharedFiles\Resources\runSearchBtn.Image.png
+		SharedFiles\Resources\Save.png = SharedFiles\Resources\Save.png
+		SharedFiles\Resources\SaveAsPackage.png = SharedFiles\Resources\SaveAsPackage.png
+		SharedFiles\Resources\SaveUnlockClose-32.png = SharedFiles\Resources\SaveUnlockClose-32.png
+		SharedFiles\Resources\searchByContent.png = SharedFiles\Resources\searchByContent.png
+		SharedFiles\Resources\searchFile.png = SharedFiles\Resources\searchFile.png
+		SharedFiles\Resources\Settings.png = SharedFiles\Resources\Settings.png
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Import", "Import", "{E87D3125-FA6B-49CE-97C0-73FBF602C5B9}"
+	ProjectSection(SolutionItems) = preProject
+		SharedFiles\OpenMethodInVS\Import\ImportOpenInVSActionAML.xml = SharedFiles\OpenMethodInVS\Import\ImportOpenInVSActionAML.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CSharp", "CSharp", "{AC1FC527-AFA3-42F6-8CBC-12E89A2F5D11}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Aras Innovator", "Aras Innovator", "{6AF40A06-1A3B-4076-8F5B-970E14CE95C9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Methods", "Methods", "{DAE44C1D-FFAE-4223-A4FD-AC047DF60133}"
+	ProjectSection(SolutionItems) = preProject
+		SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP10MethodProject.zip = SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP10MethodProject.zip
+		SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP11MethodProject.zip = SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP11MethodProject.zip
+		SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP12MethodProject.zip = SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP12MethodProject.zip
+		SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP14MethodProject.zip = SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP14MethodProject.zip
+		SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP15MethodProject.zip = SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP15MethodProject.zip
+		SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP16MethodProject.zip = SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP16MethodProject.zip
+		SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP17MethodProject.zip = SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP17MethodProject.zip
+		SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP18MethodProject.zip = SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP18MethodProject.zip
+		SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP2MethodProject.zip = SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP2MethodProject.zip
+		SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP3MethodProject.zip = SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP3MethodProject.zip
+		SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP4MethodProject.zip = SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP4MethodProject.zip
+		SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP5MethodProject.zip = SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP5MethodProject.zip
+		SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP6MethodProject.zip = SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP6MethodProject.zip
+		SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP7MethodProject.zip = SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP7MethodProject.zip
+		SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP8MethodProject.zip = SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP8MethodProject.zip
+		SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP9MethodProject.zip = SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras12SP9MethodProject.zip
+		SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras1400MethodProject.zip = SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras1400MethodProject.zip
+		SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras1401MethodProject.zip = SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras1401MethodProject.zip
+		SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras1402MethodProject.zip = SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras1402MethodProject.zip
+		SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras1403MethodProject.zip = SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras1403MethodProject.zip
+		SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras1404MethodProject.zip = SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras1404MethodProject.zip
+		SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras1405MethodProject.zip = SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras1405MethodProject.zip
+		SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras1406MethodProject.zip = SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras1406MethodProject.zip
+		SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras1407MethodProject.zip = SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras1407MethodProject.zip
+		SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras1408MethodProject.zip = SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras1408MethodProject.zip
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aras.VS.MethodPlugin", "Aras.VS.MethodPlugin\Aras.VS.MethodPlugin.csproj", "{111629B1-A99D-432C-A2B9-4AEB1C09F8F4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AD4D1D0B-A775-4ABB-A25D-19BD7EE52560} = {AD4D1D0B-A775-4ABB-A25D-19BD7EE52560}
+		{E8CD6B11-2B91-417A-8C87-210DB84C94F0} = {E8CD6B11-2B91-417A-8C87-210DB84C94F0}
+	EndProjectSection
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Aras.VS.MethodPlugin.Shared\Aras.VS.MethodPlugin.Shared.projitems*{111629b1-a99d-432c-a2b9-4aeb1c09f8f4}*SharedItemsImports = 4
+		Aras.VS.MethodPlugin.Shared\Aras.VS.MethodPlugin.Shared.projitems*{72fbaf0d-1817-43cb-b2de-9229a76acf81}*SharedItemsImports = 13
+		Aras.VS.MethodPlugin.Shared\Aras.VS.MethodPlugin.Shared.projitems*{e38f77a2-bae9-4968-88c7-ca822150d284}*SharedItemsImports = 4
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{95381532-F7F9-4556-9178-EEC0AEFD2122}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{95381532-F7F9-4556-9178-EEC0AEFD2122}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{95381532-F7F9-4556-9178-EEC0AEFD2122}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{95381532-F7F9-4556-9178-EEC0AEFD2122}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E8CD6B11-2B91-417A-8C87-210DB84C94F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E8CD6B11-2B91-417A-8C87-210DB84C94F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8CD6B11-2B91-417A-8C87-210DB84C94F0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E8CD6B11-2B91-417A-8C87-210DB84C94F0}.Debug|x86.Build.0 = Debug|Any CPU
 		{E8CD6B11-2B91-417A-8C87-210DB84C94F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E8CD6B11-2B91-417A-8C87-210DB84C94F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8CD6B11-2B91-417A-8C87-210DB84C94F0}.Release|x86.ActiveCfg = Release|Any CPU
+		{E8CD6B11-2B91-417A-8C87-210DB84C94F0}.Release|x86.Build.0 = Release|Any CPU
 		{31606639-0A7D-4786-90FE-FD2317313D02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{31606639-0A7D-4786-90FE-FD2317313D02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31606639-0A7D-4786-90FE-FD2317313D02}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{31606639-0A7D-4786-90FE-FD2317313D02}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31606639-0A7D-4786-90FE-FD2317313D02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31606639-0A7D-4786-90FE-FD2317313D02}.Release|x86.ActiveCfg = Release|Any CPU
 		{8450A949-CB6B-4530-A968-AD9D9D1D63CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8450A949-CB6B-4530-A968-AD9D9D1D63CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8450A949-CB6B-4530-A968-AD9D9D1D63CF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8450A949-CB6B-4530-A968-AD9D9D1D63CF}.Debug|x86.Build.0 = Debug|Any CPU
 		{8450A949-CB6B-4530-A968-AD9D9D1D63CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8450A949-CB6B-4530-A968-AD9D9D1D63CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8450A949-CB6B-4530-A968-AD9D9D1D63CF}.Release|x86.ActiveCfg = Release|Any CPU
+		{8450A949-CB6B-4530-A968-AD9D9D1D63CF}.Release|x86.Build.0 = Release|Any CPU
 		{7A329665-1A57-4559-9DBE-8D757DDE413A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7A329665-1A57-4559-9DBE-8D757DDE413A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A329665-1A57-4559-9DBE-8D757DDE413A}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{7A329665-1A57-4559-9DBE-8D757DDE413A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A329665-1A57-4559-9DBE-8D757DDE413A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A329665-1A57-4559-9DBE-8D757DDE413A}.Release|x86.ActiveCfg = Release|Any CPU
 		{AD4D1D0B-A775-4ABB-A25D-19BD7EE52560}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AD4D1D0B-A775-4ABB-A25D-19BD7EE52560}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD4D1D0B-A775-4ABB-A25D-19BD7EE52560}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AD4D1D0B-A775-4ABB-A25D-19BD7EE52560}.Debug|x86.Build.0 = Debug|Any CPU
 		{AD4D1D0B-A775-4ABB-A25D-19BD7EE52560}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD4D1D0B-A775-4ABB-A25D-19BD7EE52560}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD4D1D0B-A775-4ABB-A25D-19BD7EE52560}.Release|x86.ActiveCfg = Release|Any CPU
+		{AD4D1D0B-A775-4ABB-A25D-19BD7EE52560}.Release|x86.Build.0 = Release|Any CPU
+		{E38F77A2-BAE9-4968-88C7-CA822150D284}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E38F77A2-BAE9-4968-88C7-CA822150D284}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E38F77A2-BAE9-4968-88C7-CA822150D284}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E38F77A2-BAE9-4968-88C7-CA822150D284}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E38F77A2-BAE9-4968-88C7-CA822150D284}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E38F77A2-BAE9-4968-88C7-CA822150D284}.Release|x86.ActiveCfg = Release|Any CPU
+		{111629B1-A99D-432C-A2B9-4AEB1C09F8F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{111629B1-A99D-432C-A2B9-4AEB1C09F8F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{111629B1-A99D-432C-A2B9-4AEB1C09F8F4}.Debug|x86.ActiveCfg = Debug|x86
+		{111629B1-A99D-432C-A2B9-4AEB1C09F8F4}.Debug|x86.Build.0 = Debug|x86
+		{111629B1-A99D-432C-A2B9-4AEB1C09F8F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{111629B1-A99D-432C-A2B9-4AEB1C09F8F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{111629B1-A99D-432C-A2B9-4AEB1C09F8F4}.Release|x86.ActiveCfg = Release|x86
+		{111629B1-A99D-432C-A2B9-4AEB1C09F8F4}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,6 +213,13 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{31606639-0A7D-4786-90FE-FD2317313D02} = {4F7FD5FA-BFA4-4717-919C-76D637246105}
 		{7A329665-1A57-4559-9DBE-8D757DDE413A} = {4F7FD5FA-BFA4-4717-919C-76D637246105}
+		{C18C9108-0CDF-4944-8A0F-2D6CC167C5A9} = {2DBFE489-D4AF-4452-94BB-C43571A0D6E9}
+		{BADC7422-ED33-45A2-AAD7-68FDB631C90E} = {2DBFE489-D4AF-4452-94BB-C43571A0D6E9}
+		{3A264A34-13C9-481F-929F-F1072C67D481} = {2DBFE489-D4AF-4452-94BB-C43571A0D6E9}
+		{E87D3125-FA6B-49CE-97C0-73FBF602C5B9} = {C18C9108-0CDF-4944-8A0F-2D6CC167C5A9}
+		{AC1FC527-AFA3-42F6-8CBC-12E89A2F5D11} = {BADC7422-ED33-45A2-AAD7-68FDB631C90E}
+		{6AF40A06-1A3B-4076-8F5B-970E14CE95C9} = {AC1FC527-AFA3-42F6-8CBC-12E89A2F5D11}
+		{DAE44C1D-FFAE-4223-A4FD-AC047DF60133} = {6AF40A06-1A3B-4076-8F5B-970E14CE95C9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1ACEE032-E6A5-4432-A161-A89529B05931}

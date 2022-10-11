@@ -6,11 +6,11 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>..\Aras.VS.MethodPlugin\MethodLauncherNetCore\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>..\Aras.VS.MethodPlugin\MethodLauncherNetCore\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,4 +24,8 @@
     <PackageReference Include="NUnit" Version="3.13.2" />
     <PackageReference Include="System.ServiceModel.Primitives" Version="4.8.1" />
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy &quot;$(TargetDir)..\*.*&quot; &quot;$(SolutionDir)Aras.VS.MethodPlugin\MethodLauncherNetCore&quot; /Y /I /E&#xD;&#xA;xcopy &quot;$(TargetDir)..\*.*&quot; &quot;$(SolutionDir)Aras.VS.MethodPlugin.2019\MethodLauncherNetCore&quot; /Y /I /E&#xD;&#xA;" />
+  </Target>
 </Project>

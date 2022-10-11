@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json.schemastore.org/vsix-manifestinjection",
+  "urlAssociations": [
+		{
+			"protocol": "openinvs",
+			"displayName": "Open in Visual Studio",
+			"progId": "VisualStudio.openinvs.[InstanceId]",
+			"defaultProgramRegistrationPath": "Software\\Microsoft\\VisualStudio_[InstanceId]\\Capabilities"
+		}
+  ],
+  "progIds": [
+		{
+			"id": "VisualStudio.openinvs.[InstanceId]",
+			"displayName": "Open in Visual Studio",
+			"path": "[InstallDir]\\Common7\\IDE\\devenv.exe",
+			"arguments": "/openinvs",
+			"defaultIconPath": "[InstallDir]\\Common7\\IDE\\devenv.exe"
+		}
+  ]
+}
