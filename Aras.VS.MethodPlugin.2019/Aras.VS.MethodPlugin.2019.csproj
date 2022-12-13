@@ -221,6 +221,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <Content Include="..\SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras14011MethodProject.zip">
+      <Link>ProjectTemplates\CSharp\Aras Innovator\Methods\Aras14011MethodProject.zip</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <ContentManifest Include="ContentManifest.json" />
     <None Include="Key.snk" />
     <Content Include="MethodLauncherNetCore\netcoreapp3.1\MethodLauncherNetCore.deps.json">

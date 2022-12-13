@@ -36,6 +36,7 @@
 - [x] Add support for Visual Studio 2022
 - [x] Add project template for Aras 14.0.9.
 - [x] Add project template for Aras 14.0.10.
+- [x] Add project template for Aras 14.0.11.
 - [ ] Add Hotkey for plugin actions
 - [ ] Add Aras code anylizer to project templates
 
@@ -48,6 +49,9 @@ download in the
 
 These are the changes to each version that has been released
 on the official Visual Studio extension gallery.
+
+## 1.23
+- [x] Add project template for Aras 14.0.11.
 
 ## 1.22
 - [x] Add project template for Aras 14.0.10.
