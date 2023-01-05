@@ -1,6 +1,6 @@
 ﻿//------------------------------------------------------------------------------
 // <copyright file="ItemTypeItem.cs" company="Aras Corporation">
-//     © 2017-2022 Aras Corporation. All rights reserved.// </copyright>
+//     © 2017-2023 Aras Corporation. All rights reserved.// </copyright>
 //------------------------------------------------------------------------------
 
 using System;
