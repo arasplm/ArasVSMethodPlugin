@@ -1,6 +1,6 @@
 //------------------------------------------------------------------------------
 // <copyright file="ItemSearchDialog.cs" company="Aras Corporation">
-//     © 2017-2022 Aras Corporation. All rights reserved.
+//     ï¿½ 20-202322 Aras Corporation. All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 

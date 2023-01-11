@@ -1,13 +1,13 @@
 ﻿extensions: .cs
 //------------------------------------------------------------------------------
 // <copyright file="%FileName%" company="Aras Corporation">
-//     Copyright © 2017-2022 Aras Corporation.  All rights reserved.
+//     Copyright © 2017-2023 Aras Corporation.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 
 extensions: .xaml .xml
 <!--
  <copyright file="%FileName%" company="Aras Corporation">
-     Copyright © 2017-2022 Aras Corporation.  All rights reserved.
+     Copyright © 2017-2023 Aras Corporation.  All rights reserved.
  </copyright>
 -->
