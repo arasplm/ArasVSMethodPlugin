@@ -231,6 +231,36 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <Content Include="..\SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras14015MethodProject.zip">
+      <Link>ProjectTemplates\CSharp\Aras Innovator\Methods\Aras14015MethodProject.zip</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="..\SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras14018MethodProject.zip">
+      <Link>ProjectTemplates\CSharp\Aras Innovator\Methods\Aras14018MethodProject.zip</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="..\SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras14020MethodProject.zip">
+      <Link>ProjectTemplates\CSharp\Aras Innovator\Methods\Aras14020MethodProject.zip</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="..\SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras14022MethodProject.zip">
+      <Link>ProjectTemplates\CSharp\Aras Innovator\Methods\Aras14022MethodProject.zip</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="..\SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras14025MethodProject.zip">
+      <Link>ProjectTemplates\CSharp\Aras Innovator\Methods\Aras14025MethodProject.zip</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="..\SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras14028MethodProject.zip">
+      <Link>ProjectTemplates\CSharp\Aras Innovator\Methods\Aras14028MethodProject.zip</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <ContentManifest Include="ContentManifest.json" />
     <None Include="Key.snk" />
     <Content Include="MethodLauncherNetCore\netcoreapp3.1\MethodLauncherNetCore.deps.json">

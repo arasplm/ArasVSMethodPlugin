@@ -38,6 +38,8 @@
 - [x] Add project template for Aras 14.0.10.
 - [x] Add project template for Aras 14.0.11.
 - [x] Add project template for Aras 14.0.12.
+- [x] Add project templates for Aras R27 - R32.
+- [ ] Depricate 'Debug method' functionality
 - [ ] Add Hotkey for plugin actions
 - [ ] Add Aras code anylizer to project templates
 
@@ -50,6 +52,15 @@ download in the
 
 These are the changes to each version that has been released
 on the official Visual Studio extension gallery.
+
+## 1.25
+- [x] Rename build numbers with Release numbers for 14.0+ Aras Innovator project templates.
+- [x] Set correct runtime version for projects.
+- [x] Set TreatWarningsAsErrors to false.
+- [x] Set GenerateDocumentationFile to false.
+- [x] Remove Stylecop code rules analysis.
+- [x] Use seperate IOMs for plugin and for Aras Innovator versions (which fixes 14.0.12 version).
+- [x] Add project templates for Aras R27 - R32.
 
 ## 1.24
 - [x] Add project template for Aras 14.0.12.
