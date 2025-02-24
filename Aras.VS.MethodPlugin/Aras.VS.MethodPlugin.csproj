@@ -241,6 +241,11 @@
       <IncludeInVSIX>true</IncludeInVSIX>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\SharedFiles\ProjectTemplates\CSharp\Aras Innovator\Methods\Aras14034MethodProject.zip">
+      <Link>ProjectTemplates\CSharp\Aras Innovator\Methods\Aras14034MethodProject.zip</Link>
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Key.snk" />
     <Resource Include="..\sharedfiles\resources\locked.gif">
       <Link>Resources\locked.gif</Link>
