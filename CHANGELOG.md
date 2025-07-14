@@ -55,6 +55,9 @@ download in the
 These are the changes to each version that has been released
 on the official Visual Studio extension gallery.
 
+## 1.28
+- [x] Drop support of 'End of Life' versions. You can still use 12.0 SP 18 for compatibility with (12.0 SP*) versions.
+
 ## 1.27
 - [x] Add project template for Aras R34.
 
