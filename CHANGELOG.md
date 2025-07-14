@@ -42,7 +42,7 @@
 - [x] Add project templates for Aras R33.
 - [x] Add project templates for Aras R34.
 - [x] Add project templates for Aras R35.
-- [ ] Depricate 'Debug method' functionality
+- [ ] Deprecate 'Debug method' functionality
 - [ ] Add Hotkey for plugin actions
 - [ ] Add Aras code anylizer to project templates
 
