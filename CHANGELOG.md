@@ -55,6 +55,9 @@ download in the
 These are the changes to each version that has been released
 on the official Visual Studio extension gallery.
 
+## 1.27
+- [x] Add project template for Aras R34.
+
 ## 1.26
 - [x] Add project template for Aras R33.
 
