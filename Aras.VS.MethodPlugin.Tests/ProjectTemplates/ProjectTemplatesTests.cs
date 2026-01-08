@@ -90,7 +90,8 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectTemplates
 		[TestCase("14030")]
 		[TestCase("14034")]
 		[TestCase("14035")]
-
+		[TestCase("14036")]
+		[TestCase("14037")]
 		public void IsZipExists(string version)
 		{
 			//Act
@@ -104,6 +105,8 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectTemplates
 		[TestCase("12SP18", "12sp18")]
 		[TestCase("14015", "R27")]
 		[TestCase("14035", "R35")]
+		[TestCase("14036", "R36")]
+		[TestCase("14037", "R37")]
 		public void CheckForExistingCommonFiles(string version, string publicVersion)
 		{
 			//Arrange
@@ -125,6 +128,8 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectTemplates
 		[TestCase("12SP18", "12sp18")]
 		[TestCase("14015", "R27")]
 		[TestCase("14035", "R35")]
+		[TestCase("14036", "R36")]
+		[TestCase("14037", "R37")]
 		public void CheckForExistingDllLibs(string version, string publicVersion)
 		{
 			//Arrange
