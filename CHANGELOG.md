@@ -41,9 +41,10 @@
 - [x] Add project templates for Aras R27 - R32.
 - [x] Add project templates for Aras R33.
 - [x] Add project templates for Aras R34.
-- [ ] Depricate 'Debug method' functionality
-- [ ] Add Hotkey for plugin actions
-- [ ] Add Aras code anylizer to project templates
+- [x] Add project templates for Aras R35.
+- [x] Add project templates for Aras R36.
+- [x] Add project templates for Aras R37.
+- [ ] Deprecate 'Debug method' functionality
 
 
 Features that have a checkmark are complete and available for
@@ -54,6 +55,15 @@ download in the
 
 These are the changes to each version that has been released
 on the official Visual Studio extension gallery.
+
+## 1.28
+- [x] Drop support of 'End of Life' versions. You can still use 12.0 SP 18 for compatibility with (12.0 SP*) versions.
+- [x] Add project template for Aras R35.
+- [x] Add project template for Aras R36.
+- [x] Add project template for Aras R37.
+
+## 1.27
+- [x] Add project template for Aras R34.
 
 ## 1.26
 - [x] Add project template for Aras R33.

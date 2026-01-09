@@ -20,22 +20,19 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectTemplates
 			"GlobalSuppressions.cs",
 			"__TemplateIcon.ico",
 			"__PreviewImage.png",
-			"Rulesets/Aras.All.Rules.ruleset",
 			"Properties/AssemblyInfo.cs",
-			"packages.config",
 
 		};
 
 		readonly List<string> listOfCommonDlls = new List<string> {
-			"ArasLibs/Aras.Analyzers.dll",
-			"ArasLibs/Aras.ES.dll",
+			"ArasLibs/Aras.Server.Core.dll",
 			"ArasLibs/Aras.TDF.Base.dll",
+			"ArasLibs/Aras.TDF.Base.Extensions.dll",
 			"ArasLibs/Conversion.Base.dll",
 			"ArasLibs/ConversionManager.dll",
 			"ArasLibs/FileExchangeService.dll",
-			"ArasLibs/InnovatorCore.dll",
 			"ArasLibs/IOM.dll",
-			"ArasLibs/SPConnector.dll"
+			"ArasLibs/Newtonsoft.Json.dll",
 		};
 
 		readonly List<string> listOfEvents = new List<string> {
@@ -76,38 +73,47 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectTemplates
 		}
 
 
-		[TestCase(8)]
-		[TestCase(9)]
-		[TestCase(10)]
-		[TestCase(11)]
-		[TestCase(12)]
-		[TestCase(14)]
-		[TestCase(15)]
-
-		public void IsZipExists(int spVersion)
+		[TestCase("12SP18")]
+		[TestCase("1406")]
+		[TestCase("1407")]
+		[TestCase("1408")]
+		[TestCase("1409")]
+		[TestCase("14010")]
+		[TestCase("14011")]
+		[TestCase("14012")]
+		[TestCase("14015")]
+		[TestCase("14018")]
+		[TestCase("14020")]
+		[TestCase("14022")]
+		[TestCase("14025")]
+		[TestCase("14028")]
+		[TestCase("14030")]
+		[TestCase("14034")]
+		[TestCase("14035")]
+		[TestCase("14036")]
+		[TestCase("14037")]
+		public void IsZipExists(string version)
 		{
 			//Act
-			var isExists = File.Exists(Path.Combine(pathToZipFolder, $"Aras12SP{spVersion}MethodProject.zip"));
+			var isExists = File.Exists(Path.Combine(pathToZipFolder, $"Aras{version}MethodProject.zip"));
 
 			//Assert
 			Assert.IsTrue(isExists);
 		}
 
-		[TestCase(8)]
-		[TestCase(9)]
-		[TestCase(10)]
-		[TestCase(11)]
-		[TestCase(12)]
-		[TestCase(14)]
-		[TestCase(15)]
-		public void CheckForExistingCommonFiles(int spVersion)
+
+		[TestCase("12SP18", "12sp18")]
+		[TestCase("14015", "R27")]
+		[TestCase("14035", "R35")]
+		[TestCase("14036", "R36")]
+		[TestCase("14037", "R37")]
+		public void CheckForExistingCommonFiles(string version, string publicVersion)
 		{
 			//Arrange
 			bool expectedResult;
-
-			var files = GetCommonFilesBySpVersion(spVersion);
+			var files = GetCommonFilesByPublicVersion(publicVersion);
 			//Action 
-			using (FileStream zipToOpen = new FileStream(Path.Combine(pathToZipFolder, $"Aras12SP{spVersion}MethodProject.zip"), FileMode.Open))
+			using (FileStream zipToOpen = new FileStream(Path.Combine(pathToZipFolder, $"Aras{version}MethodProject.zip"), FileMode.Open))
 			{
 				using (ZipArchive archive = new ZipArchive(zipToOpen))
 				{
@@ -119,21 +125,19 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectTemplates
 			Assert.IsTrue(expectedResult);
 		}
 
-		[TestCase(8)]
-		[TestCase(9)]
-		[TestCase(10)]
-		[TestCase(11)]
-		[TestCase(12)]
-		[TestCase(14)]
-		[TestCase(15)]
-		public void CheckForExistingDllLibs(int spVersion)
+		[TestCase("12SP18", "12sp18")]
+		[TestCase("14015", "R27")]
+		[TestCase("14035", "R35")]
+		[TestCase("14036", "R36")]
+		[TestCase("14037", "R37")]
+		public void CheckForExistingDllLibs(string version, string publicVersion)
 		{
 			//Arrange
 			bool expectedResult;
-			var libs = GetDllLibsBySpVersion(spVersion);
+			var libs = GetDllLibsByPublicVersion(publicVersion);
 
 			//Action 
-			using (FileStream zipToOpen = new FileStream(Path.Combine(pathToZipFolder, $"Aras12SP{spVersion}MethodProject.zip"), FileMode.Open))
+			using (FileStream zipToOpen = new FileStream(Path.Combine(pathToZipFolder, $"Aras{version}MethodProject.zip"), FileMode.Open))
 			{
 				using (ZipArchive archive = new ZipArchive(zipToOpen))
 				{
@@ -145,16 +149,33 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectTemplates
 			Assert.IsTrue(expectedResult);
 		}
 
-		private List<string> GetCommonFilesBySpVersion(int spVersion)
+		private List<string> GetCommonFilesByPublicVersion(string publicVersion)
 		{
-			var list = new List<string>(listOfCommonFiles);
-			list.Add($"Aras.VS.MethodPlugin.12sp{spVersion}CSharp.csproj");
+			var list = new List<string>(listOfCommonFiles)
+			{
+				$"Aras.VS.MethodPlugin.{publicVersion}CSharp.csproj"
+			};
+			if (publicVersion.StartsWith("12"))
+			{
+				list.Add("Rulesets/Aras.All.Rules.ruleset");
+				list.Add("packages.config");
+			}
 			return list;
 		}
 
-		private List<string> GetDllLibsBySpVersion(int spVersion)
+		private List<string> GetDllLibsByPublicVersion(string publicVersion)
 		{
 			var list = new List<string>(listOfCommonFiles);
+			if (publicVersion.StartsWith("12"))
+			{
+				list.Add("ArasLibs/Aras.ES.dll");
+				list.Add("ArasLibs/SPConnector.dll");
+			}
+			else
+			{
+				list.Add("ArasLibs/Microsoft.Data.SqlClient.dll");
+				list.Add("ArasLibs/SixLabors.ImageSharp.dll");
+			}
 			return list;
 		}
 	}
