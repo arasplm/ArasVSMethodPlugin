@@ -44,6 +44,8 @@
 - [x] Add project templates for Aras R35.
 - [x] Add project templates for Aras R36.
 - [x] Add project templates for Aras R37.
+- [ ] Add project templates for Aras R38.
+- [ ] Add support for Visual Studio 2026.
 - [ ] Deprecate 'Debug method' functionality
 
 
