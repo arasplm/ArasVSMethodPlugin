@@ -1,23 +1,115 @@
-packages
+## NuGet Packages
+packages/
+*.nupkg
+# NuGet Symbol Packages
+*.snupkg
+# NuGet v3 cache
+project.lock.json
+project.fragment.lock.json
+artifacts/
 
-# User files
+## User-specific files
 *.suo
 *.user
+*.userosscache
 *.sln.docstates
 .vs/
 
-# Build results
+## Build results
 [Dd]ebug/
 [Rr]elease/
 x64/
+x86/
+[Bb]uild/
+bld/
 [Bb]in/
 [Oo]bj/
+[Ll]og/
+[Ll]ogs/
+[Oo]ut/
 
-# MSTest test Results
+## MethodLauncher build outputs (PostBuild copy targets)
+Aras.VS.MethodPlugin/MethodLauncher/*.exe
+Aras.VS.MethodPlugin/MethodLauncher/*.pdb
+Aras.VS.MethodPlugin/MethodLauncher/*.dll
+Aras.VS.MethodPlugin/MethodLauncher/*.exe.config
+Aras.VS.MethodPlugin/MethodLauncherNetCore/
+Aras.VS.MethodPlugin.2019/MethodLauncher/*.exe
+Aras.VS.MethodPlugin.2019/MethodLauncher/*.pdb
+Aras.VS.MethodPlugin.2019/MethodLauncher/*.dll
+Aras.VS.MethodPlugin.2019/MethodLauncher/*.exe.config
+Aras.VS.MethodPlugin.2019/MethodLauncherNetCore/
+SharedFiles/MethodLauncher/*.exe
+SharedFiles/MethodLauncher/*.pdb
+SharedFiles/MethodLauncher/*.dll
+SharedFiles/MethodLauncher/*.exe.config
+SharedFiles/MethodLauncherNetCore/
+
+## MSTest test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 
-# NCrunch
+## Visual Studio cache/options
+*.VisualState.xml
+TestResult.xml
+[Tt]est[Rr]esult*/
+
+## Visual Studio profiler
+*.psess
+*.vsp
+*.vspx
+*.sap
+
+## Visual Studio Trace Files
+*.e2e
+
+## ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+## JustCode
+.JustCode
+
+## TeamCity
+_TeamCity*
+
+## DotCover
+*.dotCover
+
+## AxoCover
+.axoCover/*
+!.axoCover/settings.json
+
+## Coverlet
+coverage*.json
+coverage*.xml
+coverage*.info
+
+## NCrunch
 *.ncrunchsolution
 *.ncrunchproject
-_NCrunch_WebCompiler
+_NCrunch_*
+
+## MFractors (Xamarin productivity tool)
+.mfractor/
+
+## Fody - auto-generated
+FodyWeavers.xsd
+
+## Local History for Visual Studio
+.localhistory/
+
+## Windows Thumbnail cache
+Thumbs.db
+ehthumbs.db
+
+## Folder config file
+[Dd]esktop.ini
+
+## VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
