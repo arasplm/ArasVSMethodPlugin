@@ -11,6 +11,23 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectTemplates
 	public class ProjectTemplatesTests
 	{
 		string pathToZipFolder;
+		readonly string[] expectedTemplateFiles = {
+			"Aras12SP18MethodProject.zip",
+			"Aras14010MethodProject.zip",
+			"Aras14011MethodProject.zip",
+			"Aras14012MethodProject.zip",
+			"Aras14015MethodProject.zip",
+			"Aras14018MethodProject.zip",
+			"Aras14020MethodProject.zip",
+			"Aras14022MethodProject.zip",
+			"Aras14025MethodProject.zip",
+			"Aras14028MethodProject.zip",
+			"Aras14030MethodProject.zip",
+			"Aras14034MethodProject.zip",
+			"Aras14035MethodProject.zip",
+			"Aras14036MethodProject.zip",
+			"Aras14037MethodProject.zip",
+		};
 		readonly List<string> listOfCommonFiles = new List<string> {
 			"projectConfig.xml",
 			"Attributes/PartialPathAttribute.cs",
@@ -73,32 +90,16 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectTemplates
 		}
 
 
-		[TestCase("12SP18")]
-		[TestCase("1406")]
-		[TestCase("1407")]
-		[TestCase("1408")]
-		[TestCase("1409")]
-		[TestCase("14010")]
-		[TestCase("14011")]
-		[TestCase("14012")]
-		[TestCase("14015")]
-		[TestCase("14018")]
-		[TestCase("14020")]
-		[TestCase("14022")]
-		[TestCase("14025")]
-		[TestCase("14028")]
-		[TestCase("14030")]
-		[TestCase("14034")]
-		[TestCase("14035")]
-		[TestCase("14036")]
-		[TestCase("14037")]
-		public void IsZipExists(string version)
+		[Test]
+		public void TemplateSet_ShouldMatchSupportedVersions()
 		{
 			//Act
-			var isExists = File.Exists(Path.Combine(pathToZipFolder, $"Aras{version}MethodProject.zip"));
+			var actualTemplateFiles = Directory.GetFiles(pathToZipFolder, "Aras*MethodProject.zip")
+				.Select(Path.GetFileName)
+				.ToArray();
 
 			//Assert
-			Assert.IsTrue(isExists);
+			CollectionAssert.AreEquivalent(expectedTemplateFiles, actualTemplateFiles);
 		}
 
 

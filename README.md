@@ -9,7 +9,7 @@ or get the [CI build](http://vsixgallery.com/extension/8424E2CB-F5F4-40EA-85B8-2
 
 ---------------------------------------
 
-Aras Innovator Method Plugin provides easy way to create and modify Aras Innovator server-side methods. Method code can be open or saved directly from/to an instance of Aras Innovator or from/to a local AML package. Aras Innovator Method Plugin for Visual Studio has also additional capabilities like generating template code to unit test the method; creating a new package directly in Aras Innovator prior to saving the method in it; etc. The Plugin provides extension for Visual Studio with all operations and project templates for different releases of Aras Innovator starting with Aras Innovator 11 SP8. Aras Corporation provides this plugin as is and will not provide any support or other related services related to this plugin.
+Aras Innovator Method Plugin provides easy way to create and modify Aras Innovator server-side methods. Method code can be open or saved directly from/to an instance of Aras Innovator or from/to a local AML package. Aras Innovator Method Plugin for Visual Studio has also additional capabilities like generating template code to unit test the method; creating a new package directly in Aras Innovator prior to saving the method in it; etc. The Plugin provides one extension package for Visual Studio 2022 and targets Visual Studio 2026, with Visual Studio 2026 runtime validation still pending. It includes project templates for Aras Innovator 12 SP18 and Aras Innovator 14 releases starting with 14.0.10. Aras Corporation provides this plugin as is and will not provide any support or other related services related to this plugin.
 
 See the [change log](CHANGELOG.md) for changes and road map.
 

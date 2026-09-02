@@ -34,11 +34,6 @@ Aras.VS.MethodPlugin/MethodLauncher/*.pdb
 Aras.VS.MethodPlugin/MethodLauncher/*.dll
 Aras.VS.MethodPlugin/MethodLauncher/*.exe.config
 Aras.VS.MethodPlugin/MethodLauncherNetCore/
-Aras.VS.MethodPlugin.2019/MethodLauncher/*.exe
-Aras.VS.MethodPlugin.2019/MethodLauncher/*.pdb
-Aras.VS.MethodPlugin.2019/MethodLauncher/*.dll
-Aras.VS.MethodPlugin.2019/MethodLauncher/*.exe.config
-Aras.VS.MethodPlugin.2019/MethodLauncherNetCore/
 SharedFiles/MethodLauncher/*.exe
 SharedFiles/MethodLauncher/*.pdb
 SharedFiles/MethodLauncher/*.dll

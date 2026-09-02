@@ -93,7 +93,7 @@ The `PackageManager` is responsible for getting and updating information about t
 
 ### ProjectTemplates folder
 
-This folder contains zipped project templates for each supported Aras Innovator version.
+This folder contains zipped project templates for Aras Innovator 12 SP18 and Aras Innovator 14 releases starting with 14.0.10.
 
 
 ### Aras.VS.MethodPlugin.SolutionManagement namespace

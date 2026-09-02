@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using Aras.Method.Libs;
 using Aras.Method.Libs.Templates;
-using Microsoft.VisualStudio.Shell.Interop;
 using NSubstitute;
 using NUnit.Framework;
 

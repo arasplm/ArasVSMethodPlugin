@@ -58,6 +58,11 @@ download in the
 These are the changes to each version that has been released
 on the official Visual Studio extension gallery.
 
+## Unreleased
+
+- Removed Visual Studio 2019 support. The Visual Studio 2022 extension package now targets Visual Studio 2026; Visual Studio 2026 runtime validation is pending.
+- Removed the Aras Innovator 14.0.6 through 14.0.9 project templates.
+
 ## 1.28
 - [x] Drop support of 'End of Life' versions. You can still use 12.0 SP 18 for compatibility with (12.0 SP*) versions.
 - [x] Add project template for Aras R35.

@@ -25,7 +25,12 @@
     <PackageReference Include="System.ServiceModel.Primitives" Version="4.8.1" />
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy &quot;$(TargetDir)..\*.*&quot; &quot;$(SolutionDir)Aras.VS.MethodPlugin\MethodLauncherNetCore&quot; /Y /I /E&#xD;&#xA;xcopy &quot;$(TargetDir)..\*.*&quot; &quot;$(SolutionDir)Aras.VS.MethodPlugin.2019\MethodLauncherNetCore&quot; /Y /I /E&#xD;&#xA;" />
+  <Target Name="CopyToVsixProject" AfterTargets="Build">
+    <ItemGroup>
+      <_LauncherOutput Include="$(TargetDir)**\*.*" />
+    </ItemGroup>
+    <MakeDir Directories="$(MSBuildProjectDirectory)\..\Aras.VS.MethodPlugin\MethodLauncherNetCore\netcoreapp3.1" />
+    <Copy SourceFiles="@(_LauncherOutput)" DestinationFiles="@(_LauncherOutput->'$(MSBuildProjectDirectory)\..\Aras.VS.MethodPlugin\MethodLauncherNetCore\netcoreapp3.1\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
   </Target>
+  <Target Name="GetEmptyVsixOutputGroup" />
 </Project>

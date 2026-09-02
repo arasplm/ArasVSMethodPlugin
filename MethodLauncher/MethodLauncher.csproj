@@ -54,9 +54,12 @@
     <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>xcopy "$(TargetDir)*.*" "$(SolutionDir)Aras.VS.MethodPlugin\MethodLauncher" /Y /I /E
-xcopy "$(TargetDir)*.*" "$(SolutionDir)Aras.VS.MethodPlugin.2019\MethodLauncher" /Y /I /E
-</PostBuildEvent>
-  </PropertyGroup>
+  <Target Name="CopyToVsixProject" AfterTargets="Build">
+    <ItemGroup>
+      <_LauncherOutput Include="$(TargetDir)*.*" />
+    </ItemGroup>
+    <MakeDir Directories="$(MSBuildProjectDirectory)\..\Aras.VS.MethodPlugin\MethodLauncher" />
+    <Copy SourceFiles="@(_LauncherOutput)" DestinationFolder="$(MSBuildProjectDirectory)\..\Aras.VS.MethodPlugin\MethodLauncher" SkipUnchangedFiles="true" />
+  </Target>
+  <Target Name="GetEmptyVsixOutputGroup" />
 </Project>
