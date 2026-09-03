@@ -76,13 +76,6 @@ namespace Aras.VS.MethodPlugin.Dialogs
 
 		IViewAdaper<CreateCodeItemView, CreateCodeItemViewResult> GetCreateCodeItemView(ICodeItemProvider codeItemProvider, bool usedVSFormatting);
 
-		IViewAdaper<DebugMethodView, DebugMethodViewResult> GetDebugMethodView(IProjectConfigurationManager projectConfigurationManager,
-			MethodInfo methodInformation,
-			string methodCode,
-			string projectConfigPath,
-			string projectName,
-			string projectFullName);
-
 		IViewAdaper<SelectPathDialog, SelectPathDialogResult> GetSelectPathDialog(DirectoryItemType searchToLevel,
 			string rootPath = "",
 			string startPath = "",

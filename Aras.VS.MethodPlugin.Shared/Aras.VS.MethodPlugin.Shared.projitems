@@ -23,7 +23,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Commands\ConnectionInfoCmd.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Commands\CreateCodeItemCmd.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Commands\CreateMethodCmd.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Commands\DebugMethodCmd.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Commands\ImportOpenInVSActionCmd.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Commands\MoveToCmd.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Commands\OpenFromArasCmd.cs" />
@@ -50,7 +49,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Dialogs\ViewModels\ConnectionInfoViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dialogs\ViewModels\CreateCodeItemViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dialogs\ViewModels\CreateMethodViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\ViewModels\DebugMethodViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dialogs\ViewModels\DirectoryItemViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dialogs\ViewModels\FolderNameViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dialogs\ViewModels\LoginViewModel.cs" />
@@ -83,11 +81,6 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\CreateMethodViewAdapter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\CreateMethodViewResult.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\DebugMethodView.xaml.cs">
-      <DependentUpon>DebugMethodView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\DebugMethodViewAdapter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\DebugMethodViewResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Views\FolderNameDialog.xaml.cs">
       <DependentUpon>FolderNameDialog.xaml</DependentUpon>
     </Compile>
@@ -222,10 +215,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Dialogs\Views\DebugMethodView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="$(MSBuildThisFileDirectory)Dialogs\Views\FolderNameDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -343,7 +332,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)Resources\16x16-ImportOpenInVSAction.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Resources\16x16-Run.png" />
     <Content Include="$(MSBuildThisFileDirectory)Resources\32x32-DiscussionPanelOn.png" />
     <Content Include="$(MSBuildThisFileDirectory)Resources\32x32-help.png" />
     <Content Include="$(MSBuildThisFileDirectory)Resources\32x32-new-aras-doc.png" />
@@ -382,7 +370,6 @@
     <Content Include="$(MSBuildThisFileDirectory)Resources\Preferences32x32.png" />
     <Content Include="$(MSBuildThisFileDirectory)Resources\prev_page.gif" />
     <Content Include="$(MSBuildThisFileDirectory)Resources\refresh-16x16.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Resources\Run.png" />
     <Content Include="$(MSBuildThisFileDirectory)Resources\runSearchBtn.Image.png" />
     <Content Include="$(MSBuildThisFileDirectory)Resources\Save.png" />
     <Content Include="$(MSBuildThisFileDirectory)Resources\SaveAsPackage.png" />

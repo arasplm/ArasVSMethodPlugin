@@ -17,8 +17,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MethodLauncher", "MethodLauncher\MethodLauncher.csproj", "{E8CD6B11-2B91-417A-8C87-210DB84C94F0}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aras.VS.MethodPlugin.Tests", "Aras.VS.MethodPlugin.Tests\Aras.VS.MethodPlugin.Tests.csproj", "{31606639-0A7D-4786-90FE-FD2317313D02}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aras.Method.Libs", "Aras.Method.Libs\Aras.Method.Libs.csproj", "{8450A949-CB6B-4530-A968-AD9D9D1D63CF}"
@@ -26,8 +24,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{4F7FD5FA-BFA4-4717-919C-76D637246105}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aras.Method.Libs.Tests", "Aras.Method.Libs.Tests\Aras.Method.Libs.Tests.csproj", "{7A329665-1A57-4559-9DBE-8D757DDE413A}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MethodLauncherNetCore", "MethodLauncherNetCore\MethodLauncherNetCore.csproj", "{AD4D1D0B-A775-4ABB-A25D-19BD7EE52560}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Aras.VS.MethodPlugin.Shared", "Aras.VS.MethodPlugin.Shared\Aras.VS.MethodPlugin.Shared.shproj", "{72FBAF0D-1817-43CB-B2DE-9229A76ACF81}"
 EndProject
@@ -40,7 +36,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resources", "Resources", "{3A264A34-13C9-481F-929F-F1072C67D481}"
 	ProjectSection(SolutionItems) = preProject
 		SharedFiles\Resources\16x16-ImportOpenInVSAction.png = SharedFiles\Resources\16x16-ImportOpenInVSAction.png
-		SharedFiles\Resources\16x16-Run.png = SharedFiles\Resources\16x16-Run.png
 		SharedFiles\Resources\32x32-DiscussionPanelOn.png = SharedFiles\Resources\32x32-DiscussionPanelOn.png
 		SharedFiles\Resources\32x32-help.png = SharedFiles\Resources\32x32-help.png
 		SharedFiles\Resources\32x32-new-aras-doc.png = SharedFiles\Resources\32x32-new-aras-doc.png
@@ -79,7 +74,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resources", "Resources", "{
 		SharedFiles\Resources\Preferences32x32.png = SharedFiles\Resources\Preferences32x32.png
 		SharedFiles\Resources\prev_page.gif = SharedFiles\Resources\prev_page.gif
 		SharedFiles\Resources\refresh-16x16.png = SharedFiles\Resources\refresh-16x16.png
-		SharedFiles\Resources\Run.png = SharedFiles\Resources\Run.png
 		SharedFiles\Resources\runSearchBtn.Image.png = SharedFiles\Resources\runSearchBtn.Image.png
 		SharedFiles\Resources\Save.png = SharedFiles\Resources\Save.png
 		SharedFiles\Resources\SaveAsPackage.png = SharedFiles\Resources\SaveAsPackage.png
@@ -131,14 +125,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E8CD6B11-2B91-417A-8C87-210DB84C94F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E8CD6B11-2B91-417A-8C87-210DB84C94F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E8CD6B11-2B91-417A-8C87-210DB84C94F0}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{E8CD6B11-2B91-417A-8C87-210DB84C94F0}.Debug|x86.Build.0 = Debug|Any CPU
-		{E8CD6B11-2B91-417A-8C87-210DB84C94F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E8CD6B11-2B91-417A-8C87-210DB84C94F0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E8CD6B11-2B91-417A-8C87-210DB84C94F0}.Release|x86.ActiveCfg = Release|Any CPU
-		{E8CD6B11-2B91-417A-8C87-210DB84C94F0}.Release|x86.Build.0 = Release|Any CPU
 		{31606639-0A7D-4786-90FE-FD2317313D02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{31606639-0A7D-4786-90FE-FD2317313D02}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31606639-0A7D-4786-90FE-FD2317313D02}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -159,14 +145,6 @@ Global
 		{7A329665-1A57-4559-9DBE-8D757DDE413A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A329665-1A57-4559-9DBE-8D757DDE413A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7A329665-1A57-4559-9DBE-8D757DDE413A}.Release|x86.ActiveCfg = Release|Any CPU
-		{AD4D1D0B-A775-4ABB-A25D-19BD7EE52560}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AD4D1D0B-A775-4ABB-A25D-19BD7EE52560}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AD4D1D0B-A775-4ABB-A25D-19BD7EE52560}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{AD4D1D0B-A775-4ABB-A25D-19BD7EE52560}.Debug|x86.Build.0 = Debug|Any CPU
-		{AD4D1D0B-A775-4ABB-A25D-19BD7EE52560}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AD4D1D0B-A775-4ABB-A25D-19BD7EE52560}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AD4D1D0B-A775-4ABB-A25D-19BD7EE52560}.Release|x86.ActiveCfg = Release|Any CPU
-		{AD4D1D0B-A775-4ABB-A25D-19BD7EE52560}.Release|x86.Build.0 = Release|Any CPU
 		{111629B1-A99D-432C-A2B9-4AEB1C09F8F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{111629B1-A99D-432C-A2B9-4AEB1C09F8F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{111629B1-A99D-432C-A2B9-4AEB1C09F8F4}.Debug|x86.ActiveCfg = Debug|x86

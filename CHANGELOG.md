@@ -6,7 +6,6 @@
 - [x] Save method to Aras Innovator
 - [x] Save method to AML package
 - [x] Partial class generation
-- [x] Possibility to debug server method
 - [x] Formatting code after method opened or created
 - [x] Add support for CSharp:Aras.Server.Core.Configurator for SP 12
 - [x] Add project template for Aras 12.0 SP 3.
@@ -46,7 +45,7 @@
 - [x] Add project templates for Aras R37.
 - [ ] Add project templates for Aras R38.
 - [ ] Add support for Visual Studio 2026.
-- [ ] Deprecate 'Debug method' functionality
+- [x] Remove 'Debug method' functionality
 
 
 Features that have a checkmark are complete and available for
@@ -62,6 +61,7 @@ on the official Visual Studio extension gallery.
 
 - Removed Visual Studio 2019 support. The Visual Studio 2022 extension package now targets Visual Studio 2026; Visual Studio 2026 runtime validation is pending.
 - Removed the Aras Innovator 14.0.6 through 14.0.9 project templates.
+- Removed the Debug Method command and its launcher applications.
 
 ## 1.28
 - [x] Drop support of 'End of Life' versions. You can still use 12.0 SP 18 for compatibility with (12.0 SP*) versions.

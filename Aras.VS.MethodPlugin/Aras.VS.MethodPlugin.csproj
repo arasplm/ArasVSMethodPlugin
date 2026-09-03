@@ -179,9 +179,6 @@
     <Resource Include="..\sharedfiles\resources\refresh-16x16.png">
       <Link>Resources\refresh-16x16.png</Link>
     </Resource>
-    <Resource Include="..\sharedfiles\resources\Run.png">
-      <Link>Resources\Run.png</Link>
-    </Resource>
     <Resource Include="..\sharedfiles\resources\runSearchBtn.Image.png">
       <Link>Resources\runSearchBtn.Image.png</Link>
     </Resource>
@@ -211,62 +208,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="MethodLauncherNetCore\netcoreapp3.1\Castle.Core.dll">
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="MethodLauncherNetCore\netcoreapp3.1\MethodLauncherNetCore.dll">
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="MethodLauncherNetCore\netcoreapp3.1\MethodLauncherNetCore.exe">
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="MethodLauncherNetCore\netcoreapp3.1\MethodLauncherNetCore.pdb">
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="MethodLauncherNetCore\netcoreapp3.1\Microsoft.Extensions.Logging.Abstractions.dll">
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="MethodLauncherNetCore\netcoreapp3.1\NSubstitute.dll">
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="MethodLauncherNetCore\netcoreapp3.1\nunit.framework.dll">
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="MethodLauncherNetCore\netcoreapp3.1\System.Private.ServiceModel.dll">
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="MethodLauncherNetCore\netcoreapp3.1\System.Reflection.DispatchProxy.dll">
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="MethodLauncherNetCore\netcoreapp3.1\System.ServiceModel.dll">
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="MethodLauncherNetCore\netcoreapp3.1\System.ServiceModel.Primitives.dll">
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="MethodLauncher\MethodLauncher.exe">
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="MethodLauncher\MethodLauncher.pdb">
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="MethodLauncher\NSubstitute.dll">
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
     <Content Include="Resources\LICENSE">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="MethodLauncher\MethodLauncher.exe.config">
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="MethodLauncherNetCore\netcoreapp3.1\MethodLauncherNetCore.deps.json">
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="MethodLauncherNetCore\netcoreapp3.1\MethodLauncherNetCore.runtimeconfig.dev.json">
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="MethodLauncherNetCore\netcoreapp3.1\MethodLauncherNetCore.runtimeconfig.json">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <None Include="source.extension.vsixmanifest">
@@ -299,11 +242,6 @@
   <ItemGroup>
     <Resource Include="..\sharedfiles\resources\16x16-ImportOpenInVSAction.png">
       <Link>Resources\16x16-ImportOpenInVSAction.png</Link>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="..\sharedfiles\resources\16x16-Run.png">
-      <Link>Resources\16x16-Run.png</Link>
     </Resource>
   </ItemGroup>
   <ItemGroup>
@@ -427,21 +365,6 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MethodLauncher\MethodLauncher.csproj">
-      <Project>{e8cd6b11-2b91-417a-8c87-210db84c94f0}</Project>
-      <Name>MethodLauncher</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <Private>false</Private>
-      <IncludeOutputGroupsInVSIX>GetEmptyVsixOutputGroup</IncludeOutputGroupsInVSIX>
-    </ProjectReference>
-    <ProjectReference Include="..\MethodLauncherNetCore\MethodLauncherNetCore.csproj">
-      <Project>{ad4d1d0b-a775-4abb-a25d-19bd7ee52560}</Project>
-      <Name>MethodLauncherNetCore</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <Private>false</Private>
-      <IncludeOutputGroupsInVSIX>GetEmptyVsixOutputGroup</IncludeOutputGroupsInVSIX>
-      <SkipGetTargetFrameworkProperties>true</SkipGetTargetFrameworkProperties>
-    </ProjectReference>
     <ProjectReference Include="..\Aras.Method.Libs\Aras.Method.Libs.csproj">
       <Project>{8450a949-cb6b-4530-a968-ad9d9d1d63cf}</Project>
       <Name>Aras.Method.Libs</Name>

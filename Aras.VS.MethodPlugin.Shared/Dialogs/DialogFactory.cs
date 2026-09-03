@@ -192,16 +192,6 @@ namespace Aras.VS.MethodPlugin.Dialogs
 			return new CreateCodeItemViewAdapter(view);
 		}
 
-		public IViewAdaper<DebugMethodView, DebugMethodViewResult> GetDebugMethodView(IProjectConfigurationManager projectConfigurationManager, MethodInfo methodInformation, string methodCode, string projectConfigPath, string projectName, string projectFullName)
-		{
-			var viewModel = new DebugMethodViewModel(authManager, projectConfigurationManager, methodInformation, this, methodCode, projectConfigPath, projectName, projectFullName);
-			var view = new DebugMethodView();
-			view.DataContext = viewModel;
-
-			AttachToParentWindow(view);
-			return new DebugMethodViewAdapter(view);
-		}
-
 		public IViewAdaper<OpenFromPackageTreeView, OpenFromPackageTreeViewResult> GetOpenFromPackageTreeView(string actualFolderPath, string package, string methodName, string selectedSearchType)
 		{
 			var viewModel = new OpenFromPackageTreeViewModel(this, this.iOWrapper, this.messageManager, actualFolderPath, package, methodName, selectedSearchType);

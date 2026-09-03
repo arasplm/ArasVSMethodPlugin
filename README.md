@@ -22,7 +22,6 @@ See the [change log](CHANGELOG.md) for changes and road map.
 - Save method to AML package
 - Partial class generation
 - External class generation
-- Debug server method
 
 
 ## Contribute

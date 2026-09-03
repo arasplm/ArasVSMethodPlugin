@@ -158,11 +158,6 @@
         <Parent guid="ArasItemGroupCmdSet" id="ArasItemMenu" />
       </Group>
 
-      <!--Item debug groups-->
-      <Group guid="ArasItemDebugGroupCmdSet" id="ItemDebugGroup" priority="0x0204">
-        <Parent guid="ArasItemGroupCmdSet" id="ArasItemMenu" />
-      </Group>
-
       <!--Aras context menu group-->
       <Group guid="ArasContextMenuGroupCmdSet" id="ArasContextMenuGroup" priority="0x0600">
         <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN" />
@@ -277,15 +272,6 @@
         </Strings>
       </Button>
 
-      <Button guid="ArasDebugMethodCmdSet" id="ArasDebugMethodCommandId" priority="0x0104" type="Button">
-        <Icon guid="guidDebugMethodImages" id="bmpPic1" />
-        <CommandFlag>DynamicVisibility</CommandFlag>
-        <CommandFlag>DefaultInvisible</CommandFlag>
-        <Strings>
-          <ButtonText>Debug method</ButtonText>
-        </Strings>
-      </Button>
-
       <Button guid="ArasRefactoringGroupCmdSet" id="ArasMoveToCommandId" priority="0x0105" type="Button">
         <Icon guid="guidOpenFromPackageImages" id="bmpPic1" />
         <CommandFlag>DynamicVisibility</CommandFlag>
@@ -316,7 +302,6 @@
       <Bitmap guid="guidEditPackageImages" href="..\SharedFiles\Resources\Package_16x16.png" usedList="bmpPic1" />
 
       <Bitmap guid="guidRefreshMethodFromArasImages" href="..\SharedFiles\Resources\refresh-16x16.png" usedList="bmpPic1" />
-      <Bitmap guid="guidDebugMethodImages" href="..\SharedFiles\Resources\16x16-Run.png" usedList="bmpPic1" />
 
 			<Bitmap guid="guidImportOpenInVSActionImages" href="..\SharedFiles\Resources\16x16-ImportOpenInVSAction.png" usedList="bmpPic1" />
     </Bitmaps>
@@ -349,9 +334,6 @@
       <Parent guid="ArasToolbarGroupCmdSet" id="ToolbarGroup" />
     </CommandPlacement>
     <CommandPlacement guid="ArasSettingCmdSet" id="ArasSedttingCommandId" priority="0x0109">
-      <Parent guid="ArasToolbarGroupCmdSet" id="ToolbarGroup" />
-    </CommandPlacement>
-    <CommandPlacement guid="ArasDebugMethodCmdSet" id="ArasDebugMethodCommandId" priority="0x0111">
       <Parent guid="ArasToolbarGroupCmdSet" id="ToolbarGroup" />
     </CommandPlacement>
 		<CommandPlacement guid="ArasImportOpenInVSActionCmdSet" id="ArasImportOpenInVSActionCommandId" priority="0x0112">
@@ -393,10 +375,6 @@
     <CommandPlacement guid="ArasUpdateMethodCmdSet" id="ArasUpdateMethodFormArasCommandId" priority="0x0103">
       <Parent guid="ArasItemUpdateMethodCmdSet" id="UpdateMethodGroup" />
     </CommandPlacement>
-    <CommandPlacement guid="ArasDebugMethodCmdSet" id="ArasDebugMethodCommandId" priority="0x0104">
-      <Parent guid="ArasItemDebugGroupCmdSet" id="ItemDebugGroup"/>
-    </CommandPlacement>
-
     <!-- Context menu-->
     <CommandPlacement guid="ArasRefactoringGroupCmdSet" id="ArasMoveToCommandId" priority="0x0105">
       <Parent guid="ArasRefactoringGroupCmdSet" id="ArasRefactoringGroup" />
@@ -432,9 +410,6 @@
     </GuidSymbol>
     <GuidSymbol name="ArasUpdateMethodCmdSet" value="{CF767190-3696-4365-9857-3600622B097D}">
       <IDSymbol name="ArasUpdateMethodFormArasCommandId" value="0x0104"/>
-    </GuidSymbol>
-    <GuidSymbol name="ArasDebugMethodCmdSet" value="{020DC4DF-2FC3-493E-97D3-4012DE93BCAB}">
-      <IDSymbol name="ArasDebugMethodCommandId" value="0x0104"/>
     </GuidSymbol>
     <GuidSymbol name="ArasSettingCmdSet" value="{E15DDF0A-1B6E-46A8-8B78-AEC2A7BB4922}">
       <IDSymbol name="ArasSedttingCommandId" value="0x104"/>
@@ -525,18 +500,6 @@
       <IDSymbol name="ArasItemMenu" value="0x700" />
     </GuidSymbol>
 
-    <GuidSymbol name="ArasItemDebugMethodCmdSet" value="{020DC4DF-2FC3-493E-97D3-4012DE93BCAB}">
-      <IDSymbol name="ItemDebugGroup" value="0x0204" />
-      <IDSymbol name="ArasItemMenu" value="0x700" />
-      <IDSymbol name="ArasItemDebugMethodCommandId" value="0x0104" />
-    </GuidSymbol>
-
-    <GuidSymbol name="ArasItemDebugGroupCmdSet" value="{169E9027-DAB1-4E05-B1CA-32E14D5DA564}">
-      <IDSymbol name="ItemDebugGroup" value="0x0204" />
-      <IDSymbol name="ArasItemMenu" value="0x700" />
-      <IDSymbol name="ArasItemDebugMethodCmdSet" value="0x0104" />
-    </GuidSymbol>
-
     <!-- Context menu-->
     <GuidSymbol name="ArasRefactoringGroupCmdSet" value="{e9768243-2e32-45cc-9fc6-76d28ccb244a}">
       <IDSymbol name="ArasMoveToCommandId" value="0x0105"/>
@@ -585,9 +548,6 @@
       <IDSymbol name="bmpPic1" value="1" />
     </GuidSymbol>
     <GuidSymbol name="guidRefreshMethodFromArasImages" value="{b52fea1d-852f-4d2f-9b00-3b18624e9810}">
-      <IDSymbol name="bmpPic1" value="1" />
-    </GuidSymbol>
-    <GuidSymbol name="guidDebugMethodImages" value="{26969D84-B33C-4E29-ADD0-8E37A107C2F7}">
       <IDSymbol name="bmpPic1" value="1" />
     </GuidSymbol>
 		<GuidSymbol name="guidImportOpenInVSActionImages" value="{E2B187BD-414F-4095-9BA4-38480DC6DC54}">

@@ -56,7 +56,6 @@ Implemented commands:
 - `ConnectionInfoCmd` shows 'Connection Info' dialog.
 - `CreateCodeItemCmd` creates and places a new file with a new code item (interface, class, etc.). More information [More information](https://github.com/arasplm/ArasVSMethodPlugin/wiki/Create-Code-Item).
 - `CreateMethodCmd` creates new method. [More information](https://github.com/arasplm/ArasVSMethodPlugin/wiki/Create-Method).
-- `DebugMethodCmd` starts debug session for the method. [More information](https://github.com/arasplm/ArasVSMethodPlugin/wiki/Debug-Method).
 - `ImportOpenInVSActionCmd` imports 'Open in VS' action to the Aras Innovator. [More information](https://github.com/arasplm/ArasVSMethodPlugin/wiki/Import-%27Open-in-Visual-Studio%27-Action).
 - `MoveToCmd` moves a code element to the partial class or external file. [More information](https://github.com/arasplm/ArasVSMethodPlugin/wiki/Move-to...).
 - `OpenFromArasCmd` opens method from Aras Innovator. [More information](https://github.com/arasplm/ArasVSMethodPlugin/wiki/Open-Method-from-Aras).
@@ -111,12 +110,3 @@ Contains detailed information about plugin's assets and installation.
 ### ArasMainMenuCmdPackage.vsct file
 
 Defines where buttons or menu items for commands should be placed.
-
-
-## MethodLauncher project
-
-`MethodLauncher` project contains special console application that executes compiled Method localy. It is used to start execution process and attach to it Visual Studio to enable debugging session. The applicaiton crate connection to the Aras Innovator, loads a library with the Server Method and calls entry method with appropriate parameters.
-
-## MethodLauncherNetCore project
-
-`MethodLauncherNetCore` is the same application as `MethodLauncher`, but it is updated to support .NET Core for Innovator of 14+ versions.

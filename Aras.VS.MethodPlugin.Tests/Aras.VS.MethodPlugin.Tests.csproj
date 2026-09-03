@@ -93,7 +93,6 @@
     <Compile Include="Dialogs\SubAdapters\OpenFileDialogTestAdapter.cs" />
     <Compile Include="Dialogs\SubAdapters\OpenFromPackageTreeViewTestAdapter.cs" />
     <Compile Include="Dialogs\ViewModels\CreateCodeItemViewModelTest.cs" />
-    <Compile Include="Dialogs\ViewModels\DebugMethodViewModelTest.cs" />
     <Compile Include="Dialogs\ViewModels\LoginViewModelTest.cs" />
     <Compile Include="Commands\AuthenticationCommandBaseTest.cs" />
     <Compile Include="Commands\CmdBaseTest.cs" />
@@ -105,7 +104,6 @@
     <Compile Include="Commands\RefreshConfigCmdTest.cs" />
     <Compile Include="Commands\OpenFromPackageCmdTest.cs" />
     <Compile Include="Commands\OpenFromArasCmdTest.cs" />
-    <Compile Include="Commands\DebugMethodCmdTest.cs" />
     <Compile Include="Commands\CreatePartialElementCmdTest.cs" />
     <Compile Include="Commands\CreateMethodCmdTest.cs" />
     <Compile Include="Configurations\GlobalConfigurationTest.cs" />

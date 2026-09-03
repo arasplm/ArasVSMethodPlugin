@@ -28,18 +28,6 @@ bld/
 [Ll]ogs/
 [Oo]ut/
 
-## MethodLauncher build outputs (PostBuild copy targets)
-Aras.VS.MethodPlugin/MethodLauncher/*.exe
-Aras.VS.MethodPlugin/MethodLauncher/*.pdb
-Aras.VS.MethodPlugin/MethodLauncher/*.dll
-Aras.VS.MethodPlugin/MethodLauncher/*.exe.config
-Aras.VS.MethodPlugin/MethodLauncherNetCore/
-SharedFiles/MethodLauncher/*.exe
-SharedFiles/MethodLauncher/*.pdb
-SharedFiles/MethodLauncher/*.dll
-SharedFiles/MethodLauncher/*.exe.config
-SharedFiles/MethodLauncherNetCore/
-
 ## MSTest test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*

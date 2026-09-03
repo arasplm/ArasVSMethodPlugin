@@ -659,18 +659,6 @@ namespace Aras.VS.MethodPlugin.SolutionManagement
 			return fileProjectItem;
 		}
 
-		public void AttachToProcess(System.Diagnostics.Process process)
-		{
-			DTE dte = (DTE)this.vsPackageWrapper.GetGlobalService(typeof(DTE));
-			foreach (EnvDTE.Process processToAttach in dte.Debugger.LocalProcesses)
-			{
-				if (processToAttach.ProcessID == process.Id)
-				{
-					processToAttach.Attach();
-				}
-			}
-		}
-
 		public void AddSuppression(string suppressName, string ruleCategory, string ruleId, string scope = "", string target = "")
 		{
 			StringBuilder stringBuilder = new StringBuilder();

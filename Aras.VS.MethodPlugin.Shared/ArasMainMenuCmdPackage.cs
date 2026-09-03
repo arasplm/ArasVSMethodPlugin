@@ -128,7 +128,6 @@ namespace Aras.VS.MethodPlugin
 			Commands.ConnectionInfoCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, messageManager);
 			Commands.CreateCodeItemCmd.Initialize(projectManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
 			Commands.RefreshConfigCmd.Initialize(projectManager, dialogFactory, projectConfigurationManager, messageManager);
-			Commands.DebugMethodCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
 			Commands.MoveToCmd.Initialize(projectManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
 			Commands.ImportOpenInVSActionCmd.Initialize(projectManager, authManager, dialogFactory, projectConfigurationManager, codeProviderFactory, messageManager);
 
