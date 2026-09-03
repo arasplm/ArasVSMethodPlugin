@@ -22,7 +22,8 @@ namespace Aras.Method.Libs
 			{ "startYourCodeInsideRegionMethodCodeDoNotChangeCodeAbove", "// start your code inside region MethodCode - DO NOT CHANGE CODE ABOVE" },
 			{ "endyourCodeInsideRegionMethodCodeDoNotChangeCodeBelow", "// end your code inside region MethodCode - DO NOT CHANGE CODE BELOW" },
 			{ "errorWhileLoadingProjectConfigFile", "Error while loading project config file." },
-			{ "errorWhileSavingProjectConfigFile", "Error while saving project config file." }
+			{ "errorWhileSavingProjectConfigFile", "Error while saving project config file." },
+			{ "MethodCodeRegionNotFound", "The method source does not contain valid '#region MethodCode' and '#endregion MethodCode' boundaries." }
 		};
 
 		public virtual string GetMessage(string key)

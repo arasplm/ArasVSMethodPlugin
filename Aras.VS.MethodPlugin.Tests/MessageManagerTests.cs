@@ -18,6 +18,7 @@ namespace Aras.VS.MethodPlugin.Tests
 		[TestCase("AuthenticationFailedFor", "Authentication failed for {0}.")]
 		[TestCase("CurrentProjectTypeIsNotSupported", "Current project type is not supported")]
 		[TestCase("NoPartialClassesFound", "No partial classes found.")]
+		[TestCase("MethodCodeRegionNotFound", "The method source does not contain valid '#region MethodCode' and '#endregion MethodCode' boundaries.")]
 		[TestCase("MethodNameCaNotBeEmpty", "Method name can not be empty.")]
 		[TestCase("TemplateNotFound", "Template not found.")]
 		[TestCase("NoAttributeFound", "No attribute found.")]

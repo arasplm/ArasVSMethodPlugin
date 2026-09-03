@@ -7,8 +7,11 @@ install:
 - ps: (new-object Net.WebClient).DownloadString("https://raw.github.com/madskristensen/ExtensionScripts/master/AppVeyor/vsix.ps1") | iex
 
 before_build:
-  - ps: Vsix-IncrementVsixVersion | Vsix-UpdateBuildVersion
-  #- ps: Vsix-TokenReplacement Aras.VS.MethodPlugin\source.extension.cs 'Version = "([0-9\\.]+)"' 'Version = "{version}"'
+  - ps: |
+      $versionInfo = Vsix-IncrementVsixVersion
+      $versionInfo | Vsix-UpdateBuildVersion
+      $env:APPVEYOR_BUILD_VERSION = $versionInfo.Version
+      Vsix-TokenReplacement Aras.VS.MethodPlugin\Properties\AssemblyInfo.cs 'AssemblyFileVersion\("[0-9\.]+"\)' 'AssemblyFileVersion("{version}.0")'
 
 build_script:
   - nuget restore -Verbosity quiet

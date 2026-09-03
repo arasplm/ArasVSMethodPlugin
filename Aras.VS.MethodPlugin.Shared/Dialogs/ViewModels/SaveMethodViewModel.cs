@@ -16,6 +16,7 @@ using Aras.VS.MethodPlugin.ArasInnovator;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.ItemSearch;
 using Aras.VS.MethodPlugin.PackageManagement;
+using Aras.VS.MethodPlugin.Utilities;
 using OfficeConnector.Dialogs;
 
 namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
@@ -321,11 +322,9 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 			}
 			catch (Exception ex)
 			{
+				ExceptionMessage diagnostic = ExceptionMessageFormatter.Format(ex, "AVS-SAVE-001", $"Save method '{MethodName}' to Aras Innovator");
 				var messageWindow = this.dialogFactory.GetMessageBoxWindow();
-				messageWindow.ShowDialog(ex.Message,
-					messageManager.GetMessage("ArasVSMethodPlugin"),
-					MessageButtons.OK,
-					MessageIcon.Error);
+				messageWindow.ShowDiagnosticDialog(diagnostic.Summary, diagnostic.Details, messageManager.GetMessage("ArasVSMethodPlugin"));
 			}
 		}
 

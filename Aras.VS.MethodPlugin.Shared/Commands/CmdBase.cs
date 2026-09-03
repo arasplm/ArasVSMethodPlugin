@@ -10,6 +10,7 @@ using Aras.Method.Libs;
 using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.SolutionManagement;
+using Aras.VS.MethodPlugin.Utilities;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -64,11 +65,9 @@ namespace Aras.VS.MethodPlugin.Commands
 			}
 			catch (Exception ex)
 			{
+				ExceptionMessage diagnostic = ExceptionMessageFormatter.Format(ex, "AVS-CMD-001", $"Execute {GetType().Name}");
 				var messageWindow = dialogFactory.GetMessageBoxWindow();
-				messageWindow.ShowDialog(ex.ToString(),
-					messageManager.GetMessage("ArasVSMethodPlugin"),
-					MessageButtons.OK,
-					MessageIcon.Error);
+				messageWindow.ShowDiagnosticDialog(diagnostic.Summary, diagnostic.Details, messageManager.GetMessage("ArasVSMethodPlugin"));
 			}
 			finally
 			{

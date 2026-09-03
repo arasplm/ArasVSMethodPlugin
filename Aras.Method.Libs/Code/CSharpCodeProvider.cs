@@ -1011,10 +1011,15 @@ namespace Aras.Method.Libs.Code
 			var endMatch = Regex.Match(codeWithRegion, endRegionPattern);
 			if (!startMatch.Success || !endMatch.Success)
 			{
-				throw new Exception();
+				throw new Exception(messageManager.GetMessage("MethodCodeRegionNotFound"));
 			}
 
 			int userCodeStartIndex = startMatch.Index + startMatch.Length;
+			if (endMatch.Index < userCodeStartIndex)
+			{
+				throw new Exception(messageManager.GetMessage("MethodCodeRegionNotFound"));
+			}
+
 			int userCodeEndIndex = endMatch.Index;
 			int userCodeLength = userCodeEndIndex - userCodeStartIndex;
 

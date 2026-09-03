@@ -6,6 +6,7 @@
 
 using System.Diagnostics;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -20,6 +21,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 	public partial class MessageBoxWindow : Window, IMessageBoxWindow
     {
 		private MessageDialogResult dialogResult = MessageDialogResult.Cancel;
+		private string diagnosticDetails;
 
 		public MessageBoxWindow()
 		{
@@ -51,6 +53,19 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 		{
 			this.dialogResult = MessageDialogResult.Cancel;
 			this.Close();
+		}
+
+		private void CopyDetailsButton_Click(object sender, RoutedEventArgs e)
+		{
+			try
+			{
+				Clipboard.SetText(this.diagnosticDetails);
+				this.CopyDetailsButton.Content = "Copied";
+			}
+			catch (ExternalException)
+			{
+				this.CopyDetailsButton.Content = "Copy failed";
+			}
 		}
 
 		public MessageDialogResult ShowDialog(Window owner, string message, string title, MessageButtons buttons, MessageIcon icon)
@@ -113,6 +128,15 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 
 			this.ShowDialog();
 			return dialogResult;
+		}
+
+		public MessageDialogResult ShowDiagnosticDialog(string message, string details, string title)
+		{
+			if (string.IsNullOrEmpty(details)) throw new System.ArgumentException("Diagnostic details are required.", nameof(details));
+
+			this.diagnosticDetails = details;
+			this.CopyDetailsButton.Visibility = Visibility.Visible;
+			return ShowDialog(message, title, MessageButtons.OK, MessageIcon.Error);
 		}
 
 		private ImageSource iconToImageSource(Icon icon)

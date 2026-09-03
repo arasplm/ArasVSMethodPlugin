@@ -97,7 +97,7 @@ namespace Aras.VS.MethodPlugin.Commands
 			MethodInfo methodInformation = projectConfigurationManager.CurrentProjectConfiguraiton.MethodInfos.FirstOrDefault(m => m.MethodName == selectedMethodName);
 			if (methodInformation == null)
 			{
-				throw new Exception();
+				throw new Exception(this.messageManager.GetMessage("ConfigurationsForTheMethodNotFound", selectedMethodName));
 			}
 
 			string packageMethodFolderPath = this.projectConfigurationManager.CurrentProjectConfiguraiton.UseCommonProjectStructure ? methodInformation.Package.MethodFolderPath : string.Empty;

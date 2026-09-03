@@ -45,10 +45,15 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Image x:Name="MessageImage" Grid.Column="0" Width="42" Height="42" Margin="10, 0, 0, 0" />
-                <TextBlock x:Name="MessageTextBlock" Grid.Column="1" Grid.Row="0" Margin="10,20,20,20" TextWrapping="Wrap" />
+                <TextBox x:Name="MessageTextBlock" Grid.Column="1" Grid.Row="0" Margin="10,20,20,20"
+                    MaxHeight="420" MinWidth="300" IsReadOnly="True" TextWrapping="Wrap"
+                    VerticalScrollBarVisibility="Auto" BorderThickness="0" Background="Transparent" />
             </Grid>
             <Grid Grid.Row="1">
                 <UniformGrid Rows="1" MinHeight="45" HorizontalAlignment="Right">
+                    <Button x:Name="CopyDetailsButton" Content="Copy details" Margin="10" MinWidth="100"
+                        Visibility="Collapsed" Click="CopyDetailsButton_Click"
+                        ToolTip="Copies technical details that may contain paths or server response data. Review before sharing." />
                     <Button x:Name="OKButton" Content="OK" Margin="10" MinWidth="80"
                         Click="OKButton_Click" />
                     <Button x:Name="YesButton" Content="Yes" Margin="10" MinWidth="80"

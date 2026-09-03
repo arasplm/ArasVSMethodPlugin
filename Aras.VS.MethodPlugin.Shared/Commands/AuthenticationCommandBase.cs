@@ -13,6 +13,7 @@ using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Dialogs;
 using Aras.VS.MethodPlugin.OpenMethodInVS;
 using Aras.VS.MethodPlugin.SolutionManagement;
+using Aras.VS.MethodPlugin.Utilities;
 using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Aras.VS.MethodPlugin.Commands
@@ -73,11 +74,9 @@ namespace Aras.VS.MethodPlugin.Commands
 			}
 			catch (Exception ex)
 			{
+				ExceptionMessage diagnostic = ExceptionMessageFormatter.Format(ex, "AVS-AUTH-CMD-001", $"Authenticate and execute {GetType().Name}");
 				var messageWindow = dialogFactory.GetMessageBoxWindow();
-				messageWindow.ShowDialog(ex.Message,
-					messageManager.GetMessage("ArasVSMethodPlugin"),
-					MessageButtons.OK,
-					MessageIcon.Error);
+				messageWindow.ShowDiagnosticDialog(diagnostic.Summary, diagnostic.Details, messageManager.GetMessage("ArasVSMethodPlugin"));
 			}
 			finally
 			{

@@ -7,6 +7,7 @@ using Aras.Method.Libs.Configurations.ProjectConfigurations;
 using Aras.VS.MethodPlugin.Authentication;
 using Aras.VS.MethodPlugin.Commands;
 using Aras.VS.MethodPlugin.Dialogs;
+using Aras.VS.MethodPlugin.Dialogs.Views;
 using Aras.VS.MethodPlugin.SolutionManagement;
 using NSubstitute;
 using NUnit.Framework;
@@ -99,6 +100,28 @@ namespace Aras.VS.MethodPlugin.Tests.Commands
 
 			//Assert
 			Assert.IsTrue(projectManager.SaveDirtyFiles(dialogFactory, projectConfigurationManager.CurrentProjectConfiguraiton.MethodInfos));
+		}
+
+		[Test]
+		public void ExecuteCommand_LoadConfigurationThrows_ShouldShowStructuredAuthenticationDiagnosticMessage()
+		{
+			var messageWindow = Substitute.For<IMessageBoxWindow>();
+			dialogFactory.GetMessageBoxWindow().Returns(messageWindow);
+			projectConfigurationManager.When(manager => manager.Load(Arg.Any<string>()))
+				.Do(callback => { throw new ApplicationException("Configuration load failed.", new InvalidOperationException("Invalid connection data.")); });
+
+			authenticationCommandBaseTest.ExecuteCommand(null, null);
+
+			messageWindow.Received().ShowDiagnosticDialog(
+				Arg.Is<string>(message => message.Contains("Error code: AVS-AUTH-CMD-001")
+					&& message.Contains("Operation: Authenticate and execute AuthenticationCommandBaseTest")
+					&& message.Contains("Reason: Invalid connection data.")
+					&& !message.Contains("Technical details:")),
+				Arg.Is<string>(details => details.Contains(typeof(ApplicationException).FullName)
+					&& details.Contains("Configuration load failed.")
+					&& details.Contains("Invalid connection data.")
+					&& details.Contains("Technical details:")),
+				Arg.Any<string>());
 		}
 	}
 }

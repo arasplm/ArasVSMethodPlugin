@@ -14,6 +14,7 @@ namespace Aras.VS.MethodPlugin.Dialogs.Views
 
         MessageDialogResult ShowDialog(string message, string title, MessageButtons buttons, MessageIcon icon);
 
+        MessageDialogResult ShowDiagnosticDialog(string message, string details, string title);
 
     }
 }

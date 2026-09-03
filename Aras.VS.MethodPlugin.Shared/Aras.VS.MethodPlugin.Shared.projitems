@@ -191,6 +191,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)SolutionManagement\IProjectManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SolutionManagement\ProjectManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SolutionManagement\ProjectUpdater.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\ExceptionMessageFormatter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\Utils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\XmlNodeExt.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)VisualStudioMessageManager.cs" />

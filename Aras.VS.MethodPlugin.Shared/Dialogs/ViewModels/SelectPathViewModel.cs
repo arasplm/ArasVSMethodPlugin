@@ -15,6 +15,7 @@ using Aras.Method.Libs;
 using Aras.VS.MethodPlugin.Dialogs.Directory;
 using Aras.VS.MethodPlugin.Dialogs.Directory.Data;
 using Aras.VS.MethodPlugin.Dialogs.Views;
+using Aras.VS.MethodPlugin.Utilities;
 
 namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 {
@@ -242,11 +243,9 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				}
 				catch (Exception ex)
 				{
+					ExceptionMessage diagnostic = ExceptionMessageFormatter.Format(ex, "AVS-FS-001", $"Rename folder '{selectDirectoryItem.FullPath}' to '{newFullPath}'");
 					var messageWindow = this.dialogFactory.GetMessageBoxWindow();
-					messageWindow.ShowDialog(ex.Message,
-						messageManager.GetMessage("ArasVSMethodPlugin"),
-						MessageButtons.OK,
-						MessageIcon.Error);
+					messageWindow.ShowDiagnosticDialog(diagnostic.Summary, diagnostic.Details, messageManager.GetMessage("ArasVSMethodPlugin"));
 				}
 			}
 		}
@@ -271,11 +270,9 @@ namespace Aras.VS.MethodPlugin.Dialogs.ViewModels
 				}
 				catch (Exception ex)
 				{
+					ExceptionMessage diagnostic = ExceptionMessageFormatter.Format(ex, "AVS-FS-002", $"Delete folder '{selectDirectoryItem.FullPath}'");
 					var errorWindow = this.dialogFactory.GetMessageBoxWindow();
-					errorWindow.ShowDialog(ex.Message,
-						messageManager.GetMessage("ArasVSMethodPlugin"),
-						MessageButtons.OK,
-						MessageIcon.Error);
+					errorWindow.ShowDiagnosticDialog(diagnostic.Summary, diagnostic.Details, messageManager.GetMessage("ArasVSMethodPlugin"));
 				}
 			}
 		}

@@ -117,6 +117,21 @@ namespace Aras.VS.MethodPlugin.Tests.Code
 			Assert.Throws<ArgumentException>(testDelegate);
 		}
 
+		[Test]
+		public void GetSourceCodeBetweenRegion_EndRegionBeforeStartRegion_ShouldThrowActionableException()
+		{
+			messageManager.GetMessage("MethodCodeRegionNotFound").Returns("Invalid MethodCode regions.");
+			string sourceCode = "\r\n#endregion MethodCode\r\n#region MethodCode\r\nreturn null;";
+			System.Reflection.MethodInfo getSourceCodeBetweenRegion = typeof(CSharpCodeProvider).GetMethod(
+				"GetSourceCodeBetweenRegion",
+				System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+
+			System.Reflection.TargetInvocationException exception = Assert.Throws<System.Reflection.TargetInvocationException>(
+				() => getSourceCodeBetweenRegion.Invoke(codeProvider, new object[] { sourceCode }));
+
+			Assert.AreEqual("Invalid MethodCode regions.", exception.InnerException.Message);
+		}
+
 
 		[Test]
 		[Ignore("Should be updated")]
