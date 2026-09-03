@@ -128,7 +128,7 @@
 								Background="#00FFFFFF"
 								BorderBrush="#00FFFFFF"
 								IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-								Style="{DynamicResource DropDownToggleButton}"
+								Style="{DynamicResource ComboBoxToggleButton}"
 								TextElement.Foreground="{DynamicResource {x:Static shell:EnvironmentColors.DropDownGlyphBrushKey}}" />
 							<ContentPresenter
 								Grid.Column="0"
