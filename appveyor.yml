@@ -1,27 +1,77 @@
-image: Visual Studio 2022
+image:
+  - Visual Studio 2022
+  - Visual Studio 2026
+
+matrix:
+  fast_finish: true
 
 init:
 - git config --global core.autocrlf false
 
-install:
-- ps: (new-object Net.WebClient).DownloadString("https://raw.github.com/madskristensen/ExtensionScripts/master/AppVeyor/vsix.ps1") | iex
-
 before_build:
   - ps: |
-      $versionInfo = Vsix-IncrementVsixVersion
-      $versionInfo | Vsix-UpdateBuildVersion
-      $env:APPVEYOR_BUILD_VERSION = $versionInfo.Version
-      Vsix-TokenReplacement Aras.VS.MethodPlugin\Properties\AssemblyInfo.cs 'AssemblyFileVersion\("[0-9\.]+"\)' 'AssemblyFileVersion("{version}.0")'
+      $manifestPath = 'Aras.VS.MethodPlugin\source.extension.vsixmanifest'
+      $assemblyInfoPath = 'Aras.VS.MethodPlugin\Properties\AssemblyInfo.cs'
+      [xml]$manifest = Get-Content $manifestPath
+      $namespace = New-Object System.Xml.XmlNamespaceManager($manifest.NameTable)
+      $namespace.AddNamespace('vsix', $manifest.DocumentElement.NamespaceURI)
+      $identity = $manifest.SelectSingleNode('//vsix:Identity', $namespace)
+      $baseVersion = [Version]$identity.Version
+      $buildVersion = New-Object Version($baseVersion.Major, $baseVersion.Minor, [int]$env:APPVEYOR_BUILD_NUMBER)
+      $identity.Version = $buildVersion.ToString()
+      $manifest.Save($manifestPath)
+      Update-AppveyorBuild -Version $buildVersion.ToString()
+      $env:APPVEYOR_BUILD_VERSION = $buildVersion.ToString()
+
+      $assemblyInfo = [System.IO.File]::ReadAllText($assemblyInfoPath)
+      $versionPattern = 'AssemblyFileVersion\("[0-9\.]+"\)'
+      if ([Regex]::Matches($assemblyInfo, $versionPattern).Count -ne 1) {
+        throw 'Expected exactly one AssemblyFileVersion attribute.'
+      }
+      $assemblyInfo = [Regex]::Replace($assemblyInfo, $versionPattern, "AssemblyFileVersion(`"$buildVersion.0`")")
+      [System.IO.File]::WriteAllText($assemblyInfoPath, $assemblyInfo, (New-Object System.Text.UTF8Encoding($false)))
 
 build_script:
-  - nuget restore -Verbosity quiet
-  - msbuild /p:configuration=Release /p:DeployExtension=false /p:ZipPackageCompressionLevel=normal /v:m
+  - msbuild Aras.VS.MethodPlugin.sln /t:Restore /p:RestorePackagesConfig=true /v:m
+  - msbuild Aras.VS.MethodPlugin.sln /p:configuration=Release /p:DeployExtension=false /p:ZipPackageCompressionLevel=normal /v:m
+
+after_build:
+  - ps: |
+      $vsixPath = 'Aras.VS.MethodPlugin\bin\Release\Aras.VS.MethodPlugin.vsix'
+      $manifestPath = 'Aras.VS.MethodPlugin\source.extension.vsixmanifest'
+      Add-Type -AssemblyName System.IO.Compression.FileSystem
+      [xml]$manifest = Get-Content $manifestPath
+      $namespace = New-Object System.Xml.XmlNamespaceManager($manifest.NameTable)
+      $namespace.AddNamespace('vsix', $manifest.DocumentElement.NamespaceURI)
+      $namespace.AddNamespace('d', 'http://schemas.microsoft.com/developer/vsx-schema-design/2011')
+      $expectedTemplates = $manifest.SelectNodes("//vsix:Asset[@Type='Microsoft.VisualStudio.ProjectTemplate']", $namespace) |
+        ForEach-Object {
+          $targetPath = $_.GetAttribute('TargetPath', $namespace.LookupNamespace('d')).Replace('\', '/')
+          $templateDirectory = $targetPath -replace '\.zip$', ''
+          (($templateDirectory -split '/') | ForEach-Object { [Uri]::EscapeDataString($_) }) -join '/'
+        }
+      $archive = [System.IO.Compression.ZipFile]::OpenRead($vsixPath)
+      try {
+        $entries = @($archive.Entries | ForEach-Object { $_.FullName.Replace('\', '/') })
+        $missingTemplates = @($expectedTemplates | Where-Object { "$_/MyTemplate.vstemplate" -notin $entries })
+        if ($missingTemplates.Count -gt 0) {
+          throw "VSIX is missing project templates: $($missingTemplates -join ', ')"
+        }
+        $obsoleteLaunchers = @($entries | Where-Object { $_ -match '(^|/)MethodLauncher(NetCore)?/' })
+        if ($obsoleteLaunchers.Count -gt 0) {
+          throw "VSIX contains obsolete launcher files: $($obsoleteLaunchers -join ', ')"
+        }
+      }
+      finally {
+        $archive.Dispose()
+      }
 
 test:
-# only assemblies to test
   assemblies:
     only:
       - Aras.VS.MethodPlugin.Tests.dll
+      - Aras.Method.Libs.Tests.dll
 
-after_test:
-  - ps: Vsix-PushArtifacts | Vsix-PublishToGallery
+artifacts:
+  - path: Aras.VS.MethodPlugin\bin\Release\Aras.VS.MethodPlugin.vsix
+    name: VSIX-$(APPVEYOR_BUILD_WORKER_IMAGE)
