@@ -32,11 +32,10 @@ var url = aras.getInnovatorUrl();
 var inn = this.getInnovator();
 var majorVersion = inn.getItemByKeyedName("Variable", "VersionMajor").getProperty("value");
 var minorVersion = inn.getItemByKeyedName("Variable", "VersionMinor").getProperty("value");
-var servicePack = inn.getItemByKeyedName("Variable", "VersionServicePack").getProperty("value");
 
-var innovatorVersion = `${majorVersion}.${minorVersion} ${servicePack}`;
+var innovatorVersion = `${majorVersion}.${minorVersion}`;
 
-var openInVsLink = `openinvs://ArasVersion=${innovatorVersion.trim()}&MethodId=${methodId}&ServerUrl=${url}&Database=${database}&UserName=${userName}`;
+var openInVsLink = `openinvs://ArasVersion=${innovatorVersion}&MethodId=${methodId}&ServerUrl=${url}&Database=${database}&UserName=${userName}`;
 window.open(openInVsLink, 'popUpWindow', 'height=500,width=500,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no,status=yes');]]></method_code>
 		<method_type>JavaScript</method_type>
 		<name>VSP_OpenInVS</name>
