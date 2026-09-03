@@ -27,6 +27,9 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectTemplates
 			"Aras14035MethodProject.zip",
 			"Aras14036MethodProject.zip",
 			"Aras14037MethodProject.zip",
+			"Aras14038MethodProject.zip",
+			"Aras14039MethodProject.zip",
+			"Aras14040MethodProject.zip",
 		};
 		readonly List<string> listOfCommonFiles = new List<string> {
 			"projectConfig.xml",
@@ -108,6 +111,9 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectTemplates
 		[TestCase("14035", "R35")]
 		[TestCase("14036", "R36")]
 		[TestCase("14037", "R37")]
+		[TestCase("14038", "R38")]
+		[TestCase("14039", "R39")]
+		[TestCase("14040", "R40")]
 		public void CheckForExistingCommonFiles(string version, string publicVersion)
 		{
 			//Arrange
@@ -131,6 +137,9 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectTemplates
 		[TestCase("14035", "R35")]
 		[TestCase("14036", "R36")]
 		[TestCase("14037", "R37")]
+		[TestCase("14038", "R38")]
+		[TestCase("14039", "R39")]
+		[TestCase("14040", "R40")]
 		public void CheckForExistingDllLibs(string version, string publicVersion)
 		{
 			//Arrange
@@ -150,6 +159,24 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectTemplates
 			Assert.IsTrue(expectedResult);
 		}
 
+		[TestCase("14038", "R38", "net8.0")]
+		[TestCase("14039", "R39", "net10.0")]
+		[TestCase("14040", "R40", "net10.0")]
+		public void CheckTargetFramework(string version, string publicVersion, string targetFramework)
+		{
+			using (FileStream zipToOpen = new FileStream(Path.Combine(pathToZipFolder, $"Aras{version}MethodProject.zip"), FileMode.Open))
+			using (ZipArchive archive = new ZipArchive(zipToOpen))
+			{
+				ZipArchiveEntry projectFile = archive.GetEntry($"Aras.VS.MethodPlugin.{publicVersion}CSharp.csproj");
+				Assert.That(projectFile, Is.Not.Null);
+
+				using (var reader = new StreamReader(projectFile.Open()))
+				{
+					Assert.That(reader.ReadToEnd(), Does.Contain($"<TargetFramework>{targetFramework}</TargetFramework>"));
+				}
+			}
+		}
+
 		private List<string> GetCommonFilesByPublicVersion(string publicVersion)
 		{
 			var list = new List<string>(listOfCommonFiles)
@@ -166,7 +193,7 @@ namespace Aras.VS.MethodPlugin.Tests.ProjectTemplates
 
 		private List<string> GetDllLibsByPublicVersion(string publicVersion)
 		{
-			var list = new List<string>(listOfCommonFiles);
+			var list = new List<string>(listOfCommonDlls);
 			if (publicVersion.StartsWith("12"))
 			{
 				list.Add("ArasLibs/Aras.ES.dll");

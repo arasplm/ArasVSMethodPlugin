@@ -1,51 +1,11 @@
 # Road map
 
-- [x] Create new method
-- [x] Open method from Aras Innovator
-- [x] Open method from AML package
-- [x] Save method to Aras Innovator
-- [x] Save method to AML package
-- [x] Partial class generation
-- [x] Formatting code after method opened or created
-- [x] Add support for CSharp:Aras.Server.Core.Configurator for SP 12
-- [x] Add project template for Aras 12.0 SP 3.
-- [x] Add project template for Aras 12.0 SP 4.
-- [x] Add project template for Aras 12.0 SP 5.
-- [x] Add project template for Aras 12.0 SP 6.
-- [x] Add project template for Aras 12.0 SP 7.
-- [x] Add project template for Aras 12.0 SP 8.
-- [x] Add project template for Aras 12.0 SP 9.
-- [x] Add project template for Aras 12.0 SP 10.
-- [x] Add project template for Aras 12.0 SP 11.
-- [x] Add project template for Aras 12.0 SP 12.
-- [x] Add project template for Aras 12.0 SP 14.
-- [x] Add project template for Aras 12.0 SP 15.
-- [x] Add project template for Aras 12.0 SP 16.
-- [x] Add project template for Aras 12.0 SP 17.
-- [x] Add project template for Aras 12.0 SP 18.
-- [x] Add project template for Aras 14.0.0.
-- [x] Add project template for Aras 14.0.1.
-- [x] Add project template for Aras 14.0.2.
-- [x] Add project template for Aras 14.0.3.
-- [x] Add project template for Aras 14.0.4.
-- [x] Add project template for Aras 14.0.5.
-- [x] Add project template for Aras 14.0.6.
-- [x] Add project template for Aras 14.0.7.
-- [x] Add project template for Aras 14.0.8.
-- [x] Add support for Visual Studio 2022
-- [x] Add project template for Aras 14.0.9.
-- [x] Add project template for Aras 14.0.10.
-- [x] Add project template for Aras 14.0.11.
-- [x] Add project template for Aras 14.0.12.
-- [x] Add project templates for Aras R27 - R32.
-- [x] Add project templates for Aras R33.
-- [x] Add project templates for Aras R34.
-- [x] Add project templates for Aras R35.
-- [x] Add project templates for Aras R36.
-- [x] Add project templates for Aras R37.
-- [ ] Add project templates for Aras R38.
-- [ ] Add support for Visual Studio 2026.
-- [x] Remove 'Debug method' functionality
+- [x] Remove Visual Studio 2019 support.
+- [x] Remove the Aras Innovator 14.0.6 through 14.0.9 project templates.
+- [x] Remove the Debug Method functionality.
+- [x] Add structured, copyable error diagnostics.
+- [x] Add project templates for Aras R38 - R40.
+- [x] Add support for Visual Studio 2026.
 
 
 Features that have a checkmark are complete and available for
@@ -57,12 +17,13 @@ download in the
 These are the changes to each version that has been released
 on the official Visual Studio extension gallery.
 
-## Unreleased
+## 1.29
 
-- Removed Visual Studio 2019 support. The Visual Studio 2022 extension package now targets Visual Studio 2026; Visual Studio 2026 runtime validation is pending.
-- Removed the Aras Innovator 14.0.6 through 14.0.9 project templates.
-- Removed the Debug Method command and its launcher applications.
-- Added structured, copyable error diagnostics with error codes, operation context, plugin version, exception chains, and stack traces.
+- [x] Added Visual Studio 2026 support and removed Visual Studio 2019 support.
+- [x] Removed the Aras Innovator 14.0.6 through 14.0.9 project templates.
+- [x] Removed the Debug Method command and its launcher applications.
+- [x] Added structured, copyable error diagnostics with error codes, operation context, plugin version, exception chains, and stack traces.
+- [x] Added project templates for Aras R38 - R40; R39 and R40 target .NET 10.
 
 ## 1.28
 - [x] Drop support of 'End of Life' versions. You can still use 12.0 SP 18 for compatibility with (12.0 SP*) versions.
