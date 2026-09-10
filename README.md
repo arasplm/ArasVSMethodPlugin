@@ -1,11 +1,10 @@
 # Aras Innovator Method Plugin
 
 <!-- Replace this badge with your own-->
-[![Build status](https://ci.appveyor.com/api/projects/status/bvssaf9aiylltmkc?svg=true)](https://ci.appveyor.com/project/mkubrak/arasvsmethodplugin)
+[![Build status](https://ci.appveyor.com/api/projects/status/f2qh05v6mxyph5ag?svg=true)](https://ci.appveyor.com/project/StanislavStrelchik/arasvsmethodplugin)
 
 <!-- Update the VS Gallery link after you upload the VSIX-->
-Download this extension from the [VS Gallery](https://marketplace.visualstudio.com/items?itemName=ArasCorporation.ArasInnovatorVisualStudioMethodPlugin)
-or get the [CI build](http://vsixgallery.com/extension/8424E2CB-F5F4-40EA-85B8-260998634ED5/).
+Download this extension from the [VS Gallery](https://marketplace.visualstudio.com/items?itemName=ArasCorporation.ArasInnovatorVisualStudioMethodPlugin2022).
 
 ---------------------------------------
 
