@@ -6,6 +6,8 @@
 - [x] Add structured, copyable error diagnostics.
 - [x] Add project templates for Aras R38 - R40.
 - [x] Add support for Visual Studio 2026.
+- [ ] Avoid synchronous waits when retrieving Visual Studio services. (based on build warnings)
+- [ ] Ensure DTE and Visual Studio SDK calls run on the UI thread. (based on build warnings)
 
 
 Features that have a checkmark are complete and available for
