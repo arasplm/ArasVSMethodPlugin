@@ -11,9 +11,7 @@ namespace Aras.VS.MethodPlugin
 	{
 		string ProjectFullName { get; }
 
-		dynamic Innovator_ScalcMD5(string password);
-
-		dynamic IomFactory_CreateHttpServerConnection(string serverUrl, string databaseName, string login, string passwordHash);
+		dynamic IomFactory_CreateHttpServerConnection(string serverUrl, string databaseName, string login, string password);
 
 		dynamic Innovator_Ctor(dynamic serverConnection);
 

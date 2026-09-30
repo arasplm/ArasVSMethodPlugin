@@ -10,7 +10,6 @@ namespace Aras.VS.MethodPlugin.Authentication
 	public class InnovatorUser
 	{
 		public string userName;
-		public string passwordHash;
 		public string databaseName;
 		public string serverUrl;
 		public string serverName;
@@ -21,7 +20,7 @@ namespace Aras.VS.MethodPlugin.Authentication
 
 		public bool IsEmpty()
 		{
-			return string.IsNullOrEmpty(passwordHash);
+			return string.IsNullOrEmpty(userName);
 		}
 	}
 }
