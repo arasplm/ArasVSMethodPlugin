@@ -50,9 +50,6 @@
     <DelaySign>false</DelaySign>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="IOM">
-      <HintPath>Libs\IOM.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -69,6 +66,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Aras.IOM" Version="15.1.2" />
     <PackageReference Include="Microsoft.VisualStudio.Interop" Version="17.0.31902.203" />
     <PackageReference Include="Microsoft.VisualStudio.LanguageServices" Version="4.0.1" />
     <PackageReference Include="Nerdbank.Streams" Version="2.8.57" />

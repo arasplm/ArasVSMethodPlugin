@@ -31,6 +31,12 @@ namespace Aras.VS.MethodPlugin.Authentication
 			this.projectManager = projectManager ?? throw new ArgumentNullException(nameof(projectManager));
 		}
 
+		internal AuthenticationManager(MessageManager messageManager, IProjectManager projectManager, IIOMWrapper iOMWrapper)
+			: this(messageManager, projectManager)
+		{
+			this.iOMWrapper = iOMWrapper;
+		}
+
 		public dynamic InnovatorInstance
 		{
 			get
@@ -188,8 +194,7 @@ namespace Aras.VS.MethodPlugin.Authentication
 				return true;
 			}
 
-			string passwordHash = IOMWrapperInstance.Innovator_ScalcMD5(password);
-			serverConnection = IOMWrapperInstance.IomFactory_CreateHttpServerConnection(serverUrl, databaseName, login, passwordHash);
+			serverConnection = IOMWrapperInstance.IomFactory_CreateHttpServerConnection(serverUrl, databaseName, login, password);
 
 			var loginItem = serverConnection.Login();
 			if (loginItem.isError())
@@ -212,8 +217,7 @@ namespace Aras.VS.MethodPlugin.Authentication
 				currentProjectName = projectName,
 				serverUrl = serverUrl,
 				databaseName = databaseName,
-				userName = login,
-				passwordHash = passwordHash
+				userName = login
 			};
 
 			//Login succesed

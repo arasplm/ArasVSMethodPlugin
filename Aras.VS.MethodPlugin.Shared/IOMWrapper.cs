@@ -37,16 +37,10 @@ namespace Aras.VS.MethodPlugin
 
 		#endregion
 
-		public dynamic Innovator_ScalcMD5(string password)
-		{
-			Type innovator = IOMAssembly.GetType(string.Format("{0}.{1}", GlobalConsts.IOMnamespace, "Innovator"));
-			return innovator.GetMethod("ScalcMD5").Invoke(null, new object[] { password }).ToString();
-		}
-
-		public dynamic IomFactory_CreateHttpServerConnection(string serverUrl, string databaseName, string login, string passwordHash)
+		public dynamic IomFactory_CreateHttpServerConnection(string serverUrl, string databaseName, string login, string password)
 		{
 			Type iomFactory = IOMAssembly.GetType(string.Format("{0}.{1}", GlobalConsts.IOMnamespace, "IomFactory"));
-			return iomFactory.GetMethod("CreateHttpServerConnection", new Type[] { typeof(string), typeof(string), typeof(string), typeof(string) }).Invoke(null, new object[] { serverUrl, databaseName, login, passwordHash });
+			return iomFactory.GetMethod("CreateHttpServerConnection", new Type[] { typeof(string), typeof(string), typeof(string), typeof(string) }).Invoke(null, new object[] { serverUrl, databaseName, login, password });
 		}
 
 		public dynamic Innovator_Ctor(dynamic serverConnection)
