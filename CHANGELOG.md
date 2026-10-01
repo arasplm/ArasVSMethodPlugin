@@ -1,11 +1,6 @@
 # Road map
 
-- [x] Remove Visual Studio 2019 support.
-- [x] Remove the Aras Innovator 14.0.6 through 14.0.9 project templates.
-- [x] Remove the Debug Method functionality.
-- [x] Add structured, copyable error diagnostics.
-- [x] Add project templates for Aras R38 - R40.
-- [x] Add support for Visual Studio 2026.
+- [x] Delegate password hashing to IOM to support login to Aras Innovator servers in FIPS mode.
 - [ ] Avoid synchronous waits when retrieving Visual Studio services. (based on build warnings)
 - [ ] Ensure DTE and Visual Studio SDK calls run on the UI thread. (based on build warnings)
 
@@ -18,6 +13,10 @@ download in the
 
 These are the changes to each version that has been released
 on the official Visual Studio extension gallery.
+
+## 1.30
+
+- [x] Fixed login to Aras Innovator servers in FIPS mode by passing plain-text passwords to IOM and letting the SDK select the password hashing algorithm.
 
 ## 1.29
 
